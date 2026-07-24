@@ -1,0 +1,38 @@
+﻿---
+import fs from "node:fs/promises";
+import path from "node:path";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import pages from "../../data/ja-pages.json";
+import { DEFAULT_LOCALE, ENABLED_LOCALES } from "../../data/locales";
+
+export async function getStaticPaths() {
+  return ENABLED_LOCALES.flatMap((locale) =>
+    pages.map((page) => ({
+      params: { locale: locale.code, slug: page.slug },
+      props: { locale: locale.code, page }
+    }))
+  );
+}
+
+const { locale, page } = Astro.props;
+const contentRoot = path.join(process.cwd(), "src", "content");
+const localizedContent = path.join(contentRoot, locale, `${page.slug}.html`);
+const fallbackContent = path.join(contentRoot, DEFAULT_LOCALE, `${page.slug}.html`);
+
+let content = "";
+try {
+  content = await fs.readFile(localizedContent, "utf8");
+} catch {
+  content = await fs.readFile(fallbackContent, "utf8");
+}
+---
+<BaseLayout
+  title={page.slug === "home" ? "外's Net｜日本で暮らす外国人のための生活ガイド" : `外's Net | ${page.title ?? page.slug}`}
+  activeId={page.id}
+  locale={locale}
+  slug={page.slug}
+>
+  <Fragment set:html={content} />
+  <Fragment slot="legacyFooter" set:html={await fs.readFile(path.join(process.cwd(), "src", "partials", "legacy-footer.html"), "utf8")} />
+</BaseLayout>
+

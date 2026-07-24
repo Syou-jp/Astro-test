@@ -1,0 +1,52 @@
+
+  <div id="page-etc" class="page-view theme-route">
+    <div class="eyebrow">ETC料金概算 ETC Toll Calculator</div>
+    <div class="portal-alert" id="etcIntro" data-no-i18n></div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>走行区間・車種</div>
+        <div class="apply-fields">
+          <div class="apply-field full"><label>走行距離 Distance</label><div class="input-wrap"><input type="number" id="etcDistance" value="100" min="1" step="1"><span>km</span></div></div>
+          <div class="apply-field full">
+            <label>よくある区間の目安 Common routes</label>
+            <div class="portal-actions">
+              <button type="button" class="secondary-btn" data-etc-preset="30">東京→横浜 約30km</button>
+              <button type="button" class="secondary-btn" data-etc-preset="180">東京→静岡 約180km</button>
+              <button type="button" class="secondary-btn" data-etc-preset="335">東京→新潟 約335km</button>
+              <button type="button" class="secondary-btn" data-etc-preset="350">東京→仙台 約350km</button>
+              <button type="button" class="secondary-btn" data-etc-preset="366">東京→名古屋 約366km</button>
+              <button type="button" class="secondary-btn" data-etc-preset="515">東京→大阪 約515km</button>
+            </div>
+          </div>
+          <div class="apply-field"><label>車種 Vehicle class</label>
+            <select id="etcVehicle">
+              <option value="kei">軽自動車等 Kei/motorcycle</option>
+              <option value="normal" selected>普通車 Standard</option>
+              <option value="medium">中型車 Medium</option>
+              <option value="large">大型車 Large</option>
+              <option value="extra">特大車 Extra-large</option>
+            </select>
+          </div>
+          <div class="apply-field"><label>割引区分 Discount</label>
+            <select id="etcDiscount">
+              <option value="none">割引なし Standard fare</option>
+              <option value="night">深夜割引 Late-night (0:00-4:00) discount -30%</option>
+              <option value="holiday">休日割引 Holiday (Sat/Sun/Holiday) discount -20%</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-copy" id="etcCalcBtn" style="margin-top:14px;width:100%;">ETC料金を概算</button>
+      </div>
+      <div>
+        <div class="calc-kpi-grid">
+          <div class="calc-kpi"><span>ETC概算料金 Estimated toll</span><strong id="etcTotal">—</strong></div>
+          <div class="calc-kpi"><span>割引適用前 Before discount</span><strong id="etcBefore">—</strong></div>
+          <div class="calc-kpi"><span>適用単価 Rate applied</span><strong id="etcPerKm">—</strong></div>
+        </div>
+        <div class="card" style="margin-top:14px;padding:14px;"><table class="portal-table"><tbody id="etcBreakdown"></tbody></table></div>
+        <div class="market-note" id="etcNote" data-no-i18n style="margin-top:14px;"></div>
+        <div class="market-note" id="etcMileageNote" data-no-i18n style="margin-top:8px;"></div>
+        <div class="portal-source">参考：<a href="https://www.driveplaza.com/" target="_blank" rel="noopener">NEXCO ドラぷら 料金・ルート検索</a>／<a href="https://www.mlit.go.jp/road/road_fr10_000024.html" target="_blank" rel="noopener">国土交通省 高速道路料金</a>／<a href="https://www.go-etc.jp/" target="_blank" rel="noopener">ETC総合情報ポータル</a></div>
+      </div>
+    </div>
+  </div><!-- /page-etc -->

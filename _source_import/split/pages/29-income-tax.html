@@ -1,0 +1,178 @@
+
+  <div id="page-income-tax" class="page-view theme-tax">
+    <div class="eyebrow">確定申告計算機 Tax Return Calculator</div>
+    <div class="portal-alert"><strong>參考：</strong>此計算機參考 <a href="https://tax.eon.jp/" target="_blank" rel="noopener">確定申告計算ツール（tax.eon.jp）</a> 製作，用於估算薪資＋副業收入應繳的所得税・住民税。<strong>僅供概算參考</strong>，未涵蓋全部特殊扣除項目（例如老年扶養、特定扶養等差異化金額），正式申告請以 e-Tax／稅務署／稅理士確認為準。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>1年間の収入</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>給与収入（総額） Salary income</label><div class="input-wrap"><input type="number" id="itSalary" value="4000000" min="0" step="10000"><span>円</span></div></div>
+          <div class="apply-field"><label>給与の源泉徴収税額 Withheld tax</label><div class="input-wrap"><input type="number" id="itWithheld" value="80000" min="0" step="1000"><span>円</span></div></div>
+          <div class="apply-field"><label>副業の収入 Side income</label><div class="input-wrap"><input type="number" id="itSideIncome" value="600000" min="0" step="1000"><span>円</span></div></div>
+          <div class="apply-field"><label>副業の経費 Side expenses</label><div class="input-wrap"><input type="number" id="itSideExpense" value="100000" min="0" step="1000"><span>円</span></div></div>
+        </div>
+
+        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>控除額入力</div>
+        <div class="apply-fields">
+          <div class="apply-field full">
+            <label>配偶者控除 Spouse deduction（配偶者の年収123万円以下）</label>
+            <div class="util-doc-switch" style="display:flex;gap:8px;">
+              <button type="button" class="util-doc-tab" id="itSpouseYes" data-spouse="yes">あり</button>
+              <button type="button" class="util-doc-tab active" id="itSpouseNo" data-spouse="no">なし</button>
+            </div>
+          </div>
+          <div class="apply-field"><label>扶養家族人数（16歳以上） Dependents</label><select id="itDependents">
+            <option value="0" selected>0人</option><option value="1">1人</option><option value="2">2人</option>
+            <option value="3">3人</option><option value="4">4人</option><option value="5">5人</option>
+          </select></div>
+          <div class="apply-field"><label>社会保険料控除 Social insurance</label><div class="input-wrap"><input type="number" id="itSocialIns" value="400000" min="0" step="1000"><span>円</span></div></div>
+          <div class="apply-field"><label>生命保険料控除 Life insurance</label><div class="input-wrap"><input type="number" id="itLifeIns" value="0" min="0" max="120000" step="1000"><span>円</span></div></div>
+          <div class="apply-field"><label>地震保険料控除 Earthquake insurance</label><div class="input-wrap"><input type="number" id="itEqIns" value="0" min="0" max="50000" step="1000"><span>円</span></div></div>
+          <div class="apply-field full"><label>税額控除（住宅ローン控除等） Tax credit</label><div class="input-wrap"><input type="number" id="itTaxCredit" value="0" min="0" step="1000"><span>円</span></div></div>
+        </div>
+        <button type="button" class="btn-copy" id="itCalcBtn" style="width:100%;margin-top:14px;">税額を計算</button>
+      </div>
+
+      <div>
+        <div class="calc-kpi-grid">
+          <div class="calc-kpi"><span>所得税額（差引・還付は−）</span><strong id="itIncomeTaxOut">—</strong></div>
+          <div class="calc-kpi"><span>住民税額（概算）</span><strong id="itResidentTaxOut">—</strong></div>
+          <div class="calc-kpi"><span>追加で納める税金 合計</span><strong id="itTotalOut">—</strong></div>
+        </div>
+        <div class="card">
+          <div class="section-title"><span class="idx">03</span>内訳</div>
+          <table class="hcal-table" style="width:100%;">
+            <tbody id="itBreakdownBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      #itBreakdownBody td{padding:6px 4px;font-size:12.5px;border-bottom:1px solid var(--line,#ddd6c5);}
+      #itBreakdownBody td:first-child{color:var(--ink-soft,#6b665a);}
+      #itBreakdownBody td:last-child{text-align:right;font-family:"JetBrains Mono",monospace;font-weight:700;}
+      #itBreakdownBody tr.hl td{color:var(--accent);font-weight:700;}
+    </style>
+
+    <script>
+    (function(){
+      var spouse = "no";
+
+      function fmtYen(n){
+        var sign = n < 0 ? "−" : "";
+        return sign + "¥" + Math.round(Math.abs(n)).toLocaleString("ja-JP");
+      }
+
+      // 給与所得控除（2020年分以降）
+      function salaryDeduction(income){
+        if (income <= 550000) return income;
+        if (income <= 1625000) return 550000;
+        if (income <= 1800000) return income * 0.4 - 100000;
+        if (income <= 3600000) return income * 0.3 + 80000;
+        if (income <= 6600000) return income * 0.2 + 440000;
+        if (income <= 8500000) return income * 0.1 + 1100000;
+        return 1950000;
+      }
+
+      // 所得税 速算表（2015年分以降）
+      function incomeTaxByBracket(taxable){
+        var t = taxable;
+        if (t <= 1950000) return t * 0.05;
+        if (t <= 3300000) return t * 0.10 - 97500;
+        if (t <= 6950000) return t * 0.20 - 427500;
+        if (t <= 9000000) return t * 0.23 - 636000;
+        if (t <= 18000000) return t * 0.33 - 1536000;
+        if (t <= 40000000) return t * 0.40 - 2796000;
+        return t * 0.45 - 4796000;
+      }
+
+      function floor1000(n){ return Math.floor(n / 1000) * 1000; }
+
+      function calculate(){
+        var salary = parseFloat(document.getElementById("itSalary").value) || 0;
+        var withheld = parseFloat(document.getElementById("itWithheld").value) || 0;
+        var sideIncome = parseFloat(document.getElementById("itSideIncome").value) || 0;
+        var sideExpense = parseFloat(document.getElementById("itSideExpense").value) || 0;
+        var dependents = parseInt(document.getElementById("itDependents").value, 10) || 0;
+        var socialIns = parseFloat(document.getElementById("itSocialIns").value) || 0;
+        var lifeIns = Math.min(parseFloat(document.getElementById("itLifeIns").value) || 0, 120000);
+        var eqIns = Math.min(parseFloat(document.getElementById("itEqIns").value) || 0, 50000);
+        var taxCredit = parseFloat(document.getElementById("itTaxCredit").value) || 0;
+
+        var salaryIncome = Math.max(0, salary - salaryDeduction(salary));
+        var sideProfit = Math.max(0, sideIncome - sideExpense);
+        var totalIncome = salaryIncome + sideProfit;
+
+        // 所得控除（所得税用：基礎控除48万）
+        var basicDeduction = 480000;
+        var spouseDeduction = (spouse === "yes") ? 380000 : 0;
+        var dependentDeduction = dependents * 380000;
+        var deductionsIncomeTax = basicDeduction + spouseDeduction + dependentDeduction + socialIns + lifeIns + eqIns;
+
+        var taxableIncome = Math.max(0, floor1000(totalIncome - deductionsIncomeTax));
+        var calcIncomeTax = Math.max(0, incomeTaxByBracket(taxableIncome));
+        var afterCreditTax = Math.max(0, calcIncomeTax - taxCredit);
+        var reconstructionTax = afterCreditTax * 0.021; // 復興特別所得税 2.1%
+        var totalIncomeTax = Math.round(afterCreditTax + reconstructionTax);
+        var diffIncomeTax = totalIncomeTax - withheld; // +は追加納付、−は還付
+
+        // 住民税（概算：基礎控除43万、税率10%＋均等割5,000円）
+        var basicDeductionResident = 430000;
+        var deductionsResident = basicDeductionResident + spouseDeduction + dependentDeduction + socialIns + lifeIns + eqIns;
+        var taxableResident = Math.max(0, floor1000(totalIncome - deductionsResident));
+        var residentTax = Math.round(taxableResident * 0.10) + 5000;
+
+        var totalDue = Math.max(0, diffIncomeTax) + residentTax;
+
+        document.getElementById("itIncomeTaxOut").textContent = fmtYen(diffIncomeTax);
+        document.getElementById("itResidentTaxOut").textContent = fmtYen(residentTax);
+        document.getElementById("itTotalOut").textContent = fmtYen(totalDue);
+
+        var rows = [
+          ["合計収入", fmtYen(salary + sideIncome)],
+          ["合計所得", fmtYen(totalIncome)],
+          ["所得控除（所得税用）", fmtYen(deductionsIncomeTax)],
+          ["課税所得", fmtYen(taxableIncome)],
+          ["計算所得税", fmtYen(calcIncomeTax)],
+          ["控除後所得税", fmtYen(afterCreditTax)],
+          ["復興特別所得税", fmtYen(reconstructionTax)],
+          ["合計所得税", fmtYen(totalIncomeTax)],
+          ["【差引所得税（源泉徴収済み分を差引）】", fmtYen(diffIncomeTax)],
+          ["住民税課税所得（概算）", fmtYen(taxableResident)],
+          ["【住民税額（概算・所得割＋均等割）】", fmtYen(residentTax)],
+          ["【合計納税額の目安】", fmtYen(totalDue)]
+        ];
+        var body = document.getElementById("itBreakdownBody");
+        var html = "";
+        rows.forEach(function(r){
+          var hl = r[0].indexOf("【") === 0 ? " class=\"hl\"" : "";
+          html += "<tr" + hl + "><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>";
+        });
+        body.innerHTML = html;
+      }
+
+      var spouseYes = document.getElementById("itSpouseYes");
+      var spouseNo = document.getElementById("itSpouseNo");
+      if (spouseYes){
+        spouseYes.addEventListener("click", function(){
+          spouse = "yes"; spouseYes.classList.add("active"); spouseNo.classList.remove("active"); calculate();
+        });
+        spouseNo.addEventListener("click", function(){
+          spouse = "no"; spouseNo.classList.add("active"); spouseYes.classList.remove("active"); calculate();
+        });
+      }
+
+      var btn = document.getElementById("itCalcBtn");
+      if (btn){
+        btn.addEventListener("click", calculate);
+        ["itSalary","itWithheld","itSideIncome","itSideExpense","itDependents","itSocialIns","itLifeIns","itEqIns","itTaxCredit"].forEach(function(id){
+          var el = document.getElementById(id);
+          if (el) el.addEventListener("input", calculate);
+          if (el) el.addEventListener("change", calculate);
+        });
+        calculate();
+      }
+    })();
+    </script>
+  </div><!-- /page-income-tax -->

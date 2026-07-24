@@ -1,0 +1,96 @@
+<div id="page-consumption-tax" class="page-view active theme-tax">
+    <div class="eyebrow">消費税計算機 Consumption Tax Calculator</div>
+    <div class="portal-alert"><strong>參考：</strong>此計算機參考 <a href="https://zei.eon.jp/" target="_blank" rel="noopener">消費税計算ツール（zei.eon.jp）</a> 製作，可用「稅抜金額」或「稅込金額」互相換算，同時顯示 8%（輕減稅率）與 10%（標準稅率）兩種結果，方便對照使用。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>金額を入力</div>
+        <div class="util-doc-switch" style="display:flex;gap:8px;margin-bottom:14px;">
+          <button type="button" class="util-doc-tab active" id="ctModeExcl" data-ct-mode="excl">税抜金額から計算</button>
+          <button type="button" class="util-doc-tab" id="ctModeIncl" data-ct-mode="incl">税込金額から計算</button>
+        </div>
+        <div class="apply-fields">
+          <div class="apply-field full"><label id="ctAmountLabel">税抜金額 Amount (excl. tax)</label><div class="input-wrap"><input type="number" id="ctAmount" value="10000" min="0" step="1"><span>円</span></div></div>
+        </div>
+        <div class="market-note" style="margin-top:8px;">
+          <strong>8%（軽減税率）対象：</strong>食品（酒類・外食を除く）、新聞の定期購読、テイクアウト・宅配の飲食料品<br>
+          <strong>10%（標準税率）対象：</strong>上記以外の商品・サービス全般、外食・イートイン、酒類
+        </div>
+      </div>
+      <div>
+        <div class="calc-kpi-grid">
+          <div class="calc-kpi"><span>8%消費税額</span><strong id="ctTax8Out">—</strong></div>
+          <div class="calc-kpi"><span>8%税込金額</span><strong id="ctTotal8Out">—</strong></div>
+          <div class="calc-kpi"><span>10%消費税額</span><strong id="ctTax10Out">—</strong></div>
+          <div class="calc-kpi"><span>10%税込金額</span><strong id="ctTotal10Out">—</strong></div>
+        </div>
+        <div class="card">
+          <div class="section-title"><span class="idx">02</span>計算式</div>
+          <div class="market-note" id="ctFormulaOut" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.9;"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    (function(){
+      var mode = "excl"; // excl = 税抜から計算 / incl = 税込から計算
+
+      function fmtYen(n){ return "¥" + Math.round(n).toLocaleString("ja-JP"); }
+
+      function render(){
+        var amountEl = document.getElementById("ctAmount");
+        if (!amountEl) return;
+        var amount = parseFloat(amountEl.value) || 0;
+        var label = document.getElementById("ctAmountLabel");
+        var formula = "";
+
+        var tax8, total8, tax10, total10, base8, base10;
+
+        if (mode === "excl"){
+          label.textContent = "税抜金額 Amount (excl. tax)";
+          base8 = amount; base10 = amount;
+          tax8 = Math.floor(amount * 0.08);
+          total8 = amount + tax8;
+          tax10 = Math.floor(amount * 0.10);
+          total10 = amount + tax10;
+          formula = "8%： " + fmtYen(amount) + " × 8% = " + fmtYen(tax8) + "（税込 " + fmtYen(total8) + "）\n" +
+                    "10%： " + fmtYen(amount) + " × 10% = " + fmtYen(tax10) + "（税込 " + fmtYen(total10) + "）";
+        } else {
+          label.textContent = "税込金額 Amount (incl. tax)";
+          total8 = amount;
+          base8 = Math.round(amount / 1.08);
+          tax8 = total8 - base8;
+          total10 = amount;
+          base10 = Math.round(amount / 1.10);
+          tax10 = total10 - base10;
+          formula = "8%： " + fmtYen(amount) + " ÷ 1.08 ≈ 税抜 " + fmtYen(base8) + "（消費税 " + fmtYen(tax8) + "）\n" +
+                    "10%： " + fmtYen(amount) + " ÷ 1.10 ≈ 税抜 " + fmtYen(base10) + "（消費税 " + fmtYen(tax10) + "）";
+        }
+
+        document.getElementById("ctTax8Out").textContent = fmtYen(tax8);
+        document.getElementById("ctTotal8Out").textContent = fmtYen(total8);
+        document.getElementById("ctTax10Out").textContent = fmtYen(tax10);
+        document.getElementById("ctTotal10Out").textContent = fmtYen(total10);
+        document.getElementById("ctFormulaOut").innerText = formula;
+      }
+
+      var exclBtn = document.getElementById("ctModeExcl");
+      var inclBtn = document.getElementById("ctModeIncl");
+      if (exclBtn){
+        exclBtn.addEventListener("click", function(){
+          mode = "excl";
+          exclBtn.classList.add("active");
+          inclBtn.classList.remove("active");
+          render();
+        });
+        inclBtn.addEventListener("click", function(){
+          mode = "incl";
+          inclBtn.classList.add("active");
+          exclBtn.classList.remove("active");
+          render();
+        });
+        document.getElementById("ctAmount").addEventListener("input", render);
+        render();
+      }
+    })();
+    </script>
+  </div><!-- /page-consumption-tax -->

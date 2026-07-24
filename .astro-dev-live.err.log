@@ -1,0 +1,56 @@
+X [ERROR] Cannot read directory "../..": Access is denied.
+
+X [ERROR] Could not resolve "./ariaPropsMap"
+
+    node_modules/aria-query/lib/index.js:7:51:
+      7 │ var _ariaPropsMap = _interopRequireDefault(require("./ariaPropsMap"));
+        ╵                                                    ~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not resolve "./AXObjectElementMap"
+
+    node_modules/axobject-query/lib/index.js:7:57:
+      7 │ ...ementMap = _interopRequireDefault(require("./AXObjectElementMap"));
+        ╵                                              ~~~~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not resolve "./domMap"
+
+    node_modules/aria-query/lib/index.js:8:45:
+      8 │ var _domMap = _interopRequireDefault(require("./domMap"));
+        ╵                                              ~~~~~~~~~~
+
+X [ERROR] Could not resolve "./AXObjectRoleMap"
+
+    node_modules/axobject-query/lib/index.js:8:54:
+      8 │ ...jectRoleMap = _interopRequireDefault(require("./AXObjectRoleMap"));
+        ╵                                                 ~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not resolve "./rolesMap"
+
+    node_modules/aria-query/lib/index.js:9:47:
+      9 │ var _rolesMap = _interopRequireDefault(require("./rolesMap"));
+        ╵                                                ~~~~~~~~~~~~
+
+X [ERROR] Could not resolve "./AXObjectsMap"
+
+    node_modules/axobject-query/lib/index.js:9:51:
+      9 │ var _AXObjectsMap = _interopRequireDefault(require("./AXObjectsMap"));
+        ╵                                                    ~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not resolve "./elementRoleMap"
+
+    node_modules/aria-query/lib/index.js:10:53:
+      10 │ ...mentRoleMap = _interopRequireDefault(require("./elementRoleMap"));
+         ╵                                                 ~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not resolve "./roleElementMap"
+
+    node_modules/aria-query/lib/index.js:11:53:
+      11 │ ...eElementMap = _interopRequireDefault(require("./roleElementMap"));
+         ╵                                                 ~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not resolve "./elementAXObjectMap"
+
+    node_modules/axobject-query/lib/index.js:10:57:
+      10 │ ...jectMap = _interopRequireDefault(require("./elementAXObjectMap"));
+         ╵                                             ~~~~~~~~~~~~~~~~~~~~~~
+

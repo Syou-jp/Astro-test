@@ -1,0 +1,109 @@
+<div id="page-nisa" class="page-view active theme-tax">
+    <div class="eyebrow">新NISA計算機 New NISA Calculator</div>
+    <div class="portal-alert"><strong>參考：</strong>此計算機參考 <a href="https://nisa.eon.jp/" target="_blank" rel="noopener">新NISA計算ツール（zei.eon.jp系列）</a> 製作，用複利公式試算每月定額投資在新NISA制度下的資產成長，僅供概算參考，不構成投資建議，實際報酬會隨市場波動。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>運用条件を入力</div>
+        <div class="apply-fields">
+          <div class="apply-field full"><label>毎月の積立額 Monthly investment</label><div class="input-wrap"><input type="number" id="nisaMonthly" value="30000" min="0" step="1000"><span>円/月</span></div></div>
+          <div class="apply-field"><label>投資する期間 Period</label><select id="nisaYears">
+            <option value="1">1年</option>
+            <option value="3">3年</option>
+            <option value="5">5年</option>
+            <option value="10" selected>10年</option>
+            <option value="15">15年</option>
+            <option value="20">20年</option>
+            <option value="25">25年</option>
+            <option value="30">30年</option>
+            <option value="35">35年</option>
+            <option value="40">40年</option>
+          </select></div>
+          <div class="apply-field"><label>想定利回り Annual return</label><div class="input-wrap"><input type="number" id="nisaRate" value="5" min="-10" max="30" step="0.1"><span>%/年</span></div></div>
+        </div>
+        <button type="button" class="btn-copy" id="nisaCalcBtn" style="width:100%;margin-top:14px;">資産運用をシミュレーション</button>
+        <div class="market-note" style="margin-top:12px;">新NISAは「つみたて投資枠」「成長投資枠」をあわせて<strong>年間360万円</strong>、生涯投資上限<strong>1,800万円</strong>までが非課税対象です。毎月積立額×12が年間360万円を超える場合は上限を超えている可能性がありますのでご注意ください。</div>
+      </div>
+      <div>
+        <div class="calc-kpi-grid">
+          <div class="calc-kpi"><span>積立元本合計</span><strong id="nisaPrincipalOut">—</strong></div>
+          <div class="calc-kpi"><span>最終資産評価額</span><strong id="nisaAssetOut">—</strong></div>
+          <div class="calc-kpi"><span>運用収益（非課税）</span><strong id="nisaProfitOut">—</strong></div>
+          <div class="calc-kpi"><span>年間投資額</span><strong id="nisaYearlyOut">—</strong></div>
+        </div>
+        <div class="card">
+          <div class="section-title"><span class="idx">02</span>元本・資産の推移</div>
+          <table class="hcal-table" id="nisaTable" style="width:100%;">
+            <thead><tr><th>経過年</th><th>西暦</th><th>元本</th><th>資産評価額</th><th>運用収益</th></tr></thead>
+            <tbody id="nisaTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      #nisaTable{border-collapse:collapse;font-size:12.5px;}
+      #nisaTable th,#nisaTable td{border-bottom:1px solid var(--line,#ddd6c5);padding:7px 6px;text-align:right;}
+      #nisaTable th:first-child,#nisaTable td:first-child,#nisaTable th:nth-child(2),#nisaTable td:nth-child(2){text-align:left;}
+      #nisaTable th{color:var(--ink-soft,#6b665a);font-weight:700;font-size:11px;}
+    </style>
+
+    <script>
+    (function(){
+      function fmtYen(n){ return "¥" + Math.round(n).toLocaleString("ja-JP"); }
+
+      function calcNisa(monthly, years, ratePct){
+        var r = ratePct / 100 / 12; // monthly rate
+        var months = years * 12;
+        var rows = [];
+        var principal = 0, asset = 0;
+        for (var m = 1; m <= months; m++){
+          principal += monthly;
+          if (Math.abs(r) < 1e-9){
+            asset += monthly;
+          } else {
+            asset = asset * (1 + r) + monthly;
+          }
+          if (m % 12 === 0){
+            rows.push({ year: m/12, principal: principal, asset: asset, profit: asset - principal });
+          }
+        }
+        return rows;
+      }
+
+      function render(){
+        var monthlyEl = document.getElementById("nisaMonthly");
+        var yearsEl = document.getElementById("nisaYears");
+        var rateEl = document.getElementById("nisaRate");
+        if (!monthlyEl) return;
+        var monthly = parseFloat(monthlyEl.value) || 0;
+        var years = parseInt(yearsEl.value, 10) || 1;
+        var rate = parseFloat(rateEl.value) || 0;
+
+        var rows = calcNisa(monthly, years, rate);
+        var last = rows[rows.length - 1] || { principal: 0, asset: 0, profit: 0 };
+
+        document.getElementById("nisaPrincipalOut").textContent = fmtYen(last.principal);
+        document.getElementById("nisaAssetOut").textContent = fmtYen(last.asset);
+        document.getElementById("nisaProfitOut").textContent = fmtYen(last.profit);
+        document.getElementById("nisaYearlyOut").textContent = fmtYen(monthly * 12) + (monthly*12 > 3600000 ? "（年間上限360万円超）" : "");
+
+        var thisYear = new Date().getFullYear();
+        var tbody = document.getElementById("nisaTableBody");
+        var html = "";
+        rows.forEach(function(row){
+          html += "<tr><td>" + row.year + "年後</td><td>" + (thisYear + row.year) + "年</td><td>" + fmtYen(row.principal) + "</td><td>" + fmtYen(row.asset) + "</td><td>" + fmtYen(row.profit) + "</td></tr>";
+        });
+        tbody.innerHTML = html;
+      }
+
+      var btn = document.getElementById("nisaCalcBtn");
+      if (btn){
+        btn.addEventListener("click", render);
+        document.getElementById("nisaMonthly").addEventListener("input", render);
+        document.getElementById("nisaYears").addEventListener("change", render);
+        document.getElementById("nisaRate").addEventListener("input", render);
+        render();
+      }
+    })();
+    </script>
+  </div><!-- /page-nisa -->

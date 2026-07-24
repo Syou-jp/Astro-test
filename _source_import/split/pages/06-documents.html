@@ -1,0 +1,398 @@
+
+  <div id="page-documents" class="page-view theme-apply">
+    <div class="eyebrow" id="docBuilderEyebrow">書類作成</div>
+    <div class="doc-type-switch" role="tablist" aria-label="文件類型">
+      <button type="button" class="doc-type-tab active" data-type-target="doc-type-business"><span>ビジネス書類</span><small>BUSINESS DOCUMENTS</small></button>
+      <button type="button" class="doc-type-tab" data-type-target="doc-type-broker"><span>仲介用書類</span><small>AGENT DOCUMENTS</small></button>
+    </div>
+
+    <section id="doc-type-business" class="doc-type-panel active theme-apply">
+          <div class="eyebrow">ビジネス書類作成 Business Document Builder</div>
+          <div class="portal-alert"><strong>入力しながら右側で完成形を確認：</strong>金額書類は明細・消費税を自動計算し、契約・社内文書は本文を自由に編集できます。PDF、Word、Excel、画像で保存できます。</div>
+          <div class="business-workspace">
+            <div class="card" id="businessFormCard">
+              <div class="section-title"><span class="idx">01</span>書類の種類</div>
+              <div class="apply-fields">
+                <div class="apply-field full"><label>Document type</label><select id="businessDocType"><optgroup label="財務・取引"><option value="invoice">請求書</option><option value="receipt">領収書</option><option value="delivery">納品書</option><option value="order">注文書</option><option value="purchase">発注書</option><option value="payment">支払明細書</option></optgroup><optgroup label="契約・社内管理"><option value="contract">業務委託契約書</option><option value="memorandum">覚書</option><option value="nda">秘密保持契約書（NDA）</option><option value="ringi">稟議書</option><option value="proposal">企画書</option><option value="suggestion">提案書</option><option value="incident">顛末書</option><option value="apology">始末書</option></optgroup></select></div>
+                <div class="apply-field"><label>発行日 Issue date</label><input type="date" id="businessDate"></div>
+                <div class="apply-field"><label>書類番号 Document no.</label><input id="businessNo" placeholder="INV-2026-001"></div>
+                <div class="apply-field full"><label>件名 Subject</label><input id="businessSubject" placeholder="業務委託料のご請求"></div>
+                <div class="apply-field"><label>宛先 Recipient</label><input id="businessRecipient" placeholder="株式会社○○ 御中"></div>
+                <div class="apply-field"><label>発行者 Issuer</label><input id="businessIssuer" placeholder="株式会社△△"></div>
+                <div class="apply-field full"><label>発行者住所・連絡先</label><textarea id="businessIssuerInfo" placeholder="〒000-0000 東京都…&#10;TEL / Email / 登録番号"></textarea></div>
+                <div class="apply-field"><label>支払・有効期限 Due date</label><input type="date" id="businessDue"></div>
+                <div class="apply-field"><label>消費税 Tax rate</label><select id="businessTaxRate"><option value="10">10%</option><option value="8">8%</option><option value="0">非課税・0%</option></select></div>
+              </div>
+              <div id="businessFinanceFields">
+                <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>明細</div>
+                <table class="business-items"><thead><tr><th>品目・内容</th><th>数量</th><th>単位</th><th>単価</th></tr></thead><tbody id="businessItemRows"></tbody></table>
+              </div>
+              <div class="section-title" style="margin-top:18px;"><span class="idx">03</span>本文・備考</div>
+              <div class="apply-field full"><textarea id="businessBody" style="min-height:180px;" placeholder="取引条件、振込先、契約条項、目的、経緯、原因、再発防止策などを入力"></textarea></div>
+              <button type="button" class="secondary-btn" id="businessTemplateBtn" style="width:100%;margin-top:10px;">この書類のひな形を本文へ入れる</button>
+            </div>
+            <div>
+              <div class="business-preview" id="businessDocPreview"></div>
+              <div class="actions export-actions" data-export-target="businessDocPreview" data-export-name="ビジネス書類">
+                <button type="button" class="btn-copy" id="businessPdfBtn">📄 PDF</button>
+                <button type="button" class="secondary-btn export-word">📝 Word</button>
+                <button type="button" class="secondary-btn export-excel">📊 Excel</button>
+                <button type="button" class="secondary-btn export-shot">📷 Screenshot</button>
+              </div>
+              <div class="footnote">契約書、NDA、覚書など法的効果を持つ文書は、取引内容に応じて弁護士・司法書士・行政書士等へ確認してください。電子帳簿保存法、インボイス制度への適合も実際の保存・発行方法により異なります。</div>
+            </div>
+          </div>
+  
+    </section><!-- /doc-type-business -->
+
+    <section id="doc-type-broker" class="doc-type-panel theme-apply">
+        <div class="eyebrow">仲介用書類 Agent Documents</div>
+        <div class="broker-doc-switch" role="tablist" aria-label="仲介用書類の種類">
+          <button type="button" class="broker-doc-tab active" data-doc-target="broker-visit">内見申込書<small>VIEWING REQUEST</small></button>
+          <button type="button" class="broker-doc-tab" data-doc-target="broker-apply">入居申込書<small>MOVE-IN APPLICATION</small></button>
+          <button type="button" class="broker-doc-tab" data-doc-target="broker-buy">買付証明書<small>PURCHASE OFFER</small></button>
+        </div>
+        <section id="broker-visit" class="broker-doc-panel active theme-visit">
+        <div class="eyebrow">内見申込書 Viewing Request Form</div>
+        <div class="grid">
+          <!-- VISIT FORM PANEL -->
+          <div class="card" id="visitFormCard">
+            <div class="section-title">物件情報 Property Info</div>
+            <div class="field-row">
+              <label>物件名 Property name</label>
+              <input type="text" id="visitPropertyName" style="text-align:left;">
+            </div>
+            <div class="field-row">
+              <label>号室 Room number</label>
+              <input type="text" id="visitRoomNumber" style="text-align:left;">
+            </div>
+            <div class="field-row">
+              <label>地址 Address</label>
+              <input type="text" id="visitAddress" style="text-align:left;">
+            </div>
+
+            <div class="section-title" style="margin-top:8px;">希望日時 Preferred Date &amp; Time</div>
+            <div class="field-row">
+              <label>日期 Date</label>
+              <input type="date" id="visitDateInput">
+            </div>
+            <div class="field-row">
+              <label>開始時間 Start time<span class="hint">30分単位</span></label>
+              <select id="visitStartTime"></select>
+            </div>
+            <div class="field-row">
+              <label>結束時間 End time<span class="hint">30分単位</span></label>
+              <select id="visitEndTime"></select>
+            </div>
+
+            <div class="section-title" style="margin-top:8px;">對方公司資訊 Counterpart Company</div>
+            <div class="field-row">
+              <label>公司名稱 Company name</label>
+              <input type="text" id="visitCompanyName" style="text-align:left;">
+            </div>
+            <div class="field-row">
+              <label>電話 Phone</label>
+              <input type="text" id="visitCompanyPhone" style="text-align:left;">
+            </div>
+            <div class="field-row">
+              <label>FAX號碼 FAX number</label>
+              <input type="text" id="visitCompanyFax" style="text-align:left;">
+            </div>
+
+            <div class="section-title" style="margin-top:8px;">名片照片 Business Card Photo</div>
+            <div class="field-row" style="grid-template-columns:1fr;">
+              <label>上傳圖片 Upload image<span class="hint">選填，會附加在申込書下方</span></label>
+              <input type="file" accept="image/*" id="visitCardFile" style="text-align:left;padding:6px 0;border:none;">
+            </div>
+          </div>
+
+          <!-- VISIT PREVIEW / PDF PANEL -->
+          <div>
+            <div class="receipt-card" id="visitPreviewCard">
+              <div class="receipt-head">
+                <h2>内見申込書</h2>
+                <div class="date" id="visitTodayDate"></div>
+              </div>
+              <div class="receipt-body">
+                <div style="text-align:center;font-family:'Shippori Mincho',serif;font-size:19px;font-weight:700;margin-bottom:2px;color:var(--ink);">内見申込書</div>
+                <div style="text-align:center;font-size:10.5px;color:var(--ink-soft);margin-bottom:16px;">PROPERTY VIEWING REQUEST</div>
+                <div class="receipt-line"><span>物件名</span><span class="amt" id="vOutPropertyName">—</span></div>
+                <div class="receipt-line"><span>号室</span><span class="amt" id="vOutRoomNumber">—</span></div>
+                <div class="receipt-line"><span>地址</span><span class="amt" id="vOutAddress">—</span></div>
+                <div class="receipt-line"><span>希望日時</span><span class="amt" id="vOutDateTime">—</span></div>
+                <div class="receipt-line"><span>對方公司</span><span class="amt" id="vOutCompanyName">—</span></div>
+                <div class="receipt-line"><span>電話</span><span class="amt" id="vOutCompanyPhone">—</span></div>
+                <div class="receipt-line"><span>FAX</span><span class="amt" id="vOutCompanyFax">—</span></div>
+                <div id="vCardImageWrap" style="margin-top:16px;display:none;">
+                  <div style="font-size:11px;color:var(--ink-soft);margin-bottom:6px;">名片 Business Card</div>
+                  <img id="vCardImagePreview" style="max-width:100%;border:1px solid var(--line);border-radius:4px;display:block;">
+                </div>
+              </div>
+            </div>
+            <div class="actions export-actions" data-export-target="visitPreviewCard" data-export-name="内見申込書">
+              <button class="btn-copy" id="visitPdfBtn">📄 生成 PDF Generate PDF</button>
+              <button type="button" class="secondary-btn export-word">📝 Word</button>
+              <button type="button" class="secondary-btn export-excel">📊 Excel</button>
+              <button type="button" class="secondary-btn export-shot">📷 Screenshot</button>
+            </div>
+            <div class="footnote">按下按鈕會將左方申込書內容轉成一份 PDF 檔案並下載，可直接傳真或email給對方公司。</div>
+          </div>
+        </div>
+        </section><!-- /broker-visit -->
+
+        <section id="broker-apply" class="broker-doc-panel theme-apply">
+          <div class="eyebrow">入居申込書 Move-in Application for Foreign Residents</div>
+          <div class="apply-intro">
+            日本在住の外国籍のお客様向け入居申込フォームです。審査に必要な項目をできるだけ漏れなく入力してください。<br>
+            這是針對在日本居住之外國人的租屋申請表。證件請先勾選種類，再上傳檔案；未勾選的上傳欄位不會顯示。
+          </div>
+
+          <form id="applicationForm" autocomplete="on">
+            <div class="apply-grid">
+              <section class="apply-section full">
+                <div class="section-title"><span class="idx">01</span>申込物件・契約条件 Property &amp; Lease</div>
+                <div class="apply-fields">
+                  <div class="apply-field"><label>物件名 Property name<span class="required-mark">*</span></label><input name="propertyName" required></div>
+                  <div class="apply-field"><label>号室 Room</label><input name="roomNumber"></div>
+                  <div class="apply-field full"><label>所在地 Property address</label><input name="propertyAddress"></div>
+                  <div class="apply-field"><label>入居希望日 Desired move-in date<span class="required-mark">*</span></label><input type="date" name="desiredMoveIn" required></div>
+                  <div class="apply-field"><label>契約予定期間 Intended lease period</label><input name="leasePeriod" placeholder="例：2年間 / 2 years"></div>
+                  <div class="apply-field"><label>賃料 Monthly rent (円)</label><input type="number" name="applyRent" min="0" step="1000"></div>
+                  <div class="apply-field"><label>共益費・管理費 Management fee (円)</label><input type="number" name="applyMgmt" min="0" step="500"></div>
+                  <div class="apply-field"><label>駐車場 Parking (円)</label><input type="number" name="applyParking" min="0" step="500"></div>
+                  <div class="apply-field"><label>月額合計 Monthly total (円)</label><input type="number" name="applyMonthlyTotal" min="0" step="500"></div>
+                </div>
+              </section>
+
+              <section class="apply-section full">
+                <div class="section-title"><span class="idx">02</span>申込者情報 Applicant</div>
+                <div class="apply-fields">
+                  <div class="apply-field"><label>氏名（ローマ字）Full name in Roman letters<span class="required-mark">*</span></label><input name="fullNameRoman" required></div>
+                  <div class="apply-field"><label>氏名（漢字・カナ）Name in Japanese</label><input name="fullNameJapanese"></div>
+                  <div class="apply-field"><label>フリガナ Furigana</label><input name="furigana"></div>
+                  <div class="apply-field"><label>旧姓・別名 Former / other name</label><input name="otherName"></div>
+                  <div class="apply-field"><label>生年月日 Date of birth<span class="required-mark">*</span></label><input type="date" name="dateOfBirth" required></div>
+                  <div class="apply-field"><label>性別 Gender</label><select name="gender"><option value="">選択 Select</option><option>男性 Male</option><option>女性 Female</option><option>その他 Other</option><option>回答しない Prefer not to say</option></select></div>
+                  <div class="apply-field"><label>国籍 Nationality<span class="required-mark">*</span></label><input name="nationality" required></div>
+                  <div class="apply-field"><label>母国語 Native language</label><input name="nativeLanguage"></div>
+                  <div class="apply-field"><label>携帯電話 Mobile phone<span class="required-mark">*</span></label><input type="tel" name="mobilePhone" required></div>
+                  <div class="apply-field"><label>Eメール Email<span class="required-mark">*</span></label><input type="email" name="email" required></div>
+                  <div class="apply-field full"><label>現住所 Current address<span class="required-mark">*</span><small>郵便番号、都道府県、市区町村、番地、建物名・号室</small></label><input name="currentAddress" required></div>
+                  <div class="apply-field"><label>現住居の居住年数 Years at current address</label><input name="yearsAtAddress" placeholder="例：1年6ヶ月"></div>
+                  <div class="apply-field"><label>現住居の家賃 Current monthly rent (円)</label><input type="number" name="currentRent" min="0" step="1000"></div>
+                  <div class="apply-field full"><label>転居理由 Reason for moving</label><div class="inline-options"><label><input type="radio" name="moveReason" value="進学">進学</label><label><input type="radio" name="moveReason" value="就職">就職</label><label><input type="radio" name="moveReason" value="転勤">転勤</label><label><input type="radio" name="moveReason" value="結婚">結婚</label><label><input type="radio" name="moveReason" value="住み替え">住み替え</label><label><input type="radio" name="moveReason" value="その他">その他</label></div></div>
+                  <div class="apply-field full"><label>転居理由の詳細 Details</label><textarea name="moveReasonDetails"></textarea></div>
+                </div>
+              </section>
+
+              <section class="apply-section">
+                <div class="section-title"><span class="idx">03</span>在留・入国情報 Immigration</div>
+                <div class="apply-fields">
+                  <div class="apply-field"><label>在留資格 Status of residence<span class="required-mark">*</span></label><input name="residenceStatus" placeholder="例：技術・人文知識・国際業務" required></div>
+                  <div class="apply-field"><label>在留期限 Expiration date<span class="required-mark">*</span></label><input type="date" name="residenceExpiry" required></div>
+                  <div class="apply-field"><label>在留カード番号 Residence card no.</label><input name="residenceCardNumber"></div>
+                  <div class="apply-field"><label>旅券番号 Passport no.</label><input name="passportNumber"></div>
+                  <div class="apply-field"><label>来日年月日 Date of entry to Japan</label><input type="date" name="entryDate"></div>
+                  <div class="apply-field"><label>日本滞在予定 Intended stay in Japan</label><input name="plannedStay" placeholder="例：5年以上"></div>
+                  <div class="apply-field"><label>日本語レベル Japanese level</label><select name="japaneseLevel"><option value="">選択 Select</option><option>ネイティブ相当 / Native</option><option>ビジネス / Business</option><option>日常会話 / Conversational</option><option>初級 / Beginner</option><option>話せない / None</option></select></div>
+                  <div class="apply-field"><label>日本語試験 Japanese qualification</label><input name="japaneseQualification" placeholder="例：JLPT N2"></div>
+                  <div class="apply-field full"><label>本国住所 Overseas home address</label><textarea name="overseasAddress"></textarea></div>
+                </div>
+              </section>
+
+              <section class="apply-section">
+                <div class="section-title"><span class="idx">04</span>勤務先・学校 Employment / School</div>
+                <div class="apply-fields">
+                  <div class="apply-field"><label>職業 Occupation<span class="required-mark">*</span></label><select name="occupation" required><option value="">選択 Select</option><option>会社員 Employee</option><option>会社役員 Executive</option><option>公務員 Public employee</option><option>自営業 Self-employed</option><option>学生 Student</option><option>パート・アルバイト Part-time</option><option>派遣 Temporary staff</option><option>内定者 Prospective employee</option><option>その他 Other</option></select></div>
+                  <div class="apply-field"><label>勤務・学校区分 Type</label><select name="organizationType"><option value="">選択 Select</option><option>勤務先 Employer</option><option>学校 School</option><option>内定先 Future employer</option></select></div>
+                  <div class="apply-field full"><label>勤務先・学校名 Employer / school name<span class="required-mark">*</span></label><input name="organizationName" required></div>
+                  <div class="apply-field full"><label>所在地 Address</label><input name="organizationAddress"></div>
+                  <div class="apply-field"><label>電話 Telephone</label><input type="tel" name="organizationPhone"></div>
+                  <div class="apply-field"><label>業種 Industry / faculty</label><input name="industry"></div>
+                  <div class="apply-field"><label>所属・役職 Department / title</label><input name="position"></div>
+                  <div class="apply-field"><label>勤続・在学年数 Years employed / enrolled</label><input name="yearsEmployed"></div>
+                  <div class="apply-field"><label>雇用形態 Employment type</label><select name="employmentType"><option value="">選択 Select</option><option>正社員 Permanent</option><option>契約社員 Contract</option><option>派遣社員 Temporary</option><option>アルバイト Part-time</option><option>自営業 Self-employed</option><option>学生 Student</option></select></div>
+                  <div class="apply-field"><label>年収 Annual income (円)</label><input type="number" name="annualIncome" min="0" step="10000"></div>
+                  <div class="apply-field"><label>月収 Monthly income (円)</label><input type="number" name="monthlyIncome" min="0" step="10000"></div>
+                  <div class="apply-field"><label>給料日 Pay date</label><input name="payDay" placeholder="例：毎月25日"></div>
+                </div>
+              </section>
+
+              <section class="apply-section full">
+                <div class="section-title"><span class="idx">05</span>入居者 Occupants</div>
+                <div class="occupant-head"><span>氏名 Name</span><span>生年月日 DOB</span><span>性別 Gender</span><span>続柄 Relation</span><span>勤務先・学校 Employer / School</span><span></span></div>
+                <div id="occupantRows"></div>
+                <button type="button" class="add-btn" id="addOccupantBtn">+ 入居者を追加 Add occupant</button>
+                <div class="apply-fields" style="margin-top:12px;">
+                  <div class="apply-field"><label>入居人数 Total occupants</label><input type="number" name="occupantCount" min="1" value="1"></div>
+                  <div class="apply-field"><label>ペット Pets</label><select name="pets"><option>なし None</option><option>あり Yes</option><option>相談希望 Ask landlord</option></select></div>
+                </div>
+              </section>
+
+              <section class="apply-section">
+                <div class="section-title"><span class="idx">06</span>緊急連絡先 Emergency Contact</div>
+                <div class="apply-fields">
+                  <div class="apply-field"><label>氏名 Full name<span class="required-mark">*</span></label><input name="emergencyName" required></div>
+                  <div class="apply-field"><label>申込者との続柄 Relationship<span class="required-mark">*</span></label><input name="emergencyRelation" required></div>
+                  <div class="apply-field"><label>電話 Telephone<span class="required-mark">*</span></label><input type="tel" name="emergencyPhone" required></div>
+                  <div class="apply-field"><label>使用言語 Language</label><input name="emergencyLanguage"></div>
+                  <div class="apply-field full"><label>住所 Address</label><input name="emergencyAddress"></div>
+                  <div class="apply-field"><label>国内／海外 Location</label><select name="emergencyLocation"><option>日本国内 In Japan</option><option>海外 Overseas</option></select></div>
+                  <div class="apply-field"><label>Eメール Email</label><input type="email" name="emergencyEmail"></div>
+                </div>
+              </section>
+
+              <section class="apply-section">
+                <div class="section-title"><span class="idx">07</span>連帯保証人 Guarantor</div>
+                <div class="apply-fields">
+                  <div class="apply-field full"><label>保証方法 Guarantee method</label><select name="guaranteeMethod"><option>保証会社 Guarantor company</option><option>連帯保証人 Personal guarantor</option><option>両方 Both</option><option>未定 Undecided</option></select></div>
+                  <div class="apply-field"><label>氏名 Full name</label><input name="guarantorName"></div>
+                  <div class="apply-field"><label>続柄 Relationship</label><input name="guarantorRelation"></div>
+                  <div class="apply-field"><label>電話 Telephone</label><input type="tel" name="guarantorPhone"></div>
+                  <div class="apply-field"><label>勤務先 Employer</label><input name="guarantorEmployer"></div>
+                  <div class="apply-field full"><label>住所 Address</label><input name="guarantorAddress"></div>
+                  <div class="apply-field"><label>年収 Annual income (円)</label><input type="number" name="guarantorIncome" min="0" step="10000"></div>
+                  <div class="apply-field"><label>国籍 Nationality</label><input name="guarantorNationality"></div>
+                </div>
+              </section>
+
+              <section class="apply-section full">
+                <div class="section-title"><span class="idx">08</span>審査用添付書類 Supporting Documents</div>
+                <p style="font-size:12px;color:var(--ink-soft);margin:-4px 0 12px;">必要な書類だけを勾選してください。勾選後、該当する上傳欄位が自動で表示されます（画像またはPDF）。</p>
+                <div class="documents-grid" id="applicationDocuments">
+                  <div class="doc-item" data-doc="passport"><label class="doc-check"><input type="checkbox"><span>パスポート</span><span class="hint-inline">Passport</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf"><div class="doc-status">ファイル未選択</div></div></div>
+                  <div class="doc-item" data-doc="visa"><label class="doc-check"><input type="checkbox"><span>VISA・査証</span><span class="hint-inline">Visa</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf"><div class="doc-status">ファイル未選択</div></div></div>
+                  <div class="doc-item" data-doc="aoe"><label class="doc-check"><input type="checkbox"><span>AOE（入国許可関連書類）</span><span class="hint-inline">Entry permit</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf"><div class="doc-status">ファイル未選択</div></div></div>
+                  <div class="doc-item" data-doc="residence-card"><label class="doc-check"><input type="checkbox"><span>在留カード（表・裏）</span><span class="hint-inline">Residence card</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf" multiple><div class="doc-status">ファイル未選択（表・裏を選択可）</div></div></div>
+                  <div class="doc-item" data-doc="student-card"><label class="doc-check"><input type="checkbox"><span>学生証</span><span class="hint-inline">Student ID</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf"><div class="doc-status">ファイル未選択</div></div></div>
+                  <div class="doc-item" data-doc="bank-balance"><label class="doc-check"><input type="checkbox"><span>預金残高証明書</span><span class="hint-inline">Bank balance certificate</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf"><div class="doc-status">ファイル未選択</div></div></div>
+                  <div class="doc-item" data-doc="offer-letter"><label class="doc-check"><input type="checkbox"><span>内定通知書</span><span class="hint-inline">Job offer letter</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf"><div class="doc-status">ファイル未選択</div></div></div>
+                  <div class="doc-item" data-doc="employment-contract"><label class="doc-check"><input type="checkbox"><span>雇用契約書</span><span class="hint-inline">Employment contract</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf"><div class="doc-status">ファイル未選択</div></div></div>
+                </div>
+              </section>
+
+              <section class="apply-section full">
+                <div class="section-title"><span class="idx">09</span>補足・同意 Notes &amp; Consent</div>
+                <div class="apply-fields">
+                  <div class="apply-field full"><label>その他の希望・補足事項 Additional requests / notes</label><textarea name="additionalNotes"></textarea></div>
+                  <div class="apply-field full"><label class="consent-row"><input type="checkbox" name="informationAccurate" required><span>上記の申込内容に相違がないことを確認します。I confirm that the information above is true and complete.<span class="required-mark">*</span></span></label></div>
+                  <div class="apply-field full"><label class="consent-row"><input type="checkbox" name="screeningConsent" required><span>勤務先・緊急連絡先への確認を含む入居審査、および審査に必要な範囲での個人情報の取扱いに同意します。<span class="required-mark">*</span></span></label></div>
+                  <div class="apply-field"><label>申込日 Application date</label><input type="date" name="applicationDate" id="applicationDate"></div>
+                  <div class="apply-field"><label>申込者署名（氏名入力）Applicant signature<span class="required-mark">*</span></label><input name="signature" required></div>
+                </div>
+              </section>
+            </div>
+            <div class="apply-actions">
+              <button type="button" class="secondary-btn" id="clearApplicationBtn">入力内容をクリア Clear</button>
+              <button type="button" class="btn-copy" id="saveApplicationBtn">申込内容を保存 Download JSON</button>
+            </div>
+            <div class="footnote">※ このHTML単体では選択した書類をサーバーへ送信しません。書類はこのブラウザ内でのみ選択されます。実際の提出機能には、安全なサーバー保存先と通信処理が別途必要です。</div>
+          </form>
+        </section><!-- /broker-apply -->
+
+        <section id="broker-buy" class="broker-doc-panel theme-buy">
+          <div class="eyebrow">買付証明書・購入申込書 Purchase Offer</div>
+          <div class="grid">
+            <div class="card" id="buyFormCard">
+              <div class="section-title"><span class="idx">01</span>宛先・物件情報 Seller &amp; Property</div>
+              <div class="apply-fields">
+                <div class="apply-field full"><label>売主・売主側会社名 Addressee</label><input id="buySeller" placeholder="例：株式会社〇〇 御中 / 〇〇様"></div>
+                <div class="apply-field"><label>申込日 Offer date</label><input type="date" id="buyOfferDate"></div>
+                <div class="apply-field"><label>有効期限 Valid until</label><input type="date" id="buyValidUntil"></div>
+                <div class="apply-field"><label>物件種別 Property type</label><select id="buyPropertyType"><option>中古マンション</option><option>新築マンション</option><option>中古戸建</option><option>新築戸建</option><option>土地</option><option>一棟収益物件</option><option>区分収益物件</option><option>事業用物件</option><option>その他</option></select></div>
+                <div class="apply-field"><label>物件名・号室 Property / room</label><input id="buyPropertyName"></div>
+                <div class="apply-field full"><label>所在地・地番 Address / lot number</label><input id="buyPropertyAddress"></div>
+                <div class="apply-field"><label>土地面積 Land area (㎡)</label><input type="number" id="buyLandArea" min="0" step="0.01"></div>
+                <div class="apply-field"><label>建物・専有面積 Building area (㎡)</label><input type="number" id="buyBuildingArea" min="0" step="0.01"></div>
+                <div class="apply-field"><label>構造 Structure</label><input id="buyStructure" placeholder="例：RC造10階建"></div>
+                <div class="apply-field"><label>現況 Current status</label><select id="buyCurrentStatus"><option>空室 Vacant</option><option>居住中 Occupied by owner</option><option>賃貸中 Tenant occupied</option><option>更地 Vacant land</option><option>古家あり Existing building</option><option>その他 Other</option></select></div>
+              </div>
+
+              <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>購入条件 Offer Terms</div>
+              <div class="apply-fields">
+                <div class="apply-field"><label>売出価格 Asking price (円)</label><input type="number" id="buyAskingPrice" min="0" step="10000"></div>
+                <div class="apply-field"><label>購入希望価格 Offer price (円)<span class="required-mark">*</span></label><input type="number" id="buyOfferPrice" min="0" step="10000" required></div>
+                <div class="apply-field"><label>手付金 Earnest money (円)</label><input type="number" id="buyDeposit" min="0" step="10000"></div>
+                <div class="apply-field"><label>中間金 Interim payment (円)</label><input type="number" id="buyInterim" min="0" step="10000"></div>
+                <div class="apply-field"><label>残代金 Balance (円)</label><input type="number" id="buyBalance" min="0" step="10000" readonly></div>
+                <div class="apply-field"><label>支払方法 Payment method</label><select id="buyPaymentMethod"><option value="loan">銀行融資 Bank financing</option><option value="cash">現金 Cash</option><option value="mixed">現金＋銀行融資 Cash + financing</option></select></div>
+                <div class="apply-field"><label>融資予定額 Loan amount (円)</label><input type="number" id="buyLoanAmount" min="0" step="10000"></div>
+                <div class="apply-field"><label>自己資金 Own funds (円)</label><input type="number" id="buyOwnFunds" min="0" step="10000"></div>
+                <div class="apply-field"><label>融資申込先 Lender</label><input id="buyLender" placeholder="例：〇〇銀行"></div>
+                <div class="apply-field"><label>事前審査 Pre-approval</label><select id="buyPreApproval"><option>未申込 Not applied</option><option>申込中 Pending</option><option>承認済 Approved</option><option>不要 Not applicable</option></select></div>
+                <div class="apply-field full"><label>融資利用特約 Financing contingency</label><select id="buyLoanContingency"><option value="yes">付す（融資否決時は白紙解除を希望）Yes</option><option value="no">付さない No</option><option value="consult">別途協議 To be discussed</option></select></div>
+                <div class="apply-field"><label>売買契約希望日 Contract date</label><input type="date" id="buyContractDate"></div>
+                <div class="apply-field"><label>決済・引渡希望日 Closing / handover</label><input type="date" id="buyClosingDate"></div>
+              </div>
+              <div class="money-diff" id="buyPriceDiff"></div>
+
+              <div class="section-title" style="margin-top:18px;"><span class="idx">03</span>その他条件 Conditions</div>
+              <div class="inline-options" id="buyConditions">
+                <label><input type="checkbox" value="現況有姿での引渡し">現況有姿</label>
+                <label><input type="checkbox" value="境界確定・確定測量を条件とする">境界確定・測量</label>
+                <label><input type="checkbox" value="残置物撤去後の引渡し">残置物撤去</label>
+                <label><input type="checkbox" value="建物解体・更地渡し">解体更地渡し</label>
+                <label><input type="checkbox" value="賃貸借契約・敷金等の承継を条件とする">賃貸借契約承継</label>
+                <label><input type="checkbox" value="契約不適合責任を免責とする">契約不適合責任免責</label>
+                <label><input type="checkbox" value="付帯設備表・物件状況報告書の交付を希望">設備表・告知書交付</label>
+              </div>
+              <div class="apply-field full" style="margin-top:10px;"><label>その他特約・希望条件 Other conditions</label><textarea id="buyOtherConditions" placeholder="例：価格には消費税を含む、管理費等の滞納がないこと、司法書士は買主指定 等"></textarea></div>
+
+              <div class="section-title" style="margin-top:18px;"><span class="idx">04</span>買主・仲介会社 Buyer &amp; Agent</div>
+              <div class="apply-fields">
+                <div class="apply-field"><label>買主区分 Buyer type</label><select id="buyBuyerType"><option>個人 Individual</option><option>法人 Company</option></select></div>
+                <div class="apply-field"><label>氏名・法人名 Buyer name<span class="required-mark">*</span></label><input id="buyBuyerName" required></div>
+                <div class="apply-field full"><label>住所 Address</label><input id="buyBuyerAddress"></div>
+                <div class="apply-field"><label>電話 Phone</label><input type="tel" id="buyBuyerPhone"></div>
+                <div class="apply-field"><label>Eメール Email</label><input type="email" id="buyBuyerEmail"></div>
+                <div class="apply-field"><label>年収 Annual income (円)</label><input type="number" id="buyAnnualIncome" min="0" step="10000"></div>
+                <div class="apply-field"><label>勤務先・職業 Employer / occupation</label><input id="buyEmployer"></div>
+                <div class="apply-field"><label>仲介会社 Agent company</label><input id="buyAgentCompany"></div>
+                <div class="apply-field"><label>担当者 Agent</label><input id="buyAgentName"></div>
+                <div class="apply-field"><label>仲介会社TEL Agent phone</label><input type="tel" id="buyAgentPhone"></div>
+                <div class="apply-field"><label>仲介会社FAX Agent fax</label><input type="tel" id="buyAgentFax"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="receipt-card" id="buyPreviewCard">
+                <div class="receipt-head"><h2>買付証明書</h2><div class="date" id="buyPreviewDate"></div></div>
+                <div class="receipt-body">
+                  <div class="buy-preview-title">買付証明書</div>
+                  <div class="buy-preview-sub">PURCHASE OFFER</div>
+                  <div style="text-align:right;font-size:12px;margin-bottom:8px;"><span id="bOutSeller">売主様</span>　御中</div>
+                  <div class="buy-statement">私は、下記不動産を下記条件にて購入したく、ここに買付を申し込みます。</div>
+                  <div class="buy-preview-section">1. 対象物件</div>
+                  <div class="buy-preview-row"><span class="k">物件種別・名称</span><span class="v" id="bOutProperty">—</span></div>
+                  <div class="buy-preview-row"><span class="k">所在地・地番</span><span class="v" id="bOutAddress">—</span></div>
+                  <div class="buy-preview-row"><span class="k">土地／建物面積</span><span class="v" id="bOutAreas">—</span></div>
+                  <div class="buy-preview-row"><span class="k">構造・現況</span><span class="v" id="bOutStatus">—</span></div>
+                  <div class="buy-preview-section">2. 購入条件</div>
+                  <div class="buy-preview-row"><span class="k">購入希望価格</span><span class="v" id="bOutOfferPrice">—</span></div>
+                  <div class="buy-preview-row"><span class="k">手付金／中間金</span><span class="v" id="bOutPayments">—</span></div>
+                  <div class="buy-preview-row"><span class="k">残代金</span><span class="v" id="bOutBalance">—</span></div>
+                  <div class="buy-preview-row"><span class="k">支払・融資条件</span><span class="v" id="bOutFinance">—</span></div>
+                  <div class="buy-preview-row"><span class="k">契約／決済引渡</span><span class="v" id="bOutDates">—</span></div>
+                  <div class="buy-preview-row"><span class="k">本申込の有効期限</span><span class="v" id="bOutValidity">—</span></div>
+                  <div class="buy-preview-section">3. その他条件</div>
+                  <div class="buy-preview-row"><span class="k">特約・希望条件</span><span class="v" id="bOutConditions">特になし</span></div>
+                  <div class="buy-preview-section">4. 買主</div>
+                  <div class="buy-signature-box" id="bOutBuyer">氏名：—<br>住所：—<br>連絡先：—</div>
+                  <div class="buy-preview-row"><span class="k">仲介会社・担当</span><span class="v" id="bOutAgent">—</span></div>
+                  <div class="buy-legal-note">本書は購入希望条件を提示し、売買契約締結に向けた協議を申し込むための書面です。本書のみで売買契約の成立を保証するものではなく、最終的な取引条件は重要事項説明および別途締結する不動産売買契約書によって確定します。</div>
+                </div>
+              </div>
+              <div class="actions export-actions" data-export-target="buyPreviewCard" data-export-name="買付証明書">
+                <button class="btn-copy" id="buyPdfBtn">📄 PDFを生成 Generate PDF</button>
+                <button type="button" class="secondary-btn export-word">📝 Word</button>
+                <button type="button" class="secondary-btn export-excel">📊 Excel</button>
+                <button type="button" class="secondary-btn export-shot">📷 Screenshot</button>
+                <button class="secondary-btn" id="buyClearBtn">クリア Clear</button>
+              </div>
+              <div class="footnote">一般的な実務項目をまとめた買付証明書です。物件・取引内容に応じて宅地建物取引士、司法書士または弁護士へ条件をご確認ください。</div>
+            </div>
+          </div>
+        </section><!-- /broker-buy -->
+  
+    </section><!-- /doc-type-broker -->
+  </div><!-- /page-documents -->

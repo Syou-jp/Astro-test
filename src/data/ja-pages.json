@@ -1,0 +1,221 @@
+[
+  {
+    "id": "page-home",
+    "slug": "home",
+    "file": "home.html",
+    "title": "首頁"
+  },
+  {
+    "id": "page-about",
+    "slug": "about",
+    "file": "00-about.html"
+  },
+  {
+    "id": "page-rent",
+    "slug": "rent",
+    "file": "01-rent.html"
+  },
+  {
+    "id": "page-tax-realestate",
+    "slug": "tax-realestate",
+    "file": "02-tax-realestate.html"
+  },
+  {
+    "id": "page-loan",
+    "slug": "loan",
+    "file": "03-loan.html"
+  },
+  {
+    "id": "page-area",
+    "slug": "area",
+    "file": "04-area.html"
+  },
+  {
+    "id": "page-listings",
+    "slug": "listings",
+    "file": "30-listings.html"
+  },
+  {
+    "id": "page-used-market",
+    "slug": "used-market",
+    "file": "used-market.html",
+    "title": "中古ゆずりあい市場"
+  },
+  {
+    "id": "page-help-request",
+    "slug": "help-request",
+    "file": "help-request.html",
+    "title": "たすけあい掲示板"
+  },
+  {
+    "id": "page-moving",
+    "slug": "moving",
+    "file": "31-moving.html"
+  },
+  {
+    "id": "page-moveout",
+    "slug": "moveout",
+    "file": "21-moveout.html"
+  },
+  {
+    "id": "page-fire-insurance",
+    "slug": "fire-insurance",
+    "file": "22-fire-insurance.html"
+  },
+  {
+    "id": "page-route",
+    "slug": "route",
+    "file": "05-route.html"
+  },
+  {
+    "id": "page-etc",
+    "slug": "etc",
+    "file": "07-etc.html"
+  },
+  {
+    "id": "page-airport",
+    "slug": "airport",
+    "file": "08-airport.html"
+  },
+  {
+    "id": "page-car-all",
+    "slug": "car-all",
+    "file": "12-car-all.html"
+  },
+  {
+    "id": "page-taxi-fare",
+    "slug": "taxi-fare",
+    "file": "taxi-fare.html",
+    "title": "タクシー料金めやす計算"
+  },
+  {
+    "id": "page-utilities",
+    "slug": "utilities",
+    "file": "09-utilities.html"
+  },
+  {
+    "id": "page-waste",
+    "slug": "waste",
+    "file": "13-waste.html"
+  },
+  {
+    "id": "page-kaden-recycle",
+    "slug": "kaden-recycle",
+    "file": "13b-kaden-recycle.html"
+  },
+  {
+    "id": "page-bank",
+    "slug": "bank",
+    "file": "14-bank.html"
+  },
+  {
+    "id": "page-credit-card",
+    "slug": "credit-card",
+    "file": "credit-card.html",
+    "title": "在日外国人のためのクレジットカードガイド"
+  },
+  {
+    "id": "page-visa",
+    "slug": "visa",
+    "file": "16-visa.html"
+  },
+  {
+    "id": "page-japanese",
+    "slug": "japanese",
+    "file": "17-japanese.html"
+  },
+  {
+    "id": "page-ward-office",
+    "slug": "ward-office",
+    "file": "18-ward-office.html"
+  },
+  {
+    "id": "page-sim",
+    "slug": "sim",
+    "file": "19-sim.html"
+  },
+  {
+    "id": "page-internet",
+    "slug": "internet",
+    "file": "20-internet.html"
+  },
+  {
+    "id": "page-holidays",
+    "slug": "holidays",
+    "file": "23-holidays.html"
+  },
+  {
+    "id": "page-services",
+    "slug": "services",
+    "file": "25-services.html"
+  },
+  {
+    "id": "page-overseas-shipping",
+    "slug": "overseas-shipping",
+    "file": "32-overseas-shipping.html",
+    "title": "海外発送ガイド"
+  },
+  {
+    "id": "page-jobs",
+    "slug": "jobs",
+    "file": "26-jobs.html"
+  },
+  {
+    "id": "page-living",
+    "slug": "living",
+    "file": "10-living.html"
+  },
+  {
+    "id": "page-friend-offers",
+    "slug": "friend-offers",
+    "file": "27-friend-offers.html"
+  },
+  {
+    "id": "page-restaurant-list",
+    "slug": "restaurant-list",
+    "file": "restaurant-list.html",
+    "title": "お店リスト｜各国のレストラン"
+  },
+  {
+    "id": "page-partners",
+    "slug": "partners",
+    "file": "partners.html",
+    "title": "嚴選合作夥伴與在地服務推薦"
+  },
+  {
+    "id": "page-tax-personal",
+    "slug": "tax-personal",
+    "file": "11-tax-personal.html"
+  },
+  {
+    "id": "page-consumption-tax",
+    "slug": "consumption-tax",
+    "file": "28-consumption-tax.html"
+  },
+  {
+    "id": "page-income-tax",
+    "slug": "income-tax",
+    "file": "29-income-tax.html"
+  },
+  {
+    "id": "page-legal",
+    "slug": "legal",
+    "file": "11b-legal.html"
+  },
+  {
+    "id": "page-nisa",
+    "slug": "nisa",
+    "file": "24-nisa.html"
+  },
+  {
+    "id": "page-documents",
+    "slug": "documents",
+    "file": "06-documents.html"
+  },
+  {
+    "id": "page-era",
+    "slug": "era",
+    "file": "era.html",
+    "title": "元号・年齢早見表｜西暦・民国・韓国年齢換算"
+  }
+]

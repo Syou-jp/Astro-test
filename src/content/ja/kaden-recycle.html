@@ -1,0 +1,500 @@
+<div id="page-kaden-recycle" class="page-view active theme-area">
+  <style>
+    .kaden-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+    .kaden-hero-main {
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, #ffffff 0%, #f6f1e8 100%);
+      padding: 24px;
+    }
+    .kaden-hero-main h2 {
+      font-family: "Shippori Mincho", serif;
+      font-size: 28px;
+      line-height: 1.35;
+      margin: 0 0 10px;
+      letter-spacing: 0.04em;
+    }
+    .kaden-hero-main p {
+      font-size: 13px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+    .kaden-summary {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+      align-content: center;
+    }
+    .kaden-summary-row {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line-soft);
+      background: var(--paper);
+    }
+    .kaden-mark {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .kaden-summary-row b {
+      display: block;
+      font-size: 12.5px;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+    .kaden-summary-row small {
+      display: block;
+      font-size: 10.5px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin-top: 2px;
+    }
+    .kaden-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kaden-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 16px;
+    }
+    .kaden-card h3 {
+      font-size: 14px;
+      margin: 0 0 8px;
+      color: var(--ink);
+    }
+    .kaden-card p {
+      font-size: 11.5px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+    .kaden-card strong {
+      display: block;
+      font: 700 10px "JetBrains Mono", monospace;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 7px;
+    }
+    .kaden-flow {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .kaden-step {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 13px;
+    }
+    .kaden-step time {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.55;
+    }
+    .kaden-step b {
+      display: block;
+      font-size: 13px;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .kaden-step span {
+      display: block;
+      font-size: 11.5px;
+      line-height: 1.75;
+      color: var(--ink-soft);
+    }
+    .kaden-two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .kaden-check {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 16px;
+    }
+    .kaden-check h3 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      color: var(--accent);
+    }
+    .kaden-check ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 7px;
+    }
+    .kaden-check li {
+      font-size: 11.5px;
+      line-height: 1.75;
+      color: var(--ink-soft);
+    }
+    .kaden-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 11.5px;
+      margin-top: 8px;
+    }
+    .kaden-table th,
+    .kaden-table td {
+      border: 1px solid var(--line);
+      padding: 9px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .kaden-table th {
+      background: var(--paper-2);
+      color: var(--accent);
+      font-size: 11px;
+    }
+    .kaden-note {
+      border-left: 3px solid var(--gold);
+      background: rgba(156, 122, 60, 0.08);
+      padding: 11px 13px;
+      font-size: 11.5px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      margin-top: 14px;
+    }
+    .kaden-warning {
+      border-left: 4px solid var(--seal);
+      background: rgba(168, 72, 47, 0.07);
+      padding: 11px 13px;
+      font-size: 11.5px;
+      line-height: 1.75;
+      color: var(--ink-soft);
+      margin-top: 12px;
+    }
+    .kaden-source-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .kaden-source-list a {
+      display: block;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 12px 13px;
+      font-size: 11.5px;
+      line-height: 1.55;
+    }
+    .kaden-source-list a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .kaden-source-list small {
+      display: block;
+      margin-top: 3px;
+      color: var(--ink-soft);
+      font-size: 10px;
+    }
+    @media (max-width: 860px) {
+      .kaden-hero,
+      .kaden-grid,
+      .kaden-two-col {
+        grid-template-columns: 1fr;
+      }
+      .kaden-source-list {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 560px) {
+      .kaden-hero-main {
+        padding: 18px;
+      }
+      .kaden-hero-main h2 {
+        font-size: 22px;
+      }
+      .kaden-step {
+        grid-template-columns: 1fr;
+      }
+      .kaden-card,
+      .kaden-check {
+        padding: 14px;
+      }
+    }
+  </style>
+
+  <div class="eyebrow">家電リサイクル / Moving Guide</div>
+
+  <section class="kaden-hero" aria-labelledby="kadenTitle">
+    <div class="kaden-hero-main">
+      <h2 id="kadenTitle">引っ越し時の家電リサイクル案内</h2>
+      <p>
+        家電4品目は、粗大ごみでは出せません。引っ越しや帰国の前に、買い替え・購入店への依頼・指定引取場所への持ち込み・東京23区の受付センター利用の
+        4つから、自分に合う方法を選べます。やさしい日本語で、手順だけを短くまとめています。
+      </p>
+    </div>
+    <div class="kaden-summary" aria-label="概要">
+      <div class="kaden-summary-row">
+        <div class="kaden-mark">4</div>
+        <div>
+          <b>対象は4品目だけ</b>
+          <small>エアコン・テレビ・冷蔵庫/冷凍庫・洗濯機/衣類乾燥機です。</small>
+        </div>
+      </div>
+      <div class="kaden-summary-row">
+        <div class="kaden-mark">24H</div>
+        <div>
+          <b>東京23区はWeb申込が便利</b>
+          <small>受付センターのインターネット申込は24時間利用できます。</small>
+        </div>
+      </div>
+      <div class="kaden-summary-row">
+        <div class="kaden-mark">NG</div>
+        <div>
+          <b>無許可回収業者は使わない</b>
+          <small>高額請求や不法投棄のトラブルを防ぐため、正規ルートを使います。</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" style="margin-bottom:16px;">
+    <div class="section-title"><span class="idx">01</span><span>対象となる家電4品目</span></div>
+    <div class="kaden-grid">
+      <article class="kaden-card">
+        <strong>1</strong>
+        <h3>エアコン</h3>
+        <p>壁掛けタイプなどの家庭用エアコンは対象です。取り外し作業は回収料金に含まれないことが多いので、必要なら別手配にします。</p>
+      </article>
+      <article class="kaden-card">
+        <strong>2</strong>
+        <h3>テレビ</h3>
+        <p>ブラウン管式、液晶式、有機EL式、プラズマ式などが対象です。サイズによってリサイクル料金が変わります。</p>
+      </article>
+      <article class="kaden-card">
+        <strong>3</strong>
+        <h3>冷蔵庫・冷凍庫</h3>
+        <p>内容積で料金区分が分かれることがあります。処分前にメーカー名と容量を確認しておくとスムーズです。</p>
+      </article>
+      <article class="kaden-card">
+        <strong>4</strong>
+        <h3>洗濯機・衣類乾燥機</h3>
+        <p>ドラム式を含む洗濯機、衣類乾燥機が対象です。中身を空にして、搬出しやすい状態で準備します。</p>
+      </article>
+    </div>
+    <div class="kaden-warning">
+      これらの4品目は、自治体の通常収集や粗大ごみとしては出せません。まず家電リサイクルのルートを確認してください。
+    </div>
+  </section>
+
+  <section class="card" style="margin-bottom:16px;">
+    <div class="section-title"><span class="idx">02</span><span>処分方法の4つの選択肢</span></div>
+    <div class="kaden-flow">
+      <div class="kaden-step">
+        <time>1. 買い替え</time>
+        <div>
+          <b>新しい家電を買うとき</b>
+          <span>家電量販店やECサイトに、古い家電の引き取りを依頼します。新旧の入れ替えがいちばん分かりやすい方法です。</span>
+        </div>
+      </div>
+      <div class="kaden-step">
+        <time>2. 購入店へ依頼</time>
+        <div>
+          <b>買った店が分かるとき</b>
+          <span>過去に購入した小売店に連絡し、引き取りを依頼します。法律上、小売店は排出場所で引き取る必要があります。</span>
+        </div>
+      </div>
+      <div class="kaden-step">
+        <time>3. 受付センター</time>
+        <div>
+          <b>購入店が不明・遠いとき</b>
+          <span>東京23区では「東京二十三区家電リサイクル受付センター」に申し込みます。販売店が閉店している場合にも使いやすい方法です。</span>
+        </div>
+      </div>
+      <div class="kaden-step">
+        <time>4. 持ち込み</time>
+        <div>
+          <b>自分で運べるとき</b>
+          <span>指定引取場所へ直接持ち込む方法です。収集運搬料金を抑えられますが、事前に家電リサイクル券の準備が必要です。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" style="margin-bottom:16px;">
+    <div class="section-title"><span class="idx">03</span><span>東京23区の申し込み手順</span></div>
+    <div class="kaden-flow">
+      <div class="kaden-step">
+        <time>STEP 1</time>
+        <div>
+          <b>品目・メーカー・サイズを確認する</b>
+          <span>テレビは画面サイズ、冷蔵庫・冷凍庫は容量、そしてメーカー名を見ます。料金確認が早くなります。</span>
+        </div>
+      </div>
+      <div class="kaden-step">
+        <time>STEP 2</time>
+        <div>
+          <b>受付センターに申し込む</b>
+          <span>電話またはインターネットで申込みます。Web申込は24時間利用できます。電話番号は 0570-087200 です。</span>
+        </div>
+      </div>
+      <div class="kaden-step">
+        <time>STEP 3</time>
+        <div>
+          <b>回収日までに家の外へ出しておく</b>
+          <span>多くの収集会社は、部屋の中からの運び出しや取り外しを行いません。玄関先や指定の集積場まで準備します。</span>
+        </div>
+      </div>
+      <div class="kaden-step">
+        <time>STEP 4</time>
+        <div>
+          <b>当日に支払う</b>
+          <span>受付センター経由の回収では、一般に「リサイクル料金」と「収集運搬料金」を当日現金で支払います。</span>
+        </div>
+      </div>
+    </div>
+    <div class="kaden-note">
+      東京23区では、インターネット申込後の変更や取消の扱いがあるため、予定が変わりそうな場合は早めに公式サイトで確認しておくと安心です。
+    </div>
+  </section>
+
+  <section class="card" style="margin-bottom:16px;">
+    <div class="section-title"><span class="idx">04</span><span>費用の目安</span></div>
+    <p style="margin:0 0 8px;font-size:11.5px;line-height:1.8;color:var(--ink-soft);">
+      リサイクル料金はメーカーや品目で変わります。下記は東京23区の受付センターに掲載されている目安です。
+    </p>
+    <table class="kaden-table">
+      <thead>
+        <tr>
+          <th>対象品目</th>
+          <th>リサイクル料金</th>
+          <th>収集運搬料金</th>
+          <th>合計目安</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>エアコン</td>
+          <td>990円</td>
+          <td>4,000円</td>
+          <td>4,990円</td>
+        </tr>
+        <tr>
+          <td>テレビ（15型以下）</td>
+          <td>1,870円</td>
+          <td>3,500円</td>
+          <td>5,370円</td>
+        </tr>
+        <tr>
+          <td>テレビ（16型以上）</td>
+          <td>2,970円</td>
+          <td>3,500円</td>
+          <td>6,470円</td>
+        </tr>
+        <tr>
+          <td>冷蔵庫（170L以下）</td>
+          <td>3,740円</td>
+          <td>4,000円</td>
+          <td>7,740円</td>
+        </tr>
+        <tr>
+          <td>冷蔵庫（171L以上）</td>
+          <td>4,730円</td>
+          <td>4,000円</td>
+          <td>8,730円</td>
+        </tr>
+        <tr>
+          <td>洗濯機・衣類乾燥機</td>
+          <td>2,530円</td>
+          <td>4,000円</td>
+          <td>6,530円</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="kaden-note">
+      自分で指定引取場所へ持ち込む場合は、収集運搬料金がかかりません。最新のリサイクル料金は、メーカー名で必ず確認してください。
+    </div>
+  </section>
+
+  <section class="card" style="margin-bottom:16px;">
+    <div class="section-title"><span class="idx">05</span><span>注意点</span></div>
+    <div class="kaden-two-col">
+      <div class="kaden-check">
+        <h3>やること</h3>
+        <ul>
+          <li>冷蔵庫・洗濯機の中身を空にする。</li>
+          <li>メーカー名、サイズ、容量を確認する。</li>
+          <li>回収日までに搬出場所を決めておく。</li>
+          <li>公式ルートか正規販売店を使う。</li>
+        </ul>
+      </div>
+      <div class="kaden-check">
+        <h3>やらないこと</h3>
+        <ul>
+          <li>無許可の「無料回収」業者に渡す。</li>
+          <li>粗大ごみとしてそのまま出す。</li>
+          <li>部屋の中から運び出してもらえると思い込む。</li>
+          <li>料金の確認をせずに申し込む。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="kaden-warning">
+      環境省は、許可のない回収業者に家電を渡さないよう注意しています。高額請求や不法投棄のトラブルを避けるため、必ず正規ルートを使ってください。
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title"><span class="idx">06</span><span>公式リンク</span></div>
+    <ul class="kaden-source-list">
+      <li>
+        <a href="https://www.kankyo.metro.tokyo.lg.jp/resource/recycle/electronics/" target="_blank" rel="noopener">
+          東京都環境局 家電リサイクル
+          <small>家電リサイクル法の概要、対象品目、役割分担を確認できます。</small>
+        </a>
+      </li>
+      <li>
+        <a href="https://kaden23rc.jp/kaden23rc/" target="_blank" rel="noopener">
+          東京二十三区家電リサイクル受付センター
+          <small>東京23区の申込窓口。Web申込と料金目安があります。</small>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.rkc.aeha.or.jp/info/download.html" target="_blank" rel="noopener">
+          家電リサイクル券センター
+          <small>最新の料金一覧表や手続き資料を確認できます。</small>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.env.go.jp/recycle/kaden/tvrecycle.html" target="_blank" rel="noopener">
+          環境省の注意案内
+          <small>無許可回収業者を利用しないよう呼びかけています。</small>
+        </a>
+      </li>
+    </ul>
+  </section>
+</div>

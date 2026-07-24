@@ -1,0 +1,26 @@
+
+  <div id="page-living" class="page-view theme-rent">
+    <div class="eyebrow">毎月の生活費計算 Monthly Living Expenses</div>
+    <div class="portal-alert"><strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="apply-fields" style="margin-bottom:14px;"><div class="apply-field full"><label>月の手取り収入 Net monthly income</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span>円/月</span></div></div></div>
+        <div class="expense-groups" id="livingExpenseGroups">
+          <div class="expense-group" data-expense-group="住居"><h3>住居 Housing</h3><div class="expense-line"><span>家賃・住宅ローン</span><input class="living-expense" value="90000" type="number" min="0"></div><div class="expense-line"><span>管理費・共益費</span><input class="living-expense" value="8000" type="number" min="0"></div><div class="expense-line"><span>駐車場・駐輪場</span><input class="living-expense" value="0" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="光熱・通信"><h3>光熱・通信 Utilities</h3><div class="expense-line"><span>電気</span><input class="living-expense" value="8000" type="number" min="0"></div><div class="expense-line"><span>ガス</span><input class="living-expense" value="5000" type="number" min="0"></div><div class="expense-line"><span>水道</span><input class="living-expense" value="3000" type="number" min="0"></div><div class="expense-line"><span>携帯・インターネット</span><input class="living-expense" value="8000" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="食費"><h3>食費 Food</h3><div class="expense-line"><span>食材・自炊</span><input class="living-expense" value="35000" type="number" min="0"></div><div class="expense-line"><span>外食・デリバリー</span><input class="living-expense" value="12000" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="交通"><h3>交通・車 Transport</h3><div class="expense-line"><span>定期券・電車・バス</span><input class="living-expense" value="10000" type="number" min="0"></div><div class="expense-line"><span>車ローン・燃料・保険</span><input class="living-expense" value="0" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="税・保険"><h3>税・保険 Tax &amp; Insurance</h3><div class="expense-line"><span>所得税・住民税</span><input class="living-expense" value="0" type="number" min="0"></div><div class="expense-line"><span>健康保険・年金</span><input class="living-expense" value="0" type="number" min="0"></div><div class="expense-line"><span>生命・医療保険</span><input class="living-expense" value="5000" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="家族・医療"><h3>家族・医療 Family</h3><div class="expense-line"><span>医療・薬</span><input class="living-expense" value="5000" type="number" min="0"></div><div class="expense-line"><span>保育・教育・学費</span><input class="living-expense" value="0" type="number" min="0"></div><div class="expense-line"><span>仕送り・ペット</span><input class="living-expense" value="0" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="日用品・娯楽"><h3>日用品・娯楽 Lifestyle</h3><div class="expense-line"><span>日用品・衣服</span><input class="living-expense" value="10000" type="number" min="0"></div><div class="expense-line"><span>交際費・娯楽・旅行</span><input class="living-expense" value="15000" type="number" min="0"></div><div class="expense-line"><span>サブスク・その他</span><input class="living-expense" value="5000" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="返済"><h3>借入返済 Debt</h3><div class="expense-line"><span>カード・奨学金・その他</span><input class="living-expense" value="0" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="貯蓄" data-savings="true"><h3>貯蓄・投資 Savings</h3><div class="expense-line"><span>貯金・NISA・投資</span><input class="living-expense" value="30000" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="自由入力"><h3>自由入力 Custom</h3><div class="expense-line"><input id="livingCustomLabel1" value="その他1" aria-label="項目名"><input class="living-expense" value="0" type="number" min="0"></div><div class="expense-line"><input id="livingCustomLabel2" value="その他2" aria-label="項目名"><input class="living-expense" value="0" type="number" min="0"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="calc-kpi-grid"><div class="calc-kpi"><span>生活支出（月）</span><strong id="livingExpenseOut">—</strong></div><div class="calc-kpi"><span>貯蓄・投資（月）</span><strong id="livingSavingsOut">—</strong></div><div class="calc-kpi"><span>残額（月）</span><strong id="livingBalanceOut">—</strong></div><div class="calc-kpi"><span>年間支出</span><strong id="livingAnnualOut">—</strong></div><div class="calc-kpi"><span>貯蓄率</span><strong id="livingSavingsRateOut">—</strong></div></div>
+        <div class="card"><div class="section-title"><span class="idx">02</span>カテゴリー別内訳</div><div id="livingBreakdown"></div><div class="market-note" id="livingAdvice" style="margin-top:14px;"></div></div>
+      </div>
+    </div>
+  </div><!-- /page-living -->

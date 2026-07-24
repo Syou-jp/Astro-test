@@ -1,0 +1,30 @@
+
+  <div id="page-waste" class="page-view theme-area">
+    <div class="eyebrow">粗大ごみ料金・回収日 Bulky Waste Guide</div>
+    <div class="portal-alert">自治体回収は安い一方、事前申込と指定日搬出が必要です。東京23区と横浜・川崎・相模原・さいたま・千葉市の全区を選択でき、複数の自己搬入施設がある地域では持込先も個別に選べます。品目料金・受付日・搬入条件は住所地の公式受付で確定してください。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>品目と数量</div>
+        <div class="apply-fields">
+          <div class="apply-field full"><label>粗大ごみ品目 Item</label><select id="wasteItem"></select></div>
+          <div class="apply-field"><label>数量 Quantity</label><input type="number" id="wasteQty" value="1" min="1" max="50"></div>
+          <div class="apply-field"><label>自治体 Municipality</label><select id="wasteArea"></select></div>
+          <div class="apply-field full" id="wasteFacilityField" style="display:none;"><label>自己搬入施設 Drop-off facility</label><select id="wasteFacility"></select><small style="display:block;margin-top:5px;color:var(--ink-soft);">施設ごとに受付品目・時間・予約条件が異なります。</small></div>
+          <div class="apply-field"><label>運び出し</label><select id="wasteCarry"><option value="self">自分で収集場所へ</option><option value="staff">室内から搬出希望</option></select></div>
+          <div class="apply-field"><label>急ぎ Urgency</label><select id="wasteUrgency"><option value="normal">急がない</option><option value="week">1週間以内</option><option value="today">当日・翌日</option></select></div>
+        </div>
+        <button type="button" class="btn-copy" id="wasteCalcBtn" style="margin-top:14px;width:100%;">処分方法を比較</button>
+        <div id="wasteSpecial" class="market-note" style="display:none;margin-top:14px;"></div>
+      </div>
+      <div>
+        <div class="portal-grid">
+          <div class="portal-result"><span>自治体回収</span><strong id="wasteGovCost">—</strong><small id="wasteGovDays">申込後の指定日</small></div>
+          <div class="portal-result"><span>民間業者の相場</span><strong id="wastePrivateCost">—</strong><small id="wastePrivateDays">最短当日〜</small></div>
+        </div>
+        <div class="card" style="margin-top:14px;padding:14px;"><table class="portal-table"><tbody id="wasteBreakdown"></tbody></table></div>
+        <div class="waste-office" id="wasteOffice"></div>
+        <div class="portal-actions"><a class="secondary-btn" id="wasteOfficialLink" href="#" target="_blank" rel="noopener">公式申込・案内を開く</a><a class="secondary-btn" id="wasteFacilityMapLink" href="#" target="_blank" rel="noopener" style="display:none;">選択施設を地図で開く</a></div>
+        <div class="portal-source">目安日数：自治体は空き枠次第で数日〜2週間程度、引越繁忙期はそれ以上の場合があります。民間の「無料回収」や無許可業者には高額請求・不法投棄のリスクがあるため、一般廃棄物収集運搬の許可や自治体案内を確認してください。</div>
+      </div>
+    </div>
+  </div><!-- /page-waste -->

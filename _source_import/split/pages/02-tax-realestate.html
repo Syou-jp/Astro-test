@@ -1,0 +1,185 @@
+
+  <div id="page-tax-realestate" class="page-view theme-tax">
+  <div class="eyebrow" id="taxRealEyebrow">不動産の税金 Property Tax</div>
+  <div class="util-doc-switch" role="tablist" aria-label="不動産稅金種別切替" data-no-i18n>
+    <button type="button" class="util-doc-tab active" data-util-target="util-tax-buy"><span id="taxRealBuyLabel">購入時の税金</span></button>
+    <button type="button" class="util-doc-tab" data-util-target="util-tax-hold"><span id="taxRealHoldLabel">保有コスト</span></button>
+  </div>
+  <section id="util-tax-buy" class="util-doc-panel active">
+  <div class="portal-alert" id="taxPurchaseExplain" data-no-i18n></div>
+  <div class="grid">
+    <!-- TAX INPUT PANEL -->
+    <div class="card" id="taxFormCard">
+      <div class="section-title">物件基本資料 Property Basics</div>
+
+      <div class="field-row">
+        <label>買賣價格 Purchase price<span class="hint">円 (税抜)</span></label>
+        <input type="number" id="txPrice" value="35000000" min="0" step="100000">
+      </div>
+      <div class="field-row">
+        <label>建物構造 Structure<span class="hint">影響折舊年數與減稅年限</span></label>
+        <select id="txStructure">
+          <option value="rc">RC／SRC（マンション類）</option>
+          <option value="steel">鉄骨</option>
+          <option value="wood">木造</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label>建物屋齡 Building age<span class="hint">年</span></label>
+        <input type="number" id="txAge" value="10" min="0" step="1">
+      </div>
+      <div class="field-row">
+        <label>建物床面積 Floor area<span class="hint">㎡（須50〜240㎡才適用控除）</span></label>
+        <input type="number" id="txFloorArea" value="70" min="0" step="1">
+      </div>
+      <div class="field-row">
+        <label>物件類型 Property type</label>
+        <select id="txPropertyType">
+          <option value="new">新築 New build</option>
+          <option value="used" selected>中古屋 Used</option>
+          <option value="land">土地 Land only</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label>用途 Usage<span class="hint">影響登錄免許稅是否適用自用減稅</span></label>
+        <select id="txUsage">
+          <option value="self">自用 Owner-occupied</option>
+          <option value="rental">投資出租 Rental / investment</option>
+        </select>
+      </div>
+
+      <div class="section-title" style="margin-top:8px;">評價額 Assessed Values</div>
+      <div class="field-row">
+        <label>土地占比 Land ratio<span class="hint">用於一鍵估算，非投資物件比例可調整</span></label>
+        <input type="number" id="txLandRatio" value="50" min="0" max="100" step="5">
+      </div>
+      <button type="button" class="add-btn" id="txEstimateBtn" style="width:100%;margin-top:4px;">依買賣價格估算評價額 →</button>
+
+      <div class="field-row" style="margin-top:4px;">
+        <label>土地固定資產稅評價額 Land assessed value</label>
+        <input type="number" id="txLandValue" value="12000000" min="0" step="100000">
+      </div>
+      <div class="field-row">
+        <label>建物固定資產稅評價額 Building assessed value</label>
+        <input type="number" id="txBuildingValue" value="9000000" min="0" step="100000">
+      </div>
+
+      <div class="section-title" style="margin-top:8px;">中古屋建物新建時期 <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11.5px;color:var(--ink-soft);">(僅中古屋需選)</span></div>
+      <div class="field-row">
+        <label>建築時期 Construction period<span class="hint">決定不動產取得稅控除額</span></label>
+        <select id="txEra">
+          <option value="0" data-seismic="0">平成9年(1997)4月以後 控除¥12,000,000</option>
+          <option value="1" data-seismic="0">平成元年(1989)4月～平成9年3月 控除¥10,000,000</option>
+          <option value="2" data-seismic="0">昭和60年(1985)7月～平成元年3月 控除¥4,500,000</option>
+          <option value="3" data-seismic="0">昭和57年(1982)1月～昭和60年6月 控除¥4,200,000</option>
+          <option value="4" data-seismic="1">昭和51年(1976)1月～昭和56年12月 控除¥3,500,000</option>
+          <option value="5" data-seismic="1">昭和50年(1975)12月以前 控除¥1,500,000</option>
+        </select>
+      </div>
+      <div class="field-row" id="txSeismicRow" style="display:none;">
+        <label>耐震基準適合證明<span class="hint">此年代須有證明才適用控除／登錄免許稅減稅</span></label>
+        <select id="txSeismic">
+          <option value="1">已取得證明 Certified</option>
+          <option value="0">尚未取得 Not certified</option>
+        </select>
+      </div>
+
+      <div class="section-title" style="margin-top:8px;">貸款與購入日期 Loan &amp; Purchase Date</div>
+      <div class="field-row">
+        <label>是否有貸款 Has loan</label>
+        <select id="txHasLoan">
+          <option value="1">有 Yes</option>
+          <option value="0">無 No</option>
+        </select>
+      </div>
+      <div class="field-row" id="txLoanRow">
+        <label>貸款金額 Loan amount</label>
+        <input type="number" id="txLoanAmount" value="20000000" min="0" step="100000">
+      </div>
+      <div class="field-row">
+        <label>購入日期 Purchase date<span class="hint">用於固都稅日割分攤</span></label>
+        <input type="date" id="txPurchaseDate">
+      </div>
+      <div class="field-row">
+        <label>日割起算日 Proration base<span class="hint">關東慣例1/1、關西慣例4/1</span></label>
+        <select id="txProrationBase">
+          <option value="jan1">關東（1月1日起算）</option>
+          <option value="apr1">關西（4月1日起算）</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label>都市計畫稅率 City planning tax rate<span class="hint">上限0.3%，依市區町村而定</span></label>
+        <input type="number" id="txCityPlanRate" value="0.3" min="0" max="0.3" step="0.05">
+      </div>
+    </div>
+
+    <!-- TAX RESULT PANEL -->
+    <div>
+      <div class="receipt-card">
+        <div class="receipt-head">
+          <h2>購屋稅金試算結果</h2>
+          <div class="date" id="txReceiptDate"></div>
+        </div>
+        <div class="receipt-body">
+          <div class="seal">概算</div>
+          <div style="font-size:11.5px;color:var(--ink-soft);margin-bottom:12px;">評價額：土地 <span id="txLandValueOut">¥0</span>／建物 <span id="txBuildingValueOut">¥0</span></div>
+
+          <div style="font-size:12.5px;font-weight:700;color:var(--accent);margin:12px 0 4px;">① 購入時一次性稅費 One-time (at closing)</div>
+          <div id="txOneTimeLines"></div>
+          <div class="receipt-line" style="font-weight:700;border-bottom:none;border-top:1px solid var(--line);padding-top:10px;">
+            <span>一次性稅費合計</span><span class="amt" id="txOneTimeTotal">¥0</span>
+          </div>
+
+          <div style="font-size:12.5px;font-weight:700;color:var(--accent);margin:16px 0 4px;">② 固定資產稅・都市計畫稅 Annual Holding Tax</div>
+          <div id="txAnnualLines"></div>
+          <div class="receipt-line line-note">
+            <span>當年度日割分攤（購入日起算）</span><span class="amt" id="txProratedAmount">¥0</span>
+          </div>
+        </div>
+        <div class="receipt-total">
+          <div class="label">購入時稅費＋當年日割合計</div>
+          <div class="value" id="txGrandTotal">¥0</div>
+        </div>
+        <div class="actions">
+          <button class="btn-copy" id="txCopyBtn">📋 複製文字發送</button>
+        </div>
+        <div class="footnote">本工具僅供概算參考，實際稅額以稅務機關核定及正式登記為準；稅率與減免特例均設有適用期限，請以最新法令為準。假設土地為200㎡以下小規模住宅用地，如實際面積較大請自行調整。所有計算僅於瀏覽器內完成。</div>
+      </div>
+    </div>
+  </div>
+  </section><!-- /util-tax-buy -->
+
+  <section id="util-tax-hold" class="util-doc-panel">
+    <div class="portal-alert"><strong>毎年の支出をまとめて概算：</strong>固定資産税・都市計画税は購入価格ではなく固定資産税評価額を入力してください。マンションの管理費・修繕積立金、保険、駐車場なども合算します。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>課税評価・土地</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>購入価格（任意）Purchase price</label><div class="input-wrap"><input type="number" id="holdPrice" value="50000000" min="0" step="100000"><span>円</span></div></div>
+          <div class="apply-field"><label>物件タイプ Property type</label><select id="holdType"><option>マンション</option><option>戸建住宅</option><option>投資用住宅</option><option>土地</option></select></div>
+          <div class="apply-field"><label>土地の評価額 Land assessed value</label><div class="input-wrap"><input type="number" id="holdLand" value="15000000" min="0" step="100000"><span>円</span></div></div>
+          <div class="apply-field"><label>建物の評価額 Building assessed value</label><div class="input-wrap"><input type="number" id="holdBuilding" value="12000000" min="0" step="100000"><span>円</span></div></div>
+          <div class="apply-field full"><label>住宅用地の特例 Land treatment</label><select id="holdLandTreatment"><option value="small" selected>小規模住宅用地（1戸につき200㎡まで）</option><option value="general">一般住宅用地（200㎡超部分）</option><option value="none">住宅用地特例なし</option></select></div>
+          <div class="apply-field"><label>所在地・計算基準 Area</label><select id="holdArea"><option value="tokyo23" selected>東京都23区（2026年度）</option><option value="standard">その他自治体（標準税率概算）</option></select></div>
+          <div class="apply-field"><label>都市計画税 City planning tax</label><select id="holdCityPlan"><option value="yes" selected>課税あり（0.3%で試算）</option><option value="no">課税なし</option></select></div>
+          <div class="apply-field"><label>新築住宅の建物減額</label><select id="holdNewReduction"><option value="no" selected>なし・期間終了</option><option value="yes">適用中（建物税額1/2で概算）</option></select></div>
+        </div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>管理・維持費</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>管理費（月額）</label><div class="input-wrap"><input type="number" id="holdManagement" value="12000" min="0"><span>円/月</span></div></div>
+          <div class="apply-field"><label>修繕積立金（月額）</label><div class="input-wrap"><input type="number" id="holdRepair" value="15000" min="0"><span>円/月</span></div></div>
+          <div class="apply-field"><label>駐車場（月額）</label><div class="input-wrap"><input type="number" id="holdParking" value="0" min="0"><span>円/月</span></div></div>
+          <div class="apply-field"><label>火災・地震保険（年額）</label><div class="input-wrap"><input type="number" id="holdInsurance" value="50000" min="0"><span>円/年</span></div></div>
+          <div class="apply-field"><label>賃貸管理委託等（年額）</label><div class="input-wrap"><input type="number" id="holdRentalManagement" value="0" min="0"><span>円/年</span></div></div>
+          <div class="apply-field"><label>その他・修繕予備費（年額）</label><div class="input-wrap"><input type="number" id="holdOther" value="100000" min="0"><span>円/年</span></div></div>
+        </div>
+        <button type="button" class="btn-copy" id="holdCalcBtn" style="width:100%;margin-top:14px;">年間保有コストを計算</button>
+      </div>
+      <div>
+        <div class="calc-kpi-grid"><div class="calc-kpi"><span>税金合計／年</span><strong id="holdTaxOut">—</strong></div><div class="calc-kpi"><span>保有コスト合計／年</span><strong id="holdAnnualOut">—</strong></div><div class="calc-kpi"><span>月平均</span><strong id="holdMonthlyOut">—</strong></div></div>
+        <div class="card"><div class="section-title"><span class="idx">03</span>年間内訳</div><table class="portal-table"><tbody id="holdBreakdown"></tbody></table><div class="market-note" id="holdRateNote" style="margin-top:12px;"></div></div>
+        <div class="portal-source">最終確認：<strong>2026年7月20日</strong>。東京都23区は固定資産税1.4%、都市計画税0.3%を基礎とし、小規模住宅用地の2026年度都独自の都市計画税1/2軽減も選択時に反映。公式：<a href="https://www.tax.metro.tokyo.lg.jp/kazei/real_estate/kotei_tosi" target="_blank" rel="noopener">東京都主税局 固定資産税・都市計画税</a>。負担調整、軽減期間、評価替えにより実額は変わります。</div>
+      </div>
+    </div>
+  </section><!-- /util-tax-hold -->
+  </div><!-- /page-tax-realestate -->

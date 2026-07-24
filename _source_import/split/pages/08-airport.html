@@ -1,0 +1,46 @@
+
+  <div id="page-airport" class="page-view theme-route">
+    <div class="eyebrow">空港から自宅まで Airport Access &amp; Private Transfer</div>
+    <div class="portal-alert"><strong>主要駅と住所を分けて検索：</strong>「主要駅」は駅までの鉄道・バスを内蔵データで比較します。「住所」は入力した住所を外部地図へそのまま渡し、内蔵結果は選択した最寄り主要駅までの概算として表示します。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>到着空港</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>空港 Airport</label><select id="airportFrom"><option value="HND">羽田空港 HND</option><option value="NRT">成田空港 NRT</option></select></div>
+          <div class="apply-field"><label>到着ターミナル Terminal</label><select id="airportTerminal"><option value="1">第1ターミナル</option><option value="2">第2ターミナル</option><option value="3">第3ターミナル</option></select></div>
+        </div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>目的地の指定方法</div>
+        <div class="apply-fields">
+          <div class="apply-field full"><label>目的地タイプ Destination type</label><select id="airportDestinationMode"><option value="station">主要駅から選ぶ</option><option value="address">住所を入力する</option></select></div>
+          <div class="apply-field full" id="airportStationWrap"><label>目的駅 Destination station</label><select id="airportStation"><option value="tokyo">東京駅</option><option value="shinagawa">品川駅</option><option value="shibuya">渋谷駅</option><option value="shinjuku">新宿駅</option><option value="ikebukuro">池袋駅</option><option value="ueno">上野駅・京成上野駅</option><option value="nippori">日暮里駅</option><option value="asakusa">浅草駅</option><option value="oshiage">押上駅</option><option value="yokohama">横浜駅</option><option value="omiya">大宮駅</option><option value="chiba">千葉駅</option></select></div>
+          <div class="apply-field full" id="airportAddressWrap" style="display:none;"><label>自宅・ホテルの住所 Exact address</label><input id="airportAddress" placeholder="例：東京都新宿区西新宿2-8-1"></div>
+          <div class="apply-field full" id="airportAddressAnchorWrap" style="display:none;"><label>住所の最寄り主要駅（概算の基準）</label><select id="airportAddressAnchor"><option value="tokyo">東京駅</option><option value="shinagawa">品川駅</option><option value="shibuya">渋谷駅</option><option value="shinjuku" selected>新宿駅</option><option value="ikebukuro">池袋駅</option><option value="ueno">上野駅・京成上野駅</option><option value="nippori">日暮里駅</option><option value="asakusa">浅草駅</option><option value="oshiage">押上駅</option><option value="yokohama">横浜駅</option><option value="omiya">大宮駅</option><option value="chiba">千葉駅</option></select></div>
+        </div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">03</span>到着・出発時刻</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>飛行機の到着予定 Flight arrival</label><input type="datetime-local" id="airportArrival"></div>
+          <div class="apply-field"><label>入国・荷物の所要時間 Buffer</label><select id="airportArrivalBuffer"><option value="30">国内線：30分</option><option value="60">国際線・身軽：60分</option><option value="90" selected>国際線・標準：90分</option><option value="120">混雑・荷物多め：120分</option></select></div>
+          <div class="apply-field full"><label>空港を出発する予定時刻 Airport departure</label><div style="display:flex;gap:8px;"><input type="datetime-local" id="airportDeparture" style="flex:1;"><button type="button" class="secondary-btn" id="airportSyncDeparture">到着＋手続時間で設定</button></div></div>
+        </div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">04</span>貸切送迎の条件</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>人数 Passengers</label><input type="number" id="airportPassengers" value="2" min="1" max="20"></div>
+          <div class="apply-field"><label>スーツケース Luggage</label><input type="number" id="airportLuggage" value="2" min="0" max="30"></div>
+          <div class="apply-field"><label>車種 Vehicle</label><select id="airportVehicle"><option value="sedan">セダン・普通車</option><option value="van">ミニバン・大型車</option><option value="bus">小型バス</option></select></div>
+        </div>
+        <button type="button" class="btn-copy" id="airportCalcBtn" style="margin-top:14px;width:100%;">ルートと送迎料金を表示</button>
+      </div>
+      <div>
+        <div class="section-title"><span class="idx">05</span>おすすめ経路 Route choices</div>
+        <div class="market-note" id="airportTimeSummary" style="margin-bottom:12px;"></div>
+        <div id="airportRoutes"></div>
+        <div class="portal-grid" style="margin-top:12px;">
+          <div class="portal-result"><span>貸切送迎の概算</span><strong id="airportCharter">—</strong><small id="airportCharterNote">高速代・駐車代・待機料は事業者により別途。</small></div>
+          <div class="portal-result"><span>道路距離・所要時間</span><strong id="airportRoad">—</strong><small id="airportRoadNote">選択した主要駅までの通常時概算。</small></div>
+        </div>
+        <div class="market-note" id="airportLateWarning" style="display:none;margin-top:12px;"></div>
+        <div class="portal-actions"><a class="secondary-btn" id="airportGoogle" target="_blank" rel="noopener">Google Mapsで即時確認</a><a class="secondary-btn route-navitime-btn" id="airportNavitime" target="_blank" rel="noopener">NAVITIMEで詳細確認</a></div>
+        <div class="portal-source">所要時間は待ち時間・乗換を含む幅で表示し、実際の便により変わります。公式情報：<a href="https://www.keikyu.co.jp/visit/haneda-airport/access/train.html" target="_blank" rel="noopener">京急 羽田主要駅</a>／<a href="https://www.tokyo-monorail.co.jp/english/guidance/train_info.html" target="_blank" rel="noopener">東京モノレール運賃</a>／<a href="https://www.keisei.co.jp/keisei/tetudou/skyliner/us/traffic/skyliner_fares.php" target="_blank" rel="noopener">京成スカイライナー</a>／<a href="https://www.jreast.co.jp/en/multi/nex/tickets/" target="_blank" rel="noopener">JR成田エクスプレス</a>／<a href="https://www.tokyo-haneda.com/access/bus/index.html" target="_blank" rel="noopener">羽田空港バス</a></div>
+      </div>
+    </div>
+  </div><!-- /page-airport -->

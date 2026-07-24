@@ -1,0 +1,13 @@
+---
+import { ENABLED_LOCALES, localePath } from "../../data/locales";
+
+export async function getStaticPaths() {
+  return ENABLED_LOCALES.map((locale) => ({
+    params: { locale: locale.code },
+    props: { locale: locale.code }
+  }));
+}
+
+const { locale } = Astro.props;
+return Astro.redirect(localePath(locale));
+---

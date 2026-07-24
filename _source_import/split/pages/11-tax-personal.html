@@ -1,0 +1,113 @@
+
+  <div id="page-tax-personal" class="page-view theme-tax">
+  <div class="eyebrow" id="taxPersonalEyebrow">個人・法人の税金 Personal &amp; Corporate Tax</div>
+  <div class="util-doc-switch" role="tablist" aria-label="個人法人稅金種別切替" data-no-i18n>
+    <button type="button" class="util-doc-tab active" data-util-target="util-tax-income"><span id="taxPersonalIncomeLabel">個人所得・住民税</span></button>
+    <button type="button" class="util-doc-tab" data-util-target="util-tax-furusato"><span id="taxPersonalFurusatoLabel">ふるさと納税</span></button>
+    <button type="button" class="util-doc-tab" data-util-target="util-tax-company"><span id="taxPersonalCompanyLabel">法人税・会社設立</span></button>
+  </div>
+  <section id="util-tax-income" class="util-doc-panel active">
+    <div class="eyebrow">給与手取り・住民税・社会保険 Personal Tax Calculator</div>
+    <div class="portal-alert" id="taxIncomeExplain" data-no-i18n></div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>収入・家族</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>年収（給与総額）Annual salary</label><input type="number" id="incomeSalary" value="4000000" min="0" step="10000"></div>
+          <div class="apply-field"><label>年齢 Age</label><input type="number" id="incomeAge" value="30" min="15" max="100"></div>
+          <div class="apply-field"><label>扶養人数 Dependents</label><input type="number" id="incomeDependents" value="0" min="0" max="15"></div>
+          <div class="apply-field"><label>働き方 / 保険</label><select id="incomeInsurance"><option value="employee">会社員・社会保険</option><option value="nhi">自営業等・国民健康保険</option><option value="student">学生・国民健康保険</option></select></div>
+          <div class="apply-field"><label>国保の地域 NHI area</label><select id="incomeArea"><option value="shinjuku">東京都新宿区（2026）</option><option value="rough">その他（全国概算）</option></select></div>
+          <div class="apply-field"><label>賞与を含む Include bonus</label><select id="incomeBonus"><option value="yes">年収に含まれている</option><option value="no">賞与なし</option></select></div>
+        </div>
+        <button type="button" class="btn-copy" id="incomeCalcBtn" style="margin-top:14px;width:100%;">手取りを計算</button>
+        <div class="market-note" id="taxStudentExplain" data-no-i18n style="margin-top:14px;"></div>
+      </div>
+      <div>
+        <div class="portal-grid three">
+          <div class="portal-result"><span>年間手取り</span><strong id="incomeNetYear">—</strong><small>概算</small></div>
+          <div class="portal-result"><span>月平均手取り</span><strong id="incomeNetMonth">—</strong><small>年額÷12</small></div>
+          <div class="portal-result"><span>負担率</span><strong id="incomeBurdenRate">—</strong><small>税・保険／年収</small></div>
+        </div>
+        <div class="card" style="margin-top:14px;padding:14px;"><table class="portal-table"><tbody id="incomeBreakdown"></tbody></table></div>
+        <div class="portal-source">主な基準：<a href="https://www.nta.go.jp/users/gensen/2026kiso/index.htm" target="_blank" rel="noopener">国税庁 2026年基礎控除等</a>／<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm" target="_blank" rel="noopener">所得税率</a>／<a href="https://www.city.shinjuku.lg.jp/hoken/hoken01_001028.html" target="_blank" rel="noopener">新宿区 2026国保</a>／<a href="https://www.nenkin.go.jp/international/simplejapanese/japanese-system/nationalpension/nationalpension.html" target="_blank" rel="noopener">日本年金機構</a></div>
+      </div>
+    </div>
+  </section><!-- /util-tax-income -->
+
+  <section id="util-tax-furusato" class="util-doc-panel">
+    <div class="eyebrow">ふるさと納税 控除上限額シミュレーション Hometown Tax Calculator</div>
+    <div class="portal-alert" id="taxFurusatoExplain" data-no-i18n></div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>収入・社会保険</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>年収（給与総額）Annual salary</label><input type="number" id="furSalary" value="5000000" min="0" step="10000"></div>
+          <div class="apply-field"><label>年齢 Age</label><input type="number" id="furAge" value="35" min="15" max="100"></div>
+          <div class="apply-field"><label>社会保険料 Social insurance</label><select id="furSocialMode"><option value="auto">自動概算</option><option value="manual">年額を手入力</option></select></div>
+          <div class="apply-field"><label>社会保険料の年額</label><input type="number" id="furSocial" value="0" min="0" step="1000" disabled></div>
+        </div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>家族・その他控除</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>配偶者控除 Spouse</label><select id="furSpouse"><option value="0">なし・対象外</option><option value="1">対象となる配偶者あり</option></select></div>
+          <div class="apply-field"><label>扶養 16〜18歳</label><input type="number" id="furDep16" value="0" min="0" max="10"></div>
+          <div class="apply-field"><label>扶養 19〜22歳</label><input type="number" id="furDep19" value="0" min="0" max="10"></div>
+          <div class="apply-field"><label>扶養 23〜69歳</label><input type="number" id="furDep23" value="0" min="0" max="10"></div>
+          <div class="apply-field"><label>扶養 70歳以上</label><input type="number" id="furDep70" value="0" min="0" max="10"></div>
+          <div class="apply-field"><label>その他の所得控除（年額）</label><input type="number" id="furOtherDeduction" value="0" min="0" step="1000"></div>
+          <div class="apply-field full"><label>住民税の所得割額（任意・通知書の合計）</label><input type="number" id="furResidentLevy" value="0" min="0" step="1000" placeholder="市町村民税所得割額＋都道府県民税所得割額"></div>
+        </div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">03</span>寄附予定・手続</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>寄附予定額 Donation</label><input type="number" id="furDonation" value="50000" min="0" step="1000"></div>
+          <div class="apply-field"><label>寄附先の自治体数</label><input type="number" id="furMunicipalities" value="3" min="1" max="100"></div>
+          <div class="apply-field full"><label>確定申告の予定 Tax return</label><select id="furTaxReturn"><option value="no">確定申告をしない予定</option><option value="yes">確定申告をする予定（医療費控除等を含む）</option></select></div>
+        </div>
+        <button type="button" class="btn-copy" id="furCalcBtn" style="margin-top:14px;width:100%;">控除上限額を計算</button>
+      </div>
+      <div>
+        <div class="portal-grid three">
+          <div class="portal-result"><span>上限の標準目安</span><strong id="furLimit">—</strong><small>自己負担2,000円の概算上限</small></div>
+          <div class="portal-result"><span>安全寄りの目安</span><strong id="furSafe">—</strong><small>標準目安の90%・千円未満切捨て</small></div>
+          <div class="portal-result"><span>予定額の自己負担</span><strong id="furOwnCost">—</strong><small id="furStatus">寄附予定額を入力してください</small></div>
+        </div>
+        <div class="card" style="margin-top:14px;padding:14px;"><table class="portal-table"><tbody id="furBreakdown"></tbody></table></div>
+        <div class="market-note" id="furProcedure" style="margin-top:14px;"></div>
+        <div class="portal-source">給与以外の所得、住宅ローン控除、医療費控除、iDeCo、配偶者・扶養の所得、人的控除差などで結果は変わります。最終確認は住民税決定通知書と自治体の試算、または税理士へ。根拠：<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm" target="_blank" rel="noopener">国税庁 ふるさと納税</a>／<a href="https://www.city.uwajima.ehime.jp/soshiki/12/kojin-133.html" target="_blank" rel="noopener">自治体の上限計算式</a></div>
+      </div>
+    </div>
+  </section><!-- /util-tax-furusato -->
+
+  <section id="util-tax-company" class="util-doc-panel">
+    <div class="eyebrow">会社設立費用・法人税 Company Setup &amp; Corporate Tax</div>
+    <div class="portal-alert" id="taxCompanyExplain" data-no-i18n></div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>会社設立費用</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>法人形態 Company type</label><select id="companyType"><option value="kk">株式会社（KK）</option><option value="gk">合同会社（GK）</option></select></div>
+          <div class="apply-field"><label>資本金 Capital</label><input type="number" id="companyCapital" value="1000000" min="1" step="10000"></div>
+          <div class="apply-field"><label>定款 Articles</label><select id="companyArticles"><option value="electronic">電子定款</option><option value="paper">紙の定款（印紙4万円）</option></select></div>
+          <div class="apply-field"><label>定款認証の特例</label><select id="companyNotaryRule"><option value="normal">通常の認証</option><option value="small">小規模設立15,000円要件を満たす</option></select></div>
+          <div class="apply-field"><label>設立サポート</label><select id="companySupport"><option value="self">自分で手続</option><option value="basic">専門家へ一部依頼</option><option value="full">設立を一括依頼</option></select></div>
+        </div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>法人税の概算</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>年間課税所得 Taxable profit</label><input type="number" id="companyProfit" value="5000000" min="0" step="10000"></div>
+          <div class="apply-field"><label>所在地 Location</label><select id="companyLocation"><option value="tokyo">東京都（概算）</option><option value="other">その他地域（概算）</option></select></div>
+        </div>
+        <button type="button" class="btn-copy" id="companyCalcBtn" style="margin-top:14px;width:100%;">設立費用と法人税を計算</button>
+      </div>
+      <div>
+        <div class="portal-grid">
+          <div class="portal-result"><span>設立時の概算</span><strong id="companySetupTotal">—</strong><small id="companySetupNote">登録免許税・定款等</small></div>
+          <div class="portal-result"><span>年間法人税等</span><strong id="companyTaxTotal">—</strong><small id="companyTaxRate">実効負担率 —</small></div>
+        </div>
+        <div class="card" style="margin-top:14px;padding:14px;"><table class="portal-table"><tbody id="companyBreakdown"></tbody></table></div>
+        <div class="market-note" style="margin-top:14px;"><strong>経営・管理ビザの新基準：</strong>2025年10月16日から、資本金・出資総額3,000万円、常勤職員1人以上、学歴・経歴、日本語能力等の要件が導入・強化されました。会社を作るだけで在留資格が認められるわけではありません。</div>
+        <div class="market-note" style="margin-top:8px;"><strong>定款認証15,000円の特例：</strong>資本金100万円未満に加え、発起人が自然人3人以下、発起人が全株式を引受け、取締役会を置かない等の条件を満たす小規模株式会社を想定します。該当しない場合は「通常の認証」を選択してください。</div>
+        <div class="portal-source">参考：<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/hojin/5759.htm" target="_blank" rel="noopener">国税庁 法人税率</a>／<a href="https://www.mof.go.jp/public_relations/finance/202505/202505c.html" target="_blank" rel="noopener">財務省 防衛特別法人税</a>／<a href="https://www.koshonin.gr.jp/chg_teikanfee" target="_blank" rel="noopener">日本公証人連合会 定款認証手数料</a></div>
+      </div>
+    </div>
+  </section><!-- /util-tax-company -->
+  </div><!-- /page-tax-personal -->

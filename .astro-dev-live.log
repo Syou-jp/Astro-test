@@ -1,0 +1,11 @@
+
+> kojian-astro-site@0.1.0 dev
+> set ASTRO_TELEMETRY_DISABLED=1&& astro dev --host 127.0.0.1
+
+01:27:58 [types] Generated 1ms
+
+ astro  v4.16.19 ready in 50 ms
+
+┃ Local    http://127.0.0.1:4321/
+
+01:27:58 watching for file changes...

@@ -1,0 +1,61 @@
+<div id="page-area" class="page-view active theme-area">
+    <div class="eyebrow">面積單位換算器 International Area Converter</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-title"><span class="idx">01</span>輸入面積 Source Area</div>
+      <div class="area-input-panel">
+        <div class="apply-field">
+          <label>面積數值 Area value</label>
+          <input class="area-source-value" type="number" id="areaSourceValue" value="60" min="0" step="any" inputmode="decimal">
+        </div>
+        <div class="apply-field">
+          <label>原始單位 Source unit<span class="required-mark">*</span></label>
+          <select id="areaSourceUnit">
+            <optgroup label="日本 Japan">
+              <option value="jp_sqm">日本｜平方メートル（㎡）</option>
+              <option value="jp_tsubo">日本｜坪</option>
+              <option value="jp_jo">日本｜畳・帖（概算）</option>
+            </optgroup>
+            <optgroup label="香港 Hong Kong">
+              <option value="hk_sqft">香港｜平方呎（sq ft）</option>
+              <option value="hk_sqm">香港｜平方米（m²）</option>
+            </optgroup>
+            <optgroup label="中國 China">
+              <option value="cn_sqm">中國｜平方米（㎡）</option>
+            </optgroup>
+            <optgroup label="台灣 Taiwan">
+              <option value="tw_sqm">台灣｜平方公尺（㎡）</option>
+              <option value="tw_ping">台灣｜坪</option>
+            </optgroup>
+            <optgroup label="歐美 US / UK / Europe">
+              <option value="intl_sqft">美國・英國｜Square foot（sq ft）</option>
+              <option value="intl_sqm">歐洲・國際｜Square metre（m²）</option>
+            </optgroup>
+            <optgroup label="韓國 South Korea">
+              <option value="kr_sqm">韓國｜제곱미터（㎡）</option>
+              <option value="kr_pyeong">韓國｜평（坪）</option>
+            </optgroup>
+            <optgroup label="東南亞 Southeast Asia">
+              <option value="sea_sqft">新加坡・馬來西亞｜Square foot（sq ft）</option>
+              <option value="sea_sqm">新加坡・馬來西亞｜Square metre（m²）</option>
+              <option value="th_sqm">泰國｜ตารางเมตร（m²）</option>
+              <option value="th_sqw">泰國｜ตารางวา（Square wah）</option>
+              <option value="vn_sqm">ベトナム｜Mét vuông（m²）</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+      <div class="area-base-summary">
+        <span class="label">國際基準面積 BASE AREA</span>
+        <span class="value" id="areaBaseSqm">60 m²</span>
+      </div>
+    </div>
+
+    <div class="section-title"><span class="idx">02</span>各地區換算結果 Regional Results</div>
+    <div class="area-regions" id="areaResults"></div>
+    <div class="apply-actions">
+      <button type="button" class="secondary-btn" id="areaResetBtn">重設 Reset</button>
+      <button type="button" class="btn-copy" id="areaCopyBtn">📋 複製全部結果 Copy all</button>
+    </div>
+    <div class="area-copy-status" id="areaCopyStatus"></div>
+    <div class="area-note">※ 所有結果均先換算為平方公尺再計算。日本「畳・帖」以 1畳＝1.62㎡概算，日本與台灣的坪採 1坪＝400/121㎡。正式契約與登記請以原始㎡數及官方資料為準。</div>
+  </div><!-- /page-area -->

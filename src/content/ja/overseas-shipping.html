@@ -1,0 +1,220 @@
+<div id="page-overseas-shipping" class="page-view active theme-route shipping-guide" data-no-i18n>
+  <style>
+    .shipping-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:18px;align-items:stretch;margin-bottom:18px;}
+    .shipping-hero-main{border:1px solid var(--line);background:linear-gradient(135deg,#fff 0%,#f6f1e8 100%);padding:24px;min-width:0;}
+    .shipping-hero-main h2{font-family:"Shippori Mincho",serif;font-size:27px;line-height:1.35;margin:0 0 10px;color:var(--ink);letter-spacing:.04em;}
+    .shipping-hero-main p{font-size:13px;line-height:1.9;color:var(--ink-soft);margin:0;}
+    .shipping-summary{border:1px solid var(--line);background:#fff;padding:18px;display:grid;gap:10px;align-content:center;}
+    .shipping-summary-row{display:grid;grid-template-columns:42px minmax(0,1fr);gap:10px;align-items:center;padding:10px;border:1px solid var(--line-soft);background:var(--paper);}
+    .shipping-mark{width:42px;height:42px;border:1px solid var(--accent);background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;}
+    .shipping-summary-row b{display:block;font-size:12.5px;color:var(--ink);line-height:1.35;}
+    .shipping-summary-row small{display:block;font-size:10.5px;color:var(--ink-soft);line-height:1.5;margin-top:2px;}
+    .shipping-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px;}
+    .shipping-card{border:1px solid var(--line);background:#fff;padding:16px;min-width:0;}
+    .shipping-card h3{font-size:14px;margin:0 0 7px;color:var(--ink);}
+    .shipping-card p{font-size:11.5px;line-height:1.75;color:var(--ink-soft);margin:0;}
+    .shipping-card strong{display:block;font:700 10px "JetBrains Mono",monospace;color:var(--accent);letter-spacing:.06em;margin-bottom:7px;}
+    .shipping-flow{list-style:none;margin:0;padding:0;display:grid;gap:10px;}
+    .shipping-flow li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:11px;padding:14px;border:1px solid var(--line);background:#fff;}
+    .shipping-flow li>span{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:13px;}
+    .shipping-flow h3{font-size:13px;margin:0 0 4px;color:var(--ink);}
+    .shipping-flow p{font-size:11.5px;line-height:1.75;color:var(--ink-soft);margin:0;}
+    .shipping-table{width:100%;border-collapse:collapse;background:#fff;font-size:11.5px;}
+    .shipping-table th,.shipping-table td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top;}
+    .shipping-table th{background:var(--paper-2);color:var(--accent);font-size:11px;}
+    .shipping-table .money{text-align:right;font-family:"JetBrains Mono",monospace;font-weight:700;white-space:nowrap;}
+    .shipping-note{border-left:3px solid var(--gold);background:rgba(156,122,60,.08);padding:11px 13px;font-size:11.5px;line-height:1.8;color:var(--ink-soft);margin-top:14px;}
+    .shipping-warning{border-left:4px solid var(--seal);background:rgba(168,72,47,.07);padding:11px 13px;font-size:11.5px;line-height:1.75;color:var(--ink-soft);margin-top:12px;}
+    .shipping-source-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none;}
+    .shipping-source-list a{display:block;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;padding:12px 13px;font-size:11.5px;line-height:1.55;}
+    .shipping-source-list a:hover{border-color:var(--accent);color:var(--accent);}
+    .shipping-source-list small{display:block;margin-top:3px;color:var(--ink-soft);font-size:10px;}
+    @media(max-width:860px){.shipping-hero,.shipping-grid{grid-template-columns:1fr}.shipping-source-list{grid-template-columns:1fr}}
+    @media(max-width:560px){.shipping-hero-main{padding:18px}.shipping-hero-main h2{font-size:22px}.shipping-flow li{grid-template-columns:1fr}.shipping-card{padding:14px}}
+  </style>
+
+  <div class="eyebrow">海外発送ガイド / International Shipping</div>
+
+  <section class="shipping-hero" aria-labelledby="shippingTitle">
+    <div class="shipping-hero-main">
+      <h2 id="shippingTitle">日本から海外へ荷物を送るなら、まずこの1ページ</h2>
+      <p>
+        家族や友人へのギフト、帰国時の荷物、越境ECの出荷まで。海外発送は「速さ」「料金」「重量」「追跡」「通関」のバランスで選ぶのがコツです。
+        このページでは、日本郵便と国際宅配便の違いを整理し、はじめてでも迷いにくい順番でまとめました。
+      </p>
+    </div>
+    <aside class="shipping-summary" aria-label="summary">
+      <div class="shipping-summary-row">
+        <div class="shipping-mark">1</div>
+        <div>
+          <b>まずは EMS を基準に比較</b>
+          <small>速さと安心感のバランスがよく、個人発送の起点にしやすいです。</small>
+        </div>
+      </div>
+      <div class="shipping-summary-row">
+        <div class="shipping-mark">2</div>
+        <div>
+          <b>軽い荷物は小形包装物も候補</b>
+          <small>2kg以下の小物なら、料金を抑えやすい選択肢です。</small>
+        </div>
+      </div>
+      <div class="shipping-summary-row">
+        <div class="shipping-mark">3</div>
+        <div>
+          <b>急ぎ・高価品はクーリエ</b>
+          <small>DHL などの国際宅配便は、速さと追跡の強さが魅力です。</small>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="portal-alert">
+    <strong>先に結論</strong>
+    送り先の国でルールがかなり変わります。内容品が同じでも、国によっては通関で止まることがあります。
+    「何を送るか」「どの国に送るか」「何日で必要か」の3点を先に決めると、発送方法が一気に絞れます。
+  </div>
+
+  <section class="card" style="margin-bottom:16px;">
+    <div class="section-title"><span class="idx">01</span><span>発送方法の比較</span></div>
+    <table class="shipping-table">
+      <thead>
+        <tr>
+          <th>サービス</th>
+          <th>向いている荷物</th>
+          <th>特徴</th>
+          <th>ひとこと</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>EMS</strong></td>
+          <td>書類、ギフト、日用品</td>
+          <td>日本郵便の代表的な国際スピード郵便。追跡や補償の面でも使いやすいです。</td>
+          <td>個人発送の標準候補</td>
+        </tr>
+        <tr>
+          <td><strong>国際小包</strong></td>
+          <td>2kg超の荷物、まとめ送り</td>
+          <td>航空便・SAL・船便など、速さと料金のバランスで選べます。</td>
+          <td>SAL は最新の受付状況を確認</td>
+        </tr>
+        <tr>
+          <td><strong>小形包装物</strong></td>
+          <td>2kg以下の小物</td>
+          <td>軽い荷物を比較的安く送れます。</td>
+          <td>書留の扱いは最新案内を確認</td>
+        </tr>
+        <tr>
+          <td><strong>国際宅急便</strong></td>
+          <td>個人向けの荷物</td>
+          <td>ヤマト運輸のサービス。宛先国によって取り扱い条件が変わります。</td>
+          <td>送り先の条件確認が重要</td>
+        </tr>
+        <tr>
+          <td><strong>DHL / FedEx / UPS</strong></td>
+          <td>急ぎ、重要書類、高価品</td>
+          <td>ドア・ツー・ドア、追跡、通関サポートが強い国際宅配便です。</td>
+          <td>スピード重視のときに有力</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="shipping-note">
+      日本郵便の公式案内では、手書きラベルではなく「国際郵便マイページサービス」でラベルと通関電子データを用意する流れが案内されています。
+      物品を送る場合は、発送前にオンライン入力を前提にしておくとスムーズです。
+    </div>
+  </section>
+
+  <section class="card" style="margin-bottom:16px;">
+    <div class="section-title"><span class="idx">02</span><span>日本郵便で送るときの要点</span></div>
+    <div class="shipping-grid">
+      <article class="shipping-card">
+        <strong>EMS</strong>
+        <h3>まず比較の起点にしやすいサービス</h3>
+        <p>
+          EMS は日本郵便の国際郵便の中でも扱いやすい定番です。スピードを重視しつつ、追跡や補償の安心感も欲しいときに向いています。
+        </p>
+      </article>
+      <article class="shipping-card">
+        <strong>SMALL PACKET</strong>
+        <h3>2kg以下の軽い荷物向け</h3>
+        <p>
+          書籍、衣類、小さな雑貨など、軽量の荷物なら小形包装物が有力です。料金を抑えやすい一方、送り先の条件は事前確認が必要です。
+        </p>
+      </article>
+      <article class="shipping-card">
+        <strong>MY PAGE</strong>
+        <h3>ラベル作成はオンラインが基本</h3>
+        <p>
+          物品発送では、内容品を英語で入力し、ラベルと通関情報をまとめて作る流れが基本です。手書きで済ませず、事前入力してから持ち込むのが安全です。
+        </p>
+      </article>
+    </div>
+    <div class="shipping-warning">
+      小形包装物の書留は終了しています。追跡や補償を強めたい場合は、サービス選びを最初から見直したほうが確実です。
+    </div>
+  </section>
+
+  <section class="card" style="margin-bottom:16px;">
+    <div class="section-title"><span class="idx">03</span><span>送りにくいもの・止まりやすいもの</span></div>
+    <div class="shipping-grid">
+      <article class="shipping-card">
+        <h3>電池・発火性のあるもの</h3>
+        <p>モバイルバッテリー、リチウム電池を含む機器、スプレー缶、香水やマニキュアのような引火性の高いものは、航空輸送や各国規制の影響を受けやすいです。</p>
+      </article>
+      <article class="shipping-card">
+        <h3>食品・肉製品</h3>
+        <p>肉製品、肉エキス入り食品、検疫対象になりやすい食品は、送り先の国で止まることがあります。迷う場合は、発送前に受取国側の規制を確認してください。</p>
+      </article>
+      <article class="shipping-card">
+        <h3>高額品・貴重品</h3>
+        <p>現金、貴金属、宝石などは、サービスの種類によっては扱えません。高額品は「送れるか」よりも「どう保険を付けるか」を先に確認するのが安全です。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="card" style="margin-bottom:16px;">
+    <div class="section-title"><span class="idx">04</span><span>発送の流れ</span></div>
+    <ol class="shipping-flow">
+      <li>
+        <span>1</span>
+        <div>
+          <h3>荷物を分類する</h3>
+          <p>書類か物品か、軽い荷物か大きい荷物かを分けます。ここで EMS、小形包装物、国際小包、クーリエの候補が絞れます。</p>
+        </div>
+      </li>
+      <li>
+        <span>2</span>
+        <div>
+          <h3>送り先国の条件を確認する</h3>
+          <p>同じサービスでも、宛先国によって重量上限、サイズ、受け付け可否が変わります。個人宛制限がある国もあるので要注意です。</p>
+        </div>
+      </li>
+      <li>
+        <span>3</span>
+        <div>
+          <h3>品名と金額を正確に入れる</h3>
+          <p>内容品は「Gifts」のようにぼかさず、英語で具体的に書きます。金額も実際の価格ベースで入力するのが基本です。</p>
+        </div>
+      </li>
+      <li>
+        <span>4</span>
+        <div>
+          <h3>ラベルを作って発送する</h3>
+          <p>日本郵便ならマイページでラベルを発行し、郵便局へ持ち込みます。クーリエは営業所持ち込みや集荷が使えることが多いです。</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <div class="section-title"><span class="idx">05</span><span>公式情報</span></div>
+    <ul class="shipping-source-list">
+      <li><a href="https://www.post.japanpost.jp/service/send/oversea/use/howto/index_en.html" target="_blank" rel="noopener">日本郵便 海外発送の基本ガイド<small>EMS・国際小包・小形包装物の全体像</small></a></li>
+      <li><a href="https://www.post.japanpost.jp/service/send/oversea/list/index_en.html" target="_blank" rel="noopener">日本郵便 サービス一覧<small>用途別にサービスを選ぶための一覧</small></a></li>
+      <li><a href="https://www.post.japanpost.jp/service/send/oversea/list/delivery/small_packing.html" target="_blank" rel="noopener">小形包装物<small>2kg以下の小さな荷物向け</small></a></li>
+      <li><a href="https://www.post.japanpost.jp/service/send/oversea/attention/restriction/upc_en.html" target="_blank" rel="noopener">海外発送できないもの<small>禁制品・制限品の確認</small></a></li>
+      <li><a href="https://faq.kuronekoyamato.co.jp/app/answers/detail/a_id/1796/" target="_blank" rel="noopener">ヤマト 国際宅急便 FAQ<small>個人宛の取扱条件</small></a></li>
+      <li><a href="https://www.dhl.com/us-en/home/express.html" target="_blank" rel="noopener">DHL Express<small>国際宅配便の代表例</small></a></li>
+    </ul>
+  </section>
+</div>

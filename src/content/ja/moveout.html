@@ -1,0 +1,236 @@
+<div id="page-moveout" class="page-view active theme-rent" data-no-i18n>
+    <style>
+      .moveout-hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(240px,.92fr);gap:18px;align-items:stretch;margin-bottom:18px;}
+      .moveout-hero-main{border:1px solid var(--line);background:linear-gradient(135deg,#fff 0%,#f6f1e8 100%);padding:24px;min-width:0;}
+      .moveout-hero-main h2{font-family:"Shippori Mincho",serif;font-size:25px;line-height:1.35;margin:0 0 10px;color:var(--ink);letter-spacing:.04em;}
+      .moveout-hero-main p{font-size:13px;line-height:1.9;color:var(--ink-soft);margin:0;}
+      .moveout-hero-visual{border:1px solid var(--line);background:#fff;padding:18px;display:grid;gap:10px;align-content:center;}
+      .moveout-visual-row{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line-soft);background:var(--paper);}
+      .moveout-icon{width:38px;height:38px;border:1px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:18px;background:#fff;font-weight:700;}
+      .moveout-visual-row b{display:block;font-size:12px;color:var(--ink);line-height:1.35;}
+      .moveout-visual-row small{display:block;font-size:10.5px;color:var(--ink-soft);line-height:1.45;margin-top:1px;}
+      .moveout-cost-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px;}
+      .moveout-cost-card{border:1px solid var(--line);background:#fff;padding:16px;position:relative;min-width:0;}
+      .moveout-cost-card .badge{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--accent);font-weight:700;margin-bottom:8px;}
+      .moveout-cost-card h3{font-size:14px;margin:0 0 8px;color:var(--ink);}
+      .moveout-cost-card p{font-size:11.5px;line-height:1.75;color:var(--ink-soft);margin:0;}
+      .moveout-cost-card strong{display:block;margin-top:9px;font-size:12px;color:var(--seal);}
+      .moveout-rule-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:16px;}
+      .moveout-rule{border:1px solid var(--line);background:#fff;padding:16px;}
+      .moveout-rule.good{border-left:4px solid var(--accent);}
+      .moveout-rule.bad{border-left:4px solid var(--seal);}
+      .moveout-rule h3{margin:0 0 9px;font-size:14px;}
+      .moveout-rule ul{margin:0;padding-left:18px;display:grid;gap:6px;}
+      .moveout-rule li{font-size:12px;line-height:1.75;color:var(--ink-soft);}
+      .moveout-table{width:100%;border-collapse:collapse;font-size:12px;background:#fff;margin:8px 0 0;}
+      .moveout-table th,.moveout-table td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top;}
+      .moveout-table th{background:var(--paper-2);color:var(--accent);font-size:11px;}
+      .moveout-calc{display:grid;grid-template-columns:minmax(0,.96fr) minmax(0,1.04fr);gap:14px;align-items:start;margin-bottom:16px;}
+      .moveout-calc-panel,.moveout-damage-panel{border:1px solid var(--line);background:#fff;padding:16px;min-width:0;}
+      .moveout-input-row{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line-soft);}
+      .moveout-input-row label{font-size:12px;color:var(--ink);line-height:1.5;}
+      .moveout-input-row input,.moveout-input-row select,.moveout-damage-card select{width:100%;padding:8px 9px;border:1px solid var(--line);font-family:inherit;font-size:12px;background:#fff;color:var(--ink);}
+      .moveout-input-row input{font-family:"JetBrains Mono",monospace;text-align:right;}
+      .moveout-period-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+      .moveout-damage-list{display:grid;gap:9px;margin-top:10px;}
+      .moveout-damage-card{display:grid;grid-template-columns:24px minmax(0,1fr) minmax(145px,.45fr);gap:9px;align-items:start;border:1px solid var(--line);background:var(--paper);padding:10px;}
+      .moveout-damage-card input{width:17px;height:17px;margin-top:3px;accent-color:var(--accent);}
+      .moveout-damage-card b{display:block;font-size:12px;color:var(--ink);line-height:1.45;}
+      .moveout-damage-card small{display:block;font-size:10.5px;line-height:1.55;color:var(--ink-soft);margin-top:2px;}
+      .moveout-calc button{margin-top:12px;border:1px solid var(--accent);background:var(--accent);color:#fff;padding:9px 14px;font-weight:700;cursor:pointer;}
+      .moveout-result{border:1px solid rgba(52,79,61,.28);background:rgba(52,79,61,.06);padding:16px;display:grid;gap:8px;}
+      .moveout-result span{font-size:11px;color:var(--ink-soft);line-height:1.55;}
+      .moveout-result strong{font-family:"JetBrains Mono",monospace;font-size:24px;color:var(--accent);line-height:1.25;}
+      .moveout-breakdown{margin:0;padding-left:17px;display:grid;gap:5px;font-size:11.5px;color:var(--ink-soft);line-height:1.65;}
+      .moveout-timeline{display:grid;gap:10px;margin-top:8px;}
+      .moveout-step{display:grid;grid-template-columns:108px minmax(0,1fr);gap:12px;border:1px solid var(--line);background:#fff;padding:12px;}
+      .moveout-step time{font-size:11px;font-weight:700;color:var(--accent);line-height:1.5;}
+      .moveout-step b{display:block;font-size:12.5px;margin-bottom:3px;color:var(--ink);}
+      .moveout-step span{display:block;font-size:11.5px;line-height:1.75;color:var(--ink-soft);}
+      .moveout-note{border-left:3px solid var(--gold);background:rgba(156,122,60,.08);padding:11px 13px;font-size:11.5px;line-height:1.8;color:var(--ink-soft);margin-top:14px;}
+      @media(max-width:860px){.moveout-hero,.moveout-cost-grid,.moveout-rule-grid,.moveout-calc{grid-template-columns:1fr}.moveout-step{grid-template-columns:92px 1fr}}
+      @media(max-width:560px){.moveout-hero-main{padding:18px}.moveout-hero-main h2{font-size:21px}.moveout-input-row,.moveout-step,.moveout-damage-card{grid-template-columns:1fr}.moveout-period-pair{grid-template-columns:1fr 1fr}.moveout-cost-card,.moveout-rule,.moveout-calc-panel,.moveout-damage-panel,.moveout-result{padding:14px}}
+    </style>
+
+    <div id="moveoutPageMount"></div>
+
+    <script>
+      (function(){
+        var mount = document.getElementById("moveoutPageMount");
+        if(!mount) return;
+
+        var MOVEOUT_COPY = {
+          ja: {
+            eyebrow:"退去費用 / Move-out Cost",
+            title:"日本の賃貸退去費用ガイド",
+            intro:"退去時の精算で確認したい、クリーニング代、原状回復費用、短期解約違約金をまとめました。国土交通省の原状回復ガイドラインの考え方をもとに、借主負担になりやすい項目と、経年劣化として貸主負担になりやすい項目を整理しています。",
+            visual:[["掃","クリーニング代","退去後の専門清掃費"],["修","原状回復費用","故意、過失、管理不足による修繕費"],["約","短期解約違約金","契約期間前に解約する場合の違約金"]],
+            costTitle:"退去費用の3項目",
+            costs:[
+              ["CLEANING","クリーニング代","退去後に専門業者が行う室内清掃費。契約で固定負担として記載されていることがあります。","1K/1DK: 約 30,000 - 50,000 円"],
+              ["RESTORE","原状回復費用","借主の故意、過失、注意義務違反による損傷を直す費用。損傷内容と入居年数を考慮します。","損傷内容と残存価値で計算"],
+              ["CONTRACT","短期解約違約金","最低入居期間がある契約で、早期退去する場合に発生することがあります。","目安: 家賃 1 - 2 か月分"]
+            ],
+            cleaningNote:"2LDK 以上のファミリータイプでは、クリーニング代が約 50,000 - 80,000 円以上になることもあります。実際の金額は契約書と管理会社の明細を確認してください。",
+            landlordTitle:"貸主負担になりやすいもの",
+            landlord:["日照による壁紙の自然な変色、設備の寿命による故障。","家具を通常使用したことによる床の軽いへこみ。","冷蔵庫やテレビ裏の電気焼け、通常使用による軽微な汚れ。","次の入居者募集のための一般的なメンテナンスや鍵交換。"],
+            tenantTitle:"借主負担になりやすいもの",
+            tenant:["室内喫煙による壁紙の黄ばみ、臭い残り。","浴室やキッチンの清掃不足による重いカビ。","引越し作業でつけた壁や床の傷。","無断で釘を打つ、塗装する、鍵を交換するなどの改造。"],
+            lifeTitle:"壁紙の6年耐用年数",
+            lifeIntro:"壁紙などは6年で残存価値が1%になる考え方がよく使われます。借主負担の損傷でも、必ず新品価格を全額負担するとは限りません。",
+            lifeHead:["入居期間","借主負担割合の目安","メモ"],
+            lifeRows:[["1年","約 83.3%","入居1年程度"],["2年","約 66.7%","入居2年程度"],["3年","約 50.0%","入居3年程度"],["4年","約 33.3%","入居4年程度"],["5年","約 16.7%","入居5年程度"],["6年以上","約 1%","残存価値1%として考える"]],
+            calcTitle:"簡易負担計算",
+            baseCost:"修繕見積額を直接入力",
+            baseCostHint:"明細がある場合のみ使用",
+            period:"入居期間",
+            years:"年",
+            months:"か月",
+            damageTitle:"よくある損傷を選ぶ",
+            damageIntro:"面積が分からない方のため、選びやすい例を入れています。単価は概算なので、正式な請求額ではありません。",
+            calcButton:"計算する",
+            resultLead:"6年残存価値の考え方で見た借主負担の概算",
+            ratio:"負担割合",
+            repairTotal:"選択した修繕総額",
+            manual:"直接入力分",
+            noItem:"損傷項目は未選択です。",
+            scheduleTitle:"退去スケジュール",
+            schedule:[
+              ["1 - 2か月前","解約予告","契約書の解約予告期間を確認します。通常は1か月前、契約によっては2か月前です。"],
+              ["2 - 3週間前","粗大ごみ","家具、家電は普通ごみに出せません。自治体または回収業者へ早めに予約します。"],
+              ["2週間前","退去立会い予約","管理会社と現地確認の日時を決めます。入居時、退去前の写真も残しておくと安心です。"],
+              ["1週間前","ライフライン手続き","水道、電気、ガス、インターネットの解約と精算、日本郵便の転居届を行います。"],
+              ["退去当日","鍵の返却","室内を空にし、管理会社と状態を確認して、すべての鍵を返却します。"]
+            ],
+            finalNote:"高額な請求が届いた場合は、明細、写真、施工範囲、計算根拠を確認してから判断してください。契約書と国土交通省ガイドラインの考え方を照らし合わせることが大切です。",
+            damageOptions:[
+              {id:"wallpaper", label:"壁紙の破れ・汚れ", note:"小さな一面、壁一面、部屋全体など。壁紙は6年残存価値を反映します。", options:[["","選択してください",0],["small","小さい範囲: 約1m2。ポスター跡、部分的な破れ",1500],["onewall","壁一面: 約8m2。アクセント壁1面くらい",12000],["room","部屋全体: 約30m2。ワンルーム壁面の大部分",45000]]},
+              {id:"floor", label:"床の傷・へこみ", note:"家具移動や引越しでついた傷。部分補修と張替えで大きく変わります。", options:[["","選択してください",0],["scratch","小さな傷: 1 - 2か所の部分補修",8000],["area","まとまった範囲: 約2m2の補修",22000],["large","広い範囲: 約6m2の張替え目安",60000]]},
+              {id:"mold", label:"カビ・水まわりの汚れ", note:"通常清掃を超えるカビ取り、換気不足や結露放置が疑われる場合。", options:[["","選択してください",0],["light","軽度: 浴室や窓まわりの追加清掃",8000],["medium","中度: 壁、収納、窓まわりの複数箇所",25000],["heavy","重度: 壁紙交換や下地確認が必要",60000]]},
+              {id:"smoke", label:"喫煙による黄ばみ・臭い", note:"室内喫煙は広範囲の壁紙交換や消臭費になりやすい項目です。", options:[["","選択してください",0],["odor","臭い消臭のみ",20000],["partial","一部壁紙交換 + 消臭",65000],["full","全室壁紙交換 + 消臭",120000]]},
+              {id:"key", label:"鍵の紛失・破損", note:"本数不足、カードキー、シリンダー交換など。", options:[["","選択してください",0],["copy","鍵1本の再発行目安",5000],["card","カードキー再発行目安",12000],["cylinder","シリンダー交換目安",25000]]}
+            ]
+          },
+          "zh-TW": {
+            eyebrow:"退去費用 / Move-out Cost",
+            title:"日本租房退房費用指南",
+            intro:"退房結算時，最需要確認的是清掃費、原狀回復費與短期解約違約金。這裡依照日本國土交通省原狀回復指南的概念，整理哪些項目通常由房東負擔，哪些比較容易被列為租客負擔。",
+            visual:[["掃","清掃費","退房後的專業清潔費"],["修","原狀回復費","故意、過失或管理不足造成的修繕費"],["約","短期解約違約金","未滿合約期間提前退房的罰金"]],
+            costTitle:"退房費用三大組成",
+            costs:[
+              ["CLEANING","清掃費","退房後由專業清潔公司進行的室內清潔費。合約中常寫明為固定負擔。","1K/1DK：約 30,000 - 50,000 円"],
+              ["RESTORE","原狀回復費","修復租客故意、過失或違反注意義務所造成的損壞。會依損壞內容與居住年限計算。","依損壞情況與殘值率計算"],
+              ["CONTRACT","短期解約違約金","合約若有最短居住期間，提前退房時可能產生短期解約違約金。","常見：約 1 - 2 個月租金"]
+            ],
+            cleaningNote:"家庭房 2LDK 以上的清掃費常見約 50,000 - 80,000 円以上。實際金額仍以租賃契約書與管理公司明細為準。",
+            landlordTitle:"通常較可能由房東負擔",
+            landlord:["牆壁因日照自然變色、設備因壽命到期故障。","家具正常使用造成地板輕微凹痕。","冰箱、電視後方因熱氣產生的輕微黑痕。","新租客入住前的一般維護或換鎖。"],
+            tenantTitle:"通常較可能由租客負擔",
+            tenant:["室內吸菸造成壁紙泛黃、煙味殘留。","浴室、廚房未清潔導致嚴重發霉。","搬家或搬家具造成牆面、地板刮傷。","未經同意釘釘子、塗牆、改裝或更換門鎖。"],
+            lifeTitle:"壁紙 6 年耐用年限",
+            lifeIntro:"壁紙等項目通常會考慮 6 年耐用年限。即使是租客造成的損壞，也不一定需要負擔全新品價格，而是依剩餘價值計算。",
+            lifeHead:["居住期間","租客負擔比例目安","日文備註"],
+            lifeRows:[["1 年","約 83.3%","入居 1 年程度"],["2 年","約 66.7%","入居 2 年程度"],["3 年","約 50.0%","入居 3 年程度"],["4 年","約 33.3%","入居 4 年程度"],["5 年","約 16.7%","入居 5 年程度"],["6 年以上","約 1%","残存価値 1% として考える"]],
+            calcTitle:"簡易負擔試算",
+            baseCost:"直接輸入修繕估價",
+            baseCostHint:"已有明細時才需要輸入",
+            period:"實際入住期間",
+            years:"年",
+            months:"個月",
+            damageTitle:"選擇常見損壞項目",
+            damageIntro:"不知道實際面積也沒關係，下面用生活中的大小感做例子。單價只是概算，不代表正式請求金額。",
+            calcButton:"開始計算",
+            resultLead:"依 6 年殘值概念估算的租客負擔",
+            ratio:"負擔比例",
+            repairTotal:"選取項目的修繕總額",
+            manual:"直接輸入金額",
+            noItem:"尚未選擇損壞項目。",
+            scheduleTitle:"退房時程表",
+            schedule:[
+              ["1 - 2 個月前","解約預告","確認契約書的解約予告期間。通常需提前 1 個月，部分合約需提前 2 個月。"],
+              ["2 - 3 週前","大型垃圾","家具、家電不可當一般垃圾丟棄，需向自治體或回收業者提前預約。"],
+              ["2 週前","預約退房立會","與管理公司約現場確認屋況的時間。建議保留入住時與退房前照片。"],
+              ["1 週前","水電瓦斯、網路、郵件","辦理水道、電力、瓦斯、網路結算與解約，並向日本郵便申請転居届。"],
+              ["退房當天","交還鑰匙","清空房間，與管理公司共同確認屋況，並交還所有鑰匙。"]
+            ],
+            finalNote:"若收到不合理高額請求，可要求管理公司提供明細、照片、施工範圍與計算依據，再依契約與國土交通省指南確認。",
+            damageOptions:[
+              {id:"wallpaper", label:"壁紙破損、髒污", note:"可選小範圍、一面牆、整間房。壁紙會套用 6 年殘值比例。", options:[["","請選擇",0],["small","小範圍：約 1m2。海報痕、局部破損",1500],["onewall","一面牆：約 8m2。大概一面重點牆",12000],["room","整間房：約 30m2。套房大部分牆面",45000]]},
+              {id:"floor", label:"地板刮傷、凹痕", note:"搬家具或搬家時造成。局部修補與整片更換費用差很多。", options:[["","請選擇",0],["scratch","小刮傷：1 - 2 處局部修補",8000],["area","一小區域：約 2m2 修補",22000],["large","較大範圍：約 6m2 更換目安",60000]]},
+              {id:"mold", label:"發霉、水回清潔不足", note:"超過一般清掃的除霉，或疑似通風不足、結露未處理。", options:[["","請選擇",0],["light","輕度：浴室或窗邊追加清潔",8000],["medium","中度：牆、收納、窗邊多處處理",25000],["heavy","重度：需要換壁紙或確認底層",60000]]},
+              {id:"smoke", label:"吸菸造成泛黃、異味", note:"室內吸菸很容易變成大範圍壁紙重貼與消臭費。", options:[["","請選擇",0],["odor","只有消臭處理",20000],["partial","部分壁紙重貼 + 消臭",65000],["full","全室壁紙重貼 + 消臭",120000]]},
+              {id:"key", label:"鑰匙遺失、破損", note:"鑰匙少還、卡片鑰匙、鎖芯交換等。", options:[["","請選擇",0],["copy","一般鑰匙 1 支再發行目安",5000],["card","卡片鑰匙再發行目安",12000],["cylinder","鎖芯交換目安",25000]]}
+            ]
+          }
+        };
+
+        function langCopy(lang){
+          return lang === "zh-TW" || lang === "zh-CN" ? MOVEOUT_COPY["zh-TW"] : MOVEOUT_COPY.ja;
+        }
+        function esc(text){
+          return String(text == null ? "" : text).replace(/[&<>"']/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch];});
+        }
+        function yen(value){
+          return Math.round(value).toLocaleString("ja-JP") + " 円";
+        }
+        function renderMoveout(lang){
+          var c = langCopy(lang || (typeof siteCurrentLanguage !== "undefined" ? siteCurrentLanguage : "ja"));
+          mount.innerHTML = ''
+            + '<div class="eyebrow">' + esc(c.eyebrow) + '</div>'
+            + '<section class="moveout-hero" aria-labelledby="moveoutTitle">'
+            + '<div class="moveout-hero-main"><h2 id="moveoutTitle">' + esc(c.title) + '</h2><p>' + esc(c.intro) + '</p></div>'
+            + '<div class="moveout-hero-visual" aria-label="' + esc(c.title) + '">' + c.visual.map(function(v){return '<div class="moveout-visual-row"><div class="moveout-icon">' + esc(v[0]) + '</div><div><b>' + esc(v[1]) + '</b><small>' + esc(v[2]) + '</small></div></div>';}).join('') + '</div>'
+            + '</section>'
+            + '<section class="card" style="margin-bottom:16px;"><div class="section-title"><span class="idx">01</span><span>' + esc(c.costTitle) + '</span></div><div class="moveout-cost-grid">'
+            + c.costs.map(function(item){return '<article class="moveout-cost-card"><div class="badge">' + esc(item[0]) + '</div><h3>' + esc(item[1]) + '</h3><p>' + esc(item[2]) + '</p><strong>' + esc(item[3]) + '</strong></article>';}).join('')
+            + '</div><div class="moveout-note">' + esc(c.cleaningNote) + '</div></section>'
+            + '<section class="moveout-rule-grid" aria-label="' + esc(c.landlordTitle) + '"><div class="moveout-rule good"><h3>' + esc(c.landlordTitle) + '</h3><ul>' + c.landlord.map(function(x){return '<li>' + esc(x) + '</li>';}).join('') + '</ul></div><div class="moveout-rule bad"><h3>' + esc(c.tenantTitle) + '</h3><ul>' + c.tenant.map(function(x){return '<li>' + esc(x) + '</li>';}).join('') + '</ul></div></section>'
+            + '<section class="card" style="margin-bottom:16px;"><div class="section-title"><span class="idx">02</span><span>' + esc(c.lifeTitle) + '</span></div><p style="font-size:12.5px;line-height:1.9;color:var(--ink-soft);margin:0 0 10px;">' + esc(c.lifeIntro) + '</p><table class="moveout-table"><thead><tr>' + c.lifeHead.map(function(h){return '<th>' + esc(h) + '</th>';}).join('') + '</tr></thead><tbody>' + c.lifeRows.map(function(row){return '<tr>' + row.map(function(cell){return '<td>' + esc(cell) + '</td>';}).join('') + '</tr>';}).join('') + '</tbody></table></section>'
+            + '<section class="moveout-calc" aria-labelledby="moveoutCalcTitle"><div class="moveout-calc-panel"><div class="section-title"><span class="idx">03</span><span id="moveoutCalcTitle">' + esc(c.calcTitle) + '</span></div>'
+            + '<div class="moveout-input-row"><label for="moveoutRepairCost">' + esc(c.baseCost) + '<span class="hint">' + esc(c.baseCostHint) + '</span></label><input id="moveoutRepairCost" type="number" min="0" value="0" inputmode="numeric"></div>'
+            + '<div class="moveout-input-row"><label>' + esc(c.period) + '</label><div class="moveout-period-pair"><select id="moveoutYears">' + Array.from({length:11},function(_,i){return '<option value="' + i + '"' + (i===2?' selected':'') + '>' + i + ' ' + esc(c.years) + '</option>';}).join('') + '</select><select id="moveoutExtraMonths">' + Array.from({length:12},function(_,i){return '<option value="' + i + '">' + i + ' ' + esc(c.months) + '</option>';}).join('') + '</select></div></div>'
+            + '<button type="button" id="moveoutCalcBtn">' + esc(c.calcButton) + '</button></div>'
+            + '<div class="moveout-damage-panel"><h3 style="font-size:14px;margin:0 0 6px;color:var(--accent);">' + esc(c.damageTitle) + '</h3><p style="font-size:11.5px;line-height:1.75;color:var(--ink-soft);margin:0;">' + esc(c.damageIntro) + '</p><div class="moveout-damage-list">' + c.damageOptions.map(function(item){return '<label class="moveout-damage-card"><input type="checkbox" data-damage-check="' + esc(item.id) + '"><span><b>' + esc(item.label) + '</b><small>' + esc(item.note) + '</small></span><select data-damage-select="' + esc(item.id) + '">' + item.options.map(function(opt){return '<option value="' + esc(opt[2]) + '">' + esc(opt[1]) + '</option>';}).join('') + '</select></label>';}).join('') + '</div></div>'
+            + '</section><div class="moveout-result" id="moveoutCalcResult" aria-live="polite"></div>'
+            + '<section class="card" style="margin-top:16px;"><div class="section-title"><span class="idx">04</span><span>' + esc(c.scheduleTitle) + '</span></div><div class="moveout-timeline">' + c.schedule.map(function(s){return '<div class="moveout-step"><time>' + esc(s[0]) + '</time><div><b>' + esc(s[1]) + '</b><span>' + esc(s[2]) + '</span></div></div>';}).join('') + '</div><div class="moveout-note">' + esc(c.finalNote) + '</div></section>';
+          bindMoveoutCalc(c);
+        }
+        function bindMoveoutCalc(c){
+          var result = document.getElementById("moveoutCalcResult");
+          var inputs = ["moveoutRepairCost","moveoutYears","moveoutExtraMonths"].map(function(id){return document.getElementById(id);});
+          var damageChecks = Array.from(document.querySelectorAll("[data-damage-check]"));
+          var damageSelects = Array.from(document.querySelectorAll("[data-damage-select]"));
+          function calc(){
+            var manual = Math.max(0, Number(document.getElementById("moveoutRepairCost").value) || 0);
+            var years = Math.max(0, Number(document.getElementById("moveoutYears").value) || 0);
+            var extraMonths = Math.max(0, Number(document.getElementById("moveoutExtraMonths").value) || 0);
+            var months = years * 12 + extraMonths;
+            var ratio = months >= 72 ? 0.01 : Math.max(0.01, (72 - months) / 72);
+            var selectedTotal = 0;
+            var lines = [];
+            c.damageOptions.forEach(function(item){
+              var check = document.querySelector('[data-damage-check="' + item.id + '"]');
+              var select = document.querySelector('[data-damage-select="' + item.id + '"]');
+              var amount = check && check.checked && select ? Number(select.value) || 0 : 0;
+              if(amount > 0){
+                selectedTotal += amount;
+                var selectedText = select.options[select.selectedIndex].textContent;
+                lines.push(esc(item.label + " - " + selectedText + ": " + yen(amount)));
+              }
+            });
+            var repairTotal = manual + selectedTotal;
+            var amount = repairTotal * ratio;
+            result.innerHTML = '<span>' + esc(c.resultLead) + '</span><strong>' + yen(amount) + '</strong><span>' + esc(c.ratio) + ': ' + (ratio * 100).toFixed(1) + '% / ' + esc(c.repairTotal) + ': ' + yen(repairTotal) + '</span><ul class="moveout-breakdown">' + (manual > 0 ? '<li>' + esc(c.manual) + ': ' + yen(manual) + '</li>' : '') + (lines.length ? lines.map(function(x){return '<li>' + x + '</li>';}).join('') : '<li>' + esc(c.noItem) + '</li>') + '</ul>';
+          }
+          inputs.forEach(function(input){ if(input) input.addEventListener("input",calc); if(input) input.addEventListener("change",calc); });
+          damageChecks.forEach(function(check){ check.addEventListener("change",function(){ var select = document.querySelector('[data-damage-select="' + check.dataset.damageCheck + '"]'); if(check.checked && select && Number(select.value) === 0 && select.options.length > 1) select.selectedIndex = 1; calc(); }); });
+          damageSelects.forEach(function(select){ select.addEventListener("change",function(){ var check = document.querySelector('[data-damage-check="' + select.dataset.damageSelect + '"]'); if(check) check.checked = Number(select.value) > 0; calc(); }); });
+          var button = document.getElementById("moveoutCalcBtn");
+          if(button) button.addEventListener("click",calc);
+          calc();
+        }
+        window.siteApplyMoveoutCopy = renderMoveout;
+        renderMoveout(typeof siteCurrentLanguage !== "undefined" ? siteCurrentLanguage : "ja");
+      })();
+    </script>
+  </div><!-- /page-moveout -->

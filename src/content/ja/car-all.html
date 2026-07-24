@@ -1,0 +1,198 @@
+<div id="page-car-all" class="page-view active theme-tax">
+  <div class="eyebrow" id="carAllEyebrow">中古車・車検・免許 Car &amp; License</div>
+  <div class="util-doc-switch" role="tablist" aria-label="車種別切替" data-no-i18n>
+    <button type="button" class="util-doc-tab active" data-util-target="util-car-used"><span id="carUsedLabel">中古車・車検</span></button>
+    <button type="button" class="util-doc-tab" data-util-target="util-car-transfer"><span id="carTransferTabLabel">売買・名義変更</span></button>
+    <button type="button" class="util-doc-tab" data-util-target="util-car-license"><span id="carLicenseLabel">運転免許</span></button>
+  </div>
+  <section id="util-car-used" class="util-doc-panel active">
+    <div class="eyebrow">中古車の税金・車検費用 Used Car &amp; Inspection</div>
+    <div class="portal-alert"><span class="portal-badge new">2026年4月</span> 自動車税・軽自動車税の「環境性能割」は廃止されました。車名を選ぶと代表的な排気量・車両重量を自動入力しますが、年式・グレードで異なるため車検証を確認してください。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>車両</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>ブランド Brand</label><select id="carBrand"></select></div>
+          <div class="apply-field"><label>代表車型 Model</label><select id="carModel"></select></div>
+          <div class="apply-field"><label>排気量 Engine（cc）</label><input type="number" id="carCc" value="1800" min="0" step="10"></div>
+          <div class="apply-field"><label>車両重量 Weight（kg）</label><input type="number" id="carWeight" value="1400" min="300" step="10"></div>
+          <div class="apply-field"><label>車種区分</label><select id="carClass"><option value="normal">普通・小型乗用車</option><option value="kei">軽自動車</option><option value="ev">電気自動車</option></select></div>
+          <div class="apply-field"><label>初度登録から</label><select id="carAge"><option value="new">13年未満</option><option value="13">13年以上</option><option value="18">18年以上</option></select></div>
+        </div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>購入・車検条件</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>車両本体価格 Price</label><input type="number" id="carPrice" value="1500000" min="0" step="10000"></div>
+          <div class="apply-field"><label>環境性能割</label><select id="carEcoRate" disabled><option value="0">2026-04-01から廃止</option></select></div>
+          <div class="apply-field"><label>車検整備基本料</label><input type="number" id="carService" value="50000" min="0" step="1000"></div>
+          <div class="apply-field"><label>修理・部品交換</label><input type="number" id="carRepair" value="30000" min="0" step="1000"></div>
+        </div>
+        <button type="button" class="btn-copy" id="carCalcBtn" style="margin-top:14px;width:100%;">中古車費用を計算</button>
+      </div>
+      <div>
+        <div class="portal-grid three">
+          <div class="portal-result"><span>購入時の税・諸費用</span><strong id="carPurchaseTotal">—</strong><small>車両本体を除く</small></div>
+          <div class="portal-result"><span>車検2年分</span><strong id="carInspectionTotal">—</strong><small>法定＋入力整備費</small></div>
+          <div class="portal-result"><span>年税額の目安</span><strong id="carAnnualTax">—</strong><small>自動車税等</small></div>
+        </div>
+        <div class="card" style="margin-top:14px;padding:14px;"><table class="portal-table"><tbody id="carBreakdown"></tbody></table></div>
+        <div class="portal-actions"><a class="secondary-btn" href="https://www.nextmvtt.mlit.go.jp/nextmvtt-web/" target="_blank" rel="noopener">国交省で重量税を照会</a></div>
+        <div class="portal-source">自賠責は自家用乗用車24か月17,650円、軽17,540円を仮置き。重量税はエコカー減免・経過年数で変わるため、2026年度改正後は車台番号による国交省照会を優先してください。参考：<a href="https://www.mof.go.jp/public_relations/finance/202604/202604c.html" target="_blank" rel="noopener">財務省 2026年度税制改正</a>。任意保険、リサイクル預託金、納車費用、駐車場は別途です。</div>
+      </div>
+    </div>
+  </section><!-- /util-car-used -->
+
+  <section id="util-car-transfer" class="util-doc-panel" data-no-i18n>
+    <div class="eyebrow" id="carTransferEyebrow">中古車売買・名義変更 Used Car Transfer Guide</div>
+    <div class="portal-alert" id="carTransferAlert"></div>
+    <div class="card">
+      <div class="section-title"><span class="idx">01</span><span id="carTransferConditionTitle">条件を選ぶ</span></div>
+      <div class="car-transfer-controls">
+        <div class="apply-field"><label id="carTransferVehicleLabel">車両区分</label><select id="carTransferVehicle"></select></div>
+        <div class="apply-field"><label id="carTransferRoleLabel">あなたの立場</label><select id="carTransferRole"></select></div>
+        <div class="apply-field"><label id="carTransferParkingLabel">駐車場</label><select id="carTransferParking"></select></div>
+      </div>
+      <div class="car-transfer-flow" id="carTransferFlow"></div>
+      <div class="market-note" id="carTransferDeadline"></div>
+    </div>
+
+    <div class="grid" style="margin-top:18px;">
+      <div class="card">
+        <div class="section-title"><span class="idx">02</span><span id="carTransferChecklistTitle">必要書類チェックリスト</span></div>
+        <div class="car-transfer-checklist" id="carTransferChecklist"></div>
+      </div>
+      <div class="card" id="carTransferInputCard">
+        <div class="section-title"><span class="idx">03</span><span id="carTransferMemoInputTitle">記入用メモを作る</span></div>
+        <div class="apply-fields">
+          <div class="apply-field"><label id="ctSellerNameLabel">旧所有者・売主氏名</label><input id="ctSellerName"></div>
+          <div class="apply-field"><label id="ctBuyerNameLabel">新所有者・買主氏名</label><input id="ctBuyerName"></div>
+          <div class="apply-field full"><label id="ctSellerAddressLabel">売主住所</label><input id="ctSellerAddress"></div>
+          <div class="apply-field full"><label id="ctBuyerAddressLabel">買主住所</label><input id="ctBuyerAddress"></div>
+          <div class="apply-field"><label id="ctVehicleNameLabel">車名・メーカー</label><input id="ctVehicleName" placeholder="例：トヨタ"></div>
+          <div class="apply-field"><label id="ctModelLabel">型式</label><input id="ctModel"></div>
+          <div class="apply-field"><label id="ctChassisLabel">車台番号</label><input id="ctChassis"></div>
+          <div class="apply-field"><label id="ctPlateLabel">登録番号</label><input id="ctPlate"></div>
+          <div class="apply-field full"><label id="ctParkingAddressLabel">保管場所住所</label><input id="ctParkingAddress"></div>
+          <div class="apply-field"><label id="ctTransferDateLabel">譲渡年月日</label><input type="date" id="ctTransferDate"></div>
+          <div class="apply-field"><label id="ctPhoneLabel">連絡先</label><input id="ctPhone"></div>
+        </div>
+        <div class="car-transfer-warning" id="carTransferMemoWarning"></div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:18px;">
+      <div>
+        <div class="section-title"><span class="idx">04</span><span id="carTransferMemoTitle">手続記入メモ</span></div>
+        <div class="car-transfer-memo" id="carTransferMemo"></div>
+        <div class="actions export-actions" data-export-target="carTransferMemo" data-export-name="中古車名義変更_記入メモ">
+          <button type="button" class="btn-copy" id="carTransferPdfBtn">📄 PDF</button>
+          <button type="button" class="secondary-btn export-word">📝 Word</button>
+          <button type="button" class="secondary-btn export-excel">📊 Excel</button>
+          <button type="button" class="secondary-btn export-shot">📷 Screenshot</button>
+        </div>
+      </div>
+      <div>
+        <div class="section-title"><span class="idx">05</span><span id="carTransferGuideTitle">外国人向け記入ガイド</span></div>
+        <div class="car-transfer-guide" id="carTransferGuide"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="section-title"><span class="idx">06</span><span id="carTransferDownloadTitle">公式様式・記載例ダウンロード</span></div>
+      <div class="car-form-downloads" id="carTransferDownloads"></div>
+      <div class="portal-source" id="carTransferSource" style="margin-top:14px;"></div>
+    </div>
+  </section><!-- /util-car-transfer -->
+
+  <section id="util-car-license" class="util-doc-panel">
+    <div class="eyebrow">外国人向け運転免許ガイド License Guide</div>
+    <div class="portal-alert">
+      東京・神奈川・埼玉・千葉の一都三県で生活する外国人向けに、日本で運転免許を取得・利用する方法を整理しました。制度や対応言語は変更されるため、申請前に住所地を管轄する運転免許センターまたは教習所へ必ず確認してください。
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>外国免許から日本免許への切替え</div>
+        <p>海外で取得した有効な運転免許証を、日本の運転免許証へ切り替える手続きが「外免切替」です。申請先は、原則として日本の住所地を管轄する都道府県警察の運転免許センター等です。</p>
+        <table class="portal-table">
+          <tbody>
+            <tr><th>主な条件</th><td>有効な外国運転免許証を持っていること。免許取得後、その発給国・地域に通算3か月以上滞在していたことをパスポート等で証明できること。日本で住民票があること。</td></tr>
+            <tr><th>主な書類</th><td>外国免許証、日本語翻訳文、住民票、在留カード等の本人確認書類、パスポート、申請用写真、手数料など。国・地域や免許センターにより追加書類が必要になる場合があります。</td></tr>
+            <tr><th>流れ</th><td>予約・書類審査、適性試験、知識確認、技能確認、交付手続きの順で進みます。知識確認・技能確認は免除対象国等を除き必要です。</td></tr>
+            <tr><th>注意</th><td>代理申請はできません。外国免許証の有効期間内に手続き・確認を完了する必要があるため、期限が短い場合は早めに予約してください。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="section-title"><span class="idx">02</span>知識確認・技能確認の免除</div>
+        <p>次の国・地域等の免許は、知識確認と技能確認が免除されます。</p>
+        <p class="market-note">アイスランド、アイルランド、イギリス、イタリア、オーストラリア、オーストリア、オランダ、カナダ、韓国、ギリシャ、スイス、スウェーデン、スペイン、スロベニア、チェコ、デンマーク、ドイツ、ニュージーランド、ノルウェー、ハンガリー、フィンランド、フランス、ベルギー、ポーランド、ポルトガル、モナコ、ルクセンブルク、台湾、アメリカ合衆国の一部州（オハイオ、オレゴン、コロラド、バージニア、ハワイ、メリーランド、ワシントン）</p>
+        <table class="portal-table">
+          <tbody>
+            <tr><th>技能確認のみ免除</th><td>アメリカ合衆国インディアナ州は、技能確認のみ免除。知識確認は必要です。</td></tr>
+            <tr><th>その他の国・地域</th><td>中国本土、フィリピン、ブラジル、インド、ベトナム、上記以外の米国州などは、原則として知識確認と技能確認の両方に合格する必要があります。</td></tr>
+            <tr><th>2025年10月以降</th><td>外免切替の知識確認・技能確認は厳格化されています。東京都では外免切替の知識確認が20言語に対応しています。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:18px;">
+      <div class="card">
+        <div class="section-title"><span class="idx">03</span>国際運転免許証と公式翻訳文</div>
+        <table class="portal-table">
+          <tbody>
+            <tr><th>国際運転免許証</th><td>1949年ジュネーブ条約に基づく国際運転免許証であれば、日本上陸日から1年間、または国際運転免許証の有効期限のいずれか短い期間まで運転できます。</td></tr>
+            <tr><th>3か月ルール</th><td>日本に住民登録がある人が出国後3か月未満で再入国した場合、新たな1年間の運転可能期間は認められない場合があります。</td></tr>
+            <tr><th>公式翻訳文で運転できる免許</th><td>スイス、ドイツ、フランス、ベルギー、モナコ、台湾の免許は、原本と指定機関発行の日本語翻訳文を携帯することで、日本上陸日から1年間運転できます。</td></tr>
+            <tr><th>翻訳文の発行機関</th><td>JAF、当該国の駐日大使館・領事館、台湾日本関係協会等。JAFの翻訳文申請はオンライン受付が基本です。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="section-title"><span class="idx">04</span>合宿免許という選択肢</div>
+        <p>合宿免許は、地方の指定自動車教習所に短期滞在し、集中的に教習を受ける日本独自の取得スタイルです。</p>
+        <table class="portal-table">
+          <tbody>
+            <tr><th>期間の目安</th><td>普通車ATで約14日、MTで約16日が一般的な最短目安です。混雑期や補習の有無により延びます。</td></tr>
+            <tr><th>料金</th><td>教習費、宿泊費、食事代がセットになったパッケージが多く、通学より総額を抑えられることがあります。</td></tr>
+            <tr><th>一都三県から</th><td>東京・神奈川・埼玉・千葉在住者は、栃木、群馬、山梨、静岡、新潟など近隣・地方エリアの合宿校を選ぶケースが多いです。</td></tr>
+            <tr><th>外国人の注意点</th><td>教習や試験説明は日本語中心の学校が多く、N3からN2程度の読解・会話力を求められることがあります。入校前に対応言語、仮免学科試験の言語、教材の有無を確認してください。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="section-title"><span class="idx">05</span>一都三県の外国語対応・外国人向け教習所</div>
+      <table class="portal-table">
+        <thead>
+          <tr><th>都県</th><th>教習所</th><th>対応・特徴</th><th>形態</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>東京都</td><td>コヤマドライビングスクール（二子玉川・成城・石神井・秋津）</td><td>英語教習を提供。石神井校は中国語教習にも対応。外国人向け案内ページあり。</td><td>通学</td></tr>
+          <tr><td>東京都</td><td>拝島自動車教習所</td><td>外免切替向けの学科・技能練習プランあり。効果測定は英語・中国語・ベトナム語対応。</td><td>通学・外免対策</td></tr>
+          <tr><td>神奈川県</td><td>コヤマドライビングスクール横浜</td><td>英語教習を提供。横浜市港北区の公安委員会指定教習所。</td><td>通学</td></tr>
+          <tr><td>神奈川県</td><td>神奈川ドライビングスクール</td><td>横浜市内の指定教習所。外国語対応は時期により変わるため、入校前に直接確認推奨。</td><td>通学</td></tr>
+          <tr><td>埼玉県</td><td>各指定自動車教習所</td><td>学校ごとに外国語教材・多言語試験対策の有無が異なります。埼玉県運転免許センターの試験対応言語と合わせて確認してください。</td><td>通学</td></tr>
+          <tr><td>千葉県</td><td>銚子大洋自動車教習所</td><td>英語・中国語・ポルトガル語・ベトナム語・インドネシア語の補助教材、英語・中国語等の効果測定対応あり。ただし教習自体は日本語中心。</td><td>通学</td></tr>
+          <tr><td>千葉県</td><td>各指定自動車教習所</td><td>英語教材や外国籍教習生の受け入れ実績があっても、外国語で技能教習できるとは限りません。資料請求時に対応範囲を確認してください。</td><td>通学</td></tr>
+        </tbody>
+      </table>
+      <div class="portal-source" style="margin-top:14px;">確認ポイント：外国語「教材」と外国語「技能教習」は別物です。予約前に、対応言語、仮免学科試験の言語、卒業後の本免学科試験の言語、外免切替練習の有無、通訳同伴の可否を確認してください。</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="section-title"><span class="idx">06</span>一都三県の申請先</div>
+      <table class="portal-table">
+        <tbody>
+          <tr><th>東京都</th><td>府中・鮫洲・江東運転免許試験場。江東は免除対象国等の手続きに限定される場合があります。</td></tr>
+          <tr><th>神奈川県</th><td>神奈川県警察の運転免許センターで外免切替手続き。予約・書類審査の詳細は県警ページで確認してください。</td></tr>
+          <tr><th>埼玉県</th><td>埼玉県警察の運転免許センターで手続き。住所地が埼玉県の人が対象です。</td></tr>
+          <tr><th>千葉県</th><td>千葉県警察の運転免許センターで手続き。試験言語や受付日は事前確認が必要です。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section><!-- /util-car-license -->
+  </div><!-- /page-car-all -->

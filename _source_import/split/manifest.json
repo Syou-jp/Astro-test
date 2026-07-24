@@ -1,0 +1,126 @@
+[
+  {
+    "id": "page-about",
+    "file": "00-about.html"
+  },
+  {
+    "id": "page-rent",
+    "file": "01-rent.html"
+  },
+  {
+    "id": "page-tax-realestate",
+    "file": "02-tax-realestate.html"
+  },
+  {
+    "id": "page-loan",
+    "file": "03-loan.html"
+  },
+  {
+    "id": "page-area",
+    "file": "04-area.html"
+  },
+  {
+    "id": "page-listings",
+    "file": "30-listings.html"
+  },
+  {
+    "id": "page-moveout",
+    "file": "21-moveout.html"
+  },
+  {
+    "id": "page-fire-insurance",
+    "file": "22-fire-insurance.html"
+  },
+  {
+    "id": "page-route",
+    "file": "05-route.html"
+  },
+  {
+    "id": "page-etc",
+    "file": "07-etc.html"
+  },
+  {
+    "id": "page-airport",
+    "file": "08-airport.html"
+  },
+  {
+    "id": "page-car-all",
+    "file": "12-car-all.html"
+  },
+  {
+    "id": "page-utilities",
+    "file": "09-utilities.html"
+  },
+  {
+    "id": "page-waste",
+    "file": "13-waste.html"
+  },
+  {
+    "id": "page-bank",
+    "file": "14-bank.html"
+  },
+  {
+    "id": "page-visa",
+    "file": "16-visa.html"
+  },
+  {
+    "id": "page-japanese",
+    "file": "17-japanese.html"
+  },
+  {
+    "id": "page-ward-office",
+    "file": "18-ward-office.html"
+  },
+  {
+    "id": "page-sim",
+    "file": "19-sim.html"
+  },
+  {
+    "id": "page-internet",
+    "file": "20-internet.html"
+  },
+  {
+    "id": "page-holidays",
+    "file": "23-holidays.html"
+  },
+  {
+    "id": "page-services",
+    "file": "25-services.html"
+  },
+  {
+    "id": "page-jobs",
+    "file": "26-jobs.html"
+  },
+  {
+    "id": "page-living",
+    "file": "10-living.html"
+  },
+  {
+    "id": "page-friend-offers",
+    "file": "27-friend-offers.html"
+  },
+  {
+    "id": "page-tax-personal",
+    "file": "11-tax-personal.html"
+  },
+  {
+    "id": "page-consumption-tax",
+    "file": "28-consumption-tax.html"
+  },
+  {
+    "id": "page-income-tax",
+    "file": "29-income-tax.html"
+  },
+  {
+    "id": "page-legal",
+    "file": "11b-legal.html"
+  },
+  {
+    "id": "page-nisa",
+    "file": "24-nisa.html"
+  },
+  {
+    "id": "page-documents",
+    "file": "06-documents.html"
+  }
+]

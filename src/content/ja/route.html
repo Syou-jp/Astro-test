@@ -1,0 +1,256 @@
+<div id="page-route" class="page-view active theme-route">
+    <div class="route-eyebrow-row">
+      <div class="eyebrow">通勤計算・地點・附近車站・定期券費用 Commute Calculator, Nearby Stations &amp; Commuter Pass</div>
+      <div class="route-header-actions">
+        <button type="button" class="route-commuter-trigger" id="commuterOpenBtn">🎫 定期券費用試算</button>
+      </div>
+    </div>
+    <div class="route-db-stats">
+      <div class="route-db-stat"><strong id="routeStationCount">—</strong><span>車站</span></div>
+      <div class="route-db-stat"><strong id="routeCampusCount">—</strong><span>大學・短大校區</span></div>
+      <div class="route-db-stat"><strong id="routeSchoolCount">—</strong><span>日本語教育機關</span></div>
+      <div class="route-db-stat"><strong id="routeVocationalCount">—</strong><span>専修学校</span></div>
+      <div class="route-db-stat"><strong id="routePrimarySecondaryCount">—</strong><span>小學・中學</span></div>
+      <div class="route-db-stat"><strong id="routeUrCount">—</strong><span>UR団地</span></div>
+    </div>
+
+    <div class="grid route-main-layout">
+      <div class="card" id="routeFormCard">
+        <div class="section-title"><span class="section-title-text"><span class="idx">01</span>選擇地點 Select Locations</span><button type="button" class="route-commuter-trigger" id="routeLineBrowserBtn">🚉 瀏覽所有路線圖</button></div>
+        <div class="route-pair">
+          <div>
+            <div class="route-endpoint-head"><strong>物件 Origin</strong></div>
+            <div class="route-place-row">
+              <select id="routeOriginType" aria-label="起點類型">
+                <optgroup label="交通・地址">
+                  <option value="station">全部車站</option>
+                  <option value="address">自由地址</option>
+                </optgroup>
+                <optgroup label="大學・留學・職業教育">
+                  <option value="campus">大學各校區</option>
+                  <option value="school">日本語教育機關</option>
+                  <option value="vocational">専修学校</option>
+                </optgroup>
+                <optgroup label="小學・中學">
+                  <option value="primarySecondary">小學・中學（含義務教育學校）</option>
+                </optgroup>
+                <optgroup label="住宅">
+                  <option value="ur">UR団地</option>
+                </optgroup>
+              </select>
+              <div class="route-input-wrap">
+                <input id="routeOrigin" placeholder="例：上野駅" autocomplete="off">
+                <div class="route-suggestions" id="routeOriginSuggestions"></div>
+              </div>
+            </div>
+            <div class="route-selected" id="routeOriginStation"></div>
+          </div>
+          <button type="button" class="route-swap-small" id="routeSwapBtn" title="交換起點與終點">⇄</button>
+          <div>
+            <div class="route-endpoint-head"><strong>目的地 Destination</strong></div>
+            <div class="route-place-row">
+              <select id="routeDestinationType" aria-label="目的地類型">
+                <optgroup label="交通・地址">
+                  <option value="station">全部車站</option>
+                  <option value="address">自由地址</option>
+                </optgroup>
+                <optgroup label="大學・留學・職業教育">
+                  <option value="campus">大學各校區</option>
+                  <option value="school">日本語教育機關</option>
+                  <option value="vocational">専修学校</option>
+                </optgroup>
+                <optgroup label="小學・中學">
+                  <option value="primarySecondary">小學・中學（含義務教育學校）</option>
+                </optgroup>
+                <optgroup label="住宅">
+                  <option value="ur">UR団地</option>
+                </optgroup>
+              </select>
+              <div class="route-input-wrap">
+                <input id="routeDestination" placeholder="例：池袋駅" autocomplete="off">
+                <div class="route-suggestions" id="routeDestinationSuggestions"></div>
+              </div>
+            </div>
+            <div class="route-selected" id="routeDestinationStation"></div>
+          </div>
+        </div>
+        <div class="route-actions-3">
+          <button type="button" class="btn-copy" id="routeEstimateBtn">估算起點 → 目的地</button>
+          <button type="button" class="secondary-btn" id="routeSearchBtn">分析起點附近</button>
+          <button type="button" class="secondary-btn" id="routeSearchDestBtn">分析目的地附近</button>
+          <button type="button" class="secondary-btn" id="routeGoogleBtn">Google Maps 路線</button>
+          <button type="button" class="secondary-btn route-navitime-btn" id="routeNavitimeBtn">NAVITIME 路線</button>
+        </div>
+        <div class="route-status" id="routeSearchStatus"></div>
+        <div class="route-source-note">輸入自由地址時，不會在本站傳送或儲存地址；按下外部查詢按鈕後，才會把起點與目的地交給所選服務。</div>
+      </div>
+
+      <div>
+        <div class="section-title"><span class="idx">02</span>電車時間・附近車站 Train Time &amp; Station Distance</div>
+        <div class="route-single-result" id="routeTransitResult">
+          <div class="route-empty-state">從上方選擇物件、學校、校區或車站後，即可查看徒步 30 分鐘內的車站；可一鍵切換徒步／開車，並在 10～60 分鐘的區間快速比較。</div>
+        </div>
+        <div class="footnote">步行估算＝直線距離 × 1.2（道路繞行係數）÷ 每分鐘 80m。電車時間則依站間距離、路線平均速度與轉乘時間推算，適合初步篩選；實際班次、快車停靠、車資及月台動線請以 Google Maps／NAVITIME 為準。</div>
+      </div>
+    </div>
+    <div class="route-attribution">資料來源：國土交通省「國土數值情報」鐵道 2025 年版、學校 2023 年版（CC BY 4.0）；文部科學省「学校コード」2026-05-01 暫定版；國土地理院住所検索；出入國在留管理廳告示日本語教育機關名單（2026-07-02）；UR都市機構個別団地類型一覧（2026-03 末）。</div>
+
+    <!-- 通勤・通学定期券 費用試算（原「通勤定期券計算」頁已併入本頁，改為彈出視窗） -->
+    <dialog class="route-line-dialog" id="commuterDialog">
+      <div class="route-line-dialog-head">
+        <div><h3>通勤・通学定期券 費用試算</h3><p>Commuter Pass Calculator</p></div>
+        <button type="button" class="route-line-close" id="commuterDialogClose" aria-label="關閉">×</button>
+      </div>
+      <div class="route-line-dialog-body">
+        <div class="commuter-mode-switch" style="display:flex;gap:8px;margin-bottom:14px;">
+          <button type="button" class="util-doc-tab active" id="commuterModeKnown" data-commuter-mode="known">已知1ヶ月定期票價</button>
+          <button type="button" class="util-doc-tab" id="commuterModeFare" data-commuter-mode="fare">只知道單程票價（概算）</button>
+        </div>
+
+        <div class="apply-fields">
+          <div class="apply-field full" id="commuterKnownField">
+            <label>1ヶ月定期券金額（可在 Yahoo!乗換案内／NAVITIME／各鉄道公司官網查詢）</label>
+            <div class="input-wrap"><input type="number" id="commuterMonthlyKnown" value="12000" min="0" step="10"><span>円</span></div>
+          </div>
+          <div class="apply-field full" id="commuterFareField" style="display:none;">
+            <label>片道の運賃 One-way fare</label>
+            <div class="input-wrap"><input type="number" id="commuterOneWayFare" value="400" min="0" step="10"><span>円</span></div>
+          </div>
+          <div class="apply-field"><label>月間通勤・通学日数 Days/month</label><div class="input-wrap"><input type="number" id="commuterDays" value="20" min="1" max="31" step="1"><span>日</span></div></div>
+          <div class="apply-field"><label>会社の通勤手当上限（任意） Employer subsidy cap</label><div class="input-wrap"><input type="number" id="commuterSubsidy" value="0" min="0" step="1000"><span>円/月</span></div></div>
+        </div>
+        <button type="button" class="btn-copy" id="commuterCalcBtn" style="width:100%;margin-top:6px;">定期券費用を計算</button>
+
+        <div class="calc-kpi-grid" style="margin-top:16px;">
+          <div class="calc-kpi"><span>1ヶ月定期</span><strong id="commuterOut1m">—</strong></div>
+          <div class="calc-kpi"><span>3ヶ月定期（概算）</span><strong id="commuterOut3m">—</strong></div>
+          <div class="calc-kpi"><span>6ヶ月定期（概算）</span><strong id="commuterOut6m">—</strong></div>
+          <div class="calc-kpi"><span>都度払い（1ヶ月換算）</span><strong id="commuterOutCash">—</strong></div>
+          <div class="calc-kpi"><span>定期券で節約できる金額（対都度払い・月）</span><strong id="commuterOutSave">—</strong></div>
+          <div class="calc-kpi"><span>自己負担額（対会社補助・月）</span><strong id="commuterOutSelf">—</strong></div>
+        </div>
+        <div class="market-note" style="margin-top:10px;">
+          3ヶ月・6ヶ月定期は、多くの鉄道会社で採用されている概算倍率（3ヶ月＝1ヶ月×2.85／6ヶ月＝1ヶ月×5.70）で計算した<strong>参考値</strong>です。実際の金額は鉄道会社により異なりますので、正式な金額は各社公式サイトまたは駅の券売機でご確認ください。
+          「片道の運賃」のみで計算する場合の1ヶ月定期は<strong>さらに粗い概算（片道運賃×2×通勤日数の約7割）</strong>となりますので、あくまで目安としてご利用ください。
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="route-line-dialog route-line-browser" id="routeLineDialog">
+      <div class="route-line-dialog-head">
+        <div><h3 id="routeLineTitle">路線圖</h3><p id="routeLineOperator"></p></div>
+        <button type="button" class="route-line-close" id="routeLineClose" aria-label="關閉">×</button>
+      </div>
+      <div class="route-line-dialog-body route-line-browser-body">
+        <div class="route-line-target-switch">
+          <span class="route-line-target-label">點選車站設為：</span>
+          <div class="route-pill-group">
+            <button type="button" class="route-pill" data-line-target="origin">起點</button>
+            <button type="button" class="route-pill active" data-line-target="destination">目的地</button>
+          </div>
+        </div>
+        <div class="route-line-target-switch">
+          <span class="route-line-target-label">篩選地區：</span>
+          <div class="route-pill-group" id="routeLinePrefFilter">
+            <button type="button" class="route-pill active" data-line-pref="">全部</button>
+            <button type="button" class="route-pill" data-line-pref="東京都">東京</button>
+            <button type="button" class="route-pill" data-line-pref="神奈川県">神奈川</button>
+            <button type="button" class="route-pill" data-line-pref="埼玉県">埼玉</button>
+            <button type="button" class="route-pill" data-line-pref="千葉県">千葉</button>
+          </div>
+        </div>
+        <div class="route-line-browser-grid">
+          <div class="route-line-picker" id="routeLinePicker"></div>
+          <div class="route-line-map-panel">
+            <div class="route-line-map-wrap" id="routeLineMap"></div>
+            <div class="route-line-stations" id="routeLineStations"></div>
+          </div>
+        </div>
+        <div class="route-line-note">這是把實際線形簡化後的站點示意圖，不是地理地圖，也不代表票價、班次或列車停靠型態。左側可切換路線，右側點擊站名或白色圓點即可依上方選擇設為起點或目的地。相互直通、共用軌道或正式線籍不同的區間，可能依官方資料拆成不同路線。</div>
+      </div>
+    </dialog>
+
+    <script>
+    (function(){
+      var mode = "known"; // known = 已知1ヶ月定期 / fare = 只知道單程票價
+
+      function fmtYen(n){ return "¥" + Math.round(n).toLocaleString("ja-JP"); }
+
+      function calcCommuter(){
+        var monthlyKnownEl = document.getElementById("commuterMonthlyKnown");
+        if (!monthlyKnownEl) return;
+        var monthlyKnown = parseFloat(monthlyKnownEl.value) || 0;
+        var oneWayFare = parseFloat(document.getElementById("commuterOneWayFare").value) || 0;
+        var days = parseFloat(document.getElementById("commuterDays").value) || 20;
+        var subsidy = parseFloat(document.getElementById("commuterSubsidy").value) || 0;
+
+        var monthly;
+        if (mode === "known"){
+          monthly = monthlyKnown;
+        } else {
+          // 片道運賃のみわかる場合の粗い概算（現金往復額の約7割）
+          monthly = Math.round(oneWayFare * 2 * days * 0.7 / 10) * 10;
+        }
+
+        var threeMonth = Math.round(monthly * 2.85 / 10) * 10;
+        var sixMonth = Math.round(monthly * 5.70 / 10) * 10;
+
+        var cashFare = oneWayFare > 0 ? oneWayFare : Math.round(monthly / (days * 2 * 0.7));
+        var cashMonthly = cashFare * 2 * days;
+
+        var save = cashMonthly - monthly;
+        var selfPay = Math.max(0, monthly - subsidy);
+
+        document.getElementById("commuterOut1m").textContent = fmtYen(monthly);
+        document.getElementById("commuterOut3m").textContent = fmtYen(threeMonth);
+        document.getElementById("commuterOut6m").textContent = fmtYen(sixMonth);
+        document.getElementById("commuterOutCash").textContent = fmtYen(cashMonthly);
+        document.getElementById("commuterOutSave").textContent = fmtYen(save);
+        document.getElementById("commuterOutSelf").textContent = fmtYen(selfPay);
+      }
+
+      var modeKnownBtn = document.getElementById("commuterModeKnown");
+      var modeFareBtn = document.getElementById("commuterModeFare");
+      var knownField = document.getElementById("commuterKnownField");
+      var fareField = document.getElementById("commuterFareField");
+
+      if (modeKnownBtn){
+        modeKnownBtn.addEventListener("click", function(){
+          mode = "known";
+          modeKnownBtn.classList.add("active");
+          modeFareBtn.classList.remove("active");
+          knownField.style.display = "";
+          fareField.style.display = "none";
+          calcCommuter();
+        });
+        modeFareBtn.addEventListener("click", function(){
+          mode = "fare";
+          modeFareBtn.classList.add("active");
+          modeKnownBtn.classList.remove("active");
+          knownField.style.display = "none";
+          fareField.style.display = "";
+          calcCommuter();
+        });
+
+        var calcBtn = document.getElementById("commuterCalcBtn");
+        calcBtn.addEventListener("click", calcCommuter);
+        ["commuterMonthlyKnown","commuterOneWayFare","commuterDays","commuterSubsidy"].forEach(function(id){
+          document.getElementById(id).addEventListener("input", calcCommuter);
+        });
+        calcCommuter();
+      }
+
+      var openBtn = document.getElementById("commuterOpenBtn");
+      var dialog = document.getElementById("commuterDialog");
+      var closeBtn = document.getElementById("commuterDialogClose");
+      if (openBtn && dialog){
+        openBtn.addEventListener("click", function(){
+          if (typeof dialog.showModal === "function") dialog.showModal(); else dialog.setAttribute("open","");
+        });
+      }
+      if (closeBtn && dialog){
+        closeBtn.addEventListener("click", function(){ dialog.close(); });
+      }
+    })();
+    </script>
+  </div><!-- /page-route -->

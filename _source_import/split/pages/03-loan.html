@@ -1,0 +1,45 @@
+
+  <div id="page-loan" class="page-view theme-tax">
+    <div class="eyebrow">住宅ローン金利・返済計算 Mortgage Calculator</div>
+    <div class="portal-alert"><strong>外国人の方向け：</strong>在留資格と働き方は審査の目安として表示し、返済額の金利には自動加算しません。実際の可否・金利は銀行の本審査、物件担保評価、信用情報などで決まります。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>本人・在留状況</div>
+        <div class="apply-fields">
+          <div class="apply-field full"><label>国籍・在留資格 Status</label><select id="loanStatus"><option value="japanese">日本国籍</option><option value="special">特別永住者</option><option value="pr">永住者</option><option value="pr-pending">永住申請中</option><option value="spouse">日本人・永住者の配偶者等</option><option value="work" selected>就労ビザ・高度専門職</option><option value="student">留学・家族滞在・その他</option></select></div>
+          <div class="apply-field"><label>日本居住年数 Years in Japan</label><input type="number" id="loanResidenceYears" value="5" min="0" max="80" step="0.5"></div>
+          <div class="apply-field"><label>在留期限の残り Remaining visa</label><div class="input-wrap"><input type="number" id="loanVisaYears" value="3" min="0" max="10" step="0.5"><span>年</span></div></div>
+          <div class="apply-field"><label>年齢 Age</label><input type="number" id="loanAge" value="35" min="18" max="80"></div>
+          <div class="apply-field"><label>働き方 Employment</label><select id="loanEmployment"><option value="permanent" selected>正社員</option><option value="civil">公務員</option><option value="contract">契約社員</option><option value="dispatch">派遣社員</option><option value="executive">会社役員</option><option value="self">自営業・個人事業主</option><option value="owner">法人代表者</option><option value="part">パート・アルバイト</option></select></div>
+          <div class="apply-field"><label>勤続・事業年数 Tenure</label><div class="input-wrap"><input type="number" id="loanTenure" value="3" min="0" max="60" step="0.5"><span>年</span></div></div>
+          <div class="apply-field"><label>税込年収 Gross income</label><div class="input-wrap"><input type="number" id="loanIncome" value="5000000" min="0" step="10000"><span>円</span></div></div>
+          <div class="apply-field full"><label>他のローン年間返済額 Other annual debt</label><div class="input-wrap"><input type="number" id="loanOtherDebt" value="0" min="0" step="10000"><span>円/年</span></div></div>
+        </div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>物件・借入条件</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>物件価格 Property price</label><div class="input-wrap"><input type="number" id="loanPrice" value="50000000" min="0" step="100000"><span>円</span></div></div>
+          <div class="apply-field"><label>自己資金 Down payment</label><div class="input-wrap"><input type="number" id="loanDown" value="10000000" min="0" step="100000"><span>円</span></div></div>
+          <div class="apply-field"><label>返済期間 Term</label><select id="loanTerm"><option value="15">15年</option><option value="20">20年</option><option value="25">25年</option><option value="30">30年</option><option value="35" selected>35年</option><option value="40">40年</option><option value="50">50年</option></select></div>
+          <div class="apply-field"><label>金利プラン Rate plan</label><select id="loanRatePlan"><option value="0.945" selected>三菱UFJ 変動金利 0.945%</option><option value="3.35">三菱UFJ 固定10年 3.35%</option><option value="4.00">三菱UFJ 全期間固定31～35年 4.00%</option><option value="3.14">フラット35 21～35年 3.14%</option><option value="custom">自分で入力</option></select></div>
+          <div class="apply-field full"><label>年利 Annual interest rate</label><div class="input-wrap"><input type="number" id="loanRate" value="0.945" min="0" max="20" step="0.001"><span>%</span></div></div>
+        </div>
+        <button type="button" class="btn-copy" id="loanCalcBtn" style="width:100%;margin-top:14px;">返済額と審査目安を計算</button>
+      </div>
+      <div>
+        <div class="calc-kpi-grid">
+          <div class="calc-kpi"><span>借入予定額</span><strong id="loanPrincipalOut">—</strong></div>
+          <div class="calc-kpi"><span>毎月返済額</span><strong id="loanMonthlyOut">—</strong></div>
+          <div class="calc-kpi"><span>総利息</span><strong id="loanInterestOut">—</strong></div>
+          <div class="calc-kpi"><span>総返済額</span><strong id="loanTotalOut">—</strong></div>
+          <div class="calc-kpi"><span>返済負担率</span><strong id="loanDtiOut">—</strong></div>
+          <div class="calc-kpi"><span>頭金比率</span><strong id="loanDownRateOut">—</strong></div>
+        </div>
+        <div class="card">
+          <div class="section-title"><span class="idx">03</span>申込準備の目安</div>
+          <div class="readiness-list" id="loanReadiness"></div>
+          <div class="market-note" style="margin-top:12px;">年収400万円未満は年間返済負担率30%以下、400万円以上は35%以下をフラット35の基準として参考表示します。これは承認を保証するものではありません。</div>
+        </div>
+        <div class="portal-source">金利確認・最終更新：<strong>2026年7月20日</strong>。公式：<a href="https://www.bk.mufg.jp/kariru/jutaku/yuuguu/index.html" target="_blank" rel="noopener">三菱UFJ銀行 金利</a>／<a href="https://www.flat35.com/loan/index.html" target="_blank" rel="noopener">フラット35 金利</a>／<a href="https://www.flat35.com/loan/lineup/flat35/conditions/index.html" target="_blank" rel="noopener">利用条件</a></div>
+      </div>
+    </div>
+  </div><!-- /page-loan -->

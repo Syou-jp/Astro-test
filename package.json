@@ -1,0 +1,18 @@
+{
+  "name": "kojian-astro-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "set ASTRO_TELEMETRY_DISABLED=1&& (if not defined PORT set PORT=4321) & astro dev --port %PORT%",
+    "build": "set ASTRO_TELEMETRY_DISABLED=1&& astro build",
+    "preview": "set ASTRO_TELEMETRY_DISABLED=1&& (if not defined PORT set PORT=4321) & astro preview --port %PORT%",
+    "migrate:source": "node tools/migrate-source.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "astro": "^4.16.18",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,9 @@
+
+> kojian-astro-site@0.1.0 preview
+> set ASTRO_TELEMETRY_DISABLED=1&& astro preview --host 127.0.0.1
+
+
+ astro  v4.16.19 ready in 8 ms
+
+┃ Local    http://127.0.0.1:4321/
+

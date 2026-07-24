@@ -1,0 +1,70 @@
+
+  <div id="page-jobs" class="page-view theme-route" data-no-i18n>
+    <div class="eyebrow" id="jobsEyebrow">外国人向け求人・採用 Jobs &amp; Recruiting</div>
+    <div class="portal-alert" id="jobsIntro"></div>
+    <div class="card" style="margin-top:15px;">
+      <div class="section-title"><span class="idx">01</span><span id="jobsSearchTitle">条件から求人を探す</span></div>
+      <div class="jobs-filter-grid">
+        <div><label for="jobFilterIndustry" id="jobFilterIndustryLabel">業種</label><select id="jobFilterIndustry"></select></div>
+        <div><label for="jobFilterType" id="jobFilterTypeLabel">雇用形態</label><select id="jobFilterType"></select></div>
+        <div><label for="jobFilterJapanese" id="jobFilterJapaneseLabel">自分の日本語レベル</label><select id="jobFilterJapanese"></select></div>
+        <div><label for="jobFilterVisa" id="jobFilterVisaLabel">在留資格・就労条件</label><select id="jobFilterVisa"></select></div>
+      </div>
+      <div class="jobs-result-head"><strong id="jobsResultCount"></strong><span id="jobsDemoNotice"></span></div>
+      <div class="job-list" id="jobDemoList"></div>
+    </div>
+
+    <div class="job-builder">
+      <div class="card" id="jobPostingForm">
+        <div class="section-title"><span class="idx">02</span><span id="jobCreateTitle">求人票を作成する</span></div>
+        <div class="job-form-grid">
+          <div><label id="jlCompany">会社・店舗名</label><input id="jobCompany" value="株式会社サンプル"></div>
+          <div><label id="jlTitle">募集職種</label><input id="jobTitle" value="多言語カスタマーサポート"></div>
+          <div><label id="jlIndustry">業種</label><select id="jobIndustry"></select></div>
+          <div><label id="jlType">雇用形態</label><select id="jobType"></select></div>
+          <div><label id="jlJapanese">必要な日本語レベル</label><select id="jobJapanese"></select></div>
+          <div><label id="jlInterviewLanguage">面接対応言語</label><input id="jobInterviewLanguage" value="日本語・中文・English"></div>
+          <div><label id="jlPrefecture">都道府県</label><input id="jobPrefecture" value="東京都"></div>
+          <div><label id="jlStation">最寄駅</label><input id="jobStation" placeholder="例：上野駅 徒歩5分"></div>
+          <div class="wide"><label id="jlAddress">勤務地</label><input id="jobAddress" placeholder="市区町村・番地・建物名"></div>
+          <div class="wide"><label id="jlWork">仕事内容</label><textarea id="jobWork" rows="3" placeholder="具体的な業務、使用言語、1日の流れなど"></textarea></div>
+          <div class="wide"><label id="jlWorkChange">業務の変更範囲</label><input id="jobWorkChange" value="会社の定める業務（変更なしの場合は「変更なし」）"></div>
+          <div class="wide"><label id="jlPlaceChange">就業場所の変更範囲</label><input id="jobPlaceChange" value="会社の定める事業所（変更なしの場合は「変更なし」）"></div>
+          <div><label id="jlContract">契約期間</label><select id="jobContract"><option value="indefinite">期間の定めなし</option><option value="fixed">有期契約</option></select></div>
+          <div><label id="jlRenewal">更新基準・上限</label><input id="jobRenewal" placeholder="勤務成績・業務量／更新上限なし 等"></div>
+          <div><label id="jlSalaryType">給与区分</label><select id="jobSalaryType"><option value="hourly">時給</option><option value="monthly" selected>月給</option><option value="annual">年収</option></select></div>
+          <div><label id="jlSalary">給与額</label><input id="jobSalary" value="250,000円～350,000円"></div>
+          <div><label id="jlHours">勤務時間</label><input id="jobHours" value="9:00～18:00"></div>
+          <div><label id="jlBreak">休憩・時間外労働</label><input id="jobBreak" value="休憩60分／残業 月平均10時間"></div>
+          <div><label id="jlDays">勤務日数</label><input id="jobDays" value="週5日"></div>
+          <div><label id="jlHoliday">休日</label><input id="jobHoliday" value="土日祝・年末年始"></div>
+          <div><label id="jlTrial">試用期間</label><input id="jobTrial" value="3か月（条件変更なし）"></div>
+          <div><label id="jlDeadline">応募期限</label><input id="jobDeadline" type="date"></div>
+          <div class="wide"><label id="jlBenefits">待遇・福利厚生</label><textarea id="jobBenefits" rows="2">社会保険完備、交通費支給、有給休暇</textarea></div>
+          <div class="wide"><label id="jlApply">応募方法・連絡先</label><input id="jobApply" placeholder="メール、電話、応募URLなど"></div>
+          <div class="wide"><label id="jlVisa">応募できる在留資格・条件（複数選択）</label><div class="job-check-grid" id="jobVisaChecks"></div></div>
+        </div>
+        <div class="market-note" id="jobVisaHint" style="margin-top:12px;"></div>
+      </div>
+      <div>
+        <div class="job-preview" id="jobPostingPreview"></div>
+        <div class="actions export-actions" data-export-target="jobPostingPreview" data-export-name="求人票">
+          <button type="button" class="btn-pdf" id="jobPdfBtn">PDF</button>
+          <button type="button" class="btn-copy export-word">Word</button>
+          <button type="button" class="btn-copy export-excel">Excel</button>
+          <button type="button" class="btn-copy export-shot">Screenshot</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="job-legal-grid">
+      <div class="market-note" id="jobWorkerNote"></div>
+      <div class="market-note" id="jobEmployerNote"></div>
+    </div>
+    <div class="portal-actions">
+      <a class="secondary-btn" href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/haken-shoukai/r0604anteisokukaisei1.html" target="_blank" rel="noopener" id="jobLinkConditions">厚生労働省：求人時の明示事項</a>
+      <a class="secondary-btn" href="https://www.moj.go.jp/isa/applications/procedures/shikakugai_00001.html" target="_blank" rel="noopener" id="jobLinkStudent">出入国在留管理庁：資格外活動許可</a>
+      <a class="secondary-btn" href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/roudoukijun/minimumichiran/" target="_blank" rel="noopener" id="jobLinkWage">地域別最低賃金</a>
+    </div>
+    <div class="portal-source" id="jobUpdated">制度確認：2026年7月20日。実際の募集・雇用時は、職務と在留資格の適合、最新の最低賃金、労働条件通知書を必ず確認してください。</div>
+  </div><!-- /page-jobs -->

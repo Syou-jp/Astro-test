@@ -1,0 +1,138 @@
+  <div id="page-holidays" class="page-view theme-area">
+    <div class="eyebrow">国民の祝日 National Holidays</div>
+
+    <style>
+      .hcal-wrap{display:flex;flex-direction:column;gap:16px;}
+      .hcal-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;}
+      .hcal-stat{background:var(--paper-2);border:1px solid var(--line);padding:9px 8px;text-align:center;}
+      .hcal-stat b{display:block;font-size:19px;color:var(--accent);font-family:"JetBrains Mono",monospace;}
+      .hcal-stat span{font-size:10.5px;color:var(--ink-soft);}
+      .hcal-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+      .hcal-table th,.hcal-table td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;}
+      .hcal-table th{color:var(--ink-soft);font-weight:700;font-size:11px;}
+      .hcal-table td.hcal-date{white-space:nowrap;font-family:"JetBrains Mono",monospace;font-weight:700;}
+      .hcal-badge{font-size:10px;font-weight:700;padding:1px 7px;background:var(--accent);color:#fff;white-space:nowrap;}
+      .hcal-badge.big{background:var(--seal);}
+      .hcal-summary{font-size:12.5px;line-height:1.7;color:var(--ink-soft);}
+      .hcal-toggle{cursor:pointer;list-style:none;font-size:13px;font-weight:700;color:var(--accent);}
+      .hcal-toggle::-webkit-details-marker{display:none;}
+      .hcal-toggle::before{content:"▸ ";}
+      details[open] .hcal-toggle::before{content:"▾ ";}
+      .hcal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:12px;}
+      .hcal-month{border:1px solid var(--line);overflow:hidden;background:#fff;}
+      .hcal-month-head{background:var(--accent);color:#fff;font-size:11.5px;font-weight:700;padding:5px 8px;}
+      .hcal-month-body{padding:6px;}
+      .hcal-dow{display:grid;grid-template-columns:repeat(7,1fr);font-size:9px;color:var(--ink-soft);text-align:center;margin-bottom:2px;}
+      .hcal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+      .hcal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink);}
+      .hcal-day.hol{background:var(--seal);color:#fff;font-weight:700;}
+      .hcal-day.sat{color:#2f5fa8;}
+      .hcal-day.sun{color:var(--seal);}
+      .hcal-day.empty{visibility:hidden;}
+      .hcal-flight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+      .hcal-flight-card h4{margin:0 0 4px;font-size:12.5px;color:var(--accent);}
+      .hcal-flight-card{font-size:12px;line-height:1.6;color:var(--ink-soft);}
+      .hcal-flight-card .expensive{color:var(--seal);font-weight:700;}
+      .hcal-flight-card .cheap{color:#2c7a4e;font-weight:700;}
+    </style>
+
+    <div class="hcal-wrap">
+
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>2026年祝日總覽</div>
+        <div class="hcal-stat-row">
+          <div class="hcal-stat"><b>16</b><span>國定祝日</span></div>
+          <div class="hcal-stat"><b>18</b><span>祝日合計天數</span></div>
+          <div class="hcal-stat"><b>8</b><span>3連休以上</span></div>
+          <div class="hcal-stat"><b>2</b><span>5連休</span></div>
+        </div>
+        <div class="hcal-summary" style="margin-top:8px;">
+          2026年（令和8年）平年。16天國定祝日＋1天振替休日(5/6)＋1天國民的休日(9/22)＝共18天。
+          特別的是有<strong>兩次5連休</strong>：5/2–5/6黃金週、9/19–9/23敬老週（銀色週）。
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title"><span class="idx">02</span>祝日與連休一覽</div>
+        <table class="hcal-table">
+          <thead><tr><th>日期</th><th>星期</th><th>祝日名稱</th><th>連休</th></tr></thead>
+          <tbody>
+            <tr><td class="hcal-date">1/1</td><td>四</td><td>元日</td><td>—</td></tr>
+            <tr><td class="hcal-date">1/10–12</td><td>六–一</td><td>成人の日</td><td><span class="hcal-badge">3連休</span></td></tr>
+            <tr><td class="hcal-date">2/11</td><td>三</td><td>建国記念の日</td><td>—</td></tr>
+            <tr><td class="hcal-date">2/21–23</td><td>六–一</td><td>天皇誕生日</td><td><span class="hcal-badge">3連休</span></td></tr>
+            <tr><td class="hcal-date">3/20–22</td><td>五–日</td><td>春分の日</td><td><span class="hcal-badge">3連休</span></td></tr>
+            <tr><td class="hcal-date">4/29</td><td>三</td><td>昭和の日</td><td>—</td></tr>
+            <tr><td class="hcal-date">5/2–6</td><td>六–三</td><td>憲法記念日・みどりの日・こどもの日</td><td><span class="hcal-badge big">5連休</span> 黃金週</td></tr>
+            <tr><td class="hcal-date">7/18–20</td><td>六–一</td><td>海の日</td><td><span class="hcal-badge">3連休</span></td></tr>
+            <tr><td class="hcal-date">8/11</td><td>二</td><td>山の日</td><td>—（常搭お盆請假）</td></tr>
+            <tr><td class="hcal-date">9/19–23</td><td>六–三</td><td>敬老の日・国民の休日・秋分の日</td><td><span class="hcal-badge big">5連休</span> 敬老週</td></tr>
+            <tr><td class="hcal-date">10/10–12</td><td>六–一</td><td>スポーツの日</td><td><span class="hcal-badge">3連休</span></td></tr>
+            <tr><td class="hcal-date">11/3</td><td>二</td><td>文化の日</td><td>—（請11/2連週末）</td></tr>
+            <tr><td class="hcal-date">11/21–23</td><td>六–一</td><td>勤労感謝の日</td><td><span class="hcal-badge">3連休</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <details class="card">
+        <summary class="hcal-toggle">展開完整年曆（紅底＝祝日）</summary>
+        <div class="hcal-grid" id="holidayCalGrid"></div>
+      </details>
+
+      <div class="card">
+        <div class="section-title"><span class="idx">03</span>機票淡旺季</div>
+        <div class="hcal-flight-grid">
+          <div class="hcal-flight-card">
+            <h4>國內線</h4>
+            <span class="expensive">貴：</span>黃金週、お盆前後、敬老週、年末年始及各連休期間。<br>
+            <span class="cheap">便宜：</span>1月中～2月上、6月、11月下～12月上的平日。
+          </div>
+          <div class="hcal-flight-card">
+            <h4>國際線（台灣往返）</h4>
+            <span class="expensive">貴：</span>日本連假疊加<strong>台灣假期</strong>（春節、清明、端午、中秋、國慶）時漲幅最明顯。<br>
+            <span class="cheap">便宜：</span>兩地都沒連假的平日，越早訂越省。
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+    (function(){
+      var MONTHS = [
+        {n:"1月", first:4, days:31, hol:[1,12]},
+        {n:"2月", first:0, days:28, hol:[11,23]},
+        {n:"3月", first:0, days:31, hol:[20]},
+        {n:"4月", first:3, days:30, hol:[29]},
+        {n:"5月", first:5, days:31, hol:[3,4,5,6]},
+        {n:"6月", first:1, days:30, hol:[]},
+        {n:"7月", first:3, days:31, hol:[20]},
+        {n:"8月", first:6, days:31, hol:[11]},
+        {n:"9月", first:2, days:30, hol:[21,22,23]},
+        {n:"10月", first:4, days:31, hol:[12]},
+        {n:"11月", first:0, days:30, hol:[3,23]},
+        {n:"12月", first:2, days:31, hol:[]}
+      ];
+      var dowLabels = ["日","一","二","三","四","五","六"];
+      var grid = document.getElementById("holidayCalGrid");
+      if(!grid) return;
+      var html = "";
+      MONTHS.forEach(function(m){
+        html += '<div class="hcal-month"><div class="hcal-month-head">2026年 '+m.n+'</div><div class="hcal-month-body">';
+        html += '<div class="hcal-dow">'+dowLabels.map(function(d){return '<div>'+d+'</div>';}).join('')+'</div>';
+        html += '<div class="hcal-days">';
+        for(var i=0;i<m.first;i++){ html += '<div class="hcal-day empty"></div>'; }
+        for(var d=1; d<=m.days; d++){
+          var dow = (m.first + d - 1) % 7;
+          var cls = "hcal-day";
+          if(m.hol.indexOf(d) !== -1) cls += " hol";
+          else if(dow === 6) cls += " sat";
+          else if(dow === 0) cls += " sun";
+          html += '<div class="'+cls+'">'+d+'</div>';
+        }
+        html += '</div></div></div>';
+      });
+      grid.innerHTML = html;
+    })();
+    </script>
+  </div><!-- /page-holidays -->

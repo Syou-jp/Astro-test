@@ -1,0 +1,161 @@
+---
+import "../styles/global.css";
+import navGroups from "../data/ja-nav.json";
+import { DEFAULT_LOCALE, ENABLED_LOCALES, LOCALES, getLocale, localePath } from "../data/locales";
+
+const { title = "外's Net", activeId = "", locale = DEFAULT_LOCALE, slug = "rent" } = Astro.props;
+const currentLocale = getLocale(locale);
+const canonicalUrl = new URL(localePath(currentLocale.code, slug), Astro.site ?? Astro.url.origin);
+const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
+  ...alternateLocale,
+  href: new URL(localePath(alternateLocale.code, slug), Astro.site ?? Astro.url.origin).href
+}));
+---
+<!DOCTYPE html>
+<html lang={currentLocale.htmlLang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content="日本で暮らす外国人のための生活・不動産・交通・税金ツール集" />
+    <link rel="canonical" href={canonicalUrl.href} />
+    {alternateUrls.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.htmlLang} href={alternate.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL(localePath(DEFAULT_LOCALE, slug), Astro.site ?? Astro.url.origin).href} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="masthead">
+        <h1><a href={localePath(currentLocale.code)} class="site-title-link">外's Net</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">日本で暮らす外国人をつなぐ</span></h1>
+        <div class="masthead-right">
+          <a class:list={["about-nav-btn", activeId === "page-about" && "active"]} id="aboutNavBtn" href={localePath(currentLocale.code, "about")} data-no-i18n><span id="aboutNavLabel">サイトについて</span></a>
+          <div class="site-language-control">
+            <label for="localeSwitcher">言語</label>
+            <select id="localeSwitcher" aria-label="表示言語" data-no-i18n data-current-slug={slug}>
+              {LOCALES.map((option) => (
+                <option value={option.code} selected={option.code === currentLocale.code} disabled={!option.enabled}>{option.label}</option>
+              ))}
+            </select>
+            <select id="siteLanguage" aria-label="Legacy language state" data-no-i18n hidden>
+              <option value="ja" selected={currentLocale.code === "ja"}>日本語</option>
+              <option value="zh-TW" selected={currentLocale.code === "zh-tw"}>繁體中文</option>
+              <option value="zh-CN" selected={currentLocale.code === "zh-cn"}>简体中文</option>
+              <option value="en" selected={currentLocale.code === "en"}>English</option>
+              <option value="ko" selected={currentLocale.code === "ko"}>한국어</option>
+              <option value="vi" selected={currentLocale.code === "vi"}>Tiếng Việt</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <nav class="tab-bar" id="tabBar" aria-label="ページ一覧">
+        {navGroups.map((group, i) => (
+          <>
+            <input type="radio" name="nav-cat" id={`navcat-${i}`} class="tab-group-radio" checked={group.tabs.some((tab) => activeId === tab.id)} />
+            <label for={`navcat-${i}`} class="tab-group-label">{group.label}</label>
+          </>
+        ))}
+        <input type="radio" name="nav-cat" id="navcat-credit" class="tab-group-radio" checked={activeId === "page-credit-card"} />
+        <label for="navcat-credit" class="tab-group-label">お金・生活</label>
+        <input type="radio" name="nav-cat" id="navcat-community" class="tab-group-radio" checked={activeId === "page-used-market" || activeId === "page-help-request"} />
+        <label for="navcat-community" class="tab-group-label">コミュニティ</label>
+
+        {navGroups.map((group, i) => (
+          <div class="tab-group-tabs" id={`navcat-${i}-panel`}>
+            {group.tabs.map((tab) => (
+              <a class:list={["doc-tab", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)}>
+                <span class="tab-glyph">{tab.glyph}</span>
+                <span class="tab-text">{tab.text}<small>{tab.small}</small></span>
+              </a>
+            ))}
+          </div>
+        ))}
+        <div class="tab-group-tabs" id="navcat-credit-panel">
+          <a class:list={["doc-tab", activeId === "page-credit-card" && "active"]} href={localePath(currentLocale.code, "credit-card")}>
+            <span class="tab-glyph">札</span>
+            <span class="tab-text">クレジットカード<small>CREDIT CARD GUIDE</small></span>
+          </a>
+        </div>
+        <div class="tab-group-tabs" id="navcat-community-panel">
+          <a class:list={["doc-tab", activeId === "page-used-market" && "active"]} href={localePath(currentLocale.code, "used-market")}>
+            <span class="tab-glyph">市</span>
+            <span class="tab-text">中古ゆずりあい市場<small>COMMUNITY MARKET</small></span>
+          </a>
+          <a class:list={["doc-tab", activeId === "page-help-request" && "active"]} href={localePath(currentLocale.code, "help-request")}>
+            <span class="tab-glyph">助</span>
+            <span class="tab-text">たすけあい掲示板<small>HELP REQUEST BOARD</small></span>
+          </a>
+        </div>
+      </nav>
+
+      <main class="tab-panel">
+        <slot />
+      </main>
+    </div>
+
+    <script is:inline>
+      document.getElementById("localeSwitcher")?.addEventListener("change", (event) => {
+        const select = event.currentTarget;
+        const slug = select.dataset.currentSlug || "rent";
+        window.location.href = `/${select.value}/${slug}/`;
+      });
+    </script>
+    <script is:inline>
+      (() => {
+        const originalGetElementById = Document.prototype.getElementById;
+        const noop = () => {};
+        const missingSelectOption = { textContent: "", value: "", dataset: {}, disabled: false, hidden: false };
+        const missingElement = new Proxy(
+          {
+            addEventListener: noop,
+            removeEventListener: noop,
+            appendChild: noop,
+            append: noop,
+            prepend: noop,
+            remove: noop,
+            close: noop,
+            showModal: noop,
+            focus: noop,
+            select: noop,
+            setAttribute: noop,
+            getAttribute: () => "",
+            querySelector: () => missingElement,
+            querySelectorAll: () => [],
+            closest: () => null,
+            classList: { add: noop, remove: noop, toggle: noop, contains: () => false },
+            style: {},
+            dataset: {},
+            options: [],
+            selectedOptions: [missingSelectOption],
+            value: "",
+            checked: false,
+            textContent: "",
+            innerHTML: "",
+            innerText: "",
+            disabled: false,
+            hidden: false
+          },
+          {
+            get(target, prop) {
+              if (prop in target) return target[prop];
+              return "";
+            },
+            set(target, prop, value) {
+              target[prop] = value;
+              return true;
+            }
+          }
+        );
+
+        Document.prototype.getElementById = function patchedGetElementById(id) {
+          return originalGetElementById.call(this, id) || missingElement;
+        };
+      })();
+    </script>
+    <slot name="legacyFooter" />
+  </body>
+</html>

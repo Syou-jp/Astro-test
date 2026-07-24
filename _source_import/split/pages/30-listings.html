@@ -1,0 +1,144 @@
+
+  <div id="page-listings" class="page-view theme-rent" data-no-i18n>
+    <div class="eyebrow">房源招租 Room &amp; Tenant Listings</div>
+
+    <div class="portal-alert" style="border-color:var(--seal,#b2402f);background:rgba(178,64,47,.07);">
+      <strong>刊登規則（請務必詳讀）：</strong><br>
+      本頁僅分享由「房東本人」直接出租的房源，<strong>禁止不動產公司、地產經紀刊登廣告或以任何形式招攬客戶</strong>。
+      違反者一經發現，一律直接<strong>封鎖 IP</strong>，不另行通知。
+    </div>
+
+    <div class="card" style="margin-top:15px;">
+      <div class="section-title"><span class="idx">01</span>選擇分類</div>
+      <div class="util-doc-switch" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button type="button" class="util-doc-tab active" id="rlTabAll" data-rl-filter="all">全部</button>
+        <button type="button" class="util-doc-tab" id="rlTabShare" data-rl-filter="share">🏠 找合租（我在找室友／空房）</button>
+        <button type="button" class="util-doc-tab" id="rlTabTenant" data-rl-filter="tenant">🔑 找租客（房東招租）</button>
+      </div>
+      <div class="jobs-result-head" style="margin-top:10px;"><strong id="rlResultCount"></strong></div>
+      <div class="rl-grid" id="rlGrid"></div>
+    </div>
+
+    <div class="market-note" style="margin-top:15px;">
+      本頁面資訊由房東／發文者自行提供，內容真實性請自行與對方確認；租屋前務必實際看屋、核對身分及房屋登記資訊，並簽署正式租賃契約。
+      本站不介入雙方交易，亦不對房源真偽負責。
+    </div>
+
+    <style>
+      .rl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:14px;}
+      .rl-card{border:1px solid var(--line,#ddd6c5);border-radius:10px;overflow:hidden;background:#fff;display:flex;flex-direction:column;}
+      .rl-card-image{position:relative;aspect-ratio:4/3;background:var(--paper-2,#f4f1e8);display:flex;align-items:center;justify-content:center;color:var(--ink-soft,#6b665a);font-size:12.5px;overflow:hidden;}
+      .rl-card-image img{width:100%;height:100%;object-fit:cover;}
+      .rl-badge{position:absolute;top:8px;left:8px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;color:#fff;}
+      .rl-badge.share{background:#447c89;}
+      .rl-badge.tenant{background:var(--accent);}
+      .rl-origin{position:absolute;top:8px;right:8px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;}
+      .rl-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1;}
+      .rl-body h3{margin:0;font-size:14.5px;}
+      .rl-meta{font-size:12px;color:var(--ink-soft,#6b665a);display:flex;flex-direction:column;gap:2px;}
+      .rl-price{font-size:15px;font-weight:700;color:var(--accent);}
+      .rl-desc{font-size:12.5px;line-height:1.6;color:var(--ink,#2b2b26);}
+      .rl-footer{margin-top:auto;padding-top:8px;border-top:1px dashed var(--line,#ddd6c5);font-size:11.5px;color:var(--ink-soft,#6b665a);display:flex;justify-content:space-between;align-items:center;}
+      .rl-contact{font-size:12px;font-weight:700;color:var(--accent);text-decoration:none;}
+      .rl-empty{padding:30px;text-align:center;color:var(--ink-soft,#6b665a);font-size:13px;}
+    </style>
+
+    <script>
+    (function(){
+      // ▼▼▼ 房源資料：要新增/刪除房源，直接編輯這個陣列即可 ▼▼▼
+      // type: "share"＝找合租（自己在找室友或分租空房） / "tenant"＝找租客（房東整層招租）
+      // origin：發文者或現任房客的出身地標示（不論日籍與否），例如：台湾人、香港人、日本人、中国人、韓国人 等
+      var RL_LISTINGS = [
+        {
+          type: "tenant",
+          image: "",
+          title: "足立区 千住 1LDK 房東直租",
+          address: "東京都足立区（詳細地址私訊提供）",
+          price: "月租 85,000円（不含管理費）",
+          origin: "房東：台湾人",
+          desc: "1LDK、近北千住駅步行8分，可養貓，外國人可申請，需保証人或保証会社。",
+          contact: "LINE：@kojian-sample",
+          updated: "2026/07"
+        },
+        {
+          type: "share",
+          image: "",
+          title: "找室友分租 葛飾区 2LDK 其中一間房",
+          address: "東京都葛飾区（詳細地址私訊提供）",
+          price: "月租 45,000円（含水電網路）",
+          origin: "現任房客：香港人",
+          desc: "現在住兩人，找第三位室友分租其中一間和室，公共空間共用，禁菸禁寵物。",
+          contact: "Instagram：@sample_account",
+          updated: "2026/07"
+        }
+      ];
+      // ▲▲▲ 房源資料結束 ▲▲▲
+
+      var currentFilter = "all";
+
+      function esc(s){
+        var d = document.createElement("div");
+        d.textContent = s || "";
+        return d.innerHTML;
+      }
+
+      function badgeLabel(type){ return type === "share" ? "找合租" : "找租客"; }
+
+      function render(){
+        var list = RL_LISTINGS.filter(function(item){
+          return currentFilter === "all" || item.type === currentFilter;
+        });
+        document.getElementById("rlResultCount").textContent = "共 " + list.length + " 筆房源";
+
+        var grid = document.getElementById("rlGrid");
+        if (!list.length){
+          grid.innerHTML = '<div class="rl-empty">目前這個分類還沒有房源，歡迎聯繫我們刊登。</div>';
+          return;
+        }
+
+        grid.innerHTML = list.map(function(item){
+          var imageHtml = item.image
+            ? '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<span>照片準備中</span>\'">'
+            : '<span>照片準備中</span>';
+          return '' +
+            '<div class="rl-card">' +
+              '<div class="rl-card-image">' + imageHtml +
+                '<span class="rl-badge ' + item.type + '">' + badgeLabel(item.type) + '</span>' +
+                (item.origin ? '<span class="rl-origin">' + esc(item.origin) + '</span>' : '') +
+              '</div>' +
+              '<div class="rl-body">' +
+                '<h3>' + esc(item.title) + '</h3>' +
+                '<div class="rl-meta">' +
+                  '<span>📍 ' + esc(item.address) + '</span>' +
+                '</div>' +
+                '<div class="rl-price">' + esc(item.price) + '</div>' +
+                '<div class="rl-desc">' + esc(item.desc) + '</div>' +
+                '<div class="rl-footer">' +
+                  '<span>更新：' + esc(item.updated) + '</span>' +
+                  '<span class="rl-contact">' + esc(item.contact) + '</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+        }).join("");
+      }
+
+      var tabs = [
+        ["rlTabAll", "all"],
+        ["rlTabShare", "share"],
+        ["rlTabTenant", "tenant"]
+      ];
+      tabs.forEach(function(pair){
+        var el = document.getElementById(pair[0]);
+        if (!el) return;
+        el.addEventListener("click", function(){
+          currentFilter = pair[1];
+          tabs.forEach(function(p){ document.getElementById(p[0]).classList.remove("active"); });
+          el.classList.add("active");
+          render();
+        });
+      });
+
+      render();
+    })();
+    </script>
+  </div><!-- /page-listings -->

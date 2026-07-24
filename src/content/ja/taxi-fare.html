@@ -1,0 +1,53 @@
+<div id="page-taxi-fare" class="page-view active theme-route">
+  <div class="eyebrow">TOKYO TAXI FARE ESTIMATE</div>
+  <div class="taxi-hero">
+    <div>
+      <p class="taxi-kicker">東京23区・武蔵野市・三鷹市</p>
+      <h2>タクシー料金めやす計算</h2>
+      <p>距離と渋滞・信号待ちの時間から、乗車料金のおおよその目安を計算します。</p>
+    </div>
+    <div class="taxi-rate-card">
+      <span>普通車・上限運賃の目安</span>
+      <strong>¥500 <small>／最初の1.0km</small></strong>
+      <p>以後 232m または低速85秒ごとに ¥100</p>
+    </div>
+  </div>
+  <div class="grid taxi-layout">
+    <section class="card">
+      <div class="section-title"><span><span class="idx">01</span>乗車条件を入力</span></div>
+      <div class="apply-fields taxi-fields">
+        <div class="apply-field full"><label for="taxiDistance">走行距離</label><div class="input-wrap"><input type="number" id="taxiDistance" value="5" min="0" step="0.1" inputmode="decimal"><span>km</span></div><small>Google Maps などで表示される車のルート距離を入力してください。</small></div>
+        <div class="apply-field full"><label for="taxiWait">渋滞・信号待ちの合計</label><div class="input-wrap"><input type="number" id="taxiWait" value="0" min="0" step="1" inputmode="numeric"><span>分</span></div><small>ゆっくり進む時間や停止時間が多そうなときだけ追加してください。</small></div>
+        <div class="apply-field full"><label class="taxi-check"><input type="checkbox" id="taxiNight"> <span>深夜・早朝割増を適用する（22:00〜5:00／20%）</span></label></div>
+      </div>
+      <div class="taxi-presets" aria-label="距離の例"><button type="button" class="secondary-btn" data-taxi-distance="2">近距離 2km</button><button type="button" class="secondary-btn" data-taxi-distance="5">市内 5km</button><button type="button" class="secondary-btn" data-taxi-distance="10">長め 10km</button></div>
+      <button type="button" class="btn-copy taxi-calc-btn" id="taxiCalcBtn">料金の目安を計算</button>
+    </section>
+    <section class="taxi-result" aria-live="polite">
+      <p class="taxi-result-label">おおよその乗車料金</p><strong id="taxiTotal">¥0</strong><p id="taxiRange">¥0〜¥0 程度</p>
+      <div class="taxi-breakdown"><div><span>距離分</span><b id="taxiDistanceFare">¥0</b></div><div><span>渋滞・信号待ち分</span><b id="taxiWaitFare">¥0</b></div><div id="taxiNightRow" hidden><span>深夜・早朝割増</span><b id="taxiNightFare">¥0</b></div></div>
+      <p class="taxi-result-note">目安として、表示額の前後10%ほど余裕を見ておくと安心です。</p>
+    </section>
+  </div>
+  <div class="taxi-notes"><div><h3>この計算に含まれるもの</h3><p>距離制運賃、低速・停止時の時間距離併用運賃、深夜・早朝割増（選択時）。</p></div><div><h3>含まれないもの</h3><p>迎車料金、予約料金、高速道路料金、空港定額運賃、アプリ手数料、会社ごとの追加料金など。</p></div><div><h3>ご利用前に</h3><p>実際の運賃はルート、交通状況、選択したタクシー会社・車種により変わります。最終的には乗車した車両のメーター料金が適用されます。</p></div></div>
+  <p class="taxi-source">料金の基準：東京23区・武蔵野市・三鷹市の普通車公定幅運賃（2026年4月20日適用の上限運賃）</p>
+  <script>
+    (function () {
+      var distanceEl = document.getElementById('taxiDistance'); if (!distanceEl) return;
+      var waitEl = document.getElementById('taxiWait'), nightEl = document.getElementById('taxiNight');
+      var yen = function (value) { return '¥' + Math.round(value).toLocaleString('ja-JP'); };
+      function calculate() {
+        var distance = Math.max(0, Number(distanceEl.value) || 0), waitMinutes = Math.max(0, Number(waitEl.value) || 0);
+        var distanceFare = 500 + Math.ceil(Math.max(0, distance * 1000 - 1000) / 232) * 100;
+        var waitFare = Math.ceil(waitMinutes * 60 / 85) * 100, subtotal = distanceFare + waitFare;
+        var nightFare = nightEl.checked ? Math.ceil(subtotal * 0.2 / 10) * 10 : 0, total = subtotal + nightFare;
+        document.getElementById('taxiTotal').textContent = yen(total);
+        document.getElementById('taxiRange').textContent = yen(Math.floor(total * .9 / 10) * 10) + '〜' + yen(Math.ceil(total * 1.1 / 10) * 10) + ' 程度';
+        document.getElementById('taxiDistanceFare').textContent = yen(distanceFare); document.getElementById('taxiWaitFare').textContent = yen(waitFare); document.getElementById('taxiNightFare').textContent = yen(nightFare); document.getElementById('taxiNightRow').hidden = !nightEl.checked;
+      }
+      [distanceEl, waitEl, nightEl].forEach(function (element) { element.addEventListener('input', calculate); element.addEventListener('change', calculate); });
+      document.getElementById('taxiCalcBtn').addEventListener('click', calculate);
+      document.querySelectorAll('[data-taxi-distance]').forEach(function (button) { button.addEventListener('click', function () { distanceEl.value = button.dataset.taxiDistance; calculate(); }); }); calculate();
+    })();
+  </script>
+</div>

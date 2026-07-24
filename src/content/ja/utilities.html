@@ -1,0 +1,120 @@
+<div id="page-utilities" class="page-view active theme-tax">
+    <div class="eyebrow" id="utilEyebrow">電気・ガス・水道 Utilities</div>
+    <div class="util-doc-switch" role="tablist" aria-label="料金種別切替" data-no-i18n>
+      <button type="button" class="util-doc-tab active" data-util-target="util-electric"><span id="utilTabElectric">電気</span><small>ELECTRICITY</small></button>
+      <button type="button" class="util-doc-tab" data-util-target="util-gas"><span id="utilTabGas">ガス</span><small>GAS</small></button>
+      <button type="button" class="util-doc-tab" data-util-target="util-water"><span id="utilTabWater">水道</span><small>WATER</small></button>
+    </div>
+    <section id="util-electric" class="util-doc-panel active">
+    <div class="portal-alert"><strong>東京電力エリア向け：</strong>検針票の「使用量（kWh）」と契約アンペアを入力すると、各社の公開料金表から月額を概算します。燃料費調整額・市場連動額は会社と月で異なるため、検針票の単価を別欄へ入力できます。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>電気使用量・契約</div>
+        <div class="apply-fields">
+          <div class="apply-field full"><label>会社・料金プラン Company / plan</label><select id="electricPlan"><option value="tepco">東京電力 従量電灯B</option><option value="softbank-home">SoftBank おうちでんき</option><option value="softbank-life">SoftBank くらしでんき</option><option value="softbank-green">SoftBank 自然でんき</option><option value="eneone-happy">Gas One／エネワンでんき ハッピー</option><option value="eneone-value">Gas One／エネワンでんき バリュー</option><option value="eneone-wonderful">Gas One／エネワンでんき ワンダフル</option></select></div>
+          <div class="apply-field"><label>1か月の電気使用量 Monthly consumption<span class="hint">検針票の「ご使用量」</span></label><div class="input-wrap"><input type="number" id="electricKwh" value="260" min="0" step="1"><span class="unit-kwh" data-no-i18n>kWh</span></div></div>
+          <div class="apply-field"><label>契約アンペア Contract</label><select id="electricAmp"><option value="10">10A</option><option value="15">15A</option><option value="20">20A</option><option value="30" selected>30A</option><option value="40">40A</option><option value="50">50A</option><option value="60">60A</option></select></div>
+          <div class="apply-field"><label>現在の請求額（任意）Current bill</label><div class="input-wrap"><input type="number" id="electricCurrentBill" value="0" min="0" step="1"><span>円</span></div></div>
+        </div>
+        <div class="market-note" style="margin-top:12px;"><strong>「電気使用量」とは：</strong>住宅用・店舗用などの用途ではなく、検針票や電力会社のマイページに表示される1か月分の「ご使用量（kWh）」です。例：260kWhと記載されていれば「260」を入力してください。この計算機は一般家庭向けの低圧・従量電灯相当プランを基準としており、業務用動力（三相200V）やオール電化の時間帯別プランには対応していません。</div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>月ごとの調整項目</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>再エネ賦課金 Renewable levy<span class="hint">2026年度</span></label><div class="input-wrap"><input type="number" id="electricRenewable" value="4.18" step="0.01"><span class="unit-kwh" data-no-i18n>円/kWh</span></div></div>
+          <div class="apply-field"><label>燃料費・市場調整単価<span class="hint">検針票どおり。値引きは－</span></label><div class="input-wrap"><input type="number" id="electricAdjustment" value="0" step="0.01"><span class="unit-kwh" data-no-i18n>円/kWh</span></div></div>
+          <div class="apply-field"><label>使用月 Billing month</label><select id="electricMonth"><option value="3.5" selected>2026年7月使用分（3.5円）</option><option value="4.5">2026年8月使用分（4.5円）</option><option value="3.5">2026年9月使用分（3.5円）</option><option value="0">その他・対象外（0円）</option></select></div>
+          <div class="apply-field"><label>国の支援値引き単価 Government discount<span class="hint">月を選ぶと自動入力</span></label><div class="input-wrap"><input type="number" id="electricSubsidy" value="3.5" min="0" step="0.01"><span class="unit-kwh" data-no-i18n>円/kWh</span></div></div>
+        </div>
+        <button type="button" class="btn-copy" id="electricCalcBtn" style="width:100%;margin-top:14px;">電気料金を計算</button>
+        <div class="market-note" id="electricPlanWarning" style="margin-top:12px;"></div>
+      </div>
+      <div>
+        <div class="electric-summary">
+          <div class="electric-stat"><span>月額概算（税込）</span><strong id="electricTotal">—</strong></div>
+          <div class="electric-stat"><span>実質単価</span><strong id="electricUnit">—</strong></div>
+          <div class="electric-stat"><span>年間単純換算</span><strong id="electricAnnual">—</strong></div>
+        </div>
+        <table class="electric-breakdown" aria-label="電気料金内訳"><thead><tr><th>内訳</th><th>計算</th><th>金額</th></tr></thead><tbody id="electricBreakdown"></tbody><tfoot><tr><td colspan="2">概算合計</td><td id="electricTableTotal">—</td></tr></tfoot></table>
+        <div class="market-note" id="electricBillDiff" style="display:none;margin-top:12px;"></div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">03</span>同じ条件で料金表比較</div>
+        <div class="electric-company-grid" id="electricComparison"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <div class="section-title"><span class="idx">04</span>料金表の読み方・公式資料</div>
+      <div class="market-note"><strong>計算式：</strong>基本料金＋電力量料金＋（使用量×燃料費・市場調整単価）＋再生可能エネルギー発電促進賦課金－政府支援。キャンペーン、セット割、ポイント、口座振替割引、初月の日割り、最低料金は原則含みません。</div>
+      <div class="portal-source">料金表確認・最終更新：<strong>2026年7月20日</strong>（東京電力エリア・税込）。公式資料：<a href="https://www.tepco.co.jp/ep/private/plan/chargelist01.html" target="_blank" rel="noopener">東京電力 料金単価表</a>／<a href="https://www.softbank.jp/energy/prices/" target="_blank" rel="noopener">SoftBank 電力料金</a>／<a href="https://eneonedenki.net/clause.html" target="_blank" rel="noopener">エネワンでんき 約款・料金表</a>／<a href="https://octopusenergy.co.jp/" target="_blank" rel="noopener">オクトパスエナジー 料金確認</a>／<a href="https://www.meti.go.jp/press/2025/03/20260319004/20260319004.html" target="_blank" rel="noopener">経済産業省 2026年度再エネ賦課金</a>／<a href="https://denkigas-gekihenkanwa.go.jp/business" target="_blank" rel="noopener">2026年7～9月 電気料金支援</a></div>
+      <div class="footnote">オクトパスエナジーは住所・郵便番号や申込時期により表示プランが変わるため、古い単価を固定せず公式料金チェックへのリンクとして掲載しています。最終的な請求額は各社の請求書・重要事項説明書をご確認ください。</div>
+    </div>
+    </section><!-- /util-electric -->
+
+    <section id="util-gas" class="util-doc-panel">
+    <div class="portal-alert"><strong>都市ガスとLPガスを分けて計算：</strong>都市ガスは使用量区分ごとの基本料金・単位料金・毎月の原料費調整で算定します。LPガスは販売店ごとに料金が違うため、公開標準料金・関東平均・検針票の単価から選べます。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="section-title"><span class="idx">01</span>ガスの種類・使用量</div>
+        <div class="apply-fields">
+          <div class="apply-field"><label>ガスの種類 Gas type</label><select id="gasKind"><option value="city">都市ガス（東京ガス供給エリア）</option><option value="lp">LPガス・プロパンガス</option></select></div>
+          <div class="apply-field"><label>会社・プラン Company / plan</label><select id="gasPlan"><option value="tokyogas" data-kind="city">東京ガス 一般料金</option><option value="tepco-gas" data-kind="city">東京電力 とくとくガスプラン</option><option value="eneos-gas" data-kind="city">ENEOS都市ガス 標準プランTK</option><option value="cd-gas" data-kind="city">CDエナジー ベーシックガス</option><option value="lp-gasone" data-kind="lp">Gas One／エネワン LPガス標準料金</option><option value="lp-kanto" data-kind="lp">関東LPガス平均価格</option><option value="lp-custom" data-kind="lp">検針票の料金を入力</option></select></div>
+          <div class="apply-field"><label>1か月の使用量 Monthly usage</label><div class="input-wrap"><input type="number" id="gasUsage" value="30" min="0" step="0.1"><span>m³</span></div></div>
+          <div class="apply-field"><label>現在の請求額（任意）Current bill</label><div class="input-wrap"><input type="number" id="gasCurrentBill" value="0" min="0" step="1"><span>円</span></div></div>
+        </div>
+        <div id="gasCityFields">
+          <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>都市ガスの月別調整</div>
+          <div class="apply-fields">
+            <div class="apply-field"><label>原料費調整単価 Raw-material adjustment<span class="hint">検針票の単価を確認</span></label><div class="input-wrap"><input type="number" id="gasAdjustment" value="31.54" step="0.01"><span>円/m³</span></div></div>
+            <div class="apply-field"><label>使用月 Billing month</label><select id="gasMonth"><option value="14" selected>2026年7月使用分／8月検針（14円）</option><option value="18">2026年8月使用分／9月検針（18円）</option><option value="14">2026年9月使用分／10月検針（14円）</option><option value="0">その他・対象外（0円）</option></select></div>
+            <div class="apply-field full"><label>政府支援値引き Government discount<span class="hint">使用月から自動入力</span></label><div class="input-wrap"><input type="number" id="gasSubsidy" value="14" min="0" step="0.01"><span>円/m³</span></div></div>
+          </div>
+        </div>
+        <div id="gasLpFields" style="display:none;">
+          <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>LPガスの契約単価</div>
+          <div class="apply-fields">
+            <div class="apply-field"><label>基本料金 Basic charge</label><div class="input-wrap"><input type="number" id="gasLpBasic" value="1870" min="0" step="1"><span>円</span></div></div>
+            <div class="apply-field"><label>従量単価 Usage rate</label><div class="input-wrap"><input type="number" id="gasLpUnit" value="495" min="0" step="0.01"><span>円/m³</span></div></div>
+            <div class="apply-field full"><label>設備料金 Equipment charge<span class="hint">請求書に記載がある場合</span></label><div class="input-wrap"><input type="number" id="gasLpEquipment" value="0" min="0" step="1"><span>円</span></div></div>
+          </div>
+          <div class="market-note" style="margin-top:12px;">LPガスは2026年夏の都市ガス料金支援の対象外です。集合住宅では販売店を自由に変更できない場合があり、設備料金も契約ごとに異なります。</div>
+        </div>
+        <button type="button" class="btn-copy" id="gasCalcBtn" style="width:100%;margin-top:14px;">ガス料金を計算</button>
+        <div class="market-note" id="gasPlanWarning" style="margin-top:12px;"></div>
+      </div>
+      <div>
+        <div class="electric-summary">
+          <div class="electric-stat"><span>月額概算（税込）</span><strong id="gasTotal">—</strong></div>
+          <div class="electric-stat"><span>実質単価</span><strong id="gasEffectiveUnit">—</strong></div>
+          <div class="electric-stat"><span>年間単純換算</span><strong id="gasAnnual">—</strong></div>
+        </div>
+        <table class="electric-breakdown" aria-label="ガス料金内訳"><thead><tr><th>内訳</th><th>計算</th><th>金額</th></tr></thead><tbody id="gasBreakdown"></tbody><tfoot><tr><td colspan="2">概算合計</td><td id="gasTableTotal">—</td></tr></tfoot></table>
+        <div class="market-note" id="gasBillDiff" style="display:none;margin-top:12px;"></div>
+        <div class="section-title" style="margin-top:18px;"><span class="idx">03</span>同じ使用量で比較</div>
+        <div class="electric-company-grid" id="gasComparison"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <div class="section-title"><span class="idx">04</span>主要会社・公式料金資料</div>
+      <div class="portal-grid three">
+        <div class="portal-card"><span class="portal-badge">都市ガス</span><h3>東京ガス・東京電力・ENEOS・CDエナジー</h3><p>東京ガス導管エリアで選べる代表的な家庭向けプラン。原料費調整額やセット割の条件は会社ごとに異なります。</p></div>
+        <div class="portal-card"><span class="portal-badge">LPガス</span><h3>Gas One・ニチガス・TOKAI</h3><p>LPガスは会社名が同じでも地域、建物、設備契約で単価が変わります。検針票の三部料金表示を優先してください。</p></div>
+        <div class="portal-card"><span class="portal-badge">市場比較</span><h3>関東LPガス平均</h3><p>石油情報センターの2026年6月30日速報：5m³ 5,509円、10m³ 9,025円、20m³ 15,813円、50m³ 35,133円。</p></div>
+      </div>
+      <div class="portal-source">料金表確認・最終更新：<strong>2026年7月20日</strong>。公式資料：<a href="https://www.tokyo-gas.co.jp/news/press/20260626-03.html" target="_blank" rel="noopener">東京ガス 2026年8月検針料金</a>／<a href="https://www.tepco.co.jp/ep/gas-business/index-j.html" target="_blank" rel="noopener">東京電力 ガス料金表</a>／<a href="https://www.eneos-power.co.jp/gas/plan/" target="_blank" rel="noopener">ENEOS都市ガス</a>／<a href="https://www.cdedirect.co.jp/plan/gas/basic_gas/" target="_blank" rel="noopener">CDエナジー</a>／<a href="https://eneonedenki.net/lpgas/fee.html" target="_blank" rel="noopener">Gas One LPガス</a>／<a href="https://www.nichigas.co.jp/ja/for-home/citygas" target="_blank" rel="noopener">ニチガス</a>／<a href="https://www.lpg.tokai.jp/" target="_blank" rel="noopener">TOKAI LPガス</a>／<a href="https://oil-info.ieej.or.jp/price/price_ippan_lp_maitsuki.html" target="_blank" rel="noopener">石油情報センター LPガス平均</a>／<a href="https://denkigas-gekihenkanwa.go.jp/business" target="_blank" rel="noopener">2026年夏季支援</a></div>
+      <div class="footnote">都市ガスの比較欄は各社の基準料金に同じ原料費調整・政府支援条件を置いた比較です。実際には会社ごとの原料費調整、端数処理、セット割、日割りで差が出ます。LPガス平均は地域調査値間の補間による目安です。</div>
+    </div>
+    </section><!-- /util-gas -->
+
+    <section id="util-water" class="util-doc-panel">
+    <div class="portal-alert" id="waterIntro"></div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-title"><span class="idx">01</span><span id="waterBasicTitle">基本のしくみ</span></div>
+      <div id="waterBasicBody" style="font-size:13px;line-height:1.9;color:var(--ink-soft);"></div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-title"><span class="idx">02</span><span id="waterApplyTitle">使用開始・中止の申請方法</span></div>
+      <div id="waterApplyBody" style="font-size:13px;line-height:1.9;color:var(--ink-soft);"></div>
+    </div>
+    <div class="card">
+      <div class="section-title"><span class="idx">03</span><span id="waterOfficialTitle">公式窓口・関連リンク</span></div>
+      <div id="waterOfficialBody" style="font-size:12.5px;line-height:1.9;color:var(--ink-soft);"></div>
+    </div>
+    </section><!-- /util-water -->
+  </div><!-- /page-utilities -->
