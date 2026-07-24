@@ -39,13 +39,13 @@
     "id": "page-used-market",
     "slug": "used-market",
     "file": "used-market.html",
-    "title": "中古ゆずりあい市場"
+    "title": "中古市場"
   },
   {
     "id": "page-help-request",
     "slug": "help-request",
     "file": "help-request.html",
-    "title": "たすけあい掲示板"
+    "title": "助け合い"
   },
   {
     "id": "page-moving",
@@ -217,5 +217,11 @@
     "slug": "era",
     "file": "era.html",
     "title": "元号・年齢早見表｜西暦・民国・韓国年齢換算"
+  },
+  {
+    "id": "page-events",
+    "slug": "events",
+    "file": "events.html",
+    "title": "イベント"
   }
 ]

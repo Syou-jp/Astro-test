@@ -16,6 +16,16 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem("site-theme");
+          if (saved && saved !== "paper") {
+            document.documentElement.setAttribute("data-theme", saved);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content="日本で暮らす外国人のための生活・不動産・交通・税金ツール集" />
     <link rel="canonical" href={canonicalUrl.href} />
@@ -33,6 +43,15 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         <h1><a href={localePath(currentLocale.code)} class="site-title-link">外's Net</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">日本で暮らす外国人をつなぐ</span></h1>
         <div class="masthead-right">
           <a class:list={["about-nav-btn", activeId === "page-about" && "active"]} id="aboutNavBtn" href={localePath(currentLocale.code, "about")} data-no-i18n><span id="aboutNavLabel">サイトについて</span></a>
+          <div class="site-theme-control">
+            <label for="themeSwitcher">配色</label>
+            <select id="themeSwitcher" aria-label="配色テーマ" data-no-i18n>
+              <option value="paper">ベージュ</option>
+              <option value="light">淺色</option>
+              <option value="dark">深色</option>
+              <option value="pink">粉紅色</option>
+            </select>
+          </div>
           <div class="site-language-control">
             <label for="localeSwitcher">言語</label>
             <select id="localeSwitcher" aria-label="表示言語" data-no-i18n data-current-slug={slug}>
@@ -56,14 +75,9 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         {navGroups.map((group, i) => (
           <>
             <input type="radio" name="nav-cat" id={`navcat-${i}`} class="tab-group-radio" checked={group.tabs.some((tab) => activeId === tab.id)} />
-            <label for={`navcat-${i}`} class="tab-group-label">{group.label}</label>
+            <label for={`navcat-${i}`} class:list={["tab-group-label", group.tabs.some((tab) => activeId === tab.id) && "has-active"]}>{group.label}</label>
           </>
         ))}
-        <input type="radio" name="nav-cat" id="navcat-credit" class="tab-group-radio" checked={activeId === "page-credit-card"} />
-        <label for="navcat-credit" class="tab-group-label">お金・生活</label>
-        <input type="radio" name="nav-cat" id="navcat-community" class="tab-group-radio" checked={activeId === "page-used-market" || activeId === "page-help-request"} />
-        <label for="navcat-community" class="tab-group-label">コミュニティ</label>
-
         {navGroups.map((group, i) => (
           <div class="tab-group-tabs" id={`navcat-${i}-panel`}>
             {group.tabs.map((tab) => (
@@ -74,29 +88,56 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
             ))}
           </div>
         ))}
-        <div class="tab-group-tabs" id="navcat-credit-panel">
-          <a class:list={["doc-tab", activeId === "page-credit-card" && "active"]} href={localePath(currentLocale.code, "credit-card")}>
-            <span class="tab-glyph">札</span>
-            <span class="tab-text">クレジットカード<small>CREDIT CARD GUIDE</small></span>
-          </a>
-        </div>
-        <div class="tab-group-tabs" id="navcat-community-panel">
-          <a class:list={["doc-tab", activeId === "page-used-market" && "active"]} href={localePath(currentLocale.code, "used-market")}>
-            <span class="tab-glyph">市</span>
-            <span class="tab-text">中古ゆずりあい市場<small>COMMUNITY MARKET</small></span>
-          </a>
-          <a class:list={["doc-tab", activeId === "page-help-request" && "active"]} href={localePath(currentLocale.code, "help-request")}>
-            <span class="tab-glyph">助</span>
-            <span class="tab-text">たすけあい掲示板<small>HELP REQUEST BOARD</small></span>
-          </a>
-        </div>
       </nav>
+      <script is:inline>
+        (() => {
+          if (window.matchMedia("(max-width:640px)").matches) {
+            document.querySelectorAll(".tab-group-radio").forEach((radio) => {
+              radio.checked = false;
+            });
+          }
+        })();
+      </script>
 
       <main class="tab-panel">
         <slot />
       </main>
+
+      <button type="button" id="backToTop" class="back-to-top" aria-label="ページ上部へ戻る">↑</button>
     </div>
 
+    <script is:inline>
+      (() => {
+        const select = document.getElementById("themeSwitcher");
+        if (!select) return;
+        let saved = "paper";
+        try {
+          saved = localStorage.getItem("site-theme") || "paper";
+        } catch (e) {}
+        select.value = saved;
+        select.addEventListener("change", () => {
+          const value = select.value;
+          if (value === "paper") {
+            document.documentElement.removeAttribute("data-theme");
+          } else {
+            document.documentElement.setAttribute("data-theme", value);
+          }
+          try {
+            localStorage.setItem("site-theme", value);
+          } catch (e) {}
+        });
+      })();
+    </script>
+    <script is:inline>
+      (() => {
+        const btn = document.getElementById("backToTop");
+        if (!btn) return;
+        const toggle = () => btn.classList.toggle("is-visible", window.scrollY > 400);
+        window.addEventListener("scroll", toggle, { passive: true });
+        toggle();
+        btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+      })();
+    </script>
     <script is:inline>
       document.getElementById("localeSwitcher")?.addEventListener("change", (event) => {
         const select = event.currentTarget;

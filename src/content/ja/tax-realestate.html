@@ -1,4 +1,12 @@
-<div id="page-tax-realestate" class="page-view active theme-tax">
+<div id="page-tax-realestate" class="page-view active theme-tax cat-realestate">
+  <style>
+    .tax-line-note{font-size:11.5px;color:var(--ink-soft);margin-bottom:12px;}
+    .tax-subsection-label{font-size:12.5px;font-weight:700;color:var(--accent);margin:12px 0 4px;}
+    @media(max-width:640px){
+      .tax-line-note{font-size:12.5px;}
+      .tax-subsection-label{font-size:13.5px;}
+    }
+  </style>
   <div class="eyebrow" id="taxRealEyebrow">不動産の税金 Property Tax</div>
   <div class="util-doc-switch" role="tablist" aria-label="不動産稅金種別切替" data-no-i18n>
     <button type="button" class="util-doc-tab active" data-util-target="util-tax-buy"><span id="taxRealBuyLabel">購入時の税金</span></button>
@@ -121,15 +129,15 @@
         </div>
         <div class="receipt-body">
           <div class="seal">概算</div>
-          <div style="font-size:11.5px;color:var(--ink-soft);margin-bottom:12px;">評價額：土地 <span id="txLandValueOut">¥0</span>／建物 <span id="txBuildingValueOut">¥0</span></div>
+          <div class="tax-line-note">評價額：土地 <span id="txLandValueOut">¥0</span>／建物 <span id="txBuildingValueOut">¥0</span></div>
 
-          <div style="font-size:12.5px;font-weight:700;color:var(--accent);margin:12px 0 4px;">① 購入時一次性稅費 One-time (at closing)</div>
+          <div class="tax-subsection-label">① 購入時一次性稅費 One-time (at closing)</div>
           <div id="txOneTimeLines"></div>
           <div class="receipt-line" style="font-weight:700;border-bottom:none;border-top:1px solid var(--line);padding-top:10px;">
             <span>一次性稅費合計</span><span class="amt" id="txOneTimeTotal">¥0</span>
           </div>
 
-          <div style="font-size:12.5px;font-weight:700;color:var(--accent);margin:16px 0 4px;">② 固定資產稅・都市計畫稅 Annual Holding Tax</div>
+          <div class="tax-subsection-label" style="margin-top:16px;">② 固定資產稅・都市計畫稅 Annual Holding Tax</div>
           <div id="txAnnualLines"></div>
           <div class="receipt-line line-note">
             <span>當年度日割分攤（購入日起算）</span><span class="amt" id="txProratedAmount">¥0</span>

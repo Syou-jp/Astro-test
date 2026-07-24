@@ -31,13 +31,6 @@
         "small": "AREA CONVERTER"
       },
       {
-        "id": "page-listings",
-        "slug": "listings",
-        "glyph": "招",
-        "text": "房源招租",
-        "small": "ROOM &amp; TENANT LISTINGS"
-      },
-      {
         "id": "page-moving",
         "slug": "moving",
         "glyph": "移",
@@ -97,6 +90,53 @@
         "glyph": "🚕",
         "text": "タクシー料金",
         "small": "TAXI FARE ESTIMATE"
+      }
+    ]
+  },
+  {
+    "label": "コミュニティ",
+    "tabs": [
+      {
+        "id": "page-listings",
+        "slug": "listings",
+        "glyph": "招",
+        "text": "房源招租",
+        "small": "ROOM &amp; TENANT LISTINGS"
+      },
+      {
+        "id": "page-used-market",
+        "slug": "used-market",
+        "glyph": "中",
+        "text": "中古市場",
+        "small": "USED MARKET"
+      },
+      {
+        "id": "page-help-request",
+        "slug": "help-request",
+        "glyph": "助",
+        "text": "助け合い",
+        "small": "HELP &amp; SUPPORT"
+      },
+      {
+        "id": "page-jobs",
+        "slug": "jobs",
+        "glyph": "求",
+        "text": "求人・採用",
+        "small": "JOBS &amp; RECRUITING"
+      },
+      {
+        "id": "page-events",
+        "slug": "events",
+        "glyph": "祭",
+        "text": "イベント",
+        "small": "EVENTS"
+      },
+      {
+        "id": "page-restaurant-list",
+        "slug": "restaurant-list",
+        "glyph": "食",
+        "text": "お店リスト",
+        "small": "WORLD FOOD GUIDE"
       }
     ]
   },
@@ -188,13 +228,6 @@
         "small": "INTERNATIONAL SHIPPING"
       },
       {
-        "id": "page-jobs",
-        "slug": "jobs",
-        "glyph": "求",
-        "text": "求人・採用",
-        "small": "JOBS &amp; RECRUITING"
-      },
-      {
         "id": "page-living",
         "slug": "living",
         "glyph": "生",
@@ -216,11 +249,11 @@
         "small": "ERA &amp; AGE CONVERTER"
       },
       {
-        "id": "page-restaurant-list",
-        "slug": "restaurant-list",
-        "glyph": "食",
-        "text": "お店リスト",
-        "small": "WORLD FOOD GUIDE"
+        "id": "page-credit-card",
+        "slug": "credit-card",
+        "glyph": "札",
+        "text": "クレジットカード",
+        "small": "CREDIT CARD GUIDE"
       },
       {
         "id": "page-partners",

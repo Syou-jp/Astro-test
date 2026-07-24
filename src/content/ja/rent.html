@@ -1,154 +1,220 @@
-<div id="page-rent" class="page-view active theme-rent active">
+<div id="page-rent" class="page-view active theme-rent active cat-realestate">
+  <style>
+    .rent-subinput-label{font-size:11.5px;color:var(--ink-soft);}
+    .rent-lang-hint{font-size:11px;color:var(--ink-soft);}
+    .rent-client-line{font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;}
+    .rent-property-line{font-size:13.5px;font-weight:700;margin-bottom:10px;color:var(--accent);}
+
+    #page-rent .section-title{font-size:14px;margin-bottom:12px;}
+    #page-rent .field-row{padding:7px 0;}
+    #page-rent .field-row label,
+    #page-rent .field-block > label{font-size:12.5px;}
+    #page-rent .field-row .hint,
+    #page-rent .field-block > label .hint{font-size:10.5px;}
+    #page-rent .field-block{padding:7px 0;}
+    #page-rent .mode-toggle{margin-top:5px;}
+    #page-rent .mode-btn{font-size:10.5px;padding:6px 5px;line-height:1.25;}
+    #page-rent .tax-check{font-size:11px;}
+    #page-rent .tax-live{font-size:10px;}
+    #page-rent .add-btn{font-size:12.5px;padding:8px 10px;}
+    #page-rent .rent-note{padding:2px 0 7px;}
+
+    #page-rent .lang-select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:0;font-family:inherit;font-size:13px;font-weight:600;background:var(--white);color:var(--ink);}
+    #page-rent .lang-select:focus{outline:2px solid var(--accent-2);outline-offset:1px;}
+
+    #page-rent .input-tax-row{display:flex;align-items:center;flex-wrap:wrap;gap:5px 10px;margin-top:6px;}
+    #page-rent .input-tax-row input[type=number]{flex:1;min-width:90px;width:auto;}
+    #page-rent .input-tax-row .sub-input-wrap{margin-top:0;}
+    #page-rent .input-tax-row .tax-check{margin-left:auto;}
+
+    #page-rent .compact-pair{display:flex;gap:16px;padding:7px 0;border-bottom:1px dashed var(--line-soft);}
+    #page-rent .compact-pair-item{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    #page-rent .compact-pair-item .compact-label{font-size:12.5px;color:var(--ink);line-height:1.3;}
+    #page-rent .compact-pair-item .compact-label .hint{display:block;font-size:10.5px;color:var(--ink-soft);margin-top:2px;}
+    #page-rent .compact-pair-item input{width:64px;flex-shrink:0;text-align:right;padding:8px 9px;border:1px solid var(--line);border-radius:0;font-family:"JetBrains Mono",monospace;font-size:14px;background:var(--white);color:var(--ink);}
+    #page-rent .compact-pair-item input:focus{outline:2px solid var(--accent-2);outline-offset:1px;}
+
+    @media(max-width:640px){
+      .rent-subinput-label{font-size:12px;}
+      .rent-lang-hint{font-size:12px;}
+      .rent-client-line{font-size:13px;}
+      .rent-property-line{font-size:14.5px;}
+      #page-rent .section-title{font-size:15px;}
+      #page-rent .field-row label,
+      #page-rent .field-block > label{font-size:13.5px;}
+      #page-rent .field-row .hint,
+      #page-rent .field-block > label .hint{font-size:11.5px;}
+      #page-rent .mode-btn{font-size:11.5px;}
+      #page-rent .tax-check{font-size:12px;}
+      #page-rent .compact-pair{flex-direction:column;gap:10px;}
+      #page-rent .compact-pair-item .compact-label{font-size:13.5px;}
+    }
+  </style>
   <div class="grid">
     <!-- INPUT PANEL -->
     <div class="card" id="formCard">
       <div class="section-title"><span class="idx">01</span>物件・お客様情報</div>
       <div class="name-fields">
-        <input type="text" id="propertyName" placeholder="物件名稱 Property name">
-        <input type="text" id="clientName" placeholder="客戶姓名 Client name (optional)">
+        <input type="text" id="propertyName" placeholder="物件名">
+        <input type="text" id="clientName" placeholder="お客様名（任意）">
       </div>
 
-      <div class="section-title"><span class="idx">02</span>費用項目 Cost Items (¥)</div>
+      <div class="section-title"><span class="idx">02</span>費用項目（¥）</div>
 
       <div class="field-row">
-        <label>入住日 Move-in date<span class="hint">用於入居月家賃的日割り計算</span></label>
+        <label>入居日<span class="hint">入居月家賃の日割り計算に使用します</span></label>
         <input type="date" id="moveInDate">
       </div>
 
       <div class="field-row" style="border-bottom:none;">
-        <label>家賃 Monthly rent<span class="hint">月租金額</span></label>
+        <label>家賃<span class="hint">月額賃料</span></label>
         <input type="number" id="rent" value="0" min="0" step="1000">
       </div>
-      <div class="rent-note">※不算入總合計金額，只用作計算禮金、敷金、仲介手數料等的基準</div>
+      <div class="rent-note">※合計には含まれません。礼金・敷金・仲介手数料の計算基準としてのみ使用します</div>
 
       <div class="field-block">
-        <label>入居月家賃 First month rent<span class="hint">概算（整月）或日割り計算</span></label>
+        <label>入居月家賃<span class="hint">概算（整月）または日割り計算</span></label>
         <div class="mode-toggle" id="modeToggle">
-          <div class="mode-btn active" data-mode="months">概算（整月）<br><small>Estimate by month(s)</small></div>
-          <div class="mode-btn" data-mode="daily">日割り計算<br><small>Prorate by move-in date</small></div>
+          <div class="mode-btn active" data-mode="months">概算（整月）</div>
+          <div class="mode-btn" data-mode="daily">日割り計算</div>
         </div>
-        <div id="monthsModeWrap" class="sub-input-wrap" style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:12.5px;color:var(--ink-soft);">幾個月 Months</span>
-          <input type="number" id="firstRentMonths" value="1" min="0" step="1" style="width:90px;text-align:right;">
+        <div class="input-tax-row">
+          <div id="monthsModeWrap" class="sub-input-wrap" style="display:flex;align-items:center;gap:8px;">
+            <span class="rent-subinput-label">月数</span>
+            <input type="number" id="firstRentMonths" value="1" min="0" step="1" style="width:70px;text-align:right;">
+          </div>
+          <div id="dailyModeWrap" class="sub-input-wrap" style="display:none;align-items:center;">
+            <select id="dailyExtraMonths" style="width:200px;">
+              <option value="1">当月のみ日割り（1ヶ月）</option>
+              <option value="2">日割り＋翌月分（合計2ヶ月）</option>
+            </select>
+          </div>
+          <label class="tax-check mini"><input type="checkbox" id="firstRentTax">税込み <span class="tax-live" id="firstRentTaxLive">¥0</span></label>
         </div>
-        <div id="dailyModeWrap" class="sub-input-wrap" style="margin-top:8px;display:none;align-items:center;justify-content:space-between;">
-          <span style="font-size:12px;color:var(--ink-soft);">日割り + 追加月數</span>
-          <select id="dailyExtraMonths">
-            <option value="1">僅當月日割り (1個月)</option>
-            <option value="2">日割り + 1個月 (共2個月)</option>
-          </select>
-        </div>
-        <label class="tax-check"><input type="checkbox" id="firstRentTax"> 税込み表示 (+10%) <span class="tax-live" id="firstRentTaxLive">¥0</span></label>
       </div>
 
       <div class="field-block">
-        <label>管理費・共益費 Management fee<span class="hint">初回請求分（1ヶ月）固定金額</span></label>
-        <input type="number" id="mgmt" value="5000" min="0" step="500" style="width:100%;text-align:right;">
-        <label class="tax-check"><input type="checkbox" id="mgmtTax"> 税込み表示 (+10%) <span class="tax-live" id="mgmtTaxLive">¥5,000</span></label>
+        <label>管理費・共益費<span class="hint">初回請求分（1ヶ月）の固定金額</span></label>
+        <div class="input-tax-row">
+          <input type="number" id="mgmt" value="5000" min="0" step="500" style="text-align:right;">
+          <label class="tax-check mini"><input type="checkbox" id="mgmtTax">税込み <span class="tax-live" id="mgmtTaxLive">¥5,000</span></label>
+        </div>
       </div>
 
-      <div class="field-row">
-        <label>敷金 Deposit<span class="hint">家賃の何ヶ月分 (× months of rent)</span></label>
-        <input type="number" id="depositMonths" value="1" min="0" step="0.5">
-      </div>
-      <div class="field-row">
-        <label>礼金 Key money<span class="hint">家賃の何ヶ月分 (× months of rent)</span></label>
-        <input type="number" id="keyMoneyMonths" value="1" min="0" step="0.5">
+      <div class="compact-pair">
+        <div class="compact-pair-item">
+          <span class="compact-label">敷金<span class="hint">家賃の何ヶ月分</span></span>
+          <input type="number" id="depositMonths" value="1" min="0" step="0.5">
+        </div>
+        <div class="compact-pair-item">
+          <span class="compact-label">礼金<span class="hint">家賃の何ヶ月分</span></span>
+          <input type="number" id="keyMoneyMonths" value="1" min="0" step="0.5">
+        </div>
       </div>
 
       <div class="field-block">
-        <label>仲介手数料 Agency fee<span class="hint">可填金額或家賃的%</span></label>
+        <label>仲介手数料<span class="hint">金額または家賃に対する割合で入力</span></label>
         <div class="mode-toggle" id="agencyModeToggle">
           <div class="mode-btn active" data-mode="percent">%（家賃基準）</div>
-          <div class="mode-btn" data-mode="amount">金額 Amount</div>
+          <div class="mode-btn" data-mode="amount">金額</div>
         </div>
-        <div id="agencyPercentWrap" class="sub-input-wrap" style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:12px;color:var(--ink-soft);">家賃の %</span>
-          <input type="number" id="agencyPercent" value="100" min="0" step="5" style="width:90px;text-align:right;">
+        <div class="input-tax-row">
+          <div id="agencyPercentWrap" class="sub-input-wrap" style="display:flex;align-items:center;gap:8px;">
+            <span class="rent-subinput-label">家賃の %</span>
+            <input type="number" id="agencyPercent" value="100" min="0" step="5" style="width:70px;text-align:right;">
+          </div>
+          <div id="agencyAmountWrap" class="sub-input-wrap" style="display:none;align-items:center;">
+            <input type="number" id="agencyAmount" value="0" min="0" step="1000" style="width:140px;text-align:right;">
+          </div>
+          <label class="tax-check mini"><input type="checkbox" id="agencyTax">税込み <span class="tax-live" id="agencyTaxLive">¥0</span></label>
         </div>
-        <div id="agencyAmountWrap" class="sub-input-wrap" style="margin-top:8px;display:none;">
-          <input type="number" id="agencyAmount" value="0" min="0" step="1000" style="width:100%;text-align:right;">
-        </div>
-        <label class="tax-check"><input type="checkbox" id="agencyTax"> 税込み表示 (+10%) <span class="tax-live" id="agencyTaxLive">¥0</span></label>
       </div>
 
       <div class="field-block">
-        <label>初回保証利用料 Initial guarantor fee<span class="hint">可填金額，或家賃＋管理費總和的%</span></label>
+        <label>初回保証利用料<span class="hint">金額、または家賃＋管理費合計に対する割合で入力</span></label>
         <div class="mode-toggle" id="guarantorModeToggle">
           <div class="mode-btn" data-mode="percent">%（家賃+管理費基準）</div>
-          <div class="mode-btn active" data-mode="amount">金額 Amount</div>
+          <div class="mode-btn active" data-mode="amount">金額</div>
         </div>
-        <div id="guarantorPercentWrap" class="sub-input-wrap" style="margin-top:8px;display:none;align-items:center;justify-content:space-between;">
-          <span style="font-size:12px;color:var(--ink-soft);">(家賃+管理費) 的 %</span>
-          <input type="number" id="guarantorPercent" value="50" min="0" step="5" style="width:90px;text-align:right;">
+        <div class="input-tax-row">
+          <div id="guarantorPercentWrap" class="sub-input-wrap" style="display:none;align-items:center;gap:8px;">
+            <span class="rent-subinput-label">(家賃+管理費) の %</span>
+            <input type="number" id="guarantorPercent" value="50" min="0" step="5" style="width:70px;text-align:right;">
+          </div>
+          <div id="guarantorAmountWrap" class="sub-input-wrap" style="display:flex;align-items:center;">
+            <input type="number" id="guarantorAmount" value="40000" min="0" step="1000" style="width:140px;text-align:right;">
+          </div>
+          <label class="tax-check mini"><input type="checkbox" id="guarantorTax">税込み <span class="tax-live" id="guarantorTaxLive">¥0</span></label>
         </div>
-        <div id="guarantorAmountWrap" class="sub-input-wrap" style="margin-top:8px;display:block;">
-          <input type="number" id="guarantorAmount" value="40000" min="0" step="1000" style="width:100%;text-align:right;">
-        </div>
-        <label class="tax-check"><input type="checkbox" id="guarantorTax"> 税込み表示 (+10%) <span class="tax-live" id="guarantorTaxLive">¥0</span></label>
       </div>
 
       <div class="field-block">
-        <label>火災保険料 Fire insurance<span class="hint">固定金額 fixed amount</span></label>
-        <input type="number" id="insurance" value="20000" min="0" step="1000" style="width:100%;text-align:right;">
-        <label class="tax-check"><input type="checkbox" id="insuranceTax"> 税込み表示 (+10%) <span class="tax-live" id="insuranceTaxLive">¥20,000</span></label>
+        <label>火災保険料<span class="hint">固定金額</span></label>
+        <div class="input-tax-row">
+          <input type="number" id="insurance" value="20000" min="0" step="1000" style="text-align:right;">
+          <label class="tax-check mini"><input type="checkbox" id="insuranceTax">税込み <span class="tax-live" id="insuranceTaxLive">¥20,000</span></label>
+        </div>
       </div>
 
       <div class="field-block">
-        <label>鍵交換費用 Key exchange fee<span class="hint">固定金額 fixed amount</span></label>
-        <input type="number" id="keyExchange" value="20000" min="0" step="1000" style="width:100%;text-align:right;">
-        <label class="tax-check"><input type="checkbox" id="keyExchangeTax"> 税込み表示 (+10%) <span class="tax-live" id="keyExchangeTaxLive">¥16,500</span></label>
+        <label>鍵交換費用<span class="hint">固定金額</span></label>
+        <div class="input-tax-row">
+          <input type="number" id="keyExchange" value="20000" min="0" step="1000" style="text-align:right;">
+          <label class="tax-check mini"><input type="checkbox" id="keyExchangeTax">税込み <span class="tax-live" id="keyExchangeTaxLive">¥16,500</span></label>
+        </div>
       </div>
 
       <div class="field-block">
-        <label>生活サポート料金 Lifestyle support fee<span class="hint">可設定月額或年額</span></label>
+        <label>生活サポート料金<span class="hint">月額または年額で設定</span></label>
         <div class="mode-toggle" id="lifesupportModeToggle">
-          <div class="mode-btn active" data-mode="month">月額 Monthly</div>
-          <div class="mode-btn" data-mode="year">年額 Annual</div>
+          <div class="mode-btn active" data-mode="month">月額</div>
+          <div class="mode-btn" data-mode="year">年額</div>
         </div>
-        <input type="number" id="lifesupportAmount" value="0" min="0" step="500" style="width:100%;text-align:right;margin-top:8px;">
-        <label class="tax-check"><input type="checkbox" id="lifesupportTax"> 税込み表示 (+10%) <span class="tax-live" id="lifesupportTaxLive">¥0</span></label>
+        <div class="input-tax-row">
+          <input type="number" id="lifesupportAmount" value="0" min="0" step="500" style="text-align:right;">
+          <label class="tax-check mini"><input type="checkbox" id="lifesupportTax">税込み <span class="tax-live" id="lifesupportTaxLive">¥0</span></label>
+        </div>
       </div>
 
       <div class="field-block">
-        <label>その他 Other<span class="hint">可自行新增多行項目</span></label>
+        <label>その他<span class="hint">複数行を自由に追加できます</span></label>
         <div id="otherRows"></div>
-        <button type="button" class="add-btn" id="addOtherBtn">+ 新增項目 Add item</button>
+        <button type="button" class="add-btn" id="addOtherBtn">＋ 項目を追加</button>
       </div>
     </div>
 
     <!-- OUTPUT PANEL -->
     <div>
       <div class="card" style="margin-bottom:16px;">
-        <div class="section-title"><span class="idx">03</span>生成語言 Output Language</div>
-        <div class="lang-picker" id="langPicker" data-no-i18n>
-          <div class="lang-btn active" data-lang="ja">日本語</div>
-          <div class="lang-btn" data-lang="en">EN</div>
-          <div class="lang-btn" data-lang="zh-CN">简体中文</div>
-          <div class="lang-btn" data-lang="zh-TW">繁體中文</div>
-          <div class="lang-btn" data-lang="ko">한국어</div>
-          <div class="lang-btn" data-lang="vi">Tiếng Việt</div>
-        </div>
-        <div style="font-size:11.5px;color:var(--ink-soft);">選擇要複製給客人的語言，下方明細會即時更新。</div>
+        <div class="section-title"><span class="idx">03</span>出力言語</div>
+        <select class="lang-select" id="langPicker" data-no-i18n>
+          <option value="ja" selected>日本語</option>
+          <option value="en">English</option>
+          <option value="zh-CN">简体中文</option>
+          <option value="zh-TW">繁體中文</option>
+          <option value="ko">한국어</option>
+          <option value="vi">Tiếng Việt</option>
+        </select>
+        <div class="rent-lang-hint">お客様に送る言語を選択してください。下の明細がすぐに更新されます。</div>
       </div>
 
       <div class="receipt-card">
         <div class="receipt-head">
-          <h2 id="receiptTitle">Initial Move-in Cost Estimate</h2>
+          <h2 id="receiptTitle">初期費用お見積り</h2>
           <div class="date" id="receiptDate"></div>
         </div>
         <div class="receipt-body">
           <div class="seal" id="sealMark">見積</div>
-          <div id="clientLine" style="font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;"></div>
-          <div id="propertyLine" style="font-size:13.5px;font-weight:700;margin-bottom:10px;color:var(--accent);"></div>
+          <div id="clientLine" class="rent-client-line"></div>
+          <div id="propertyLine" class="rent-property-line"></div>
           <div id="lineItems"></div>
         </div>
         <div class="receipt-total">
-          <div class="label" id="totalLabel">TOTAL</div>
+          <div class="label" id="totalLabel">合計</div>
           <div class="value" id="totalValue">¥0</div>
         </div>
         <div class="actions">
-          <button class="btn-copy" id="copyBtn">📋 Copy text to send</button>
+          <button class="btn-copy" id="copyBtn">📋 テキストをコピーする</button>
         </div>
         <div class="footnote" id="footnote"></div>
       </div>
