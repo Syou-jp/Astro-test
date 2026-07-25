@@ -5,8 +5,7 @@
       .moveout-hero-main h2{font-family:"Shippori Mincho",serif;font-size:25px;line-height:1.35;margin:0 0 10px;color:var(--ink);letter-spacing:.04em;}
       .moveout-hero-main p{font-size:13px;line-height:1.9;color:var(--ink-soft);margin:0;}
       .moveout-hero-visual{border:1px solid var(--line);background:#fff;padding:18px;display:grid;gap:10px;align-content:center;}
-      .moveout-visual-row{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line-soft);background:var(--paper);}
-      .moveout-icon{width:38px;height:38px;border:1px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:18px;background:#fff;font-weight:700;}
+      .moveout-visual-row{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line-soft);background:var(--paper);}
       .moveout-visual-row b{display:block;font-size:12px;color:var(--ink);line-height:1.35;}
       .moveout-visual-row small{display:block;font-size:10.5px;color:var(--ink-soft);line-height:1.45;margin-top:1px;}
       .moveout-cost-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px;}
@@ -54,6 +53,7 @@
       @media(max-width:860px){.moveout-hero,.moveout-cost-grid,.moveout-rule-grid,.moveout-calc{grid-template-columns:1fr}.moveout-step{grid-template-columns:92px 1fr}}
       @media(max-width:560px){.moveout-hero-main{padding:18px}.moveout-hero-main h2{font-size:21px}.moveout-input-row,.moveout-step,.moveout-damage-card{grid-template-columns:1fr}.moveout-period-pair{grid-template-columns:1fr 1fr}.moveout-cost-card,.moveout-rule,.moveout-calc-panel,.moveout-damage-panel,.moveout-result{padding:14px}}
       @media(max-width:640px){
+        .moveout-hero-main h2{font-size:18px;}
         .moveout-hero-main p{font-size:14px;}
         .moveout-visual-row b{font-size:13.5px;}
         .moveout-visual-row small{font-size:12px;}
@@ -64,10 +64,15 @@
         .moveout-rule h3{font-size:15px;}
         .moveout-rule li{font-size:13px;}
         .moveout-table,.moveout-table th,.moveout-table td{font-size:13px;}
-        .moveout-input-row label{font-size:13.5px;}
-        .moveout-input-row input,.moveout-input-row select,.moveout-damage-card select{font-size:16px;}
-        .moveout-damage-card b{font-size:13.5px;}
-        .moveout-damage-card small{font-size:12px;}
+        .moveout-calc-panel,.moveout-damage-panel{padding:12px;}
+        .moveout-input-row{grid-template-columns:1fr;gap:6px;padding:7px 0;}
+        .moveout-input-row label{font-size:12.5px;}
+        .moveout-input-row input,.moveout-input-row select,.moveout-damage-card select{font-size:13px;padding:6px 7px;}
+        .moveout-damage-card{grid-template-columns:20px minmax(0,1fr);gap:6px;padding:8px;}
+        .moveout-damage-card select{grid-column:1 / -1;margin-top:6px;width:100%;}
+        .moveout-damage-card b{font-size:12.5px;}
+        .moveout-damage-card small{font-size:11px;}
+        .moveout-damage-list{gap:7px;}
         .moveout-result span{font-size:12.5px;}
         .moveout-result strong{font-size:22px;}
         .moveout-breakdown{font-size:13px;}
@@ -76,8 +81,8 @@
         .moveout-step span{font-size:13px;}
         .moveout-note{font-size:13px;}
         .moveout-life-intro{font-size:13px;}
-        .moveout-damage-title{font-size:15px;}
-        .moveout-damage-intro{font-size:13px;}
+        .moveout-damage-title{font-size:14px;}
+        .moveout-damage-intro{font-size:12.5px;}
       }
     </style>
 
@@ -90,7 +95,7 @@
 
         var MOVEOUT_COPY = {
           ja: {
-            eyebrow:"退去費用 / Move-out Cost",
+            eyebrow:"退去費用",
             title:"日本の賃貸退去費用ガイド",
             intro:"退去時の精算で確認したい、クリーニング代、原状回復費用、短期解約違約金をまとめました。国土交通省の原状回復ガイドラインの考え方をもとに、借主負担になりやすい項目と、経年劣化として貸主負担になりやすい項目を整理しています。",
             visual:[["掃","クリーニング代","退去後の専門清掃費"],["修","原状回復費用","故意、過失、管理不足による修繕費"],["約","短期解約違約金","契約期間前に解約する場合の違約金"]],
@@ -141,7 +146,7 @@
             ]
           },
           "zh-TW": {
-            eyebrow:"退去費用 / Move-out Cost",
+            eyebrow:"退去費用",
             title:"日本租房退房費用指南",
             intro:"退房結算時，最需要確認的是清掃費、原狀回復費與短期解約違約金。這裡依照日本國土交通省原狀回復指南的概念，整理哪些項目通常由房東負擔，哪些比較容易被列為租客負擔。",
             visual:[["掃","清掃費","退房後的專業清潔費"],["修","原狀回復費","故意、過失或管理不足造成的修繕費"],["約","短期解約違約金","未滿合約期間提前退房的罰金"]],
@@ -208,7 +213,7 @@
             + '<div class="eyebrow">' + esc(c.eyebrow) + '</div>'
             + '<section class="moveout-hero" aria-labelledby="moveoutTitle">'
             + '<div class="moveout-hero-main"><h2 id="moveoutTitle">' + esc(c.title) + '</h2><p>' + esc(c.intro) + '</p></div>'
-            + '<div class="moveout-hero-visual" aria-label="' + esc(c.title) + '">' + c.visual.map(function(v){return '<div class="moveout-visual-row"><div class="moveout-icon">' + esc(v[0]) + '</div><div><b>' + esc(v[1]) + '</b><small>' + esc(v[2]) + '</small></div></div>';}).join('') + '</div>'
+            + '<div class="moveout-hero-visual" aria-label="' + esc(c.title) + '">' + c.visual.map(function(v){return '<div class="moveout-visual-row"><div><b>' + esc(v[1]) + '</b><small>' + esc(v[2]) + '</small></div></div>';}).join('') + '</div>'
             + '</section>'
             + '<section class="card" style="margin-bottom:16px;"><div class="section-title"><span class="idx">01</span><span>' + esc(c.costTitle) + '</span></div><div class="moveout-cost-grid">'
             + c.costs.map(function(item){return '<article class="moveout-cost-card"><div class="badge">' + esc(item[0]) + '</div><h3>' + esc(item[1]) + '</h3><p>' + esc(item[2]) + '</p><strong>' + esc(item[3]) + '</strong></article>';}).join('')
