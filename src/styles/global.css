@@ -833,7 +833,7 @@
   button.route-line-badge:hover{background:var(--accent);border-color:var(--accent);color:var(--white);}
   .route-eyebrow-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
   .route-eyebrow-row .eyebrow{margin-bottom:0;}
-  .route-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .route-header-actions{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;justify-content:flex-end;flex-shrink:0;}
   .route-commuter-trigger{padding:9px 14px;border:1px solid var(--accent);background:var(--white);color:var(--accent);font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap;border-radius:0;}
   .route-commuter-trigger:hover{background:var(--accent);color:var(--white);}
   .route-quick-filter{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dotted var(--line-soft);}
@@ -887,10 +887,13 @@
   .route-swap-small{width:44px;height:44px;margin-top:25px;padding:0;border:1px solid var(--line);background:var(--white);color:var(--accent);cursor:pointer;font-weight:700;border-radius:50%;}
   .route-selected{min-height:36px;margin-top:7px;font-size:10.5px;color:var(--ink-soft);line-height:1.55;}
   .route-selected strong{color:var(--accent);}
-  .route-actions-3{display:grid;grid-template-columns:1.35fr 1.1fr 1fr 1fr;gap:7px;margin-top:12px;}
+  .route-actions-3{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:12px;}
   .route-actions-3 button{min-height:42px;}
+  .route-actions-3 button:first-child{grid-column:1 / -1;min-height:46px;}
   .route-result-toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:9px;}
   .route-result-toolbar .route-result-filter{flex:1;min-width:170px;}
+  .route-result-toolbar .route-pill-group[aria-label="時間範圍"]{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;}
+  .route-result-toolbar .route-pill-group[aria-label="時間範圍"] .route-pill{text-align:center;padding:6px 4px;}
   .route-scope-btn{padding:8px 9px;border:1px solid var(--line);background:var(--white);color:var(--accent);font-size:10.5px;font-weight:700;cursor:pointer;}
   .route-scope-btn.active{background:var(--accent);color:var(--white);border-color:var(--accent);}
   .route-place-summary{border-left:3px solid var(--accent);background:var(--paper-2);padding:10px 12px;margin-bottom:10px;font-size:11px;line-height:1.65;}
@@ -932,10 +935,17 @@
     .occ-row{grid-template-columns:1fr 1fr;}
     .area-input-panel,.area-regions{grid-template-columns:1fr;}
     .route-key-row,.route-input-row,.route-result-grid,.route-pair,.route-actions-3,.route-place-row{grid-template-columns:1fr;}
-    .route-swap-small{width:100%;height:34px;margin:0;}
+    .route-actions-3 button:first-child{grid-column:auto;}
+    .route-swap-small{width:40px;height:40px;margin:2px auto;}
     .route-db-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
     .route-line-stations{grid-template-columns:repeat(2,minmax(0,1fr));}
     .route-map{height:280px;}
+    .route-line-map{min-width:0;}
+    .route-result-toolbar .route-pill-group[aria-label="時間範圍"]{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .route-result-table{font-size:9.5px;}
+    .route-result-table th,.route-result-table td{padding:6px 5px;}
+    .route-row-actions{min-width:0;}
+    .route-ext-btn,.route-scope-btn{font-size:9px;padding:5px 6px;white-space:normal;line-height:1.35;}
   }
 
   /* Receipt panel */
