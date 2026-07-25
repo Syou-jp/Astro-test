@@ -1,6 +1,6 @@
 <div id="page-route" class="page-view active theme-route">
     <div class="route-eyebrow-row">
-      <div class="eyebrow">通勤計算・地點・附近車站・定期券費用 Commute Calculator, Nearby Stations &amp; Commuter Pass</div>
+      <div class="eyebrow">通勤計算・地點・附近車站・定期券費用</div>
       <div class="route-header-actions">
         <button type="button" class="route-commuter-trigger" id="commuterOpenBtn">🎫 定期券費用試算</button>
       </div>
@@ -15,7 +15,7 @@
     </div>
 
     <div class="grid route-main-layout">
-      <div class="card" id="routeFormCard">
+      <div class="card" id="routeFormCard" data-no-collapse>
         <div class="section-title"><span class="section-title-text"><span class="idx">01</span>選擇地點 Select Locations</span><button type="button" class="route-commuter-trigger" id="routeLineBrowserBtn">🚉 瀏覽所有路線圖</button></div>
         <div class="route-pair">
           <div>
@@ -45,7 +45,7 @@
             </div>
             <div class="route-selected" id="routeOriginStation"></div>
           </div>
-          <button type="button" class="route-swap-small" id="routeSwapBtn" title="交換起點與終點">⇄</button>
+          <button type="button" class="route-swap-small" id="routeSwapBtn" title="交換起點與終點"><span class="route-swap-icon-h" aria-hidden="true">⇄</span><span class="route-swap-icon-v" aria-hidden="true">⇅</span></button>
           <div>
             <div class="route-endpoint-head"><strong>目的地 Destination</strong></div>
             <div class="route-place-row">
@@ -157,6 +157,21 @@
             <button type="button" class="route-pill" data-line-pref="神奈川県">神奈川</button>
             <button type="button" class="route-pill" data-line-pref="埼玉県">埼玉</button>
             <button type="button" class="route-pill" data-line-pref="千葉県">千葉</button>
+          </div>
+        </div>
+        <div class="route-line-target-switch">
+          <span class="route-line-target-label">快速跳到：</span>
+          <div class="route-pill-group">
+            <button type="button" class="route-pill" data-line-operator="東日本旅客鉄道">JR</button>
+            <button type="button" class="route-pill" data-line-operator="東京地下鉄">東京メトロ</button>
+            <button type="button" class="route-pill" data-line-operator="東京都">都營</button>
+            <button type="button" class="route-pill" data-line-operator="京成電鉄">京成</button>
+            <button type="button" class="route-pill" data-line-operator="京浜急行電鉄">京急</button>
+            <button type="button" class="route-pill" data-line-operator="東急電鉄">東急</button>
+            <button type="button" class="route-pill" data-line-operator="小田急電鉄">小田急</button>
+            <button type="button" class="route-pill" data-line-operator="西武鉄道">西武</button>
+            <button type="button" class="route-pill" data-line-operator="東武鉄道">東武</button>
+            <button type="button" class="route-pill" data-line-operator="京王電鉄">京王</button>
           </div>
         </div>
         <div class="route-line-browser-grid">

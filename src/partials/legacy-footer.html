@@ -1218,16 +1218,47 @@ function routeMeta(item,type){
   if (type === "campus") return [item.k,item.p,item.c].filter(Boolean).join("｜");
   return [item.p,item.c,item.k].filter(Boolean).join("｜") || routeTypeLabels[type];
 }
+var ROUTE_OPERATOR_SHORT_NAMES = {
+  "東京地下鉄":"メトロ",
+  "東京都":"都営",
+  "東日本旅客鉄道":"JR",
+  "東海旅客鉄道":"JR",
+  "京成電鉄":"京成",
+  "京浜急行電鉄":"京急",
+  "京王電鉄":"京王",
+  "小田急電鉄":"小田急",
+  "小田急箱根":"箱根登山",
+  "東急電鉄":"東急",
+  "東武鉄道":"東武",
+  "西武鉄道":"西武",
+  "相模鉄道":"相鉄",
+  "秩父鉄道":"秩父",
+  "北総鉄道":"北総",
+  "東葉高速鉄道":"東葉高速",
+  "埼玉高速鉄道":"埼玉高速",
+  "埼玉新都市交通":"ニューシャトル",
+  "首都圏新都市鉄道":"TX",
+  "東京臨海高速鉄道":"りんかい線",
+  "横浜市":"横浜市営",
+  "横浜高速鉄道":"横浜高速",
+  "江ノ島電鉄":"江ノ電",
+  "銚子電気鉄道":"銚子電鉄",
+  "伊豆箱根鉄道":"伊豆箱根",
+  "多摩都市モノレール":"多摩モノレール",
+  "千葉都市モノレール":"千葉モノレール",
+  "小湊鐵道":"小湊鉄道"
+};
 function routeLineShortOperator(operator){
-  if (operator === "東京地下鉄") return "メトロ";
-  if (operator === "東京都") return "都営";
-  if (/旅客鉄道/.test(operator)) return "JR";
-  return null;
+  if (!operator) return null;
+  if (ROUTE_OPERATOR_SHORT_NAMES[operator]) return ROUTE_OPERATOR_SHORT_NAMES[operator];
+  const stripped = operator.replace(/(旅客鉄道|高速鉄道|電気鉄道|都市モノレール|モノレール|電鉄|鉄道)$/,"");
+  return stripped || operator;
 }
 function routeLineDisplayName(line){
   const base = line.n.replace(/^\d+号線(.+)$/,"$1");
   const tag = routeLineShortOperator(line.r);
-  return tag ? `${base}（${tag}）` : base;
+  if (!tag || base.startsWith(tag)) return base;
+  return `${tag}${base}`;
 }
 function routeLineButtons(item){
   if (!item || !item.q || !item.q.length) return "";
@@ -1889,6 +1920,20 @@ document.addEventListener("click",event => {
     routeFilterLinePicker(linePref.dataset.linePref);
     return;
   }
+  const lineOperator = event.target.closest("[data-line-operator]");
+  if (lineOperator){
+    routeBuildLinePicker();
+    const target = Array.from(document.querySelectorAll("#routeLinePicker .route-line-pick-group")).find(group => {
+      const heading = group.querySelector("h4");
+      return heading && heading.textContent === lineOperator.dataset.lineOperator;
+    });
+    if (target){
+      target.scrollIntoView({block:"start",behavior:"smooth"});
+      target.classList.add("route-line-pick-group-flash");
+      setTimeout(() => target.classList.remove("route-line-pick-group-flash"),900);
+    }
+    return;
+  }
   const lineTarget = event.target.closest("[data-line-target]");
   if (lineTarget){
     routeLineTargetMode = lineTarget.dataset.lineTarget;
@@ -1914,9 +1959,13 @@ document.addEventListener("keydown",event => {
   event.preventDefault();
   routeSetLineDestination(lineStation.dataset.lineMapKey,Number(lineStation.dataset.lineStationIndex));
 });
-document.getElementById("routeSearchBtn").addEventListener("click",() => routeAnalyzeNearby("origin"));
-document.getElementById("routeSearchDestBtn").addEventListener("click",() => routeAnalyzeNearby("destination"));
-document.getElementById("routeEstimateBtn").addEventListener("click",routeEstimateTrain);
+function routeScrollToResult(){
+  const el = document.getElementById("routeTransitResult");
+  if (el) el.scrollIntoView({block:"start",behavior:"smooth"});
+}
+document.getElementById("routeSearchBtn").addEventListener("click",() => { routeAnalyzeNearby("origin"); routeScrollToResult(); });
+document.getElementById("routeSearchDestBtn").addEventListener("click",() => { routeAnalyzeNearby("destination"); routeScrollToResult(); });
+document.getElementById("routeEstimateBtn").addEventListener("click",() => { routeEstimateTrain(); routeScrollToResult(); });
 document.getElementById("routeGoogleBtn").addEventListener("click",routeOpenGoogle);
 document.getElementById("routeNavitimeBtn").addEventListener("click",routeOpenNavitime);
 document.getElementById("routeLineClose").addEventListener("click",() => document.getElementById("routeLineDialog").close());

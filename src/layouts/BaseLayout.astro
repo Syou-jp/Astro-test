@@ -113,6 +113,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         function setup() {
           document.querySelectorAll(".card").forEach((card) => {
             if (card.dataset.collapseReady) return;
+            if (card.hasAttribute("data-no-collapse")) return;
             const title = card.querySelector(":scope > .section-title");
             if (!title) return;
             card.dataset.collapseReady = "1";
