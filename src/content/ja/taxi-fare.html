@@ -1,4 +1,13 @@
 <div id="page-taxi-fare" class="page-view active theme-route">
+  <style>
+    .taxi-route-field .route-pair{grid-template-columns:1fr;gap:10px;}
+    .taxi-route-field .route-place-row{grid-template-columns:1fr;gap:6px;}
+    .taxi-route-field .route-swap-small{margin:0 auto;}
+    .taxi-route-field .route-swap-small .route-swap-icon-h{display:none;}
+    .taxi-route-field .route-swap-small .route-swap-icon-v{display:inline;}
+    .taxi-route-field{margin-bottom:18px;}
+    .taxi-distance-btn{width:100%;margin-top:10px;}
+  </style>
   <div class="eyebrow">TOKYO TAXI FARE ESTIMATE</div>
   <div class="taxi-hero">
     <div>
@@ -15,15 +24,65 @@
   <div class="grid taxi-layout">
     <section class="card">
       <div class="section-title"><span><span class="idx">01</span>乗車条件を入力</span></div>
+      <div class="apply-field full taxi-route-field">
+        <label>出発地 → 到着地から距離を計算（任意）</label>
+        <div class="route-pair">
+          <div>
+            <div class="route-place-row">
+              <select id="taxiOriginType" aria-label="出発地タイプ">
+                <optgroup label="住所・駅">
+                  <option value="address">自由住所</option>
+                  <option value="station">駅</option>
+                </optgroup>
+                <optgroup label="学校・キャンパス">
+                  <option value="campus">大学キャンパス</option>
+                  <option value="school">日本語教育機関</option>
+                  <option value="vocational">専修学校</option>
+                  <option value="primarySecondary">小中学校</option>
+                </optgroup>
+                <optgroup label="住宅"><option value="ur">UR団地</option></optgroup>
+              </select>
+              <div class="route-input-wrap">
+                <input id="taxiOrigin" placeholder="例：東京都千代田区丸の内1-1-1" autocomplete="off">
+                <div class="route-suggestions" id="taxiOriginSuggestions"></div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="route-swap-small" id="taxiSwapBtn" title="出発地と到着地を入れ替え"><span class="route-swap-icon-h" aria-hidden="true">⇄</span><span class="route-swap-icon-v" aria-hidden="true">⇅</span></button>
+          <div>
+            <div class="route-place-row">
+              <select id="taxiDestinationType" aria-label="到着地タイプ">
+                <optgroup label="住所・駅">
+                  <option value="address">自由住所</option>
+                  <option value="station">駅</option>
+                </optgroup>
+                <optgroup label="学校・キャンパス">
+                  <option value="campus">大学キャンパス</option>
+                  <option value="school">日本語教育機関</option>
+                  <option value="vocational">専修学校</option>
+                  <option value="primarySecondary">小中学校</option>
+                </optgroup>
+                <optgroup label="住宅"><option value="ur">UR団地</option></optgroup>
+              </select>
+              <div class="route-input-wrap">
+                <input id="taxiDestination" placeholder="例：羽田空港" autocomplete="off">
+                <div class="route-suggestions" id="taxiDestinationSuggestions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="secondary-btn taxi-distance-btn" id="taxiDistanceEstimateBtn">📍 距離を計算して走行距離にあてはめる</button>
+        <div class="route-status" id="taxiRouteStatus"></div>
+      </div>
       <div class="apply-fields taxi-fields">
-        <div class="apply-field full"><label for="taxiDistance">走行距離</label><div class="input-wrap"><input type="number" id="taxiDistance" value="5" min="0" step="0.1" inputmode="decimal"><span>km</span></div><small>Google Maps などで表示される車のルート距離を入力してください。</small></div>
+        <div class="apply-field full"><label for="taxiDistance">走行距離</label><div class="input-wrap"><input type="number" id="taxiDistance" value="5" min="0" step="0.1" inputmode="decimal"><span>km</span></div><small>上の距離計算、またはGoogle Maps などで表示される車のルート距離を入力してください。</small></div>
         <div class="apply-field full"><label for="taxiWait">渋滞・信号待ちの合計</label><div class="input-wrap"><input type="number" id="taxiWait" value="0" min="0" step="1" inputmode="numeric"><span>分</span></div><small>ゆっくり進む時間や停止時間が多そうなときだけ追加してください。</small></div>
         <div class="apply-field full"><label class="taxi-check"><input type="checkbox" id="taxiNight"> <span>深夜・早朝割増を適用する（22:00〜5:00／20%）</span></label></div>
       </div>
       <div class="taxi-presets" aria-label="距離の例"><button type="button" class="secondary-btn" data-taxi-distance="2">近距離 2km</button><button type="button" class="secondary-btn" data-taxi-distance="5">市内 5km</button><button type="button" class="secondary-btn" data-taxi-distance="10">長め 10km</button></div>
       <button type="button" class="btn-copy taxi-calc-btn" id="taxiCalcBtn">料金の目安を計算</button>
     </section>
-    <section class="taxi-result" aria-live="polite">
+    <section class="taxi-result" id="taxiResultSection" aria-live="polite">
       <p class="taxi-result-label">おおよその乗車料金</p><strong id="taxiTotal">¥0</strong><p id="taxiRange">¥0〜¥0 程度</p>
       <div class="taxi-breakdown"><div><span>距離分</span><b id="taxiDistanceFare">¥0</b></div><div><span>渋滞・信号待ち分</span><b id="taxiWaitFare">¥0</b></div><div id="taxiNightRow" hidden><span>深夜・早朝割増</span><b id="taxiNightFare">¥0</b></div></div>
       <p class="taxi-result-note">目安として、表示額の前後10%ほど余裕を見ておくと安心です。</p>
@@ -45,9 +104,133 @@
         document.getElementById('taxiRange').textContent = yen(Math.floor(total * .9 / 10) * 10) + '〜' + yen(Math.ceil(total * 1.1 / 10) * 10) + ' 程度';
         document.getElementById('taxiDistanceFare').textContent = yen(distanceFare); document.getElementById('taxiWaitFare').textContent = yen(waitFare); document.getElementById('taxiNightFare').textContent = yen(nightFare); document.getElementById('taxiNightRow').hidden = !nightEl.checked;
       }
+      function scrollToResult() { var el = document.getElementById('taxiResultSection'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
       [distanceEl, waitEl, nightEl].forEach(function (element) { element.addEventListener('input', calculate); element.addEventListener('change', calculate); });
-      document.getElementById('taxiCalcBtn').addEventListener('click', calculate);
+      document.getElementById('taxiCalcBtn').addEventListener('click', function () { calculate(); scrollToResult(); });
       document.querySelectorAll('[data-taxi-distance]').forEach(function (button) { button.addEventListener('click', function () { distanceEl.value = button.dataset.taxiDistance; calculate(); }); }); calculate();
+
+      /* ---- 出発地/到着地から距離を概算（駅・学校・住所など、國土地理院の住所検索とサイト内の車站・学校データを利用） ---- */
+      var taxiState = { origin: null, destination: null };
+      function catalog(type) { return (typeof routeCatalog === 'function') ? routeCatalog(type) : []; }
+      function displayName(item, type) { return (typeof routeDisplayName === 'function') ? routeDisplayName(item, type) : (item && item.n) || ''; }
+      function metaText(item, type) { return (typeof routeMeta === 'function') ? routeMeta(item, type) : ''; }
+      function normalize(value) { return (typeof routeNormalize === 'function') ? routeNormalize(value) : String(value || '').trim().toLowerCase(); }
+      function escapeHtml(value) { return (typeof routeEscape === 'function') ? routeEscape(value) : String(value == null ? '' : value); }
+      function searchText(item, type) { return (typeof routeSearchText === 'function') ? routeSearchText(item, type) : normalize(displayName(item, type)); }
+      function hasPoint(item) { return (typeof routeHasPoint === 'function') ? routeHasPoint(item) : (item && Number.isFinite(Number(item.a)) && Number.isFinite(Number(item.o))); }
+
+      function taxiResolve(endpoint) {
+        var key = endpoint.toLowerCase();
+        var type = document.getElementById('taxi' + endpoint + 'Type').value;
+        var input = document.getElementById('taxi' + endpoint);
+        var saved = taxiState[key];
+        if (saved && saved.type === type && normalize(displayName(saved.item, type)) === normalize(input.value)) return saved;
+        if (type === 'address') return input.value.trim() ? { type: type, item: { n: input.value.trim(), p: '日本', c: '自由住所' } } : null;
+        var query = normalize(input.value);
+        if (!query) return null;
+        var item = catalog(type).find(function (row) { return normalize(displayName(row, type)) === query || normalize(row.n) === query; });
+        return item ? { type: type, item: item } : null;
+      }
+      function taxiShowSuggestions(endpoint) {
+        var type = document.getElementById('taxi' + endpoint + 'Type').value;
+        var input = document.getElementById('taxi' + endpoint);
+        var box = document.getElementById('taxi' + endpoint + 'Suggestions');
+        var query = normalize(input.value);
+        var list = catalog(type);
+        if (type === 'address' || !query || !list.length) { box.classList.remove('open'); box.innerHTML = ''; return; }
+        var matches = [];
+        list.forEach(function (item) {
+          var text = searchText(item, type);
+          var at = text.indexOf(query);
+          if (at >= 0) matches.push({ item: item, score: at + (normalize(item.n).indexOf(query) === 0 ? -20 : 0) });
+        });
+        matches.sort(function (a, b) { return a.score - b.score || displayName(a.item, type).localeCompare(displayName(b.item, type), 'ja'); });
+        var chosen = matches.slice(0, 10);
+        box.innerHTML = chosen.map(function (row, index) {
+          return '<button type="button" class="taxi-suggestion" data-taxi-endpoint="' + endpoint + '" data-taxi-index="' + index + '"><strong>' + escapeHtml(displayName(row.item, type)) + '</strong><small>' + escapeHtml(metaText(row.item, type)) + '</small></button>';
+        }).join('') || '<div class="route-no-coordinate">見つかりませんでした。「自由住所」に切り替えてください。</div>';
+        box._matches = chosen.map(function (row) { return row.item; });
+        box.classList.add('open');
+      }
+      function taxiSelectSuggestion(endpoint, index) {
+        var type = document.getElementById('taxi' + endpoint + 'Type').value;
+        var box = document.getElementById('taxi' + endpoint + 'Suggestions');
+        var item = box._matches && box._matches[index];
+        if (!item) return;
+        taxiState[endpoint.toLowerCase()] = { type: type, item: item };
+        document.getElementById('taxi' + endpoint).value = displayName(item, type);
+        box.classList.remove('open'); box.innerHTML = '';
+      }
+      function taxiBindEndpoint(endpoint) {
+        var input = document.getElementById('taxi' + endpoint);
+        var typeSel = document.getElementById('taxi' + endpoint + 'Type');
+        var placeholders = { station: '例：東京駅', campus: '例：早稲田大学 早稲田キャンパス', school: '例：赤門会', vocational: '例：文化服装学院', primarySecondary: '例：新宿区立西新宿小学校', ur: '例：豊島五丁目', address: '例：東京都千代田区丸の内1-1-1' };
+        input.addEventListener('input', function () { taxiState[endpoint.toLowerCase()] = null; taxiShowSuggestions(endpoint); });
+        input.addEventListener('focus', function () { taxiShowSuggestions(endpoint); });
+        typeSel.addEventListener('change', function () {
+          taxiState[endpoint.toLowerCase()] = null;
+          input.value = '';
+          input.placeholder = placeholders[typeSel.value] || '';
+          document.getElementById('taxi' + endpoint + 'Suggestions').classList.remove('open');
+        });
+      }
+      taxiBindEndpoint('Origin'); taxiBindEndpoint('Destination');
+      document.addEventListener('click', function (event) {
+        var suggestion = event.target.closest('.taxi-suggestion');
+        if (suggestion) { taxiSelectSuggestion(suggestion.dataset.taxiEndpoint, Number(suggestion.dataset.taxiIndex)); return; }
+        if (!event.target.closest('.route-input-wrap')) {
+          var originBox = document.getElementById('taxiOriginSuggestions'), destBox = document.getElementById('taxiDestinationSuggestions');
+          if (originBox) originBox.classList.remove('open');
+          if (destBox) destBox.classList.remove('open');
+        }
+      });
+      var swapBtn = document.getElementById('taxiSwapBtn');
+      if (swapBtn) swapBtn.addEventListener('click', function () {
+        var originInput = document.getElementById('taxiOrigin'), destInput = document.getElementById('taxiDestination');
+        var originType = document.getElementById('taxiOriginType'), destType = document.getElementById('taxiDestinationType');
+        var tmpVal = originInput.value; originInput.value = destInput.value; destInput.value = tmpVal;
+        var tmpType = originType.value; originType.value = destType.value; destType.value = tmpType;
+        var tmpState = taxiState.origin; taxiState.origin = taxiState.destination; taxiState.destination = tmpState;
+      });
+      async function taxiGeocodeAddress(text) {
+        try {
+          var response = await fetch('https://msearch.gsi.go.jp/address-search/AddressSearch?q=' + encodeURIComponent(text));
+          if (!response.ok) return null;
+          var results = await response.json();
+          var coordinates = results && results[0] && results[0].geometry && results[0].geometry.coordinates;
+          if (!coordinates || coordinates.length < 2) return null;
+          return { o: Number(coordinates[0]), a: Number(coordinates[1]) };
+        } catch (error) { return null; }
+      }
+      async function taxiEnsurePoint(resolved) {
+        if (!resolved || hasPoint(resolved.item)) return Boolean(resolved);
+        if (resolved.type === 'address') {
+          var coords = await taxiGeocodeAddress(resolved.item.n);
+          if (!coords) return false;
+          resolved.item.a = coords.a; resolved.item.o = coords.o;
+          return true;
+        }
+        if (typeof routeEnsurePoint === 'function') return routeEnsurePoint(resolved);
+        return false;
+      }
+      var distanceBtn = document.getElementById('taxiDistanceEstimateBtn');
+      if (distanceBtn) distanceBtn.addEventListener('click', async function () {
+        var status = document.getElementById('taxiRouteStatus');
+        var origin = taxiResolve('Origin'), destination = taxiResolve('Destination');
+        if (!origin || !destination) { status.textContent = '出発地と到着地の両方を、候補から選ぶか自由住所で入力してください。'; return; }
+        taxiState.origin = origin; taxiState.destination = destination;
+        status.textContent = '位置情報を確認しています…';
+        distanceBtn.disabled = true;
+        await taxiEnsurePoint(origin); await taxiEnsurePoint(destination);
+        distanceBtn.disabled = false;
+        if (!hasPoint(origin.item) || !hasPoint(destination.item)) { status.textContent = '位置が特定できませんでした。住所をより詳しく（丁目・番地まで）入力するか、走行距離を直接入力してください。'; return; }
+        var straightMetres = (typeof routeDistanceMetres === 'function') ? routeDistanceMetres(origin.item, destination.item) : 0;
+        var roadKm = Math.max(0.1, Math.round(straightMetres / 1000 * 1.25 * 10) / 10);
+        distanceEl.value = roadKm;
+        status.textContent = '直線距離 約' + (straightMetres / 1000).toFixed(1) + 'km → 道路距離のめやす 約' + roadKm + 'km を走行距離欄に入力しました（実際のルートとは誤差があります）。';
+        calculate();
+        scrollToResult();
+      });
     })();
   </script>
 </div>
