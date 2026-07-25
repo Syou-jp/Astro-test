@@ -223,10 +223,10 @@ function computeAgency(rent){
   return num("agencyAmount");
 }
 
-function computeGuarantor(rent, mgmtRaw){
+function computeGuarantor(rent, mgmtRaw, guarantorOthersTotal){
   const mode = getMode("guarantorModeToggle");
   if (mode === "percent"){
-    return (rent + mgmtRaw) * (num("guarantorPercent") / 100);
+    return (rent + mgmtRaw + guarantorOthersTotal) * (num("guarantorPercent") / 100);
   }
   return num("guarantorAmount");
 }
@@ -263,9 +263,9 @@ function compute(){
   const firstRentInfo = computeFirstRent(rent);
   const firstRent = firstRentInfo.amount;
 
-  const guarantor = computeGuarantor(rent, mgmt);
   const guarantorOthers = getGuarantorOtherRows();
   const guarantorOthersTotal = guarantorOthers.reduce((s, o) => s + o.amount, 0);
+  const guarantor = computeGuarantor(rent, mgmt, guarantorOthersTotal);
 
   const insurance = num("insurance");
 
@@ -314,6 +314,11 @@ function buildLineData(vals, t){
   if (vals.mgmt > 0){
     lines.push({label: t.items.mgmt, amount: vals.mgmt});
   }
+  vals.guarantorOthers.forEach(o => {
+    if (o.raw > 0){
+      lines.push({label: o.label || t.items.other, amount: o.amount});
+    }
+  });
   if (vals.deposit > 0) lines.push({label: t.items.deposit, amount: vals.deposit});
   if (vals.keymoney > 0) lines.push({label: t.items.keymoney, amount: vals.keymoney});
 
@@ -324,11 +329,6 @@ function buildLineData(vals, t){
   if (vals.guarantor > 0){
     lines.push({label: t.items.guarantor, amount: vals.guarantor});
   }
-  vals.guarantorOthers.forEach(o => {
-    if (o.raw > 0){
-      lines.push({label: o.label || t.items.other, amount: o.amount});
-    }
-  });
   if (vals.insurance > 0){
     lines.push({label: t.items.insurance, amount: vals.insurance});
   }

@@ -39,9 +39,6 @@
     #page-rent .fire-key-row .input-tax-row{flex-wrap:wrap;gap:5px 8px;}
     #page-rent .fire-key-row .input-tax-row input[type=number]{width:100%;max-width:none;min-width:0;box-sizing:border-box;}
 
-    #page-rent .guarantor-other-block{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-soft);}
-    #page-rent .guarantor-other-title{font-size:12.5px;color:var(--ink);}
-    #page-rent .guarantor-other-title .hint{display:block;font-size:10.5px;color:var(--ink-soft);margin-top:2px;}
     #page-rent .add-btn.mini{font-size:11.5px;padding:6px 9px;margin-top:8px;}
 
     @media(max-width:640px){
@@ -61,8 +58,6 @@
       #page-rent .compact-pair-item .compact-label{font-size:12.5px;}
       #page-rent .compact-pair-item input{width:56px;}
       #page-rent .fire-key-row{gap:10px;}
-      #page-rent .guarantor-other-title{font-size:13px;}
-      #page-rent .guarantor-other-title .hint{font-size:11px;}
     }
   </style>
   <div class="grid">
@@ -88,6 +83,12 @@
         <div class="input-tax-row">
           <input type="number" id="mgmt" value="5000" min="0" step="500" style="text-align:right;">
         </div>
+      </div>
+
+      <div class="field-block">
+        <label>その他<span class="hint">駐輪場代・駐車場代など、項目名を自由に入力できます。初回保証利用料の基準（家賃+管理費+その他）にも加算されます（非課税）</span></label>
+        <div id="guarantorOtherRows"></div>
+        <button type="button" class="add-btn mini" id="addGuarantorOtherBtn">＋ 項目を追加</button>
       </div>
 
       <div class="field-block">
@@ -140,24 +141,19 @@
       </div>
 
       <div class="field-block">
-        <label>初回保証利用料<span class="hint">金額、または家賃＋管理費合計に対する割合で入力（非課税）</span></label>
+        <label>初回保証利用料<span class="hint">金額、または家賃＋管理費＋その他合計に対する割合で入力（非課税）</span></label>
         <div class="mode-toggle" id="guarantorModeToggle">
-          <div class="mode-btn" data-mode="percent">%（家賃+管理費基準）</div>
+          <div class="mode-btn" data-mode="percent">%（家賃+管理費+その他基準）</div>
           <div class="mode-btn active" data-mode="amount">金額</div>
         </div>
         <div class="input-tax-row">
           <div id="guarantorPercentWrap" class="sub-input-wrap" style="display:none;align-items:center;gap:8px;">
-            <span class="rent-subinput-label">(家賃+管理費) の %</span>
+            <span class="rent-subinput-label">(家賃+管理費+その他) の %</span>
             <input type="number" id="guarantorPercent" value="50" min="0" step="5" style="width:70px;text-align:right;">
           </div>
           <div id="guarantorAmountWrap" class="sub-input-wrap" style="display:flex;align-items:center;">
             <input type="number" id="guarantorAmount" value="40000" min="0" step="1000" style="text-align:right;">
           </div>
-        </div>
-        <div class="guarantor-other-block">
-          <div class="guarantor-other-title">その他<span class="hint">駐輪場代・駐車場代など、項目名を自由に入力できます（非課税）</span></div>
-          <div id="guarantorOtherRows"></div>
-          <button type="button" class="add-btn mini" id="addGuarantorOtherBtn">＋ 項目を追加</button>
         </div>
       </div>
 
