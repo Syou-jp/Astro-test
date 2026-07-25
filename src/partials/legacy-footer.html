@@ -2359,7 +2359,7 @@ function holdingRender(){
   document.getElementById("holdBreakdown").innerHTML=rows.map(x=>`<tr><td>${x[0]}</td><td class="money">${toolYen(x[1])}</td></tr>`).join("");
   document.getElementById("holdRateNote").innerHTML=price?`購入価格に対する年間保有コストは <strong>${(total/price*100).toFixed(2)}%</strong> です。ローン返済、室内設備の突発修理、空室損失は含みません。`:"購入価格を入力すると、価格に対する年間コスト率も表示します。";
 }
-document.querySelectorAll("#page-holding input,#page-holding select").forEach(el=>el.addEventListener("input",holdingRender));document.getElementById("holdCalcBtn")?.addEventListener("click",holdingRender);holdingRender();
+document.querySelectorAll("#page-holding input,#page-holding select").forEach(el=>el.addEventListener("input",holdingRender));document.getElementById("holdCalcBtn")?.addEventListener("click",()=>{holdingRender();document.getElementById("holdTaxOut")?.closest(".calc-kpi-grid")?.scrollIntoView({behavior:"smooth",block:"start"});});holdingRender();
 
 const BUSINESS_NAMES={invoice:"請求書",receipt:"領収書",delivery:"納品書",order:"注文書",purchase:"発注書",payment:"支払明細書",contract:"業務委託契約書",memorandum:"覚書",nda:"秘密保持契約書",ringi:"稟議書",proposal:"企画書",suggestion:"提案書",incident:"顛末書",apology:"始末書"};
 const BUSINESS_FINANCE=new Set(["invoice","receipt","delivery","order","purchase","payment"]);
