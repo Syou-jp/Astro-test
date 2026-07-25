@@ -1702,4 +1702,5 @@
   .card.is-collapsed > .section-title.card-toggle{margin-bottom:0;padding-bottom:12px;}
   .card.is-collapsed > .section-title.card-toggle::after{transform:rotate(-90deg);}
   .card.is-collapsed .card-body{display:none;}
+  #jobPostingForm.is-collapsed ~ *{display:none;}
 }
