@@ -24,9 +24,11 @@
     .moving-check h3{margin:0 0 10px;font-size:14px;color:var(--accent);}
     .moving-check ul{margin:0;padding-left:18px;display:grid;gap:6px;}
     .moving-check li{font-size:11.5px;line-height:1.75;color:var(--ink-soft);}
-    .moving-table{width:100%;border-collapse:collapse;background:#fff;font-size:11.5px;margin-top:8px;}
-    .moving-table th,.moving-table td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top;}
+    .moving-table{width:100%;table-layout:fixed;border-collapse:collapse;background:#fff;font-size:11.5px;margin-top:8px;}
+    .moving-table th,.moving-table td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top;word-break:break-word;}
     .moving-table th{background:var(--paper-2);color:var(--accent);font-size:11px;}
+    .moving-table th:nth-child(1),.moving-table td:nth-child(1){width:16%;}
+    .moving-table th:nth-child(2),.moving-table td:nth-child(2){width:22%;}
     .moving-note{border-left:3px solid var(--gold);background:rgba(156,122,60,.08);padding:11px 13px;font-size:11.5px;line-height:1.8;color:var(--ink-soft);margin-top:14px;}
     .moving-warning{border-left:4px solid var(--seal);background:rgba(168,72,47,.07);padding:11px 13px;font-size:11.5px;line-height:1.75;color:var(--ink-soft);margin-top:12px;}
     .moving-source-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none;}
@@ -34,27 +36,34 @@
     .moving-source-list a:hover{border-color:var(--accent);color:var(--accent);}
     .moving-source-list small{display:block;margin-top:3px;color:var(--ink-soft);font-size:10px;}
     @media(max-width:860px){.moving-hero,.moving-grid,.moving-two-col{grid-template-columns:1fr}.moving-source-list{grid-template-columns:1fr}}
-    @media(max-width:560px){.moving-hero-main{padding:18px}.moving-hero-main h2{font-size:22px}.moving-step{grid-template-columns:1fr}.moving-card,.moving-check{padding:14px}}
+    @media(max-width:560px){.moving-hero-main{padding:18px}.moving-step{grid-template-columns:1fr}.moving-card,.moving-check{padding:14px}}
     @media(max-width:640px){
-      .moving-hero-main p{font-size:14px;}
-      .moving-summary-row b{font-size:13.5px;}
-      .moving-summary-row small{font-size:12px;}
-      .moving-card h3{font-size:15px;}
-      .moving-card p{font-size:13px;}
-      .moving-card strong{font-size:11px;}
-      .moving-step time{font-size:12px;}
-      .moving-step b{font-size:14px;}
-      .moving-step span{font-size:13px;}
-      .moving-check h3{font-size:15px;}
-      .moving-check li{font-size:13px;}
-      .moving-table,.moving-table th,.moving-table td{font-size:13px;}
-      .moving-note,.moving-warning{font-size:13px;}
-      .moving-source-list a{font-size:13px;}
-      .moving-source-list small{font-size:11px;}
+      .moving-hero-main h2{font-size:18.5px;line-height:1.5;}
+      .moving-hero-main p{font-size:12.5px;line-height:1.85;}
+      .moving-summary-row b{font-size:12px;}
+      .moving-summary-row small{font-size:10.5px;}
+      .moving-card h3{font-size:13.5px;}
+      .moving-card p{font-size:11.5px;}
+      .moving-card strong{font-size:10px;}
+      .moving-step time{font-size:11px;}
+      .moving-step b{font-size:12.5px;}
+      .moving-step span{font-size:11.5px;}
+      .moving-check h3{font-size:13.5px;}
+      .moving-check li{font-size:11.5px;}
+      .moving-note,.moving-warning{font-size:11.5px;}
+      .moving-source-list a{font-size:11.5px;}
+      .moving-source-list small{font-size:10px;}
+      .moving-table{border:none;background:transparent;}
+      .moving-table thead{display:none;}
+      .moving-table tbody{display:grid;gap:10px;}
+      .moving-table tr{display:block;border:1px solid var(--line);background:#fff;}
+      .moving-table td{display:block;border:none;border-bottom:1px solid var(--line-soft);padding:8px 12px;font-size:11.5px;}
+      .moving-table td:last-child{border-bottom:none;}
+      .moving-table td::before{content:attr(data-label);display:block;font:700 10px "JetBrains Mono",monospace;color:var(--accent);letter-spacing:.04em;margin-bottom:3px;}
     }
   </style>
 
-  <div class="eyebrow">引越し手続き / Moving Guide</div>
+  <div class="eyebrow">引越し手続き</div>
 
   <section class="moving-hero" aria-labelledby="movingTitle">
     <div class="moving-hero-main">
@@ -137,12 +146,12 @@
         <tr><th>項目</th><th>目安</th><th>ポイント</th></tr>
       </thead>
       <tbody>
-        <tr><td>転出届</td><td>引越し前</td><td>別の市区町村へ移る場合に必要。マイナンバーカードがあれば、条件によりマイナポータルからオンライン提出できます。</td></tr>
-        <tr><td>転入届・転居届</td><td>住み始めてから14日以内</td><td>本人確認書類、マイナンバーカード、在留カードなどを持参。自治体により必要書類が異なります。</td></tr>
-        <tr><td>郵便転送</td><td>できれば1週間以上前</td><td>無料で1年間転送されます。ただし「転送不要」と記載された郵便物など、転送されないものもあります。</td></tr>
-        <tr><td>ガス</td><td>約1週間前までが安心</td><td>使用開始は立会いが必要。オートロックなどでメーターに入れない場合、停止時も立会いが必要になることがあります。</td></tr>
-        <tr><td>粗大ごみ</td><td>早め</td><td>自治体ごとに申込方法・料金・収集日が違います。大量廃棄は通常回収で出せないことがあります。</td></tr>
-        <tr><td>インターネット</td><td>2〜4週間前</td><td>工事が必要な回線は時間がかかります。賃貸では建物の対応回線と工事可否を管理会社に確認します。</td></tr>
+        <tr><td data-label="項目">転出届</td><td data-label="目安">引越し前</td><td data-label="ポイント">別の市区町村へ移る場合に必要。マイナンバーカードがあれば、条件によりマイナポータルからオンライン提出できます。</td></tr>
+        <tr><td data-label="項目">転入届・転居届</td><td data-label="目安">住み始めてから14日以内</td><td data-label="ポイント">本人確認書類、マイナンバーカード、在留カードなどを持参。自治体により必要書類が異なります。</td></tr>
+        <tr><td data-label="項目">郵便転送</td><td data-label="目安">できれば1週間以上前</td><td data-label="ポイント">無料で1年間転送されます。ただし「転送不要」と記載された郵便物など、転送されないものもあります。</td></tr>
+        <tr><td data-label="項目">ガス</td><td data-label="目安">約1週間前までが安心</td><td data-label="ポイント">使用開始は立会いが必要。オートロックなどでメーターに入れない場合、停止時も立会いが必要になることがあります。</td></tr>
+        <tr><td data-label="項目">粗大ごみ</td><td data-label="目安">早め</td><td data-label="ポイント">自治体ごとに申込方法・料金・収集日が違います。大量廃棄は通常回収で出せないことがあります。</td></tr>
+        <tr><td data-label="項目">インターネット</td><td data-label="目安">2〜4週間前</td><td data-label="ポイント">工事が必要な回線は時間がかかります。賃貸では建物の対応回線と工事可否を管理会社に確認します。</td></tr>
       </tbody>
     </table>
     <div class="moving-note">
