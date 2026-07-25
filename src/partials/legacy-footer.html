@@ -1031,6 +1031,20 @@ if (document.querySelector("#taxFormCard")){
     if (el && !el.value) el.value = new Date().toISOString().slice(0,10);
   })();
 
+  (function populateTxAge(){
+    const el = document.getElementById("txAge");
+    if (!el) return;
+    const thisYear = new Date().getFullYear();
+    const defaultAge = 10;
+    for (let age = 0; age <= 60; age++){
+      const opt = document.createElement("option");
+      opt.value = age;
+      opt.textContent = (thisYear - age) + "年築／" + age + "年";
+      if (age === defaultAge) opt.selected = true;
+      el.appendChild(opt);
+    }
+  })();
+
   txRender();
 }
 
@@ -3156,7 +3170,7 @@ siteAdd("概算（整月）或日割り計算","概算（全月）または日�
 siteAdd("日割り + 追加月數","日割＋追加月数","Prorated + additional months","일할＋추가 개월","Theo ngày + số tháng bổ sung");
 siteAdd("家賃の何ヶ月分 (× months of rent)","賃料の何か月分","Multiple of monthly rent","월세의 몇 개월분","Số tháng tiền thuê");
 siteAdd("家賃の %","賃料の％","Percentage of rent","월세의 %","% tiền thuê");
-siteAdd("RC／SRC（マンション類）","RC／SRC（マンション等）","RC / SRC (condominiums)","RC／SRC(맨션 등)","RC／SRC (chung cư)");
+siteAdd("RC／SRC","RC／SRC","RC / SRC","RC／SRC","RC／SRC");
 siteAdd("Annual Holding Tax","年間保有税","Annual Holding Tax","연간 보유세","Thuế sở hữu hàng năm");
 siteAdd("パスポート","パスポート","Passport","여권","Hộ chiếu");
 siteAdd("在留カード（表・裏）","在留カード（表・裏）","Residence card (front and back)","재류카드(앞・뒤)","Thẻ cư trú (mặt trước・sau)");

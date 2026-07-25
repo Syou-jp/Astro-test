@@ -26,14 +26,14 @@
       <div class="field-row">
         <label>建物構造 Structure<span class="hint">影響折舊年數與減稅年限</span></label>
         <select id="txStructure">
-          <option value="rc">RC／SRC（マンション類）</option>
+          <option value="rc">RC／SRC</option>
           <option value="steel">鉄骨</option>
           <option value="wood">木造</option>
         </select>
       </div>
       <div class="field-row">
-        <label>建物屋齡 Building age<span class="hint">年</span></label>
-        <input type="number" id="txAge" value="10" min="0" step="1">
+        <label>建築年 Year built<span class="hint">自動計算屋齡</span></label>
+        <select id="txAge"></select>
       </div>
       <div class="field-row">
         <label>建物床面積 Floor area<span class="hint">㎡（須50〜240㎡才適用控除）</span></label>
@@ -166,7 +166,7 @@
           <div class="apply-field"><label>物件タイプ Property type</label><select id="holdType"><option>マンション</option><option>戸建住宅</option><option>投資用住宅</option><option>土地</option></select></div>
           <div class="apply-field"><label>土地の評価額 Land assessed value</label><div class="input-wrap"><input type="number" id="holdLand" value="15000000" min="0" step="100000"><span>円</span></div></div>
           <div class="apply-field"><label>建物の評価額 Building assessed value</label><div class="input-wrap"><input type="number" id="holdBuilding" value="12000000" min="0" step="100000"><span>円</span></div></div>
-          <div class="apply-field full"><label>住宅用地の特例 Land treatment</label><select id="holdLandTreatment"><option value="small" selected>小規模住宅用地（1戸につき200㎡まで）</option><option value="general">一般住宅用地（200㎡超部分）</option><option value="none">住宅用地特例なし</option></select></div>
+          <div class="apply-field full"><label>住宅用地の特例 Land treatment</label><select id="holdLandTreatment"><option value="small" selected>小規模住宅用地（200㎡まで）</option><option value="general">一般住宅用地（200㎡超部分）</option><option value="none">住宅用地特例なし</option></select></div>
           <div class="apply-field"><label>所在地・計算基準 Area</label><select id="holdArea"><option value="tokyo23" selected>東京都23区（2026年度）</option><option value="standard">その他自治体（標準税率概算）</option></select></div>
           <div class="apply-field"><label>都市計画税 City planning tax</label><select id="holdCityPlan"><option value="yes" selected>課税あり（0.3%で試算）</option><option value="no">課税なし</option></select></div>
           <div class="apply-field"><label>新築住宅の建物減額</label><select id="holdNewReduction"><option value="no" selected>なし・期間終了</option><option value="yes">適用中（建物税額1/2で概算）</option></select></div>

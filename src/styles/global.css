@@ -1593,12 +1593,18 @@
   .field-block{padding:9px 0;}
   .rent-note{font-size:11px;}
 
-  /* 16px minimum keeps iOS Safari from auto-zooming the page on focus. */
+  /* 16px minimum keeps iOS Safari from auto-zooming the page on focus.
+     Must beat .field-row's own (higher-specificity) font-size rules, which
+     otherwise stay under 16px on mobile and trigger the zoom. */
   input[type=text],
   input[type=number],
   input[type=date],
   select,
-  textarea{font-size:16px;}
+  textarea,
+  .field-row select,
+  .field-row input[type=number],
+  .field-row input[type=text],
+  .field-row input[type=date]{font-size:16px;}
 
   .name-fields input[type=text]{font-size:16px;padding:10px 10px;}
   .mode-btn{font-size:12px;padding:8px 8px;}
