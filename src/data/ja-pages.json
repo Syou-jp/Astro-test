@@ -11,6 +11,12 @@
     "file": "00-about.html"
   },
   {
+    "id": "page-news",
+    "slug": "news",
+    "file": "news.html",
+    "title": "時事日報｜日本の最新ニュースまとめ"
+  },
+  {
     "id": "page-rent",
     "slug": "rent",
     "file": "01-rent.html"

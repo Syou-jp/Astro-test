@@ -1,5 +1,17 @@
 [
   {
+    "label": "時事・ニュース",
+    "tabs": [
+      {
+        "id": "page-news",
+        "slug": "news",
+        "glyph": "報",
+        "text": "時事日報",
+        "small": "DAILY NEWS"
+      }
+    ]
+  },
+  {
     "label": "住まい・不動産",
     "tabs": [
       {

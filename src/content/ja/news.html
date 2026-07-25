@@ -1,0 +1,76 @@
+<div id="page-news" class="page-view active news-page" data-no-i18n>
+  <div class="eyebrow">DAILY NEWS · JAPAN</div>
+
+  <section class="nw-hero">
+    <div>
+      <p class="nw-kicker">日本で暮らす外国人のための時事まとめ。</p>
+      <h2>時事日報</h2>
+      <p class="nw-lead">日本国内の<strong>政治・経済・社会・生活</strong>に関する主なニュースを毎日まとめてお届けします。難しいニュースも要点だけをやさしく整理し、日本での生活に関わる情報を見逃さないようにします。</p>
+      <div class="nw-hero-actions">
+        <a class="nw-primary-link" href="#news-list">最新ニュースを見る <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+    <aside class="nw-rule-card">
+      <span class="nw-rule-number">毎日</span>
+      <strong>更新頻度について</strong>
+      <p>このページは編集部が内容を確認したうえで更新しています。最新の更新日は各記事カードの日付をご確認ください。</p>
+      <div class="nw-rule-line"></div>
+      <small>最終更新：2026年7月25日</small>
+    </aside>
+  </section>
+
+  <div class="nw-notice"><strong>ご注意</strong><span>本ページの内容は要約・参考情報です。詳細な内容や最新情報は、各ニュースの引用元（一次情報源）をご確認ください。</span></div>
+
+  <section class="nw-section" id="news-list">
+    <div class="nw-section-head">
+      <div><span>TODAY'S PICKS</span><h3>注目のニュース</h3></div>
+      <p>掲載イメージです</p>
+    </div>
+
+    <div class="nw-filters" aria-label="ニュースカテゴリー">
+      <button type="button" class="nw-filter active" data-filter="all">すべて <small>06</small></button>
+      <button type="button" class="nw-filter" data-filter="society">社会</button>
+      <button type="button" class="nw-filter" data-filter="economy">経済</button>
+      <button type="button" class="nw-filter" data-filter="policy">政策・行政</button>
+      <button type="button" class="nw-filter" data-filter="life">生活・気象</button>
+    </div>
+
+    <div class="nw-news-grid" id="nwNewsGrid"></div>
+  </section>
+
+  <div class="nw-note" style="margin-top:15px;">
+    本ページのニュース要約は情報提供のみを目的としており、内容の正確性・完全性を保証するものではありません。重要な判断を行う際は、必ず各ニュースの一次情報源（政府機関・報道機関の公式発表など）をご確認ください。
+  </div>
+
+  <style>
+    .news-page{--nw-dark:#1a3d5c;--nw-sage:#e8f0f7;--nw-cream:#f0f4f8;--nw-accent:#0066cc;--nw-muted:#667080}.nw-kicker,.nw-section-head span{font:700 10px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--nw-accent)}.nw-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:20px;align-items:stretch;padding:7px 0 28px}.nw-hero h2{font-family:"Shippori Mincho",serif;font-size:38px;line-height:1.25;letter-spacing:.05em;margin:7px 0 12px}.nw-lead{max-width:620px;margin:0;font-size:14px;line-height:2;color:var(--ink-soft)}.nw-lead strong{color:var(--nw-accent)}.nw-hero-actions{display:flex;align-items:center;gap:18px;margin-top:23px}.nw-primary-link{display:inline-flex;align-items:center;gap:20px;padding:11px 15px;background:var(--nw-dark);color:#fff;text-decoration:none;font-size:12px;font-weight:700}.nw-primary-link:hover{background:var(--accent-2)}.nw-rule-card{border:1px solid var(--nw-dark);background:var(--nw-sage);padding:21px;display:flex;flex-direction:column}.nw-rule-number{font:700 24px "JetBrains Mono",monospace;letter-spacing:-.03em;color:var(--nw-dark)}.nw-rule-card strong{font-family:"Shippori Mincho",serif;font-size:16px;margin-top:2px}.nw-rule-card p{font-size:11px;line-height:1.75;color:var(--ink-soft);margin:12px 0}.nw-rule-line{height:1px;background:rgba(26,61,92,.25);margin-top:auto}.nw-rule-card small{font-size:10px;color:var(--ink-soft);line-height:1.6;margin-top:11px}.nw-notice{display:flex;gap:14px;align-items:flex-start;border-left:3px solid var(--nw-accent);background:#f0f4f8;padding:12px 14px;font-size:11.5px;line-height:1.75;margin-bottom:31px}.nw-notice strong{color:var(--nw-accent);white-space:nowrap}.nw-notice span{color:var(--ink-soft)}.nw-section{padding-top:2px}.nw-section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:12px}.nw-section-head h3{font-family:"Shippori Mincho",serif;font-size:22px;line-height:1.45;margin:3px 0 0}.nw-section-head p{margin:0;color:var(--ink-soft);font-size:10.5px}.nw-filters{display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:13px}.nw-filter{border:1px solid var(--line);background:#fff;color:var(--ink-soft);font:600 11px inherit;padding:7px 12px;cursor:pointer}.nw-filter small{font:400 9px "JetBrains Mono",monospace;margin-left:4px}.nw-filter.active,.nw-filter:hover{border-color:var(--nw-dark);background:var(--nw-dark);color:#fff}.nw-news-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:17px}.nw-card{border:1px solid var(--line);background:#fff;min-width:0;overflow:hidden;display:flex;flex-direction:column;padding:16px}.nw-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.nw-card-category{color:var(--nw-accent);font:700 9px "JetBrains Mono",monospace;letter-spacing:.1em}.nw-card-date{font:400 9.5px "JetBrains Mono",monospace;color:var(--nw-muted);white-space:nowrap}.nw-card h4{margin:9px 0;font-size:16px;line-height:1.45}.nw-card-note{font-size:11.5px;color:var(--ink-soft);line-height:1.75;margin:0 0 10px}.nw-meta{display:flex;gap:7px;font-size:10.5px;margin-top:auto;padding-top:10px;border-top:1px dashed var(--line)}.nw-meta b{color:var(--nw-muted);min-width:50px;font-size:9px;letter-spacing:.04em}.nw-meta span{color:var(--ink)}@media(max-width:700px){.nw-hero{grid-template-columns:1fr}.nw-hero h2{font-size:31px}.nw-news-grid{grid-template-columns:1fr}.nw-rule-card{min-height:190px}.nw-section-head{align-items:start;flex-direction:column}.nw-hero-actions{gap:12px;flex-wrap:wrap}}
+  </style>
+
+  <script>
+    (function () {
+      var news = [
+        { category: "policy", categoryLabel: "政策・行政", date: "2026.07.25", title: "在留手続きのオンライン化、対象を拡大", description: "出入国在留管理庁は、在留資格の各種手続きについてオンライン申請の対象範囲を拡大すると発表。在留カードを持つ外国人の負担軽減が期待される。", source: "出入国在留管理庁 発表" },
+        { category: "economy", categoryLabel: "経済", date: "2026.07.25", title: "最低賃金の改定、今年度も引き上げの方向", description: "中央最低賃金審議会が今年度の最低賃金引き上げ目安を審議。物価上昇を踏まえ、各都道府県で数十円規模の引き上げが見込まれる。", source: "厚生労働省 関連報道" },
+        { category: "society", categoryLabel: "社会", date: "2026.07.24", title: "外国人材の受け入れ制度、見直し議論が進む", description: "特定技能制度の対象分野や在留期間について、関係省庁による見直し議論が継続中。生活・就労環境の改善策も論点に挙がっている。", source: "関係省庁 資料" },
+        { category: "life", categoryLabel: "生活・気象", date: "2026.07.24", title: "関東地方、来週にかけて猛暑が継続", description: "気象庁は関東甲信地方を中心に来週にかけて厳しい暑さが続くと予測。熱中症警戒アラートの発表状況にも注意が必要。", source: "気象庁 発表" },
+        { category: "economy", categoryLabel: "経済", date: "2026.07.23", title: "円相場、日銀の金融政策見通しで変動", description: "日銀の金融政策運営に関する見通しを受け、外国為替市場で円相場が変動。家計の輸入品価格や海外送金にも影響が及ぶ可能性がある。", source: "金融市場 関連報道" },
+        { category: "society", categoryLabel: "社会", date: "2026.07.23", title: "自治体窓口、多言語対応の拡充進む", description: "複数の自治体で、区役所・市役所窓口における多言語通訳サービスや翻訳アプリの導入が進んでいる。生活相談のハードルが下がることが期待される。", source: "自治体 発表資料" }
+      ];
+      var activeFilter = "all";
+      function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value; return el.innerHTML; }
+      function render() {
+        var visible = news.filter(function (item) { return activeFilter === "all" || item.category === activeFilter; });
+        var grid = document.getElementById("nwNewsGrid");
+        if (!visible.length) {
+          grid.innerHTML = '<div class="nw-empty" style="grid-column:1/-1;padding:30px;text-align:center;color:var(--ink-soft);font-size:13px;">現在、該当するニュースはありません。</div>';
+          return;
+        }
+        grid.innerHTML = visible.map(function (item) {
+          return '<article class="nw-card"><div class="nw-card-top"><span class="nw-card-category">' + item.categoryLabel + '</span><span class="nw-card-date">' + item.date + '</span></div><h4>' + escapeHtml(item.title) + '</h4><p class="nw-card-note">' + escapeHtml(item.description) + '</p><div class="nw-meta"><b>出典</b><span>' + escapeHtml(item.source) + '</span></div></article>';
+        }).join("");
+      }
+      document.querySelectorAll(".nw-filter").forEach(function (button) { button.addEventListener("click", function () { activeFilter = button.dataset.filter; document.querySelectorAll(".nw-filter").forEach(function (entry) { entry.classList.toggle("active", entry === button); }); render(); }); });
+      render();
+    })();
+  </script>
+</div>
