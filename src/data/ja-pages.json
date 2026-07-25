@@ -235,5 +235,11 @@
     "slug": "zairyu-shikaku",
     "file": "zairyu-shikaku.html",
     "title": "在留資格ガイド｜種類・一覧・在留期間まとめ"
+  },
+  {
+    "id": "page-pension-insurance",
+    "slug": "pension-insurance",
+    "file": "pension-insurance.html",
+    "title": "年金・健康保険ガイド｜外国人が知っておくべき制度まとめ"
   }
 ]

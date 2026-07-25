@@ -198,6 +198,13 @@
         "small": "VISA RENEWAL"
       },
       {
+        "id": "page-pension-insurance",
+        "slug": "pension-insurance",
+        "glyph": "年",
+        "text": "年金・健康保険",
+        "small": "PENSION &amp; HEALTH INSURANCE"
+      },
+      {
         "id": "page-japanese",
         "slug": "japanese",
         "glyph": "語",
