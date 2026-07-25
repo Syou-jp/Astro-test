@@ -108,6 +108,42 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
 
     <script is:inline>
       (() => {
+        const mq = window.matchMedia("(max-width:640px)");
+
+        function setup() {
+          document.querySelectorAll(".card").forEach((card) => {
+            if (card.dataset.collapseReady) return;
+            const title = card.querySelector(":scope > .section-title");
+            if (!title) return;
+            card.dataset.collapseReady = "1";
+            title.classList.add("card-toggle");
+            const body = document.createElement("div");
+            body.className = "card-body";
+            let node = title.nextSibling;
+            while (node) {
+              const next = node.nextSibling;
+              body.appendChild(node);
+              node = next;
+            }
+            card.appendChild(body);
+            title.addEventListener("click", () => {
+              if (!mq.matches) return;
+              card.classList.toggle("is-collapsed");
+            });
+          });
+        }
+
+        setup();
+        mq.addEventListener("change", () => {
+          if (!mq.matches) {
+            document.querySelectorAll(".card.is-collapsed").forEach((card) => card.classList.remove("is-collapsed"));
+          }
+        });
+      })();
+    </script>
+
+    <script is:inline>
+      (() => {
         const select = document.getElementById("themeSwitcher");
         if (!select) return;
         let saved = "paper";

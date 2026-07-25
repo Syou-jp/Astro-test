@@ -1009,9 +1009,13 @@
   }
   .receipt-total .value{
     font-family:"JetBrains Mono", monospace;
+    font-variant-numeric:tabular-nums;
     font-size:24px;
     font-weight:700;
     color:var(--seal);
+    display:inline-block;
+    min-width:11ch;
+    text-align:right;
   }
   .seal{
     position:absolute;
@@ -1571,18 +1575,23 @@
      force the whole page to overflow horizontally on narrow phones. */
   .grid{grid-template-columns:minmax(0,1fr);gap:16px;}
 
-  .card{padding:18px 15px;}
-  .section-title{font-size:16px;margin-bottom:14px;}
-  .eyebrow{font-size:13px;}
-  .portal-alert{font-size:13.5px;line-height:1.75;}
+  .masthead h1{font-size:19px;}
+  .masthead .sub{font-size:10.5px;}
+  .doc-tab .tab-text{font-size:11.5px;}
+  .doc-tab .tab-text small{font-size:8.5px;}
 
-  .field-row{grid-template-columns:1fr 112px;padding:11px 0;}
+  .card{padding:16px 14px;}
+  .section-title{font-size:14px;margin-bottom:12px;}
+  .eyebrow{font-size:11px;}
+  .portal-alert{font-size:12px;line-height:1.7;}
+
+  .field-row{grid-template-columns:1fr 112px;padding:9px 0;}
   .field-row label,
-  .field-block > label{font-size:14.5px;}
+  .field-block > label{font-size:13px;}
   .field-row .hint,
-  .field-block > label .hint{font-size:12.5px;}
-  .field-block{padding:11px 0;}
-  .rent-note{font-size:12.5px;}
+  .field-block > label .hint{font-size:11px;}
+  .field-block{padding:9px 0;}
+  .rent-note{font-size:11px;}
 
   /* 16px minimum keeps iOS Safari from auto-zooming the page on focus. */
   input[type=text],
@@ -1591,74 +1600,84 @@
   select,
   textarea{font-size:16px;}
 
-  .name-fields input[type=text]{font-size:16px;padding:11px 10px;}
-  .mode-btn{font-size:13px;padding:9px 8px;}
-  .mode-btn small{font-size:11px;}
-  .tax-check{font-size:13px;}
-  .tax-live{font-size:12px;}
+  .name-fields input[type=text]{font-size:16px;padding:10px 10px;}
+  .mode-btn{font-size:12px;padding:8px 8px;}
+  .mode-btn small{font-size:10px;}
+  .tax-check{font-size:11.5px;}
+  .tax-live{font-size:10.5px;}
   .other-row .other-label,
-  .other-row .other-amount{font-size:14px;}
-  .add-btn{font-size:13.5px;padding:10px 12px;}
+  .other-row .other-amount{font-size:12.5px;}
+  .add-btn{font-size:12px;padding:9px 12px;}
 
   /* The 6-button language picker used min-width:70px flex items, which alone forced
      the whole page ~530px wide on a 375px screen. A grid can actually shrink below that. */
   .lang-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));}
-  .lang-btn{min-width:0;font-size:13px;padding:10px 6px;}
+  .lang-btn{min-width:0;font-size:12px;padding:9px 6px;}
 
-  .doc-check{font-size:14px;}
-  .doc-check .hint-inline{font-size:12px;}
-  .doc-file-label{font-size:12.5px;}
+  .doc-check{font-size:12.5px;}
+  .doc-check .hint-inline{font-size:10.5px;}
+  .doc-file-label{font-size:11px;}
 
-  .apply-field label{font-size:13px;}
-  .apply-field label small{font-size:11.5px;}
+  .apply-field label{font-size:12px;}
+  .apply-field label small{font-size:10.5px;}
   .apply-field input,
   .apply-field select,
   .apply-field textarea{font-size:16px;}
   .inline-options label,
-  .consent-row{font-size:13.5px;}
-  .secondary-btn{font-size:13.5px;padding:11px 16px;}
+  .consent-row{font-size:12px;}
+  .secondary-btn{font-size:12.5px;padding:10px 15px;}
 
-  .buy-statement{font-size:13.5px;}
-  .buy-preview-row{font-size:12.5px;grid-template-columns:104px 1fr;}
-  .buy-signature-box{font-size:12.5px;}
-  .buy-legal-note{font-size:11px;}
-  .money-diff{font-size:12.5px;}
+  .buy-statement{font-size:12.5px;}
+  .buy-preview-row{font-size:11.5px;grid-template-columns:104px 1fr;}
+  .buy-signature-box{font-size:11.5px;}
+  .buy-legal-note{font-size:10px;}
+  .money-diff{font-size:11px;}
 
-  .area-region-head strong{font-size:14px;}
-  .area-region-head span{font-size:11px;}
-  .area-result-name{font-size:13px;}
-  .area-result-name small{font-size:11px;}
-  .area-result-value{font-size:14.5px;}
-  .area-note{font-size:12px;}
-  .area-base-summary .label{font-size:12px;}
-  .area-base-summary .value{font-size:20px;}
+  .area-region-head strong{font-size:13px;}
+  .area-region-head span{font-size:10px;}
+  .area-result-name{font-size:12px;}
+  .area-result-name small{font-size:10px;}
+  .area-result-value{font-size:13.5px;}
+  .area-note{font-size:11px;}
+  .area-base-summary .label{font-size:11px;}
+  .area-base-summary .value{font-size:18px;}
 
-  .calc-kpi span{font-size:11.5px;}
-  .calc-kpi strong{font-size:19px;}
-  .readiness-item{font-size:13px;}
-  .market-note{font-size:13px;}
-  .portal-source{font-size:12px;}
+  .calc-kpi span{font-size:10.5px;}
+  .calc-kpi strong{font-size:17px;}
+  .readiness-item{font-size:12px;}
+  .market-note{font-size:12px;}
+  .portal-source{font-size:11px;}
 
-  .util-doc-tab{font-size:13px;}
-  .util-doc-tab small{font-size:10.5px;}
+  .util-doc-tab{font-size:12px;}
+  .util-doc-tab small{font-size:10px;}
 
-  .receipt-head h2{font-size:16.5px;}
-  .receipt-line{font-size:14.5px;}
-  .receipt-total .label{font-size:14px;}
-  .receipt-total .value{font-size:22px;}
-  .btn-copy{font-size:15px;padding:14px;}
-  .footnote{font-size:12px;}
+  .receipt-head h2{font-size:15px;}
+  .receipt-line{font-size:13px;}
+  .receipt-total .label{font-size:12.5px;}
+  .receipt-total .value{font-size:19px;}
+  .btn-copy{font-size:14px;padding:13px;}
+  .footnote{font-size:11px;}
 
-  .fireins-flyer-card strong{font-size:13.5px;}
-  .fireins-flyer-card small{font-size:12px;}
+  .fireins-flyer-card strong{font-size:12.5px;}
+  .fireins-flyer-card small{font-size:11px;}
 
   .back-to-top{display:flex;}
   .back-to-top.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}
 
   .readiness-details{border:none;padding:0;margin:0;}
-  .readiness-summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:9px 16px;border:1px solid var(--line);border-radius:20px;background:var(--paper-2);font-size:13px;font-weight:700;color:var(--ink-soft);}
+  .readiness-summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:9px 16px;border:1px solid var(--line);border-radius:20px;background:var(--paper-2);font-size:12px;font-weight:700;color:var(--ink-soft);}
   .readiness-summary::-webkit-details-marker{display:none;}
   .readiness-summary::after{content:"▾";font-size:9px;opacity:.6;transition:transform .18s ease;}
   .readiness-details[open] .readiness-summary::after{transform:rotate(180deg);}
   .readiness-details .readiness-list{margin-top:10px;}
+
+  /* One-tap collapse for .card boxes: JS (BaseLayout) tags the first .section-title
+     with .card-toggle and wraps the remaining children in .card-body so any box on
+     any page can be tucked away, keeping long mobile pages tidy. Cards start expanded
+     (no content is hidden without the visitor tapping the header first). */
+  .card > .section-title.card-toggle{cursor:pointer;user-select:none;position:relative;padding-right:22px;}
+  .card > .section-title.card-toggle::after{content:"▾";position:absolute;right:2px;top:1px;font-size:10px;color:var(--ink-soft);transition:transform .2s ease;}
+  .card.is-collapsed > .section-title.card-toggle{margin-bottom:0;padding-bottom:12px;}
+  .card.is-collapsed > .section-title.card-toggle::after{transform:rotate(-90deg);}
+  .card.is-collapsed .card-body{display:none;}
 }

@@ -23,7 +23,7 @@
     #page-rent .lang-select:focus{outline:2px solid var(--accent-2);outline-offset:1px;}
 
     #page-rent .input-tax-row{display:flex;align-items:center;flex-wrap:wrap;gap:5px 10px;margin-top:6px;}
-    #page-rent .input-tax-row input[type=number]{flex:1;min-width:90px;width:auto;}
+    #page-rent .input-tax-row input[type=number]{flex:0 0 auto;width:140px;}
     #page-rent .input-tax-row .sub-input-wrap{margin-top:0;}
     #page-rent .input-tax-row .tax-check{margin-left:auto;}
 
@@ -55,7 +55,7 @@
     <div class="card" id="formCard">
       <div class="section-title"><span class="idx">01</span>物件・お客様情報</div>
       <div class="name-fields">
-        <input type="text" id="propertyName" placeholder="物件名">
+        <input type="text" id="propertyName" placeholder="物件名（任意）">
         <input type="text" id="clientName" placeholder="お客様名（任意）">
       </div>
 
@@ -81,7 +81,7 @@
         <div class="input-tax-row">
           <div id="monthsModeWrap" class="sub-input-wrap" style="display:flex;align-items:center;gap:8px;">
             <span class="rent-subinput-label">月数</span>
-            <input type="number" id="firstRentMonths" value="1" min="0" step="1" style="width:70px;text-align:right;">
+            <input type="number" id="firstRentMonths" value="1" min="0" step="1" style="width:64px;text-align:right;">
           </div>
           <div id="dailyModeWrap" class="sub-input-wrap" style="display:none;align-items:center;">
             <select id="dailyExtraMonths" style="width:200px;">
@@ -89,15 +89,13 @@
               <option value="2">日割り＋翌月分（合計2ヶ月）</option>
             </select>
           </div>
-          <label class="tax-check mini"><input type="checkbox" id="firstRentTax">税込み <span class="tax-live" id="firstRentTaxLive">¥0</span></label>
         </div>
       </div>
 
       <div class="field-block">
-        <label>管理費・共益費<span class="hint">初回請求分（1ヶ月）の固定金額</span></label>
+        <label>管理費・共益費<span class="hint">初回請求分（1ヶ月）の固定金額（非課税）</span></label>
         <div class="input-tax-row">
           <input type="number" id="mgmt" value="5000" min="0" step="500" style="text-align:right;">
-          <label class="tax-check mini"><input type="checkbox" id="mgmtTax">税込み <span class="tax-live" id="mgmtTaxLive">¥5,000</span></label>
         </div>
       </div>
 
@@ -124,14 +122,14 @@
             <input type="number" id="agencyPercent" value="100" min="0" step="5" style="width:70px;text-align:right;">
           </div>
           <div id="agencyAmountWrap" class="sub-input-wrap" style="display:none;align-items:center;">
-            <input type="number" id="agencyAmount" value="0" min="0" step="1000" style="width:140px;text-align:right;">
+            <input type="number" id="agencyAmount" value="0" min="0" step="1000" style="text-align:right;">
           </div>
           <label class="tax-check mini"><input type="checkbox" id="agencyTax">税込み <span class="tax-live" id="agencyTaxLive">¥0</span></label>
         </div>
       </div>
 
       <div class="field-block">
-        <label>初回保証利用料<span class="hint">金額、または家賃＋管理費合計に対する割合で入力</span></label>
+        <label>初回保証利用料<span class="hint">金額、または家賃＋管理費合計に対する割合で入力（非課税）</span></label>
         <div class="mode-toggle" id="guarantorModeToggle">
           <div class="mode-btn" data-mode="percent">%（家賃+管理費基準）</div>
           <div class="mode-btn active" data-mode="amount">金額</div>
@@ -142,17 +140,15 @@
             <input type="number" id="guarantorPercent" value="50" min="0" step="5" style="width:70px;text-align:right;">
           </div>
           <div id="guarantorAmountWrap" class="sub-input-wrap" style="display:flex;align-items:center;">
-            <input type="number" id="guarantorAmount" value="40000" min="0" step="1000" style="width:140px;text-align:right;">
+            <input type="number" id="guarantorAmount" value="40000" min="0" step="1000" style="text-align:right;">
           </div>
-          <label class="tax-check mini"><input type="checkbox" id="guarantorTax">税込み <span class="tax-live" id="guarantorTaxLive">¥0</span></label>
         </div>
       </div>
 
       <div class="field-block">
-        <label>火災保険料<span class="hint">固定金額</span></label>
+        <label>火災保険料<span class="hint">固定金額（非課税）</span></label>
         <div class="input-tax-row">
           <input type="number" id="insurance" value="20000" min="0" step="1000" style="text-align:right;">
-          <label class="tax-check mini"><input type="checkbox" id="insuranceTax">税込み <span class="tax-live" id="insuranceTaxLive">¥20,000</span></label>
         </div>
       </div>
 

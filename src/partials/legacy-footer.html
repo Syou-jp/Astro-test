@@ -242,9 +242,7 @@ function getOtherRows(){
 function compute(){
   const rent = num("rent");
 
-  const mgmtRaw = num("mgmt");
-  const mgmtTax = checked("mgmtTax");
-  const mgmt = applyTax(mgmtRaw, mgmtTax);
+  const mgmt = num("mgmt");
 
   const deposit = rent * num("depositMonths");
   const keymoney = rent * num("keyMoneyMonths");
@@ -254,16 +252,11 @@ function compute(){
   const agency = applyTax(agencyRaw, agencyTax);
 
   const firstRentInfo = computeFirstRent(rent);
-  const firstRentTax = checked("firstRentTax");
-  const firstRent = applyTax(firstRentInfo.amount, firstRentTax);
+  const firstRent = firstRentInfo.amount;
 
-  const guarantorRaw = computeGuarantor(rent, mgmtRaw);
-  const guarantorTax = checked("guarantorTax");
-  const guarantor = applyTax(guarantorRaw, guarantorTax);
+  const guarantor = computeGuarantor(rent, mgmt);
 
-  const insuranceRaw = num("insurance");
-  const insuranceTax = checked("insuranceTax");
-  const insurance = applyTax(insuranceRaw, insuranceTax);
+  const insurance = num("insurance");
 
   const keyexchangeRaw = num("keyExchange");
   const keyexchangeTax = checked("keyExchangeTax");
@@ -280,11 +273,11 @@ function compute(){
   const total = mgmt + deposit + keymoney + agency + firstRent + guarantor + insurance + keyexchange + lifesupport + othersTotal;
 
   return {
-    rent, mgmt, mgmtTax, deposit, keymoney,
+    rent, mgmt, deposit, keymoney,
     agency, agencyTax,
-    firstRent, firstRentInfo, firstRentTax,
-    guarantor, guarantorTax,
-    insurance, insuranceTax,
+    firstRent, firstRentInfo,
+    guarantor,
+    insurance,
     keyexchange, keyexchangeTax,
     lifesupport, lifesupportTax, lifesupportMode,
     others, total
@@ -305,12 +298,10 @@ function buildLineData(vals, t){
   } else if (fr.unit === "months" && fr.n > 0){
     frLabel += ` (${t.monthLabel(fr.n)})`;
   }
-  if (vals.firstRentTax) frLabel += " " + t.taxNote;
   if (vals.firstRent > 0) lines.push({label: frLabel, amount: vals.firstRent});
 
   if (vals.mgmt > 0){
-    let l = t.items.mgmt + (vals.mgmtTax ? " " + t.taxNote : "");
-    lines.push({label: l, amount: vals.mgmt});
+    lines.push({label: t.items.mgmt, amount: vals.mgmt});
   }
   if (vals.deposit > 0) lines.push({label: t.items.deposit, amount: vals.deposit});
   if (vals.keymoney > 0) lines.push({label: t.items.keymoney, amount: vals.keymoney});
@@ -320,12 +311,10 @@ function buildLineData(vals, t){
     lines.push({label: l, amount: vals.agency});
   }
   if (vals.guarantor > 0){
-    let l = t.items.guarantor + (vals.guarantorTax ? " " + t.taxNote : "");
-    lines.push({label: l, amount: vals.guarantor});
+    lines.push({label: t.items.guarantor, amount: vals.guarantor});
   }
   if (vals.insurance > 0){
-    let l = t.items.insurance + (vals.insuranceTax ? " " + t.taxNote : "");
-    lines.push({label: l, amount: vals.insurance});
+    lines.push({label: t.items.insurance, amount: vals.insurance});
   }
   if (vals.keyexchange > 0){
     let l = t.items.keyexchange + (vals.keyexchangeTax ? " " + t.taxNote : "");
@@ -362,9 +351,8 @@ function render(){
   document.getElementById("copyBtn").innerHTML = t.copy;
 
   const taxLiveValues = {
-    firstRentTaxLive: vals.firstRent, mgmtTaxLive: vals.mgmt,
-    agencyTaxLive: vals.agency, guarantorTaxLive: vals.guarantor,
-    insuranceTaxLive: vals.insurance, keyExchangeTaxLive: vals.keyexchange,
+    agencyTaxLive: vals.agency,
+    keyExchangeTaxLive: vals.keyexchange,
     lifesupportTaxLive: vals.lifesupport
   };
   Object.entries(taxLiveValues).forEach(([id,value]) => {

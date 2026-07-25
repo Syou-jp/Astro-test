@@ -19,7 +19,7 @@
         <div class="apply-fields">
           <div class="apply-field"><label>飛行機の到着予定 Flight arrival</label><input type="datetime-local" id="airportArrival"></div>
           <div class="apply-field"><label>入国・荷物の所要時間 Buffer</label><select id="airportArrivalBuffer"><option value="30">国内線：30分</option><option value="60">国際線・身軽：60分</option><option value="90" selected>国際線・標準：90分</option><option value="120">混雑・荷物多め：120分</option></select></div>
-          <div class="apply-field full"><label>空港を出発する予定時刻 Airport departure</label><div style="display:flex;gap:8px;"><input type="datetime-local" id="airportDeparture" style="flex:1;"><button type="button" class="secondary-btn" id="airportSyncDeparture">到着＋手続時間で設定</button></div></div>
+          <div class="apply-field full"><label>空港を出発する予定時刻 Airport departure</label><div style="display:flex;gap:8px;flex-wrap:wrap;"><input type="datetime-local" id="airportDeparture" style="flex:1;min-width:150px;"><button type="button" class="secondary-btn" id="airportSyncDeparture" style="flex:0 0 auto;">到着＋手続時間で設定</button></div></div>
         </div>
         <div class="section-title" style="margin-top:18px;"><span class="idx">04</span>貸切送迎の条件</div>
         <div class="apply-fields">
