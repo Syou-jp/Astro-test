@@ -184,6 +184,13 @@
         "small": "BANK ACCOUNT"
       },
       {
+        "id": "page-zairyu-shikaku",
+        "slug": "zairyu-shikaku",
+        "glyph": "留",
+        "text": "在留資格",
+        "small": "STATUS OF RESIDENCE"
+      },
+      {
         "id": "page-visa",
         "slug": "visa",
         "glyph": "証",

@@ -229,5 +229,11 @@
     "slug": "events",
     "file": "events.html",
     "title": "イベント"
+  },
+  {
+    "id": "page-zairyu-shikaku",
+    "slug": "zairyu-shikaku",
+    "file": "zairyu-shikaku.html",
+    "title": "在留資格ガイド｜種類・一覧・在留期間まとめ"
   }
 ]
