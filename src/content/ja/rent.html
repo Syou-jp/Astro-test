@@ -34,6 +34,11 @@
     #page-rent .compact-pair-item input{width:64px;flex-shrink:0;text-align:right;padding:8px 9px;border:1px solid var(--line);border-radius:0;font-family:"JetBrains Mono",monospace;font-size:14px;background:var(--white);color:var(--ink);}
     #page-rent .compact-pair-item input:focus{outline:2px solid var(--accent-2);outline-offset:1px;}
 
+    #page-rent .fire-key-row{display:flex;gap:16px;padding:7px 0;border-bottom:1px dashed var(--line-soft);}
+    #page-rent .fire-key-row .field-block{flex:1;min-width:0;padding:0;border-bottom:none;}
+    #page-rent .fire-key-row .input-tax-row{flex-wrap:wrap;gap:5px 8px;}
+    #page-rent .fire-key-row .input-tax-row input[type=number]{width:100%;max-width:none;min-width:0;box-sizing:border-box;}
+
     @media(max-width:640px){
       .rent-subinput-label{font-size:12px;}
       .rent-lang-hint{font-size:12px;}
@@ -48,22 +53,19 @@
       #page-rent .tax-check{font-size:12px;}
       #page-rent .compact-pair{flex-direction:column;gap:10px;}
       #page-rent .compact-pair-item .compact-label{font-size:13.5px;}
+      #page-rent .fire-key-row{gap:10px;}
     }
   </style>
   <div class="grid">
     <!-- INPUT PANEL -->
     <div class="card" id="formCard">
-      <div class="section-title"><span class="idx">01</span>物件・お客様情報</div>
-      <div class="name-fields">
-        <input type="text" id="propertyName" placeholder="物件名（任意）">
-        <input type="text" id="clientName" placeholder="お客様名（任意）">
-      </div>
+      <div class="section-title"><span class="idx">01</span>費用項目（¥）</div>
 
-      <div class="section-title"><span class="idx">02</span>費用項目（¥）</div>
-
-      <div class="field-row">
+      <div class="field-block">
         <label>入居日<span class="hint">入居月家賃の日割り計算に使用します</span></label>
-        <input type="date" id="moveInDate">
+        <div class="input-tax-row">
+          <input type="date" id="moveInDate" style="width:100%;max-width:220px;">
+        </div>
       </div>
 
       <div class="field-row" style="border-bottom:none;">
@@ -145,18 +147,20 @@
         </div>
       </div>
 
-      <div class="field-block">
-        <label>火災保険料<span class="hint">固定金額（非課税）</span></label>
-        <div class="input-tax-row">
-          <input type="number" id="insurance" value="20000" min="0" step="1000" style="text-align:right;">
+      <div class="fire-key-row">
+        <div class="field-block">
+          <label>火災保険料<span class="hint">固定金額（非課税）</span></label>
+          <div class="input-tax-row">
+            <input type="number" id="insurance" value="20000" min="0" step="1000" style="text-align:right;">
+          </div>
         </div>
-      </div>
 
-      <div class="field-block">
-        <label>鍵交換費用<span class="hint">固定金額</span></label>
-        <div class="input-tax-row">
-          <input type="number" id="keyExchange" value="20000" min="0" step="1000" style="text-align:right;">
-          <label class="tax-check mini"><input type="checkbox" id="keyExchangeTax">税込み <span class="tax-live" id="keyExchangeTaxLive">¥16,500</span></label>
+        <div class="field-block">
+          <label>鍵交換費用<span class="hint">固定金額</span></label>
+          <div class="input-tax-row">
+            <input type="number" id="keyExchange" value="20000" min="0" step="1000" style="text-align:right;">
+            <label class="tax-check mini"><input type="checkbox" id="keyExchangeTax">税込み <span class="tax-live" id="keyExchangeTaxLive">¥16,500</span></label>
+          </div>
         </div>
       </div>
 
@@ -181,6 +185,14 @@
 
     <!-- OUTPUT PANEL -->
     <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title"><span class="idx">02</span>物件・情報</div>
+        <div class="name-fields" style="margin-bottom:0;">
+          <input type="text" id="propertyName" placeholder="物件名（任意）">
+          <input type="text" id="clientName" placeholder="お名前（任意）">
+        </div>
+      </div>
+
       <div class="card" style="margin-bottom:16px;">
         <div class="section-title"><span class="idx">03</span>出力言語</div>
         <select class="lang-select" id="langPicker" data-no-i18n>
