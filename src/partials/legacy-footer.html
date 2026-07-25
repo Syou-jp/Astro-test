@@ -168,6 +168,7 @@ const T = {
 
 let currentLang = "ja";
 let otherRowCounter = 0;
+let guarantorOtherRowCounter = 0;
 
 function yen(n){
   return "¥" + Math.round(n).toLocaleString("en-US");
@@ -231,11 +232,19 @@ function computeGuarantor(rent, mgmtRaw){
 }
 
 function getOtherRows(){
-  return Array.from(document.querySelectorAll(".other-row")).map(row => {
+  return Array.from(document.querySelectorAll("#otherRows .other-row")).map(row => {
     const label = row.querySelector(".other-label").value.trim();
     const raw = parseFloat(row.querySelector(".other-amount").value) || 0;
     const tax = row.querySelector(".other-tax").checked;
     return {label, raw, tax, amount: applyTax(raw, tax)};
+  });
+}
+
+function getGuarantorOtherRows(){
+  return Array.from(document.querySelectorAll("#guarantorOtherRows .other-row")).map(row => {
+    const label = row.querySelector(".other-label").value.trim();
+    const raw = parseFloat(row.querySelector(".other-amount").value) || 0;
+    return {label, raw, amount: raw};
   });
 }
 
@@ -255,6 +264,8 @@ function compute(){
   const firstRent = firstRentInfo.amount;
 
   const guarantor = computeGuarantor(rent, mgmt);
+  const guarantorOthers = getGuarantorOtherRows();
+  const guarantorOthersTotal = guarantorOthers.reduce((s, o) => s + o.amount, 0);
 
   const insurance = num("insurance");
 
@@ -270,13 +281,13 @@ function compute(){
   const others = getOtherRows();
   const othersTotal = others.reduce((s, o) => s + o.amount, 0);
 
-  const total = mgmt + deposit + keymoney + agency + firstRent + guarantor + insurance + keyexchange + lifesupport + othersTotal;
+  const total = mgmt + deposit + keymoney + agency + firstRent + guarantor + guarantorOthersTotal + insurance + keyexchange + lifesupport + othersTotal;
 
   return {
     rent, mgmt, deposit, keymoney,
     agency, agencyTax,
     firstRent, firstRentInfo,
-    guarantor,
+    guarantor, guarantorOthers,
     insurance,
     keyexchange, keyexchangeTax,
     lifesupport, lifesupportTax, lifesupportMode,
@@ -313,6 +324,11 @@ function buildLineData(vals, t){
   if (vals.guarantor > 0){
     lines.push({label: t.items.guarantor, amount: vals.guarantor});
   }
+  vals.guarantorOthers.forEach(o => {
+    if (o.raw > 0){
+      lines.push({label: o.label || t.items.other, amount: o.amount});
+    }
+  });
   if (vals.insurance > 0){
     lines.push({label: t.items.insurance, amount: vals.insurance});
   }
@@ -454,6 +470,31 @@ document.getElementById("addOtherBtn").addEventListener("click", () => {
 
 createOtherRow("", 0, false);
 
+/* ---------- Guarantor "other" rows (dynamic, non-taxable) ---------- */
+function createGuarantorOtherRow(label, amount){
+  guarantorOtherRowCounter += 1;
+  const row = document.createElement("div");
+  row.className = "other-row";
+  row.dataset.id = guarantorOtherRowCounter;
+  row.innerHTML = `
+    <input type="text" class="other-label" placeholder="項目名（例：駐輪場代）" value="${label || ""}">
+    <input type="number" class="other-amount" value="${amount || 0}" min="0" step="500">
+    <button type="button" class="remove-btn" title="削除">×</button>
+  `;
+  row.querySelector(".other-label").addEventListener("input", render);
+  row.querySelector(".other-amount").addEventListener("input", render);
+  row.querySelector(".remove-btn").addEventListener("click", () => {
+    row.remove();
+    render();
+  });
+  document.getElementById("guarantorOtherRows").appendChild(row);
+}
+
+document.getElementById("addGuarantorOtherBtn").addEventListener("click", () => {
+  createGuarantorOtherRow("", 0);
+  render();
+});
+
 /* ---------- Language picker ---------- */
 document.getElementById("langPicker")?.addEventListener("change", (e) => {
   currentLang = e.target.value;
@@ -467,6 +508,9 @@ formCard.addEventListener("input", (e) => {
   render();
 });
 formCard.addEventListener("change", render);
+
+document.getElementById("propertyName").addEventListener("input", render);
+document.getElementById("clientName").addEventListener("input", render);
 
 /* ---------- Copy to clipboard ---------- */
 document.getElementById("copyBtn").addEventListener("click", () => {
