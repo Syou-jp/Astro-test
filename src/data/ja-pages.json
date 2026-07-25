@@ -241,5 +241,11 @@
     "slug": "pension-insurance",
     "file": "pension-insurance.html",
     "title": "年金・健康保険ガイド｜外国人が知っておくべき制度まとめ"
+  },
+  {
+    "id": "page-tax-guide-foreigners",
+    "slug": "tax-guide-foreigners",
+    "file": "tax-guide-foreigners.html",
+    "title": "税金ガイド｜外国人が知っておくべき所得税・住民税まとめ"
   }
 ]

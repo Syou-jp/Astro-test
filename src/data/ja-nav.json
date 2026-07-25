@@ -294,6 +294,13 @@
     "label": "税金・専門手続",
     "tabs": [
       {
+        "id": "page-tax-guide-foreigners",
+        "slug": "tax-guide-foreigners",
+        "glyph": "税",
+        "text": "税金ガイド",
+        "small": "TAX GUIDE FOR FOREIGNERS"
+      },
+      {
         "id": "page-tax-personal",
         "slug": "tax-personal",
         "glyph": "給",
