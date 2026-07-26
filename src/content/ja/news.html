@@ -46,7 +46,7 @@
     .nw-issue{border:1px solid var(--line);background:#fff;min-width:0;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit}
     .nw-issue:hover .nw-issue-title{color:var(--nw-accent)}
     .nw-issue-cover{position:relative;aspect-ratio:16/8;overflow:hidden;background:var(--nw-sage)}
-    .nw-issue-cover svg{width:100%;height:100%;display:block}
+    .nw-issue-cover svg,.nw-issue-cover img{width:100%;height:100%;display:block;object-fit:cover}
     .nw-issue-tag{position:absolute;top:10px;left:10px;background:var(--nw-dark);color:#fff;font:700 9px "JetBrains Mono",monospace;letter-spacing:.08em;padding:4px 8px}
     .nw-issue-body{padding:16px}
     .nw-issue-date{font:400 9.5px "JetBrains Mono",monospace;color:var(--nw-muted)}
@@ -58,7 +58,7 @@
     .nw-back{border:1px solid var(--line);background:#fff;color:var(--ink-soft);font:600 11px inherit;padding:8px 13px;cursor:pointer;margin-bottom:20px}
     .nw-back:hover{border-color:var(--nw-dark);color:var(--nw-dark)}
     .nw-art-cover{aspect-ratio:16/6;overflow:hidden;background:var(--nw-sage);margin-bottom:20px}
-    .nw-art-cover svg{width:100%;height:100%;display:block}
+    .nw-art-cover svg,.nw-art-cover img{width:100%;height:100%;display:block;object-fit:cover}
     .nw-art-date{font:400 10.5px "JetBrains Mono",monospace;color:var(--nw-muted)}
     .nw-art-title{font-family:"Shippori Mincho",serif;font-size:26px;line-height:1.5;margin:8px 0 22px}
     .nw-art-section{margin-bottom:26px}
@@ -72,7 +72,7 @@
   <script>
     (function () {
       var covers = {
-        checkpoint: '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="nwDusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16213b"/><stop offset="1" stop-color="#2b3f66"/></linearGradient></defs><rect width="400" height="200" fill="url(#nwDusk)"/><rect x="0" y="120" width="70" height="80" fill="#0d1830"/><rect x="330" y="100" width="70" height="100" fill="#0d1830"/><rect x="60" y="90" width="60" height="110" fill="#1b2a4a"/><rect x="280" y="80" width="60" height="120" fill="#1b2a4a"/><g fill="#ffd27a" opacity="0.9"><rect x="66" y="100" width="10" height="12"/><rect x="86" y="100" width="10" height="12"/><rect x="66" y="122" width="10" height="12"/><rect x="286" y="92" width="10" height="12"/><rect x="306" y="92" width="10" height="12"/></g><rect x="150" y="30" width="46" height="70" fill="#0066cc"/><rect x="204" y="30" width="46" height="70" fill="#1a3d5c"/><text x="158" y="55" font-family="JetBrains Mono, monospace" font-size="8" font-weight="700" fill="#fff">外国人住民と</text><text x="158" y="68" font-family="JetBrains Mono, monospace" font-size="8" font-weight="700" fill="#fff">変わりゆく</text><text x="158" y="81" font-family="JetBrains Mono, monospace" font-size="8" font-weight="700" fill="#fff">日本の姿</text><line x1="173" y1="0" x2="173" y2="30" stroke="#8a94a6" stroke-width="3"/><rect x="150" y="164" width="200" height="6" fill="#33415f"/><circle cx="230" cy="150" r="16" fill="#e8c39e"/><rect x="212" y="164" width="36" height="46" rx="8" fill="#1a3d5c"/><circle cx="180" cy="146" r="15" fill="#dba679"/><rect x="163" y="159" width="34" height="50" rx="8" fill="#33415f"/><rect x="182" y="176" width="20" height="14" fill="#f5f5f5"/><text x="20" y="185" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#ffd27a">IMMIGRATION CHECK</text></svg>'
+        checkpoint: '<img src="/news/2026-07-23.jpg" alt="夜の繁華街で入国警備官が外国人住民に声をかけている様子" loading="lazy">'
       };
 
       var digests = [
