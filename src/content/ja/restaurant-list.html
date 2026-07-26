@@ -50,8 +50,10 @@
     .rl-m-links a:hover{border-color:var(--accent,#b23b2e);color:var(--accent,#b23b2e)}
     .rl-m-empty{font-size:11.5px;color:var(--ink-soft,#6b5f56);font-style:italic;margin:0 0 8px}
     .restaurant-card.is-claimed{cursor:pointer}
-    .restaurant-card-thumbs{display:flex;gap:6px;margin:2px 0 12px}
-    .restaurant-card-thumbs img{width:56px;height:56px;object-fit:cover;display:block;border:1px solid var(--line,#e2d9cf)}
+    .restaurant-card-main{display:flex;gap:10px;align-items:flex-start}
+    .restaurant-card-text{flex:1;min-width:0}
+    .restaurant-card-thumbs{display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
+    .restaurant-card-thumbs img{width:48px;height:48px;object-fit:cover;display:block;border:1px solid var(--line,#e2d9cf)}
     @media(max-width:640px){
       .rl-modal-backdrop{padding:6px}
       .rl-modal{max-height:97vh}
@@ -138,9 +140,10 @@
             : "";
           return '<article class="restaurant-card' + (r.claimed ? " is-claimed" : "") + '" data-id="' + escapeHtml(r.id) + '">' +
             '<div class="restaurant-card-top"><span class="restaurant-country">' + escapeHtml(r.country) + '</span><span>' + escapeHtml(r.category) + '</span></div>' +
-            '<h3>' + escapeHtml(r.name) + '</h3>' +
-            '<p>' + escapeHtml(r.description) + '</p>' +
-            thumb +
+            '<div class="restaurant-card-main">' +
+              '<div class="restaurant-card-text"><h3>' + escapeHtml(r.name) + '</h3><p>' + escapeHtml(r.description) + '</p></div>' +
+              thumb +
+            '</div>' +
             '<div class="restaurant-card-bottom"><span>' + escapeHtml(r.area) + '</span><a href="' + mapLinkUrl(r.mapQuery) + '" target="_blank" rel="noopener noreferrer" data-maplink>Google Maps ↗</a></div>' +
             "</article>";
         }).join("");
