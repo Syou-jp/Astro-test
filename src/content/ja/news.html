@@ -76,7 +76,8 @@
         politics: '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="200" fill="#e8f0f7"/><rect x="60" y="120" width="280" height="8" fill="#1a3d5c"/><rect x="80" y="60" width="14" height="60" fill="#1a3d5c"/><rect x="140" y="60" width="14" height="60" fill="#1a3d5c"/><rect x="200" y="60" width="14" height="60" fill="#1a3d5c"/><rect x="260" y="60" width="14" height="60" fill="#1a3d5c"/><rect x="320" y="60" width="14" height="60" fill="#1a3d5c"/><polygon points="60,60 340,60 300,30 100,30" fill="#0066cc"/><text x="20" y="185" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#1a3d5c">DIET SESSION</text></svg>',
         market: '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="200" fill="#eef4ee"/><polyline points="20,150 90,110 150,130 210,80 270,95 340,50 380,60" fill="none" stroke="#2e7d32" stroke-width="4"/><circle cx="380" cy="60" r="5" fill="#2e7d32"/><text x="20" y="185" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#2e7d32">MARKET WATCH</text></svg>',
         society: '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="200" fill="#f0f4f8"/><circle cx="120" cy="90" r="30" fill="#90a4ae"/><rect x="70" y="120" width="100" height="60" rx="10" fill="#90a4ae"/><circle cx="260" cy="100" r="24" fill="#78909c"/><rect x="220" y="124" width="80" height="56" rx="10" fill="#78909c"/><text x="20" y="185" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#455a64">SOCIETY</text></svg>',
-        world: '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="200" fill="#e3eaf3"/><circle cx="200" cy="100" r="70" fill="none" stroke="#1a3d5c" stroke-width="2"/><ellipse cx="200" cy="100" rx="70" ry="26" fill="none" stroke="#1a3d5c" stroke-width="1.4"/><ellipse cx="200" cy="100" rx="26" ry="70" fill="none" stroke="#1a3d5c" stroke-width="1.4"/><line x1="130" y1="100" x2="270" y2="100" stroke="#1a3d5c" stroke-width="1.4"/><text x="20" y="185" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#1a3d5c">WORLD DESK</text></svg>'
+        world: '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="200" fill="#e3eaf3"/><circle cx="200" cy="100" r="70" fill="none" stroke="#1a3d5c" stroke-width="2"/><ellipse cx="200" cy="100" rx="70" ry="26" fill="none" stroke="#1a3d5c" stroke-width="1.4"/><ellipse cx="200" cy="100" rx="26" ry="70" fill="none" stroke="#1a3d5c" stroke-width="1.4"/><line x1="130" y1="100" x2="270" y2="100" stroke="#1a3d5c" stroke-width="1.4"/><text x="20" y="185" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#1a3d5c">WORLD DESK</text></svg>',
+        resident: '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="200" fill="#eef4ee"/><circle cx="330" cy="50" r="34" fill="#fff" stroke="#2e7d32" stroke-width="3"/><text x="330" y="60" font-family="Shippori Mincho, serif" font-size="28" font-weight="700" fill="#2e7d32" text-anchor="middle">¥</text><path d="M40 70h150a10 10 0 0 1 10 10v34a10 10 0 0 1-10 10H90l-16 16v-16H40a10 10 0 0 1-10-10V80a10 10 0 0 1 10-10z" fill="#1a3d5c"/><g fill="#fff"><circle cx="70" cy="104" r="5"/><circle cx="100" cy="104" r="5"/><circle cx="130" cy="104" r="5"/></g><path d="M150 100h150a10 10 0 0 1 10 10v30a10 10 0 0 1-10 10h-110l-16 16v-16h-24a10 10 0 0 1-10-10v-30a10 10 0 0 1 10-10z" fill="#0066cc"/><text x="163" y="122" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700" fill="#fff">A / あ / 文</text><text x="20" y="185" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#2e7d32">RESIDENT DESK</text></svg>'
       };
 
       var digests = [
@@ -112,15 +113,21 @@
         {
           id: "2026-07-23",
           date: "2026年7月23日（木）",
-          tag: "経済",
-          cover: "market",
-          title: "円相場が日銀の政策見通しで変動、自治体は多言語対応を拡充",
-          teaser: "日銀の金融政策運営に関する見通しを受けて円相場が変動。家計の輸入品価格や海外送金にも影響が及ぶ可能性がある一方、自治体窓口では多言語対応の拡充が進んでいます。",
+          tag: "生活",
+          cover: "resident",
+          title: "円相場が日銀観測で振れる、自治体窓口の多言語対応は拡大続く",
+          teaser: "日銀の利上げペースをめぐる報道でドル円相場が一時円高に振れたものの、大きな変動はなく取引を終了。片山財務相は為替について「必要な対応を行う」と発言しました。一方、全国の自治体窓口では、外国人住民向けの多言語通訳サービス導入が着実に広がっています。",
           sections: [
-            { h: "経済・市場", p: ["日銀の金融政策運営に関する見通しを受け、外国為替市場で円相場が変動しました。輸入品の価格や海外送金コストへの影響が懸念されており、今後の動向が注目されます。"] },
-            { h: "社会", p: ["複数の自治体で、区役所・市役所窓口における多言語通訳サービスや翻訳アプリの導入が進んでいます。外国人住民が生活相談を行う際のハードルが下がることが期待されます。"] }
+            { h: "為替・家計", p: [
+              "外国為替市場では、日銀が利上げペースについて柔軟な姿勢を取るとの報道を受けて円が一時買われる場面がありましたが、その後は反落し、ドル円は163円台前半、ユーロ円は186円台前半とほぼ前日と同水準で1日の取引を終えました。",
+              "片山財務相は為替の動向について、行き過ぎた変動には必要に応じて対応する考えを示しています。円安基調が続けば、輸入食品や日用品の価格、海外への送金コストに影響が及ぶため、日本で暮らし家族へ仕送りを行う外国人住民にとっても関心の高いテーマです。"
+            ] },
+            { h: "暮らし・行政サービス", p: [
+              "2024年4月の改正障害者差別解消法の施行以降、行政窓口には「誰一人取り残さない」対応が求められており、これを背景に各地の区役所・市役所では音声翻訳アプリやタブレット端末を使った多言語通訳サービスの導入が進んでいます。",
+              "住民票や在留手続き、子どもの就学、生活相談など、日本語に不安がある住民が窓口を訪れた際に、その場で母語に近い言語でやり取りできる環境が少しずつ広がっている点は、生活面での安心材料といえます。"
+            ] }
           ],
-          sources: "金融市場関連報道、自治体発表資料などをもとに編集部が要約"
+          sources: "OANDA Japan「ドル/円見通し」「ユーロ/円見通し」（2026年7月23日号）、総務省「地方公共団体における多言語音声翻訳サービスの導入ガイド」などの公開情報をもとに編集部が要約"
         }
       ];
 
