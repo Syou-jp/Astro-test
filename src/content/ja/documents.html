@@ -729,6 +729,20 @@ document.querySelectorAll(".export-actions").forEach(group=>{
   });
 });
 
+function setBuyDefaultDates(){
+  const today = new Date();
+  const iso = date => date.toISOString().slice(0,10);
+  const valid = new Date(today); valid.setDate(valid.getDate() + 7);
+  const contract = new Date(today); contract.setDate(contract.getDate() + 7);
+  const closing = new Date(today); closing.setDate(closing.getDate() + 30);
+  document.getElementById("buyOfferDate").value = iso(today);
+  document.getElementById("buyValidUntil").value = iso(valid);
+  document.getElementById("buyContractDate").value = iso(contract);
+  document.getElementById("buyClosingDate").value = iso(closing);
+}
+setBuyDefaultDates();
+buyRender();
+
 document.getElementById("buyClearBtn").addEventListener("click", () => {
   if (!confirm("買付証明書の入力内容をすべて消去しますか？")) return;
   document.querySelectorAll("#buyFormCard input").forEach(el => {
