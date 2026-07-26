@@ -83,7 +83,6 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
               aria-controls={`navcat-${i}-panel`}
             >
               {group.label}
-              <span class="tab-group-caret" aria-hidden="true">▾</span>
             </button>
             <div class="tab-group-tabs" id={`navcat-${i}-panel`} role="menu" aria-labelledby={`navcat-${i}-btn`}>
               {group.tabs.map((tab) => (
