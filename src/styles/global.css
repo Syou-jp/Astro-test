@@ -1550,7 +1550,9 @@
 .home-featured-thumb{position:relative;aspect-ratio:16/7;background:var(--paper-2);overflow:hidden;}
 .home-featured-thumb--market{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
 .home-featured-thumb--market img{width:100%;height:100%;object-fit:cover;display:block;}
-.home-featured-thumb--listings{padding:10px;display:flex;flex-direction:column;gap:8px;justify-content:center;}
+.home-featured-thumb--listings{display:block;}
+.home-featured-thumb--listings img{width:100%;height:100%;object-fit:cover;display:block;}
+.hfl-overlay{position:absolute;inset:0;padding:10px;display:flex;flex-direction:column;gap:8px;justify-content:center;}
 .hfl-card{border:1px solid var(--line);background:var(--white);padding:8px 10px;display:flex;align-items:center;gap:10px;}
 .hfl-card b{flex:1;font-size:11.5px;color:var(--ink);font-weight:700;}
 .hfl-card>span:last-child{font-size:11px;color:var(--accent);font-family:"JetBrains Mono",monospace;font-weight:700;white-space:nowrap;}
