@@ -26,27 +26,27 @@
   <style>
     .rl-modal-backdrop{position:fixed;inset:0;background:rgba(26,20,16,.55);display:flex;align-items:center;justify-content:center;padding:24px;z-index:200}
     .rl-modal-backdrop[hidden]{display:none}
-    .rl-modal{position:relative;background:var(--white,#fff);max-width:640px;width:100%;max-height:88vh;overflow-y:auto;border:1px solid var(--line,#e2d9cf);box-shadow:0 18px 48px rgba(30,22,16,.25)}
-    .rl-modal-close{position:sticky;top:10px;float:right;margin:10px 10px 0 0;width:32px;height:32px;border:1px solid var(--line,#e2d9cf);background:var(--white,#fff);font-size:18px;line-height:1;cursor:pointer;color:var(--ink-soft,#6b5f56);z-index:1}
+    .rl-modal{position:relative;background:var(--white,#fff);max-width:480px;width:100%;max-height:82vh;overflow-y:auto;border:1px solid var(--line,#e2d9cf);box-shadow:0 18px 48px rgba(30,22,16,.25)}
+    .rl-modal-close{position:sticky;top:8px;float:right;margin:8px 8px 0 0;width:28px;height:28px;border:1px solid var(--line,#e2d9cf);background:var(--white,#fff);font-size:16px;line-height:1;cursor:pointer;color:var(--ink-soft,#6b5f56);z-index:1}
     .rl-modal-close:hover{border-color:var(--accent,#b23b2e);color:var(--accent,#b23b2e)}
-    .rl-modal-body{padding:8px 26px 26px}
-    .rl-m-tags{display:flex;gap:8px;align-items:center;font:700 10.5px "JetBrains Mono",monospace;letter-spacing:.04em;color:var(--accent,#b23b2e);margin-bottom:8px}
+    .rl-modal-body{padding:6px 20px 20px}
+    .rl-m-tags{display:flex;gap:8px;align-items:center;font:700 9.5px "JetBrains Mono",monospace;letter-spacing:.04em;color:var(--accent,#b23b2e);margin-bottom:6px}
     .rl-m-tags span:last-child{color:var(--ink-soft,#6b5f56);font-weight:600}
-    .rl-modal-body h3{font-family:"Shippori Mincho",serif;font-size:23px;line-height:1.4;margin:0 0 4px}
-    .rl-m-area{font-size:12px;color:var(--ink-soft,#6b5f56);margin:0 0 16px}
-    .rl-m-section{margin:0 0 20px}
-    .rl-m-section h4{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--accent,#b23b2e);margin:0 0 8px;text-transform:uppercase}
-    .rl-m-section p{font-size:13px;line-height:1.85;color:var(--ink,#2b241f);margin:0}
-    .rl-m-info{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 12px;margin:0}
-    .rl-m-info dt{font-size:11px;font-weight:700;color:var(--ink-soft,#6b5f56)}
-    .rl-m-info dd{font-size:12.5px;color:var(--ink,#2b241f);margin:0}
-    .rl-m-dish-list{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
-    .rl-m-dish-list li{border:1px solid var(--line,#e2d9cf);background:var(--paper-2,#f7f1e8);padding:6px 11px;font-size:12px;color:var(--ink,#2b241f)}
-    .rl-m-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+    .rl-modal-body h3{font-family:"Shippori Mincho",serif;font-size:19px;line-height:1.35;margin:0 0 3px}
+    .rl-m-area{font-size:11px;color:var(--ink-soft,#6b5f56);margin:0 0 12px}
+    .rl-m-section{margin:0 0 14px}
+    .rl-m-section h4{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--accent,#b23b2e);margin:0 0 6px;text-transform:uppercase}
+    .rl-m-section p{font-size:12px;line-height:1.7;color:var(--ink,#2b241f);margin:0}
+    .rl-m-info{display:grid;grid-template-columns:84px minmax(0,1fr);gap:5px 10px;margin:0}
+    .rl-m-info dt{font-size:10px;font-weight:700;color:var(--ink-soft,#6b5f56)}
+    .rl-m-info dd{font-size:11.5px;color:var(--ink,#2b241f);margin:0}
+    .rl-m-dish-list{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+    .rl-m-dish-list li{border:1px solid var(--line,#e2d9cf);background:var(--paper-2,#f7f1e8);padding:5px 9px;font-size:11px;color:var(--ink,#2b241f)}
+    .rl-m-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
     .rl-m-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border:1px solid var(--line,#e2d9cf)}
-    .rl-m-map iframe{width:100%;height:220px;border:1px solid var(--line,#e2d9cf);display:block}
-    .rl-m-links{display:flex;flex-wrap:wrap;gap:8px}
-    .rl-m-links a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line,#e2d9cf);padding:8px 13px;font-size:12px;font-weight:600;color:var(--ink,#2b241f);text-decoration:none}
+    .rl-m-map iframe{width:100%;height:170px;border:1px solid var(--line,#e2d9cf);display:block}
+    .rl-m-links{display:flex;flex-wrap:wrap;gap:6px}
+    .rl-m-links a{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line,#e2d9cf);padding:6px 11px;font-size:11px;font-weight:600;color:var(--ink,#2b241f);text-decoration:none}
     .rl-m-links a:hover{border-color:var(--accent,#b23b2e);color:var(--accent,#b23b2e)}
     .rl-m-empty{font-size:11.5px;color:var(--ink-soft,#6b5f56);font-style:italic;margin:0 0 8px}
     .restaurant-card{cursor:pointer}
@@ -134,7 +134,6 @@
           r.hours ? ["営業時間", r.hours] : null,
           r.closedDays ? ["定休日", r.closedDays] : null,
           r.phone ? ["電話番号", r.phone] : null,
-          r.reservation ? ["予約", r.reservation] : null,
           r.priceRange ? ["価格帯", r.priceRange] : null,
           r.dietary ? ["食事制限への対応", r.dietary] : null,
           r.payment && r.payment.length ? ["支払い方法", r.payment.join("、")] : null
@@ -176,9 +175,8 @@
           "<h3 id=\"rlModalTitle\">" + escapeHtml(r.name) + "</h3>" +
           '<p class="rl-m-area">' + escapeHtml(r.area) + " · " + escapeHtml(r.region) + "</p>" +
           '<div class="rl-m-section"><h4>お店紹介</h4><p>' + escapeHtml(r.intro || r.description) + "</p></div>" +
-          infoSection + tablesSection + dishesSection + photosSection +
-          '<div class="rl-m-section rl-m-map"><h4>地図</h4><iframe src="' + mapEmbedUrl(r.mapQuery) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>' +
-          linksSection;
+          infoSection + tablesSection + dishesSection + linksSection + photosSection +
+          '<div class="rl-m-section rl-m-map"><h4>地図</h4><iframe src="' + mapEmbedUrl(r.mapQuery) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>';
 
         backdrop.hidden = false;
         document.body.style.overflow = "hidden";
