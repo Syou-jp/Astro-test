@@ -190,3 +190,274 @@
     </div>
   </section><!-- /util-tax-hold -->
   </div><!-- /page-tax-realestate -->
+<script>
+/* ================= Purchase Tax Calculator ================= */
+const eraTable = [
+  {deduction: 12000000, seismicRequired: false},
+  {deduction: 10000000, seismicRequired: false},
+  {deduction: 4500000,  seismicRequired: false},
+  {deduction: 4200000,  seismicRequired: false},
+  {deduction: 3500000,  seismicRequired: true},
+  {deduction: 1500000,  seismicRequired: true}
+];
+
+function txNum(id){
+  const el = document.getElementById(id);
+  if (!el) return 0;
+  const v = parseFloat(el.value);
+  return isNaN(v) ? 0 : v;
+}
+function txYen(n){
+  return "¥" + Math.round(n).toLocaleString("en-US");
+}
+
+if (document.querySelector("#taxFormCard")){
+  document.getElementById("txEra").addEventListener("change", () => {
+    const opt = document.getElementById("txEra").selectedOptions[0];
+    const needsSeismic = opt.dataset.seismic === "1";
+    document.getElementById("txSeismicRow").style.display = needsSeismic ? "grid" : "none";
+    txRender();
+  });
+
+  document.getElementById("txHasLoan").addEventListener("change", () => {
+    document.getElementById("txLoanRow").style.display = document.getElementById("txHasLoan").value === "1" ? "grid" : "none";
+    txRender();
+  });
+
+  document.getElementById("txEstimateBtn").addEventListener("click", () => {
+    const price = txNum("txPrice");
+    const ratio = txNum("txLandRatio") / 100;
+    const structure = document.getElementById("txStructure").value;
+    const age = txNum("txAge");
+    const usefulLife = structure === "rc" ? 47 : structure === "steel" ? 34 : 22;
+    const depreciation = Math.max(0.1, 1 - age / usefulLife);
+    const landValue = Math.round(price * ratio * 0.7);
+    const buildingValue = Math.round(price * (1 - ratio) * 0.6 * depreciation);
+    document.getElementById("txLandValue").value = landValue;
+    document.getElementById("txBuildingValue").value = buildingValue;
+    txRender();
+  });
+}
+
+function txCompute(){
+  const propertyType = document.getElementById("txPropertyType").value;
+  const usage = document.getElementById("txUsage").value;
+  const floorArea = txNum("txFloorArea");
+  const landValue = txNum("txLandValue");
+  const buildingValue = propertyType === "land" ? 0 : txNum("txBuildingValue");
+  const eraIdx = parseInt(document.getElementById("txEra").value, 10);
+  const era = eraTable[eraIdx];
+  const seismicOk = document.getElementById("txSeismic") ? document.getElementById("txSeismic").value === "1" : true;
+  const eraQualifies = !era.seismicRequired || seismicOk;
+  const hasLoan = document.getElementById("txHasLoan").value === "1";
+  const loanAmount = hasLoan ? txNum("txLoanAmount") : 0;
+  const cityPlanRate = txNum("txCityPlanRate") / 100;
+  const floorOk = floorArea >= 50 && floorArea <= 240;
+
+  /* ---- 不動産取得税 ---- */
+  const landAcqBeforeDeduction = landValue * 0.5 * 0.03;
+  const landAcqTax = Math.max(0, landAcqBeforeDeduction - 45000);
+
+  let buildingDeduction = 0;
+  if (propertyType === "new" && floorOk) buildingDeduction = 12000000;
+  if (propertyType === "used" && floorOk && eraQualifies) buildingDeduction = era.deduction;
+  const buildingAcqBeforeDeduction = propertyType === "land" ? 0 : buildingValue * 0.03;
+  const buildingAcqTax = Math.max(0, buildingAcqBeforeDeduction - buildingDeduction);
+
+  /* ---- 登録免許税 ---- */
+  const landRegTax = landValue * 0.015;
+
+  let buildingRegTax = 0;
+  let buildingRegNote = "";
+  if (propertyType !== "land"){
+    if (usage === "rental"){
+      buildingRegTax = buildingValue * 0.02;
+      buildingRegNote = "一般稅率（投資出租不適用自用減稅）";
+    } else if (propertyType === "new"){
+      if (floorArea >= 50){
+        buildingRegTax = buildingValue * 0.0015;
+        buildingRegNote = "保存登記 0.15%（自用新築）";
+      } else {
+        buildingRegTax = buildingValue * 0.004;
+        buildingRegNote = "未滿50㎡，適用一般稅率0.4%";
+      }
+    } else { // used, self
+      if (floorArea >= 50 && eraQualifies){
+        buildingRegTax = buildingValue * 0.003;
+        buildingRegNote = "移轉登記 0.3%（自用中古）";
+      } else {
+        buildingRegTax = buildingValue * 0.02;
+        buildingRegNote = "未符合面積或耐震要件，適用一般稅率2%";
+      }
+    }
+  }
+
+  let mortgageRegTax = 0;
+  if (hasLoan){
+    const qualifiesForLoanReduction = usage === "self" && propertyType !== "land" && floorArea >= 50 && (propertyType === "new" || eraQualifies);
+    mortgageRegTax = qualifiesForLoanReduction ? loanAmount * 0.001 : loanAmount * 0.004;
+  }
+
+  const oneTimeTotal = landAcqTax + buildingAcqTax + landRegTax + buildingRegTax + mortgageRegTax;
+
+  /* ---- 固定資産税・都市計画税（全年） ---- */
+  const landFixed = landValue * (1/6) * 0.014;
+  const landCityPlan = landValue * (1/3) * cityPlanRate;
+
+  const buildingFixedFull = buildingValue * 0.014;
+  let buildingFixed = buildingFixedFull;
+  if (propertyType === "new" && floorArea > 0){
+    const reducedRatio = Math.min(floorArea, 120) / floorArea;
+    buildingFixed = buildingFixedFull - (buildingFixedFull * reducedRatio * 0.5);
+  }
+  const buildingCityPlan = buildingValue * cityPlanRate;
+
+  const annualFull = landFixed + landCityPlan + buildingFixed + buildingCityPlan;
+
+  /* ---- proration ---- */
+  const dateStr = document.getElementById("txPurchaseDate").value;
+  let prorated = 0, daysRemaining = 0, daysInPeriod = 365;
+  if (dateStr){
+    const base = document.getElementById("txProrationBase").value;
+    const d = new Date(dateStr + "T00:00:00");
+    let periodStart, periodEnd;
+    if (base === "jan1"){
+      periodStart = new Date(d.getFullYear(), 0, 1);
+      periodEnd = new Date(d.getFullYear(), 11, 31);
+    } else {
+      if (d.getMonth() >= 3){
+        periodStart = new Date(d.getFullYear(), 3, 1);
+        periodEnd = new Date(d.getFullYear() + 1, 2, 31);
+      } else {
+        periodStart = new Date(d.getFullYear() - 1, 3, 1);
+        periodEnd = new Date(d.getFullYear(), 2, 31);
+      }
+    }
+    daysInPeriod = Math.round((periodEnd - periodStart) / 86400000) + 1;
+    daysRemaining = Math.max(0, Math.round((periodEnd - d) / 86400000) + 1);
+    prorated = annualFull * (daysRemaining / daysInPeriod);
+  }
+
+  return {
+    landValue, buildingValue,
+    landAcqTax, buildingAcqTax, buildingDeduction,
+    landRegTax, buildingRegTax, buildingRegNote, mortgageRegTax, hasLoan,
+    oneTimeTotal,
+    landFixed, landCityPlan, buildingFixed, buildingCityPlan, annualFull,
+    prorated, daysRemaining, daysInPeriod
+  };
+}
+
+function txBuildLines(v){
+  const oneTime = [];
+  oneTime.push({label: "不動產取得稅・土地", amount: v.landAcqTax});
+  if (v.buildingValue > 0) oneTime.push({label: "不動產取得稅・建物", amount: v.buildingAcqTax});
+  oneTime.push({label: "登錄免許稅・土地移轉（1.5%）", amount: v.landRegTax});
+  if (v.buildingValue > 0) oneTime.push({label: `登錄免許稅・建物（${v.buildingRegNote}）`, amount: v.buildingRegTax});
+  if (v.hasLoan) oneTime.push({label: "登錄免許稅・抵押權設定", amount: v.mortgageRegTax});
+
+  const annual = [];
+  annual.push({label: "固定資產稅・土地（小規模住宅用地1/6）", amount: v.landFixed});
+  annual.push({label: "都市計畫稅・土地（1/3）", amount: v.landCityPlan});
+  if (v.buildingValue > 0){
+    annual.push({label: "固定資產稅・建物", amount: v.buildingFixed});
+    annual.push({label: "都市計畫稅・建物", amount: v.buildingCityPlan});
+  }
+
+  return {oneTime, annual};
+}
+
+function txRender(){
+  if (!document.querySelector("#taxFormCard")) return;
+  const v = txCompute();
+  const lines = txBuildLines(v);
+
+  document.getElementById("txReceiptDate").textContent = new Date().toISOString().slice(0,10);
+  document.getElementById("txLandValueOut").textContent = txYen(v.landValue);
+  document.getElementById("txBuildingValueOut").textContent = txYen(v.buildingValue);
+
+  document.getElementById("txOneTimeLines").innerHTML = lines.oneTime.map(l =>
+    `<div class="receipt-line"><span>${l.label}</span><span class="amt">${txYen(l.amount)}</span></div>`
+  ).join("");
+  document.getElementById("txOneTimeTotal").textContent = txYen(v.oneTimeTotal);
+
+  document.getElementById("txAnnualLines").innerHTML = lines.annual.map(l =>
+    `<div class="receipt-line"><span>${l.label}</span><span class="amt">${txYen(l.amount)}</span></div>`
+  ).join("") + `<div class="receipt-line" style="font-weight:700;"><span>全年持有稅金參考（未日割）</span><span class="amt">${txYen(v.annualFull)}</span></div>`;
+
+  const proratedLine = document.getElementById("txProratedAmount");
+  if (v.daysRemaining > 0){
+    proratedLine.textContent = `${txYen(v.prorated)}（${v.daysRemaining}／${v.daysInPeriod}天）`;
+  } else {
+    proratedLine.textContent = "請選擇購入日期";
+  }
+
+  document.getElementById("txGrandTotal").textContent = txYen(v.oneTimeTotal + v.prorated);
+}
+
+function txBuildCopyText(){
+  const v = txCompute();
+  const lines = txBuildLines(v);
+  let out = [];
+  out.push("日本不動產購屋稅金試算");
+  out.push(`評價額：土地 ${txYen(v.landValue)}／建物 ${txYen(v.buildingValue)}`);
+  out.push("------------------------------");
+  out.push("① 購入時一次性稅費");
+  lines.oneTime.forEach(l => out.push(`${l.label}：${txYen(l.amount)}`));
+  out.push(`一次性稅費合計：${txYen(v.oneTimeTotal)}`);
+  out.push("------------------------------");
+  out.push("② 固定資產稅・都市計畫稅");
+  lines.annual.forEach(l => out.push(`${l.label}：${txYen(l.amount)}`));
+  out.push(`全年持有稅金參考：${txYen(v.annualFull)}`);
+  if (v.daysRemaining > 0){
+    out.push(`當年度日割分攤（${v.daysRemaining}／${v.daysInPeriod}天）：${txYen(v.prorated)}`);
+  }
+  out.push("------------------------------");
+  out.push(`購入時稅費＋當年日割合計：${txYen(v.oneTimeTotal + v.prorated)}`);
+  out.push("");
+  out.push("本試算僅供概算參考，實際稅額以稅務機關核定為準。");
+  return out.join("\n");
+}
+
+if (document.querySelector("#taxFormCard")){
+  document.getElementById("txCopyBtn").addEventListener("click", () => {
+    const text = txBuildCopyText();
+    const btn = document.getElementById("txCopyBtn");
+    function flash(){
+      const original = btn.innerHTML;
+      btn.textContent = "已複製 ✓";
+      setTimeout(() => { btn.innerHTML = original; }, 1600);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(flash).catch(() => fallbackCopy(text, flash));
+    } else {
+      fallbackCopy(text, flash);
+    }
+  });
+
+  document.getElementById("taxFormCard").addEventListener("input", txRender);
+  document.getElementById("taxFormCard").addEventListener("change", txRender);
+
+  (function setTxDefaultDate(){
+    const el = document.getElementById("txPurchaseDate");
+    if (el && !el.value) el.value = new Date().toISOString().slice(0,10);
+  })();
+
+  (function populateTxAge(){
+    const el = document.getElementById("txAge");
+    if (!el) return;
+    const thisYear = new Date().getFullYear();
+    const defaultAge = 10;
+    for (let age = 0; age <= 60; age++){
+      const opt = document.createElement("option");
+      opt.value = age;
+      opt.textContent = (thisYear - age) + "年築／" + age + "年";
+      if (age === defaultAge) opt.selected = true;
+      el.appendChild(opt);
+    }
+  })();
+
+  txRender();
+}
+
+</script>
