@@ -3,7 +3,7 @@ import "../styles/global.css";
 import navGroups from "../data/ja-nav.json";
 import { DEFAULT_LOCALE, ENABLED_LOCALES, LOCALES, getLocale, localePath } from "../data/locales";
 
-const { title = "外's Net", activeId = "", locale = DEFAULT_LOCALE, slug = "rent" } = Astro.props;
+const { title = "Sotocom", activeId = "", locale = DEFAULT_LOCALE, slug = "rent" } = Astro.props;
 const currentLocale = getLocale(locale);
 const canonicalUrl = new URL(localePath(currentLocale.code, slug), Astro.site ?? Astro.url.origin);
 const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
@@ -40,7 +40,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
   <body>
     <div class="wrap">
       <div class="masthead">
-        <h1><a href={localePath(currentLocale.code)} class="site-title-link">外's Net</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">日本で暮らす外国人をつなぐ</span></h1>
+        <h1><a href={localePath(currentLocale.code)} class="site-title-link">Sotocom</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">日本で暮らす外国人をつなぐ</span></h1>
         <div class="masthead-right">
           <a class:list={["about-nav-btn", activeId === "page-about" && "active"]} id="aboutNavBtn" href={localePath(currentLocale.code, "about")} data-no-i18n><span id="aboutNavLabel">サイトについて</span></a>
           <div class="site-theme-control">
@@ -296,7 +296,7 @@ const SITE_LANGS = {ja:"ja", "zh-TW":"zh-Hant", "zh-CN":"zh-Hans", en:"en", ko:"
 const SITE_TEXT = new Map();
 function siteAdd(source,ja,en,ko,vi){ SITE_TEXT.set(source,{ja,en,ko,vi}); }
 [
-  ["外's Net","外's Net","外's Net","外's Net","外's Net"],
+  ["Sotocom","Sotocom","Sotocom","Sotocom","Sotocom"],
   ["ETC料金概算 ETC Toll Calculator","ETC料金概算 ETC Toll Calculator","ETC Toll Calculator","ETC 요금 계산","Tính phí ETC"],
   ["ETC概算料金 Estimated toll","ETC概算料金 Estimated toll","Estimated toll","ETC 예상 요금","Phí ETC ước tính"],
   ["通常料金（概算）","通常料金（概算）","Standard fare (estimate)","일반 요금(개산)","Phí thông thường (ước tính)"],
@@ -628,7 +628,7 @@ const SITE_EN_LABELS = {
 
 const SITE_NODE_SOURCE = new WeakMap(), SITE_ATTR_SOURCE = new WeakMap();
 const SITE_ZH_TW_EXACT = {
-  "外's Net":"外's Net",
+  "Sotocom":"Sotocom",
   "通常料金（概算）":"一般費率（概算）", "適用した割引額":"套用的折扣金額", "割引後の概算料金":"折扣後的概算費用",
   "言語":"語言", "初期費用計算機":"初期費用計算器", "内見申込書":"看房申請書",
   "入居申込書":"入住申請書", "買付証明書":"購買意向證明書", "仲介用書類":"仲介用文件", "物件・お客様情報":"物件・客戶資料",
@@ -738,42 +738,42 @@ const ABOUT_PAGE_COPY={
  ja:{
   aboutEyebrow:"About サイトについて",
   aboutSiteTitle:"サイトについて",
-  aboutSiteIntro:"「外's Net」は、日本で暮らす外国人の生活をもっと便利にするための情報・計算ツールサイトです。賃貸の初期費用計算、税金試算、各種手続きの解説など、日本での生活・不動産に関わる実用的な情報をひとつにまとめました。言語の壁や複雑な制度に悩まず、必要な情報にすぐアクセスできることを目指しています。",
+  aboutSiteIntro:"「Sotocom」は、日本で暮らす外国人の生活をもっと便利にするための情報・計算ツールサイトです。賃貸の初期費用計算、税金試算、各種手続きの解説など、日本での生活・不動産に関わる実用的な情報をひとつにまとめました。言語の壁や複雑な制度に悩まず、必要な情報にすぐアクセスできることを目指しています。",
   aboutAuthorTitle:"作者について",
   aboutAuthorBio:"（ここに作者の簡単な自己紹介を入力してください。例：経歴、日本在住年数、サイト運営のきっかけなど）"
  },
  "zh-TW":{
   aboutEyebrow:"About 關於本站",
   aboutSiteTitle:"網站介紹",
-  aboutSiteIntro:"「外's Net」是為了讓在日本生活的外國人更方便，所打造的資訊與計算工具網站。從租屋初期費用試算、稅金試算，到各種手續說明，我們把在日本生活與不動產相關的實用資訊整合在同一個地方，希望大家不必再被語言隔閡或複雜制度困擾，就能快速找到需要的資訊。",
+  aboutSiteIntro:"「Sotocom」是為了讓在日本生活的外國人更方便，所打造的資訊與計算工具網站。從租屋初期費用試算、稅金試算，到各種手續說明，我們把在日本生活與不動產相關的實用資訊整合在同一個地方，希望大家不必再被語言隔閡或複雜制度困擾，就能快速找到需要的資訊。",
   aboutAuthorTitle:"作者介紹",
   aboutAuthorBio:"（請在此處填寫作者的簡短自我介紹，例如經歷、在日年數、經營本站的契機等）"
  },
  "zh-CN":{
   aboutEyebrow:"About 关于本站",
   aboutSiteTitle:"网站介绍",
-  aboutSiteIntro:"「外's Net」是为了让在日本生活的外国人更方便，所打造的信息与计算工具网站。从租房初期费用试算、税金试算，到各种手续说明，我们把在日本生活与不动产相关的实用信息整合在同一个地方，希望大家不必再被语言隔阂或复杂制度困扰，就能快速找到需要的信息。",
+  aboutSiteIntro:"「Sotocom」是为了让在日本生活的外国人更方便，所打造的信息与计算工具网站。从租房初期费用试算、税金试算，到各种手续说明，我们把在日本生活与不动产相关的实用信息整合在同一个地方，希望大家不必再被语言隔阂或复杂制度困扰，就能快速找到需要的信息。",
   aboutAuthorTitle:"作者介绍",
   aboutAuthorBio:"（请在此处填写作者的简短自我介绍，例如经历、在日年数、创办本站的契机等）"
  },
  en:{
   aboutEyebrow:"About",
   aboutSiteTitle:"About This Site",
-  aboutSiteIntro:"\u201c外's Net\u201d is an information and calculator hub built to make life in Japan easier for foreign residents. From move-in cost calculators and tax estimates to step-by-step guides for everyday procedures, we've gathered practical resources about living and real estate in Japan in one place \u2014 so you can find what you need without getting lost in language barriers or complex systems.",
+  aboutSiteIntro:"\u201cSotocom\u201d is an information and calculator hub built to make life in Japan easier for foreign residents. From move-in cost calculators and tax estimates to step-by-step guides for everyday procedures, we've gathered practical resources about living and real estate in Japan in one place \u2014 so you can find what you need without getting lost in language barriers or complex systems.",
   aboutAuthorTitle:"About the Author",
   aboutAuthorBio:"(Add a short author bio here \u2014 e.g. background, years in Japan, why this site was created.)"
  },
  ko:{
   aboutEyebrow:"About 소개",
   aboutSiteTitle:"사이트 소개",
-  aboutSiteIntro:"「外's Net」는 일본에서 생활하는 외국인의 삶을 더 편리하게 만들기 위한 정보・계산 도구 사이트입니다. 임대 초기비용 계산, 세금 시뮬레이션, 각종 수속 안내 등 일본 생활과 부동산에 관한 실용적인 정보를 한곳에 모았습니다. 언어 장벽이나 복잡한 제도에 얽매이지 않고 필요한 정보에 빠르게 접근할 수 있도록 돕는 것이 목표입니다.",
+  aboutSiteIntro:"「Sotocom」는 일본에서 생활하는 외국인의 삶을 더 편리하게 만들기 위한 정보・계산 도구 사이트입니다. 임대 초기비용 계산, 세금 시뮬레이션, 각종 수속 안내 등 일본 생활과 부동산에 관한 실용적인 정보를 한곳에 모았습니다. 언어 장벽이나 복잡한 제도에 얽매이지 않고 필요한 정보에 빠르게 접근할 수 있도록 돕는 것이 목표입니다.",
   aboutAuthorTitle:"작성자 소개",
   aboutAuthorBio:"(여기에 작성자의 간단한 자기소개를 입력하세요. 예: 경력, 일본 거주 연수, 사이트를 만든 계기 등)"
  },
  vi:{
   aboutEyebrow:"About Giới thiệu",
   aboutSiteTitle:"Giới thiệu trang web",
-  aboutSiteIntro:"\u201c外's Net\u201d là trang thông tin và công cụ tính toán được xây dựng để giúp cuộc sống của người nước ngoài tại Nhật Bản trở nên thuận tiện hơn. Từ tính chi phí thuê nhà ban đầu, ước tính thuế, đến hướng dẫn các thủ tục thường gặp, chúng tôi tổng hợp những thông tin thực tế về cuộc sống và bất động sản tại Nhật vào một nơi duy nhất, để bạn có thể nhanh chóng tìm thấy thông tin cần thiết mà không bị cản trở bởi rào cản ngôn ngữ hay hệ thống phức tạp.",
+  aboutSiteIntro:"\u201cSotocom\u201d là trang thông tin và công cụ tính toán được xây dựng để giúp cuộc sống của người nước ngoài tại Nhật Bản trở nên thuận tiện hơn. Từ tính chi phí thuê nhà ban đầu, ước tính thuế, đến hướng dẫn các thủ tục thường gặp, chúng tôi tổng hợp những thông tin thực tế về cuộc sống và bất động sản tại Nhật vào một nơi duy nhất, để bạn có thể nhanh chóng tìm thấy thông tin cần thiết mà không bị cản trở bởi rào cản ngôn ngữ hay hệ thống phức tạp.",
   aboutAuthorTitle:"Giới thiệu tác giả",
   aboutAuthorBio:"(Hãy thêm phần giới thiệu ngắn về tác giả tại đây \u2014 ví dụ: kinh nghiệm, số năm sống tại Nhật, lý do lập trang web này.)"
  }
@@ -991,7 +991,7 @@ function siteSetLanguage(lang,save=true){
   siteCurrentLanguage = lang;
   document.documentElement.lang = SITE_LANGS[lang];
   document.getElementById("siteLanguage").value = lang;
-  document.title = siteTranslateCore("外's Net",lang);
+  document.title = siteTranslateCore("Sotocom",lang);
   siteTranslationBusy = true;
   siteTranslateElement(document.body,lang);
   siteApplyTaxCopy(lang);
