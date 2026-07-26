@@ -134,6 +134,8 @@
       function renderList() {
         var visible = restaurants.filter(function (r) {
           return (currentCountry === "all" || r.country === currentCountry) && (currentRegion === "all" || r.region === currentRegion);
+        }).sort(function (a, b) {
+          return (b.claimed ? 1 : 0) - (a.claimed ? 1 : 0);
         });
         countEl.textContent = String(visible.length);
         listEl.innerHTML = visible.map(function (r) {
