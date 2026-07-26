@@ -1,17 +1,5 @@
 [
   {
-    "label": "時事・ニュース",
-    "tabs": [
-      {
-        "id": "page-news",
-        "slug": "news",
-        "glyph": "報",
-        "text": "時事日報",
-        "small": "DAILY NEWS"
-      }
-    ]
-  },
-  {
     "label": "住まい・不動産",
     "tabs": [
       {
@@ -22,13 +10,6 @@
         "small": "MOVE-IN COST"
       },
       {
-        "id": "page-tax-realestate",
-        "slug": "tax-realestate",
-        "glyph": "税",
-        "text": "不動産の税金",
-        "small": "PROPERTY TAX"
-      },
-      {
         "id": "page-loan",
         "slug": "loan",
         "glyph": "金",
@@ -36,18 +17,18 @@
         "small": "MORTGAGE"
       },
       {
-        "id": "page-area",
-        "slug": "area",
-        "glyph": "積",
-        "text": "面積單位換算",
-        "small": "AREA CONVERTER"
+        "id": "page-tax-realestate",
+        "slug": "tax-realestate",
+        "glyph": "税",
+        "text": "不動産の税金",
+        "small": "PROPERTY TAX"
       },
       {
-        "id": "page-moving",
-        "slug": "moving",
-        "glyph": "移",
-        "text": "引越し手続き",
-        "small": "MOVING GUIDE"
+        "id": "page-fire-insurance",
+        "slug": "fire-insurance",
+        "glyph": "火",
+        "text": "火災保険",
+        "small": "FIRE INSURANCE"
       },
       {
         "id": "page-moveout",
@@ -57,104 +38,80 @@
         "small": "MOVE-OUT COST"
       },
       {
-        "id": "page-fire-insurance",
-        "slug": "fire-insurance",
-        "glyph": "火",
-        "text": "火災保険",
-        "small": "FIRE INSURANCE"
+        "id": "page-moving",
+        "slug": "moving",
+        "glyph": "移",
+        "text": "引越し手続き",
+        "small": "MOVING GUIDE"
+      },
+      {
+        "id": "page-area",
+        "slug": "area",
+        "glyph": "積",
+        "text": "面積單位換算",
+        "small": "AREA CONVERTER"
       }
     ]
   },
   {
-    "label": "交通",
+    "label": "行政・生活",
     "tabs": [
       {
-        "id": "page-route",
-        "slug": "route",
-        "glyph": "路",
-        "text": "通勤計算",
-        "small": "COMMUTE CALCULATOR"
+        "id": "page-zairyu-shikaku",
+        "slug": "zairyu-shikaku",
+        "glyph": "留",
+        "text": "在留資格",
+        "small": "STATUS OF RESIDENCE"
       },
       {
-        "id": "page-etc",
-        "slug": "etc",
-        "glyph": "通",
-        "text": "ETC料金計算",
-        "small": "ETC TOLL CALCULATOR"
+        "id": "page-visa",
+        "slug": "visa",
+        "glyph": "証",
+        "text": "在留資格更新",
+        "small": "VISA RENEWAL"
       },
       {
-        "id": "page-airport",
-        "slug": "airport",
-        "glyph": "空",
-        "text": "空港アクセス",
-        "small": "AIRPORT ACCESS"
+        "id": "page-legal",
+        "slug": "legal",
+        "glyph": "行",
+        "text": "行政書士料金",
+        "small": "LEGAL SUPPORT"
       },
       {
-        "id": "page-car-all",
-        "slug": "car-all",
-        "glyph": "車",
-        "text": "中古車・車検・免許",
-        "small": "CAR &amp; LICENSE"
+        "id": "page-pension-insurance",
+        "slug": "pension-insurance",
+        "glyph": "年",
+        "text": "年金・健康保険",
+        "small": "PENSION &amp; HEALTH INSURANCE"
       },
       {
-        "id": "page-taxi-fare",
-        "slug": "taxi-fare",
-        "glyph": "🚕",
-        "text": "タクシー料金",
-        "small": "TAXI FARE ESTIMATE"
-      }
-    ]
-  },
-  {
-    "label": "コミュニティ",
-    "tabs": [
-      {
-        "id": "page-listings",
-        "slug": "listings",
-        "glyph": "招",
-        "text": "房源招租",
-        "small": "ROOM &amp; TENANT LISTINGS"
+        "id": "page-ward-office",
+        "slug": "ward-office",
+        "glyph": "役",
+        "text": "区役所手続",
+        "small": "WARD OFFICE"
       },
       {
-        "id": "page-used-market",
-        "slug": "used-market",
-        "glyph": "中",
-        "text": "中古市場",
-        "small": "USED MARKET"
+        "id": "page-bank",
+        "slug": "bank",
+        "glyph": "銀",
+        "text": "銀行口座開設",
+        "small": "BANK ACCOUNT"
       },
       {
-        "id": "page-help-request",
-        "slug": "help-request",
-        "glyph": "助",
-        "text": "助け合い",
-        "small": "HELP &amp; SUPPORT"
+        "id": "page-sim",
+        "slug": "sim",
+        "glyph": "携",
+        "text": "携帯電話SIM",
+        "small": "SIM CARD"
       },
       {
-        "id": "page-jobs",
-        "slug": "jobs",
-        "glyph": "求",
-        "text": "求人・採用",
-        "small": "JOBS &amp; RECRUITING"
+        "id": "page-internet",
+        "slug": "internet",
+        "glyph": "網",
+        "text": "インターネット回線",
+        "small": "HOME INTERNET"
       },
-      {
-        "id": "page-events",
-        "slug": "events",
-        "glyph": "祭",
-        "text": "イベント",
-        "small": "EVENTS"
-      },
-      {
-        "id": "page-restaurant-list",
-        "slug": "restaurant-list",
-        "glyph": "食",
-        "text": "お店リスト",
-        "small": "WORLD FOOD GUIDE"
-      }
-    ]
-  },
-  {
-    "label": "生活",
-    "tabs": [
       {
         "id": "page-utilities",
         "slug": "utilities",
@@ -175,128 +132,51 @@
         "glyph": "家",
         "text": "家電リサイクル",
         "small": "APPLIANCE RECYCLING"
-      },
-      {
-        "id": "page-bank",
-        "slug": "bank",
-        "glyph": "銀",
-        "text": "銀行口座開設",
-        "small": "BANK ACCOUNT"
-      },
-      {
-        "id": "page-zairyu-shikaku",
-        "slug": "zairyu-shikaku",
-        "glyph": "留",
-        "text": "在留資格",
-        "small": "STATUS OF RESIDENCE"
-      },
-      {
-        "id": "page-visa",
-        "slug": "visa",
-        "glyph": "証",
-        "text": "在留資格更新",
-        "small": "VISA RENEWAL"
-      },
-      {
-        "id": "page-pension-insurance",
-        "slug": "pension-insurance",
-        "glyph": "年",
-        "text": "年金・健康保険",
-        "small": "PENSION &amp; HEALTH INSURANCE"
-      },
-      {
-        "id": "page-japanese",
-        "slug": "japanese",
-        "glyph": "語",
-        "text": "日本語学習資源",
-        "small": "JAPANESE LEARNING"
-      },
-      {
-        "id": "page-ward-office",
-        "slug": "ward-office",
-        "glyph": "役",
-        "text": "区役所手続",
-        "small": "WARD OFFICE"
-      },
-      {
-        "id": "page-sim",
-        "slug": "sim",
-        "glyph": "携",
-        "text": "携帯電話SIM",
-        "small": "SIM CARD"
-      },
-      {
-        "id": "page-internet",
-        "slug": "internet",
-        "glyph": "網",
-        "text": "インターネット回線",
-        "small": "HOME INTERNET"
-      },
-      {
-        "id": "page-holidays",
-        "slug": "holidays",
-        "glyph": "祝",
-        "text": "国民の祝日",
-        "small": "NATIONAL HOLIDAYS"
-      },
-      {
-        "id": "page-services",
-        "slug": "services",
-        "glyph": "語",
-        "text": "外国語対応サービス",
-        "small": "MULTILINGUAL SERVICES"
-      },
-      {
-        "id": "page-overseas-shipping",
-        "slug": "overseas-shipping",
-        "glyph": "海",
-        "text": "海外発送ガイド",
-        "small": "INTERNATIONAL SHIPPING"
-      },
-      {
-        "id": "page-living",
-        "slug": "living",
-        "glyph": "生",
-        "text": "生活費計算",
-        "small": "LIVING EXPENSES"
-      },
-      {
-        "id": "page-friend-offers",
-        "slug": "friend-offers",
-        "glyph": "得",
-        "text": "お得情報",
-        "small": "DEALS &amp; OFFERS"
-      },
-      {
-        "id": "page-era",
-        "slug": "era",
-        "glyph": "暦",
-        "text": "元号・年齢早見表",
-        "small": "ERA &amp; AGE CONVERTER"
-      },
-      {
-        "id": "page-credit-card",
-        "slug": "credit-card",
-        "glyph": "札",
-        "text": "クレジットカード",
-        "small": "CREDIT CARD GUIDE"
       }
     ]
   },
   {
-    "label": "厳選パートナー",
+    "label": "交通・移動",
     "tabs": [
       {
-        "id": "page-partners",
-        "slug": "partners",
-        "glyph": "夥",
-        "text": "厳選パートナー",
-        "small": "PARTNERS &amp; LOCAL SERVICES"
+        "id": "page-route",
+        "slug": "route",
+        "glyph": "路",
+        "text": "通勤計算",
+        "small": "COMMUTE CALCULATOR"
+      },
+      {
+        "id": "page-etc",
+        "slug": "etc",
+        "glyph": "通",
+        "text": "ETC料金計算",
+        "small": "ETC TOLL CALCULATOR"
+      },
+      {
+        "id": "page-taxi-fare",
+        "slug": "taxi-fare",
+        "glyph": "🚕",
+        "text": "タクシー料金",
+        "small": "TAXI FARE ESTIMATE"
+      },
+      {
+        "id": "page-airport",
+        "slug": "airport",
+        "glyph": "空",
+        "text": "空港アクセス",
+        "small": "AIRPORT ACCESS"
+      },
+      {
+        "id": "page-car-all",
+        "slug": "car-all",
+        "glyph": "車",
+        "text": "中古車・車検・免許",
+        "small": "CAR &amp; LICENSE"
       }
     ]
   },
   {
-    "label": "税金・専門手続",
+    "label": "税金・財務",
     "tabs": [
       {
         "id": "page-tax-guide-foreigners",
@@ -327,11 +207,11 @@
         "small": "TAX RETURN CALC"
       },
       {
-        "id": "page-legal",
-        "slug": "legal",
-        "glyph": "行",
-        "text": "行政書士料金",
-        "small": "LEGAL SUPPORT"
+        "id": "page-living",
+        "slug": "living",
+        "glyph": "生",
+        "text": "生活費計算",
+        "small": "LIVING EXPENSES"
       },
       {
         "id": "page-nisa",
@@ -339,18 +219,128 @@
         "glyph": "積",
         "text": "新NISA計算機",
         "small": "NEW NISA CALCULATOR"
+      },
+      {
+        "id": "page-credit-card",
+        "slug": "credit-card",
+        "glyph": "札",
+        "text": "クレジットカード",
+        "small": "CREDIT CARD GUIDE"
       }
     ]
   },
   {
-    "label": "書類作成",
+    "label": "コミュニティ",
     "tabs": [
+      {
+        "id": "page-listings",
+        "slug": "listings",
+        "glyph": "招",
+        "text": "房源招租",
+        "small": "ROOM &amp; TENANT LISTINGS"
+      },
+      {
+        "id": "page-used-market",
+        "slug": "used-market",
+        "glyph": "中",
+        "text": "中古市場",
+        "small": "USED MARKET"
+      },
+      {
+        "id": "page-jobs",
+        "slug": "jobs",
+        "glyph": "求",
+        "text": "求人・採用",
+        "small": "JOBS &amp; RECRUITING"
+      },
+      {
+        "id": "page-events",
+        "slug": "events",
+        "glyph": "祭",
+        "text": "イベント",
+        "small": "EVENTS"
+      },
+      {
+        "id": "page-help-request",
+        "slug": "help-request",
+        "glyph": "助",
+        "text": "助け合い",
+        "small": "HELP &amp; SUPPORT"
+      },
+      {
+        "id": "page-restaurant-list",
+        "slug": "restaurant-list",
+        "glyph": "食",
+        "text": "お店リスト",
+        "small": "WORLD FOOD GUIDE"
+      }
+    ]
+  },
+  {
+    "label": "暮らしの便利ツール",
+    "tabs": [
+      {
+        "id": "page-news",
+        "slug": "news",
+        "glyph": "報",
+        "text": "時事日報",
+        "small": "DAILY NEWS"
+      },
+      {
+        "id": "page-friend-offers",
+        "slug": "friend-offers",
+        "glyph": "得",
+        "text": "お得情報",
+        "small": "DEALS &amp; OFFERS"
+      },
       {
         "id": "page-documents",
         "slug": "documents",
         "glyph": "書",
         "text": "書類作成",
         "small": "DOCUMENT BUILDER"
+      },
+      {
+        "id": "page-services",
+        "slug": "services",
+        "glyph": "語",
+        "text": "外国語対応サービス",
+        "small": "MULTILINGUAL SERVICES"
+      },
+      {
+        "id": "page-japanese",
+        "slug": "japanese",
+        "glyph": "語",
+        "text": "日本語学習資源",
+        "small": "JAPANESE LEARNING"
+      },
+      {
+        "id": "page-overseas-shipping",
+        "slug": "overseas-shipping",
+        "glyph": "海",
+        "text": "海外発送ガイド",
+        "small": "INTERNATIONAL SHIPPING"
+      },
+      {
+        "id": "page-holidays",
+        "slug": "holidays",
+        "glyph": "祝",
+        "text": "国民の祝日",
+        "small": "NATIONAL HOLIDAYS"
+      },
+      {
+        "id": "page-era",
+        "slug": "era",
+        "glyph": "暦",
+        "text": "元号・年齢早見表",
+        "small": "ERA &amp; AGE CONVERTER"
+      },
+      {
+        "id": "page-partners",
+        "slug": "partners",
+        "glyph": "夥",
+        "text": "厳選パートナー",
+        "small": "PARTNERS &amp; LOCAL SERVICES"
       }
     ]
   }
