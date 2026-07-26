@@ -118,3 +118,175 @@
     </div>
     </section><!-- /util-water -->
   </div><!-- /page-utilities -->
+<script>
+/* ================= Electricity Bill Calculator ================= */
+const electricPlans = {
+  "tepco": {name:"東京電力 従量電灯B", basicPer10:311.75, tiers:[[120,29.80],[300,36.40],[Infinity,40.49]], date:"2026-07-20", note:"規制料金。燃料費調整額には上限があります。"},
+  "softbank-home": {name:"SoftBank おうちでんき", basicPer10:311.75, tiers:[[120,29.80],[300,36.40],[Infinity,40.49]], date:"2026-06-01", note:"セット割・市場連動額・最低月額料金は含めていません。"},
+  "softbank-life": {name:"SoftBank くらしでんき", basicPer10:311.75, tiers:[[120,29.50],[300,35.30],[Infinity,38.46]], date:"2026-06-01", note:"現在の公式料金表を使用。燃料費調整額は別入力です。"},
+  "softbank-green": {name:"SoftBank 自然でんき", basicPer10:0, tiers:[[Infinity,36.55]], date:"2026-06-01", note:"基本料金0円。燃料費・電力市場連動額は別入力です。"},
+  "eneone-happy": {name:"Gas One／エネワンでんき ハッピー", basicPer10:300.75, minAmp:30, tiers:[[120,29.80],[300,36.40],[Infinity,40.49]], date:"2025-07-01", note:"30～60A向け。燃料費調整額の上限はありません。"},
+  "eneone-value": {name:"Gas One／エネワンでんき バリュー", basicPer10:300.75, minAmp:30, tiers:[[300,33.76],[Infinity,37.51]], date:"2025-07-01", note:"30～60A向け。月300～600kWh程度の家庭向けプランです。"},
+  "eneone-wonderful": {name:"Gas One／エネワンでんき ワンダフル", basicPer10:300.75, tiers:[[600,35.57],[Infinity,36.66]], date:"2025-07-01", note:"大容量利用向け。燃料費調整額の上限はありません。"}
+};
+
+function electricMoney(n){ return "¥" + Math.round(n).toLocaleString("ja-JP"); }
+function electricNum(id){ const n = Number(document.getElementById(id)?.value); return Number.isFinite(n) ? n : 0; }
+function electricTierCost(kwh, tiers){
+  let previous = 0, cost = 0;
+  const details = [];
+  tiers.forEach(([limit, price]) => {
+    const amount = Math.max(0, Math.min(kwh, limit) - previous);
+    if (amount > 0){ cost += amount * price; details.push({amount, price, cost:amount * price}); }
+    previous = limit;
+  });
+  return {cost, details};
+}
+function electricEstimate(plan, amp, kwh, adjustment, renewable, subsidy){
+  const appliedAmp = Math.max(plan.minAmp || 0, amp);
+  const basic = plan.basicPer10 * appliedAmp / 10;
+  const usage = electricTierCost(kwh, plan.tiers);
+  const adjust = kwh * adjustment;
+  const levy = kwh * renewable;
+  const support = kwh * subsidy;
+  return {appliedAmp, basic, usage, adjust, levy, support, total:Math.max(0,basic + usage.cost + adjust + levy - support)};
+}
+function electricRender(){
+  if (!document.querySelector("#electricPlan")) return;
+  const key = document.getElementById("electricPlan").value;
+  const plan = electricPlans[key];
+  const amp = electricNum("electricAmp");
+  const kwh = Math.max(0,electricNum("electricKwh"));
+  const adjustment = electricNum("electricAdjustment");
+  const renewable = electricNum("electricRenewable");
+  const subsidy = Math.max(0,electricNum("electricSubsidy"));
+  const result = electricEstimate(plan,amp,kwh,adjustment,renewable,subsidy);
+  document.getElementById("electricTotal").textContent = electricMoney(result.total);
+  document.getElementById("electricUnit").textContent = kwh ? (result.total/kwh).toFixed(2) + "円/kWh" : "—";
+  document.getElementById("electricAnnual").textContent = electricMoney(result.total*12);
+  document.getElementById("electricTableTotal").textContent = electricMoney(result.total);
+  const usageFormula = result.usage.details.map(d => `${d.amount.toLocaleString("ja-JP")}kWh×${d.price.toFixed(2)}円`).join(" + ") || "0kWh";
+  document.getElementById("electricBreakdown").innerHTML = `
+    <tr><td>基本料金</td><td>${result.appliedAmp}A</td><td>${electricMoney(result.basic)}</td></tr>
+    <tr><td>電力量料金</td><td>${usageFormula}</td><td>${electricMoney(result.usage.cost)}</td></tr>
+    <tr><td>燃料費・市場調整</td><td>${kwh}kWh×${adjustment.toFixed(2)}円</td><td>${electricMoney(result.adjust)}</td></tr>
+    <tr><td>再エネ賦課金</td><td>${kwh}kWh×${renewable.toFixed(2)}円</td><td>${electricMoney(result.levy)}</td></tr>
+    <tr><td>政府支援</td><td>${kwh}kWh×-${subsidy.toFixed(2)}円</td><td>-${electricMoney(result.support)}</td></tr>`;
+  const ampWarning = plan.minAmp && amp < plan.minAmp ? `このプランは${plan.minAmp}A以上が対象のため、${plan.minAmp}Aで計算しました。` : "";
+  document.getElementById("electricPlanWarning").innerHTML = `<strong>${plan.name}</strong>　料金表基準日：${plan.date}<br>${ampWarning}${plan.note}`;
+  const currentBill = Math.max(0,electricNum("electricCurrentBill"));
+  const diffBox = document.getElementById("electricBillDiff");
+  if (currentBill){
+    const diff = currentBill-result.total;
+    diffBox.style.display = "block";
+    diffBox.innerHTML = diff >= 0 ? `現在の請求額より概算で <strong>${electricMoney(diff)}低い</strong> 結果です。` : `現在の請求額より概算で <strong>${electricMoney(Math.abs(diff))}高い</strong> 結果です。`;
+  } else diffBox.style.display = "none";
+  const comparison = Object.entries(electricPlans).map(([id,p]) => {
+    const r = electricEstimate(p,amp,kwh,0,renewable,0);
+    return `<div class="electric-company"><h3>${p.name}</h3><div class="electric-price">${electricMoney(r.total)} / 月</div><small>固定料金＋再エネ賦課金。燃料費・市場調整、割引は除外。</small></div>`;
+  }).join("");
+  document.getElementById("electricComparison").innerHTML = comparison + `<div class="electric-company is-unavailable"><h3>オクトパスエナジー（小章魚電力）</h3><div class="electric-price">公式サイトで確認</div><small>郵便番号・申込時期で表示プランが変わるため固定比較から除外。<a href="https://octopusenergy.co.jp/" target="_blank" rel="noopener">料金を確認する</a></small></div>`;
+}
+if (document.querySelector("#electricPlan")){
+  ["electricPlan","electricKwh","electricAmp","electricCurrentBill","electricRenewable","electricAdjustment","electricSubsidy"].forEach(id => document.getElementById(id)?.addEventListener("input",electricRender));
+  document.getElementById("electricMonth")?.addEventListener("change",e => {
+    document.getElementById("electricSubsidy").value = e.target.value;
+    electricRender();
+  });
+  document.getElementById("electricCalcBtn")?.addEventListener("click",electricRender);
+  electricRender();
+}
+
+</script>
+<script>
+/* ================= Gas Bill Calculator ================= */
+const gasCityPlans = {
+  "tokyogas": {name:"東京ガス 一般料金", date:"2026-08検針", tiers:[[20,759,145.31],[80,1056,130.46],[200,1232,128.26],[500,1892,124.96],[800,6292,116.16],[Infinity,12452,108.46]], note:"東京地区等。一般料金には原料費調整の上限があります。"},
+  "tepco-gas": {name:"東京電力 とくとくガスプラン", date:"2025-06-01", tiers:[[20,736.23,140.94],[80,1024.32,126.54],[200,1195.04,124.40],[500,1835.24,121.20],[800,6103.24,112.67],[Infinity,12078.44,105.20]], note:"東京ガス供給エリア向け。セット割・原料費調整は契約内容をご確認ください。"},
+  "eneos-gas": {name:"ENEOS都市ガス 標準プランTK", date:"2025-04", tiers:[[20,735.45,140.76],[80,1022.35,126.42],[200,1187.65,123.65],[500,1816.32,119.95],[800,6040.32,111.50],[Infinity,11953.92,104.11]], note:"原料費調整・カード特典・セット特典は別です。"},
+  "cd-gas": {name:"CDエナジー ベーシックガス", date:"2026-05確認", tiers:[[20,735.46,140.76],[80,1022.38,126.42],[200,1193.39,124.28],[500,1833.02,121.08],[800,6100.61,112.54],[Infinity,12065.05,105.09]], note:"原料費調整単価に上限はありません。セット割は含みません。"}
+};
+function gasMoney(n){ return "¥" + Math.round(n).toLocaleString("ja-JP"); }
+function gasNum(id){ const n=Number(document.getElementById(id)?.value); return Number.isFinite(n)?n:0; }
+function gasCityEstimate(plan,usage,adjustment,subsidy){
+  const tier=plan.tiers.find(t=>usage<=t[0]) || plan.tiers[plan.tiers.length-1];
+  const basic=tier[1], unit=tier[2], usageCharge=usage*(unit+adjustment), support=usage*subsidy;
+  return {basic,unit,adjustment,usageCharge,support,total:Math.max(0,basic+usageCharge-support)};
+}
+function gasKantoAverage(usage){
+  const points=[[0,1993],[5,5509],[10,9025],[20,15813],[50,35133]];
+  if(usage>=50) return 35133+(usage-50)*644;
+  for(let i=1;i<points.length;i++) if(usage<=points[i][0]){
+    const [x0,y0]=points[i-1],[x1,y1]=points[i];
+    return y0+(usage-x0)*(y1-y0)/(x1-x0);
+  }
+  return 0;
+}
+function gasSyncPlanOptions(resetUsage=false){
+  if (!document.querySelector("#gasKind")) return;
+  const kind=document.getElementById("gasKind").value;
+  const select=document.getElementById("gasPlan");
+  [...select.options].forEach(o=>{const show=o.dataset.kind===kind;o.hidden=!show;o.disabled=!show;});
+  if(select.selectedOptions[0]?.dataset.kind!==kind) select.value=kind==="city"?"tokyogas":"lp-gasone";
+  document.getElementById("gasCityFields").style.display=kind==="city"?"block":"none";
+  document.getElementById("gasLpFields").style.display=kind==="lp"?"block":"none";
+  if(resetUsage) document.getElementById("gasUsage").value=kind==="city"?30:10;
+  gasSyncLpFields();
+}
+function gasSyncLpFields(){
+  if (!document.querySelector("#gasPlan")) return;
+  const key=document.getElementById("gasPlan").value;
+  const basic=document.getElementById("gasLpBasic"), unit=document.getElementById("gasLpUnit");
+  const locked=key==="lp-kanto";
+  if(key==="lp-gasone"){basic.value=1870;unit.value=495;}
+  if(key==="lp-custom" && (Number(basic.value)===1870 && Number(unit.value)===495)){basic.value=2000;unit.value=700;}
+  basic.disabled=locked;unit.disabled=locked;
+}
+function gasRender(){
+  if (!document.querySelector("#gasKind")) return;
+  const kind=document.getElementById("gasKind").value, key=document.getElementById("gasPlan").value;
+  const usage=Math.max(0,gasNum("gasUsage"));
+  let total=0, rows="", warning="", cards="";
+  if(kind==="city"){
+    const adjustment=gasNum("gasAdjustment"), subsidy=Math.max(0,gasNum("gasSubsidy"));
+    const plan=gasCityPlans[key]||gasCityPlans.tokyogas, r=gasCityEstimate(plan,usage,adjustment,subsidy);
+    total=r.total;
+    rows=`<tr><td>基本料金</td><td>使用量区分</td><td>${gasMoney(r.basic)}</td></tr><tr><td>従量料金</td><td>${usage}m³×(${r.unit.toFixed(2)}＋${adjustment.toFixed(2)})円</td><td>${gasMoney(r.usageCharge)}</td></tr><tr><td>政府支援</td><td>${usage}m³×-${subsidy.toFixed(2)}円</td><td>-${gasMoney(r.support)}</td></tr>`;
+    warning=`<strong>${plan.name}</strong>　料金表基準：${plan.date}<br>${plan.note} 2026年8月検針の東京ガス原料費調整額31.54円/m³を初期値にしています。`;
+    cards=Object.values(gasCityPlans).map(p=>{const x=gasCityEstimate(p,usage,adjustment,subsidy);return `<div class="electric-company"><h3>${p.name}</h3><div class="electric-price">${gasMoney(x.total)} / 月</div><small>同じ原料費調整・政府支援を仮定。</small></div>`}).join("");
+  }else{
+    const equipment=Math.max(0,gasNum("gasLpEquipment"));
+    if(key==="lp-kanto"){
+      total=gasKantoAverage(usage)+equipment;
+      rows=`<tr><td>関東平均価格</td><td>調査値間を補間</td><td>${gasMoney(total-equipment)}</td></tr><tr><td>設備料金</td><td>契約による</td><td>${gasMoney(equipment)}</td></tr>`;
+      warning="<strong>関東LPガス平均</strong>　2026年6月30日速報の5・10・20・50m³価格から補間した目安です。個別契約の料金ではありません。";
+    }else{
+      const basic=Math.max(0,gasNum("gasLpBasic")),unit=Math.max(0,gasNum("gasLpUnit")),usageCharge=usage*unit;
+      total=basic+usageCharge+equipment;
+      rows=`<tr><td>基本料金</td><td>毎月固定</td><td>${gasMoney(basic)}</td></tr><tr><td>従量料金</td><td>${usage}m³×${unit.toFixed(2)}円</td><td>${gasMoney(usageCharge)}</td></tr><tr><td>設備料金</td><td>契約による</td><td>${gasMoney(equipment)}</td></tr>`;
+      warning=key==="lp-gasone"?"<strong>Gas One／エネワン LPガス</strong>　公開標準料金です。実際の単価・設備料金は建物と契約により異なります。":"<strong>検針票入力</strong>　基本料金・従量単価・設備料金を請求書どおり入力してください。";
+    }
+    const gasone=1870+usage*495+equipment, avg=gasKantoAverage(usage)+equipment, custom=Math.max(0,gasNum("gasLpBasic"))+usage*Math.max(0,gasNum("gasLpUnit"))+equipment;
+    cards=`<div class="electric-company"><h3>Gas One 標準料金</h3><div class="electric-price">${gasMoney(gasone)} / 月</div><small>基本1,870円＋495円/m³＋設備料金。</small></div><div class="electric-company"><h3>関東LPガス平均</h3><div class="electric-price">${gasMoney(avg)} / 月</div><small>2026年6月30日調査値から補間。</small></div><div class="electric-company"><h3>入力した契約単価</h3><div class="electric-price">${gasMoney(custom)} / 月</div><small>検針票の単価による計算。</small></div>`;
+  }
+  document.getElementById("gasTotal").textContent=gasMoney(total);
+  document.getElementById("gasEffectiveUnit").textContent=usage?(total/usage).toFixed(2)+"円/m³":"—";
+  document.getElementById("gasAnnual").textContent=gasMoney(total*12);
+  document.getElementById("gasTableTotal").textContent=gasMoney(total);
+  document.getElementById("gasBreakdown").innerHTML=rows;
+  document.getElementById("gasPlanWarning").innerHTML=warning;
+  document.getElementById("gasComparison").innerHTML=cards;
+  const bill=Math.max(0,gasNum("gasCurrentBill")),box=document.getElementById("gasBillDiff");
+  if(bill){const diff=bill-total;box.style.display="block";box.innerHTML=diff>=0?`現在の請求額より概算で <strong>${gasMoney(diff)}低い</strong> 結果です。`:`現在の請求額より概算で <strong>${gasMoney(Math.abs(diff))}高い</strong> 結果です。`;}else box.style.display="none";
+}
+if (document.querySelector("#gasKind")){
+  document.getElementById("gasKind")?.addEventListener("change",()=>{gasSyncPlanOptions(true);gasRender();});
+  document.getElementById("gasPlan")?.addEventListener("change",()=>{gasSyncLpFields();gasRender();});
+  document.getElementById("gasMonth")?.addEventListener("change",e=>{document.getElementById("gasSubsidy").value=e.target.value;gasRender();});
+  ["gasUsage","gasCurrentBill","gasAdjustment","gasSubsidy","gasLpBasic","gasLpUnit","gasLpEquipment"].forEach(id=>document.getElementById(id)?.addEventListener("input",gasRender));
+  document.getElementById("gasCalcBtn")?.addEventListener("click",gasRender);
+  gasSyncPlanOptions();
+  gasRender();
+}
+
+</script>

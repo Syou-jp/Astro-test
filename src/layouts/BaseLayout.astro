@@ -183,6 +183,63 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
       });
     </script>
     <script is:inline>
+      /* ================= Tab switcher (generic, drives in-page doc/util/broker tab groups) ================= */
+      document.querySelectorAll("#tabBar .doc-tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (!btn.dataset.target) return;
+          document.querySelectorAll("#tabBar .doc-tab").forEach((b) => b.classList.remove("active"));
+          document.querySelectorAll(".page-view").forEach((p) => p.classList.remove("active"));
+          const aboutBtn = document.getElementById("aboutNavBtn");
+          if (aboutBtn) aboutBtn.classList.remove("active");
+          btn.classList.add("active");
+          const panel = document.getElementById(btn.dataset.target);
+          if (panel) panel.classList.add("active");
+        });
+      });
+
+      const aboutNavBtn = document.getElementById("aboutNavBtn");
+      if (aboutNavBtn) {
+        aboutNavBtn.addEventListener("click", () => {
+          document.querySelectorAll("#tabBar .doc-tab").forEach((b) => b.classList.remove("active"));
+          document.querySelectorAll(".page-view").forEach((p) => p.classList.remove("active"));
+          aboutNavBtn.classList.add("active");
+          const panel = document.getElementById("page-about");
+          if (panel) panel.classList.add("active");
+        });
+      }
+
+      document.querySelectorAll(".broker-doc-tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".broker-doc-tab").forEach((b) => b.classList.remove("active"));
+          document.querySelectorAll(".broker-doc-panel").forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          const panel = document.getElementById(btn.dataset.docTarget);
+          if (panel) panel.classList.add("active");
+        });
+      });
+
+      document.querySelectorAll(".doc-type-tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".doc-type-tab").forEach((b) => b.classList.remove("active"));
+          document.querySelectorAll(".doc-type-panel").forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          const panel = document.getElementById(btn.dataset.typeTarget);
+          if (panel) panel.classList.add("active");
+        });
+      });
+
+      document.querySelectorAll(".util-doc-tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const scope = btn.closest(".page-view") || document;
+          scope.querySelectorAll(".util-doc-tab").forEach((b) => b.classList.remove("active"));
+          scope.querySelectorAll(".util-doc-panel").forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          const panel = document.getElementById(btn.dataset.utilTarget);
+          if (panel) panel.classList.add("active");
+        });
+      });
+    </script>
+    <script is:inline>
       (() => {
         const originalGetElementById = Document.prototype.getElementById;
         const noop = () => {};
