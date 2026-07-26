@@ -25,6 +25,14 @@ try {
 } catch {
   content = await fs.readFile(fallbackContent, "utf8");
 }
+
+// route.html's nearby-station/campus/school finder needs the shared station
+// dataset. Kept out of the content file and only loaded on the page that
+// uses it so other pages don't pay for the ~550KB blob.
+let routeData = "";
+if (page.slug === "route") {
+  routeData = await fs.readFile(path.join(process.cwd(), "src", "partials", "route-data.json"), "utf8");
+}
 ---
 <BaseLayout
   title={page.slug === "home" ? "外's Net｜日本で暮らす外国人のための生活ガイド" : `外's Net | ${page.title ?? page.slug}`}
@@ -32,6 +40,7 @@ try {
   locale={locale}
   slug={page.slug}
 >
+  {routeData && <script id="routeLocationData" type="application/json" set:html={routeData} />}
   <Fragment set:html={content} />
 </BaseLayout>
 
