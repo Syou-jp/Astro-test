@@ -1544,7 +1544,7 @@
 .home-btn.primary:hover{background:var(--accent-2);border-color:var(--accent-2);}
 .home-hero-art{margin:0;border:1px solid var(--line);background:var(--paper-2);padding:14px;}
 .home-hero-art svg{display:block;width:100%;height:auto;}
-.home-featured-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}
+.home-featured-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}
 .home-featured-card{display:block;border:1px solid var(--line);background:var(--white);text-decoration:none;overflow:hidden;transition:border-color .15s ease,transform .15s ease;}
 .home-featured-card:hover{border-color:var(--accent);transform:translateY(-2px);}
 .home-featured-thumb{position:relative;aspect-ratio:16/7;background:var(--paper-2);overflow:hidden;}
