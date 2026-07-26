@@ -1437,25 +1437,30 @@
 
     .tab-bar{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
+      grid-template-columns:repeat(3,1fr);
       gap:1px;
       background:var(--line);
       border:1px solid var(--line);
       border-radius:8px;
-      overflow:hidden;
       padding:0;
       margin-top:8px;
     }
     .nav-dropdown{position:static;}
+    .nav-dropdown:nth-child(1) .tab-group-label{border-top-left-radius:8px;}
+    .nav-dropdown:nth-child(3) .tab-group-label{border-top-right-radius:8px;}
+    .nav-dropdown:nth-child(4) .tab-group-label{border-bottom-left-radius:8px;}
+    .nav-dropdown:nth-child(6) .tab-group-label{border-bottom-right-radius:8px;}
     .tab-group-label{
       width:100%;
+      height:100%;
       border:none;
       border-radius:0;
       background:var(--paper);
-      padding:9px 4px;
-      font-size:10.5px;
-      line-height:1.3;
+      padding:11px 6px;
+      font-size:11.5px;
+      line-height:1.35;
       justify-content:center;
+      align-items:center;
       text-align:center;
       white-space:normal;
     }
@@ -1504,7 +1509,8 @@
 
 /* Homepage */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-.home-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:20px;}
+.home-hero{display:flex;justify-content:center;margin-bottom:20px;}
+.home-hero-art{max-width:520px;width:100%;}
 .home-kicker{margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--accent);}
 .home-hero h2{font-family:"Shippori Mincho",serif;font-size:28px;line-height:1.5;letter-spacing:.02em;margin:0 0 14px;color:var(--ink);}
 .home-hero>div>p{font-size:13.5px;line-height:1.95;color:var(--ink-soft);margin:0 0 20px;}
