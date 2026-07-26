@@ -154,6 +154,10 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         <slot />
       </main>
 
+      <footer class="site-footer">
+        <a class:list={["about-nav-btn", "site-footer-about", activeId === "page-about" && "active"]} href={localePath(currentLocale.code, "about")} data-no-i18n>サイトについて</a>
+      </footer>
+
       <button type="button" id="backToTop" class="back-to-top" aria-label="ページ上部へ戻る">↑</button>
     </div>
 
