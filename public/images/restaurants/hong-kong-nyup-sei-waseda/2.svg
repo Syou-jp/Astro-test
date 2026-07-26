@@ -1,0 +1,14 @@
+<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="香港料理 廿四味 placeholder photo 2">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform="rotate(351 0.5 0.5)">
+      <stop offset="0%" stop-color="#b23b2e"/>
+      <stop offset="100%" stop-color="#7a231a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#g)"/>
+  <circle cx="451" cy="223" r="115" fill="#ffffff" opacity="0.08"/>
+  <circle cx="149" cy="377" r="80.5" fill="#ffffff" opacity="0.06"/>
+  <text x="300" y="330" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="34" fill="#ffffff" opacity="0.92">香港料理 廿四味</text>
+  <text x="300" y="368" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="15" letter-spacing="2" fill="#ffffff" opacity="0.7">港式麺・小炒</text>
+  <text x="300" y="560" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" letter-spacing="1.5" fill="#ffffff" opacity="0.5">PLACEHOLDER PHOTO 2 / 香港</text>
+</svg>
