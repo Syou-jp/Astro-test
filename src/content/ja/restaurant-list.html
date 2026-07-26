@@ -3,7 +3,7 @@
     <div>
       <p class="restaurant-kicker">TOKYO · WORLD FOOD GUIDE</p>
       <h2>お店リスト</h2>
-      <p>東京で各国・地域の料理を楽しめるお店を、料理のルーツごとにまとめるためのリストです。気になる国を選んで、Google Maps からすぐに場所を確認できます。</p>
+      <p>東京で各国・地域の料理を楽しめるお店を、料理のルーツごとにまとめるためのリストです。気になる国を選んで、Google Maps からすぐに場所を確認できます。カードをクリックすると、お店の詳細（席数、招牌菜、写真、公式リンクなど）を確認できます。</p>
     </div>
     <div class="restaurant-hero-images" aria-hidden="true">
       <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&amp;fit=crop&amp;w=420&amp;q=75" alt="" loading="lazy" />
@@ -11,68 +11,172 @@
     </div>
   </div>
   <div class="restaurant-note"><b>掲載について：</b>現在は掲載イメージとしての東京の店舗例です。「正宗」は店の出身地・専門料理・公式案内を確認しながら追加する運用をおすすめします。営業日・住所・メニューは変更されるため、来店前に Google Maps または公式情報でご確認ください。</div>
-  <div class="restaurant-filters" aria-label="国で絞り込む">
-    <button class="active" type="button" data-country="all">すべて <small>28</small></button><button type="button" data-country="香港">香港</button><button type="button" data-country="台湾">台湾</button><button type="button" data-country="タイ">タイ</button><button type="button" data-country="ベトナム">ベトナム</button><button type="button" data-country="韓国">韓国</button><button type="button" data-country="インド">インド</button><button type="button" data-country="中国">中国</button><button type="button" data-country="メキシコ">メキシコ</button><button type="button" data-country="イタリア">イタリア</button><button type="button" data-country="トルコ">トルコ</button>
+  <div class="restaurant-filters" aria-label="国で絞り込む" id="rlCountryFilters"></div>
+  <div class="restaurant-filters restaurant-filters-region" aria-label="地域で絞り込む" id="rlRegionFilters"></div>
+  <div class="restaurant-result"><strong id="restaurantCount">0</strong> 件のお店を表示しています <span>東京・掲載例</span></div>
+  <div class="restaurant-list" id="restaurantList"></div>
+
+  <div class="rl-modal-backdrop" id="rlBackdrop" hidden>
+    <div class="rl-modal" role="dialog" aria-modal="true" aria-labelledby="rlModalTitle">
+      <button type="button" class="rl-modal-close" id="rlModalClose" aria-label="閉じる">×</button>
+      <div class="rl-modal-body" id="rlModalBody"></div>
+    </div>
   </div>
-  <div class="restaurant-filters restaurant-filters-region" aria-label="地域で絞り込む">
-    <button class="active" type="button" data-region="all">全地域</button><button type="button" data-region="東京">東京</button><button type="button" data-region="神奈川">神奈川</button><button type="button" data-region="埼玉">埼玉</button><button type="button" data-region="千葉">千葉</button>
-  </div>
-  <div class="restaurant-result"><strong id="restaurantCount">28</strong> 件のお店を表示しています <span>東京・掲載例</span></div>
-  <div class="restaurant-list" id="restaurantList">
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>飲茶</span></div><h3>添好運（Tim Ho Wan）日比谷店</h3><p>香港発の点心専門店。焼き豚入りメロンパンや蒸し餃子など、飲茶を中心に楽しめます。</p><div class="restaurant-card-bottom"><span>日比谷</span><a href="https://www.google.com/maps/search/?api=1&amp;query=Tim+Ho+Wan+Hibiya" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>点心・飲茶</span></div><h3>香港傳奇 湯島店</h3><p>香港人シェフが手作りする点心が評判の店。エッグタルトやパイナップルバンも楽しめます。</p><div class="restaurant-card-bottom"><span>湯島</span><a href="https://www.google.com/maps/search/?api=1&amp;query=香港傳奇+湯島店" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>点心・飲茶</span></div><h3>香港傳奇 浅草店</h3><p>湯島店の姉妹店。浅草寺近くで香港式の点心や焼臘、絲襪奶茶を提供しています。</p><div class="restaurant-card-bottom"><span>浅草</span><a href="https://www.google.com/maps/search/?api=1&amp;query=香港傳奇+浅草店" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="神奈川"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>香港家庭料理</span></div><h3>聯和墟（レンワキョ）</h3><p>横浜に移住した香港人家族が営む家庭料理店。乾炒牛河や日替わりの老火湯が人気です。</p><div class="restaurant-card-bottom"><span>東白楽</span><a href="https://www.google.com/maps/search/?api=1&amp;query=聯和墟+東白楽" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="神奈川"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>香港家庭料理</span></div><h3>Hong Kong Cafe A Better Tomorrow</h3><p>香港人の妻と日本人の夫が営む茶餐廳。店名は香港映画「英雄本色」の英題から。</p><div class="restaurant-card-bottom"><span>横須賀・北久里浜</span><a href="https://www.google.com/maps/search/?api=1&amp;query=Hong+Kong+Cafe+A+Better+Tomorrow+Yokosuka" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>港式ファミレス</span></div><h3>洋洋冰室（ヤンヤンビンサ）</h3><p>2025年オープンの香港式ファミリーレストラン。香港風オムライスやエッグタルトが人気。</p><div class="restaurant-card-bottom"><span>吉祥寺</span><a href="https://www.google.com/maps/search/?api=1&amp;query=洋洋冰室+吉祥寺" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>精緻粵菜</span></div><h3>港式料理 鴻禧</h3><p>香港人シェフ覃志光（トミー）氏が手がける本格的な港式コース料理店。</p><div class="restaurant-card-bottom"><span>虎ノ門</span><a href="https://www.google.com/maps/search/?api=1&amp;query=港式料理+鴻禧+虎ノ門" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>港式麺・小炒</span></div><h3>香港料理 廿四味</h3><p>早稲田駅近くの香港式カフェ。乾炒牛河や香港風焼きダックが人気のカジュアルな一軒。</p><div class="restaurant-card-bottom"><span>早稲田</span><a href="https://www.google.com/maps/search/?api=1&amp;query=香港料理+廿四味+早稲田" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>創作港式料理</span></div><h3>火炎 香港創作料理</h3><p>香港で修業したシェフが営む一軒。手作り焼売など、出汁を効かせた港式創作料理が特徴。</p><div class="restaurant-card-bottom"><span>浅草</span><a href="https://www.google.com/maps/search/?api=1&amp;query=火炎香港創作料理+浅草" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>港式軽食</span></div><h3>香港冰室</h3><p>香港出身の二人が2021年に開いたカフェ。香港式の粥、麺料理、点心、エッグタルトを提供。</p><div class="restaurant-card-bottom"><span>学芸大学</span><a href="https://www.google.com/maps/search/?api=1&amp;query=香港冰室+学芸大学" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>港式麺</span></div><h3>香港麺 新記 三宿本店</h3><p>30年以上続く老舗。香港の屋台から始まった雲吞麺や炒め麺が味わえる人気店。</p><div class="restaurant-card-bottom"><span>三宿</span><a href="https://www.google.com/maps/search/?api=1&amp;query=香港麺+新記+三宿本店" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>焼味専門</span></div><h3>香港料理 錦福</h3><p>福臨門銀座店で13年焼き物を担当したシェフが営む店。ミシュランガイド東京でビブグルマンを獲得。</p><div class="restaurant-card-bottom"><span>九段下</span><a href="https://www.google.com/maps/search/?api=1&amp;query=香港料理+錦福+九段下" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>茶餐廳</span></div><h3>香港 贊記茶餐廳 飯田橋店</h3><p>絲襪奶茶や現焼きの菠蘿油など、香港の茶餐廳文化をそのまま再現した人気店。</p><div class="restaurant-card-bottom"><span>飯田橋</span><a href="https://www.google.com/maps/search/?api=1&amp;query=香港贊記茶餐廳+飯田橋店" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>避風塘料理</span></div><h3>喜記 銀座店</h3><p>1965年創業、香港の避風塘炒蟹の名店による日本初出店。避風塘炒蟹や椒鹽瀨尿蝦が名物。</p><div class="restaurant-card-bottom"><span>銀座</span><a href="https://www.google.com/maps/search/?api=1&amp;query=喜記+銀座店" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>港式家庭料理</span></div><h3>八十港</h3><p>「80年代の香港」をテーマにした店。蒸し餃子や海老雲吞麺、香港式おでんを提供。</p><div class="restaurant-card-bottom"><span>麻布十番</span><a href="https://www.google.com/maps/search/?api=1&amp;query=八十港+麻布十番" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>茶餐廳</span></div><h3>香港華記茶餐廳 渋谷店</h3><p>市谷本店に続き渋谷にオープンした茶餐廳。雲吞麺や港式ミルクティーが楽しめます。</p><div class="restaurant-card-bottom"><span>渋谷</span><a href="https://www.google.com/maps/search/?api=1&amp;query=香港華記茶餐廳+渋谷店" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>点心・焼味</span></div><h3>粵港美食</h3><p>香港人のHenry氏と広東人の羅シェフが営む店。神保町は炒め物、上野は点心が看板。</p><div class="restaurant-card-bottom"><span>神保町・上野</span><a href="https://www.google.com/maps/search/?api=1&amp;query=粵港美食+神保町店" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>中華・家庭料理</span></div><h3>香港人家</h3><p>水道橋・後楽園エリアにある中華料理店。手頃な価格の定食メニューが揃います。</p><div class="restaurant-card-bottom"><span>本郷・後楽園</span><a href="https://www.google.com/maps/search/?api=1&amp;query=香港人家+本郷" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="香港" data-region="神奈川"><div class="restaurant-card-top"><span class="restaurant-country">香港</span><span>広東・香港料理</span></div><h3>雲龍</h3><p>横浜元町・山下公園エリアにある広東・香港料理店。落ち着いた雰囲気で食事が楽しめます。</p><div class="restaurant-card-bottom"><span>横浜元町</span><a href="https://www.google.com/maps/search/?api=1&amp;query=雲龍+横浜元町" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="台湾" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">台湾</span><span>台湾家庭料理</span></div><h3>台湾料理 故宮 渋谷店</h3><p>小籠包、魯肉飯、台湾小皿料理を扱う台湾料理店。複数人でのシェアにも向きます。</p><div class="restaurant-card-bottom"><span>渋谷</span><a href="https://www.google.com/maps/search/?api=1&amp;query=%E5%8F%B0%E6%B9%BE%E6%96%99%E7%90%86+%E6%95%85%E5%AE%AE+%E6%B8%8B%E8%B0%B7" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="タイ" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">タイ</span><span>タイ王国料理</span></div><h3>バンコクナイト 六本木</h3><p>タイ料理を中心に、ハーブとスパイスを生かした定番メニューを提供するレストランです。</p><div class="restaurant-card-bottom"><span>六本木</span><a href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%90%E3%83%B3%E3%82%B3%E3%82%AF%E3%83%8A%E3%82%A4%E3%83%88+%E5%85%AD%E6%9C%AC%E6%9C%A8" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="ベトナム" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">ベトナム</span><span>南部料理</span></div><h3>バインセオ サイゴン 新宿店</h3><p>米粉のクレープ「バインセオ」を看板にしたベトナム料理店。フォーや生春巻きも楽しめます。</p><div class="restaurant-card-bottom"><span>新宿</span><a href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%90%E3%82%A4%E3%83%B3%E3%82%BB%E3%82%AA+%E3%82%B5%E3%82%A4%E3%82%B4%E3%83%B3+%E6%96%B0%E5%AE%BF" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="韓国" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">韓国</span><span>韓国料理</span></div><h3>ハヌリ 新宿歌舞伎町ゴジラ通り店</h3><p>サムギョプサル、チゲ、冷麺など、幅広い韓国料理を扱うカジュアルな一軒です。</p><div class="restaurant-card-bottom"><span>新宿</span><a href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%8F%E3%83%8C%E3%83%AA+%E6%96%B0%E5%AE%BF%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="インド" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">インド</span><span>南インド料理</span></div><h3>ダバ インディア</h3><p>南インド料理を主軸にした人気店。ドーサ、ビリヤニ、スパイスの効いたカレーを味わえます。</p><div class="restaurant-card-bottom"><span>京橋</span><a href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%80%E3%83%90+%E3%82%A4%E3%83%B3%E3%83%87%E3%82%A3%E3%82%A2+%E4%BA%AC%E6%A9%8B" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="中国" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">中国</span><span>北京・東北料理</span></div><h3>味坊 鉄鍋荘</h3><p>中国東北・北京エリアの料理を楽しめる店。羊肉料理や香辛料を使う料理が特徴です。</p><div class="restaurant-card-bottom"><span>神田</span><a href="https://www.google.com/maps/search/?api=1&amp;query=%E5%91%B3%E5%9D%8A+%E9%89%84%E9%8D%8B%E8%8D%98" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="メキシコ" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">メキシコ</span><span>メキシコ料理</span></div><h3>ロス・タコス・アスーレス</h3><p>トウモロコシから作るタコスを主役にしたメキシコ料理店。テイクアウトにも便利です。</p><div class="restaurant-card-bottom"><span>代官山</span><a href="https://www.google.com/maps/search/?api=1&amp;query=Los+Tacos+Azules+Daikanyama" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="イタリア" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">イタリア</span><span>イタリア料理</span></div><h3>ラ・ベットラ・ダ・オチアイ</h3><p>イタリア料理の定番を親しみやすく楽しめるレストラン。予約状況は事前確認がおすすめです。</p><div class="restaurant-card-bottom"><span>銀座</span><a href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%A9%E3%83%BB%E3%83%99%E3%83%83%E3%83%88%E3%83%A9%E3%83%BB%E3%83%80%E3%83%BB%E3%82%AA%E3%83%81%E3%82%A2%E3%82%A4" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-    <article class="restaurant-card" data-country="トルコ" data-region="東京"><div class="restaurant-card-top"><span class="restaurant-country">トルコ</span><span>トルコ料理</span></div><h3>ボスボラス ハサン 市ヶ谷店</h3><p>ケバブ、メゼ、トルコの家庭的な料理を扱うレストラン。ハラール対応の確認にも便利です。</p><div class="restaurant-card-bottom"><span>市ヶ谷</span><a href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%9C%E3%82%B9%E3%83%9C%E3%83%A9%E3%82%B9+%E3%83%8F%E3%82%B5%E3%83%B3+%E5%B8%82%E3%83%B6%E8%B0%B7" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div></article>
-  </div>
+
+  <style>
+    .rl-modal-backdrop{position:fixed;inset:0;background:rgba(26,20,16,.55);display:flex;align-items:center;justify-content:center;padding:24px;z-index:200}
+    .rl-modal-backdrop[hidden]{display:none}
+    .rl-modal{position:relative;background:var(--white,#fff);max-width:640px;width:100%;max-height:88vh;overflow-y:auto;border:1px solid var(--line,#e2d9cf);box-shadow:0 18px 48px rgba(30,22,16,.25)}
+    .rl-modal-close{position:sticky;top:10px;float:right;margin:10px 10px 0 0;width:32px;height:32px;border:1px solid var(--line,#e2d9cf);background:var(--white,#fff);font-size:18px;line-height:1;cursor:pointer;color:var(--ink-soft,#6b5f56);z-index:1}
+    .rl-modal-close:hover{border-color:var(--accent,#b23b2e);color:var(--accent,#b23b2e)}
+    .rl-modal-body{padding:8px 26px 26px}
+    .rl-m-tags{display:flex;gap:8px;align-items:center;font:700 10.5px "JetBrains Mono",monospace;letter-spacing:.04em;color:var(--accent,#b23b2e);margin-bottom:8px}
+    .rl-m-tags span:last-child{color:var(--ink-soft,#6b5f56);font-weight:600}
+    .rl-modal-body h3{font-family:"Shippori Mincho",serif;font-size:23px;line-height:1.4;margin:0 0 4px}
+    .rl-m-area{font-size:12px;color:var(--ink-soft,#6b5f56);margin:0 0 16px}
+    .rl-m-section{margin:0 0 20px}
+    .rl-m-section h4{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--accent,#b23b2e);margin:0 0 8px;text-transform:uppercase}
+    .rl-m-section p{font-size:13px;line-height:1.85;color:var(--ink,#2b241f);margin:0}
+    .rl-m-dish-list{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+    .rl-m-dish-list li{border:1px solid var(--line,#e2d9cf);background:var(--paper-2,#f7f1e8);padding:6px 11px;font-size:12px;color:var(--ink,#2b241f)}
+    .rl-m-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+    .rl-m-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border:1px solid var(--line,#e2d9cf)}
+    .rl-m-map iframe{width:100%;height:220px;border:1px solid var(--line,#e2d9cf);display:block}
+    .rl-m-links{display:flex;flex-wrap:wrap;gap:8px}
+    .rl-m-links a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line,#e2d9cf);padding:8px 13px;font-size:12px;font-weight:600;color:var(--ink,#2b241f);text-decoration:none}
+    .rl-m-links a:hover{border-color:var(--accent,#b23b2e);color:var(--accent,#b23b2e)}
+    .rl-m-empty{font-size:11.5px;color:var(--ink-soft,#6b5f56);font-style:italic;margin:0 0 8px}
+    .restaurant-card{cursor:pointer}
+  </style>
+
+  <script>
+    (function () {
+      var dataEl = document.getElementById("restaurantsData");
+      var restaurants = dataEl ? JSON.parse(dataEl.textContent) : [];
+
+      function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value == null ? "" : value; return el.innerHTML; }
+      function mapEmbedUrl(query) { return "https://www.google.com/maps?q=" + encodeURIComponent(query) + "&output=embed"; }
+      function mapLinkUrl(query) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query); }
+
+      var countries = ["all"].concat(Array.from(new Set(restaurants.map(function (r) { return r.country; }))));
+      var regions = ["all"].concat(Array.from(new Set(restaurants.map(function (r) { return r.region; }))));
+
+      var countryLabels = { all: "すべて" };
+      var regionLabels = { all: "全地域" };
+
+      var countryFiltersEl = document.getElementById("rlCountryFilters");
+      var regionFiltersEl = document.getElementById("rlRegionFilters");
+      var listEl = document.getElementById("restaurantList");
+      var countEl = document.getElementById("restaurantCount");
+      var backdrop = document.getElementById("rlBackdrop");
+      var modalBody = document.getElementById("rlModalBody");
+
+      var currentCountry = "all";
+      var currentRegion = "all";
+
+      function renderFilters() {
+        countryFiltersEl.innerHTML = countries.map(function (c) {
+          var label = countryLabels[c] || c;
+          var count = c === "all" ? restaurants.length : restaurants.filter(function (r) { return r.country === c; }).length;
+          return '<button type="button" class="' + (c === currentCountry ? "active" : "") + '" data-country="' + escapeHtml(c) + '">' + escapeHtml(label) + (c === "all" ? " <small>" + count + "</small>" : "") + "</button>";
+        }).join("");
+        regionFiltersEl.innerHTML = regions.map(function (r) {
+          var label = regionLabels[r] || r;
+          return '<button type="button" class="' + (r === currentRegion ? "active" : "") + '" data-region="' + escapeHtml(r) + '">' + escapeHtml(label) + "</button>";
+        }).join("");
+
+        countryFiltersEl.querySelectorAll("button").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            currentCountry = btn.dataset.country;
+            renderFilters();
+            renderList();
+          });
+        });
+        regionFiltersEl.querySelectorAll("button").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            currentRegion = btn.dataset.region;
+            renderFilters();
+            renderList();
+          });
+        });
+      }
+
+      function renderList() {
+        var visible = restaurants.filter(function (r) {
+          return (currentCountry === "all" || r.country === currentCountry) && (currentRegion === "all" || r.region === currentRegion);
+        });
+        countEl.textContent = String(visible.length);
+        listEl.innerHTML = visible.map(function (r) {
+          return '<article class="restaurant-card" data-id="' + escapeHtml(r.id) + '">' +
+            '<div class="restaurant-card-top"><span class="restaurant-country">' + escapeHtml(r.country) + '</span><span>' + escapeHtml(r.category) + '</span></div>' +
+            '<h3>' + escapeHtml(r.name) + '</h3>' +
+            '<p>' + escapeHtml(r.description) + '</p>' +
+            '<div class="restaurant-card-bottom"><span>' + escapeHtml(r.area) + '</span><a href="' + mapLinkUrl(r.mapQuery) + '" target="_blank" rel="noopener noreferrer" data-maplink>Google Maps ↗</a></div>' +
+            "</article>";
+        }).join("");
+
+        listEl.querySelectorAll(".restaurant-card").forEach(function (card) {
+          card.addEventListener("click", function (event) {
+            if (event.target.closest("[data-maplink]")) return;
+            openModal(card.dataset.id);
+          });
+        });
+      }
+
+      function openModal(id) {
+        var r = restaurants.filter(function (item) { return item.id === id; })[0];
+        if (!r) return;
+
+        var tablesSection = r.tables
+          ? '<div class="rl-m-section"><h4>席・テーブル</h4><p>' + escapeHtml(r.tables) + "</p></div>"
+          : "";
+
+        var dishesSection = r.signatureDishes && r.signatureDishes.length
+          ? '<div class="rl-m-section"><h4>招牌菜</h4><ul class="rl-m-dish-list">' + r.signatureDishes.map(function (d) { return "<li>" + escapeHtml(d) + "</li>"; }).join("") + "</ul></div>"
+          : "";
+
+        var photosSection = r.photos && r.photos.length
+          ? '<div class="rl-m-section"><h4>写真</h4><div class="rl-m-photos">' + r.photos.map(function (src) { return '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(r.name) + '" loading="lazy">'; }).join("") + "</div></div>"
+          : "";
+
+        var links = [
+          r.website ? ["公式サイト", r.website] : null,
+          r.instagram ? ["Instagram", r.instagram] : null,
+          r.x ? ["X", r.x] : null,
+          r.facebook ? ["Facebook", r.facebook] : null,
+          r.tabelog ? ["食べログ", r.tabelog] : null
+        ].filter(Boolean);
+        var linksSection = '<div class="rl-m-section"><h4>リンク</h4>' +
+          (links.length ? "" : '<p class="rl-m-empty">公式サイトやSNSのリンクは準備中です。</p>') +
+          '<div class="rl-m-links">' +
+          links.map(function (l) { return '<a href="' + escapeHtml(l[1]) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(l[0]) + "</a>"; }).join("") +
+          '<a href="' + mapLinkUrl(r.mapQuery) + '" target="_blank" rel="noopener noreferrer">Google Maps ↗</a>' +
+          "</div></div>";
+
+        modalBody.innerHTML =
+          '<div class="rl-m-tags"><span>' + escapeHtml(r.country) + "</span><span>" + escapeHtml(r.category) + "</span></div>" +
+          "<h3 id=\"rlModalTitle\">" + escapeHtml(r.name) + "</h3>" +
+          '<p class="rl-m-area">' + escapeHtml(r.area) + " · " + escapeHtml(r.region) + "</p>" +
+          '<div class="rl-m-section"><h4>お店紹介</h4><p>' + escapeHtml(r.intro || r.description) + "</p></div>" +
+          tablesSection + dishesSection + photosSection +
+          '<div class="rl-m-section rl-m-map"><h4>地図</h4><iframe src="' + mapEmbedUrl(r.mapQuery) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>' +
+          linksSection;
+
+        backdrop.hidden = false;
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        backdrop.hidden = true;
+        document.body.style.overflow = "";
+      }
+
+      document.getElementById("rlModalClose").addEventListener("click", closeModal);
+      backdrop.addEventListener("click", function (event) { if (event.target === backdrop) closeModal(); });
+      document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !backdrop.hidden) closeModal(); });
+
+      renderFilters();
+      renderList();
+    })();
+  </script>
 </div>
-<script>
-  const countryButtons = document.querySelectorAll('.restaurant-filters[aria-label="国で絞り込む"] button');
-  const regionButtons = document.querySelectorAll('.restaurant-filters-region button');
-  const restaurantCards = document.querySelectorAll('.restaurant-card');
-  const restaurantCount = document.getElementById('restaurantCount');
-  let currentCountry = 'all';
-  let currentRegion = 'all';
-  function applyFilters() {
-    let visible = 0;
-    restaurantCards.forEach((card) => {
-      const show = (currentCountry === 'all' || card.dataset.country === currentCountry) && (currentRegion === 'all' || card.dataset.region === currentRegion);
-      card.hidden = !show;
-      if (show) visible += 1;
-    });
-    restaurantCount.textContent = String(visible);
-  }
-  countryButtons.forEach((button) => button.addEventListener('click', () => {
-    currentCountry = button.dataset.country;
-    countryButtons.forEach((item) => item.classList.toggle('active', item === button));
-    applyFilters();
-  }));
-  regionButtons.forEach((button) => button.addEventListener('click', () => {
-    currentRegion = button.dataset.region;
-    regionButtons.forEach((item) => item.classList.toggle('active', item === button));
-    applyFilters();
-  }));
-</script>

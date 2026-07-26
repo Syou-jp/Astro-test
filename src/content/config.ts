@@ -22,4 +22,28 @@ const newsDigests = defineCollection({
   })
 });
 
-export const collections = { newsDigests };
+const restaurants = defineCollection({
+  // same reasoning as newsDigests above: base lives outside src/content so
+  // each restaurant can be authored/edited as its own markdown file.
+  loader: glob({ pattern: "**/*.md", base: "./src/data/restaurants" }),
+  schema: z.object({
+    name: z.string(),
+    country: z.string(),
+    region: z.string(),
+    area: z.string(),
+    category: z.string(),
+    description: z.string(),
+    mapQuery: z.string(),
+    intro: z.string().optional(),
+    tables: z.string().optional(),
+    signatureDishes: z.array(z.string()).default([]),
+    photos: z.array(z.string()).default([]),
+    website: z.string().optional(),
+    instagram: z.string().optional(),
+    x: z.string().optional(),
+    facebook: z.string().optional(),
+    tabelog: z.string().optional()
+  })
+});
+
+export const collections = { newsDigests, restaurants };
