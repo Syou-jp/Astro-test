@@ -280,12 +280,17 @@
         "glyph": "札",
         "text": "クレジットカード",
         "small": "CREDIT CARD GUIDE"
-      },
+      }
+    ]
+  },
+  {
+    "label": "厳選パートナー",
+    "tabs": [
       {
         "id": "page-partners",
         "slug": "partners",
         "glyph": "夥",
-        "text": "嚴選合作夥伴與在地服務推薦",
+        "text": "厳選パートナー",
         "small": "PARTNERS &amp; LOCAL SERVICES"
       }
     ]
