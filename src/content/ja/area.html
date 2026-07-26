@@ -59,3 +59,133 @@
     <div class="area-copy-status" id="areaCopyStatus"></div>
     <div class="area-note">※ 所有結果均先換算為平方公尺再計算。日本「畳・帖」以 1畳＝1.62㎡概算，日本與台灣的坪採 1坪＝400/121㎡。正式契約與登記請以原始㎡數及官方資料為準。</div>
   </div><!-- /page-area -->
+<script>
+/* ================= International Area Converter ================= */
+const AREA_REGIONS = [
+  {
+    region:"日本", english:"Japan", units:[
+      {id:"jp_sqm",name:"平方メートル",english:"Square metre",symbol:"m²",sqm:1},
+      {id:"jp_tsubo",name:"坪",english:"Tsubo",symbol:"坪",sqm:400/121},
+      {id:"jp_jo",name:"畳・帖",english:"Tatami / jo (estimate)",symbol:"畳",sqm:1.62}
+    ]
+  },
+  {
+    region:"香港",english:"Hong Kong",units:[
+      {id:"hk_sqft",name:"平方呎",english:"Square foot",symbol:"sq ft",sqm:0.09290304},
+      {id:"hk_sqm",name:"平方米",english:"Square metre",symbol:"m²",sqm:1}
+    ]
+  },
+  {
+    region:"中國",english:"China",units:[
+      {id:"cn_sqm",name:"平方米",english:"Square metre",symbol:"㎡",sqm:1}
+    ]
+  },
+  {
+    region:"台灣",english:"Taiwan",units:[
+      {id:"tw_sqm",name:"平方公尺",english:"Square metre",symbol:"㎡",sqm:1},
+      {id:"tw_ping",name:"坪",english:"Ping",symbol:"坪",sqm:400/121}
+    ]
+  },
+  {
+    region:"美國・英國",english:"United States / United Kingdom",units:[
+      {id:"intl_sqft",name:"Square foot",english:"平方英尺",symbol:"sq ft",sqm:0.09290304}
+    ]
+  },
+  {
+    region:"歐洲・國際",english:"Europe / International",units:[
+      {id:"intl_sqm",name:"Square metre",english:"平方米",symbol:"m²",sqm:1}
+    ]
+  },
+  {
+    region:"韓國",english:"South Korea",units:[
+      {id:"kr_sqm",name:"제곱미터",english:"Square metre",symbol:"㎡",sqm:1},
+      {id:"kr_pyeong",name:"평",english:"Pyeong",symbol:"평",sqm:400/121}
+    ]
+  },
+  {
+    region:"東南亞",english:"Southeast Asia",units:[
+      {id:"sea_sqft",name:"新加坡・馬來西亞 Square foot",english:"平方英尺",symbol:"sq ft",sqm:0.09290304},
+      {id:"sea_sqm",name:"新加坡・馬來西亞 Square metre",english:"平方米",symbol:"m²",sqm:1},
+      {id:"th_sqm",name:"泰國 ตารางเมตร",english:"Square metre",symbol:"m²",sqm:1},
+      {id:"th_sqw",name:"泰國 ตารางวา",english:"Square wah",symbol:"ตร.ว.",sqm:4},
+      {id:"vn_sqm",name:"ベトナム Mét vuông",english:"Square metre",symbol:"m²",sqm:1}
+    ]
+  }
+];
+
+const AREA_UNIT_MAP = {};
+AREA_REGIONS.forEach(group => group.units.forEach(unit => {
+  AREA_UNIT_MAP[unit.id] = {...unit,region:group.region,regionEnglish:group.english};
+}));
+
+function areaFormat(value){
+  if (!Number.isFinite(value)) return "—";
+  const abs = Math.abs(value);
+  let digits = 4;
+  if (abs >= 1000000) digits = 2;
+  else if (abs >= 100) digits = 2;
+  else if (abs >= 1) digits = 4;
+  else if (abs >= 0.01) digits = 6;
+  else digits = 8;
+  return value.toLocaleString("en-US",{maximumFractionDigits:digits});
+}
+
+function areaSquareMetres(){
+  const amount = Number(document.getElementById("areaSourceValue").value);
+  const source = AREA_UNIT_MAP[document.getElementById("areaSourceUnit").value];
+  return Number.isFinite(amount) && amount >= 0 && source ? amount * source.sqm : 0;
+}
+
+function areaRender(){
+  if (!document.querySelector("#areaSourceValue")) return;
+  const sqm = areaSquareMetres();
+  document.getElementById("areaBaseSqm").textContent = `${areaFormat(sqm)} m²`;
+  document.getElementById("areaResults").innerHTML = AREA_REGIONS.map(group => `
+    <section class="area-region-card">
+      <div class="area-region-head"><strong>${group.region}</strong><span>${group.english}</span></div>
+      ${group.units.map(unit => `
+        <div class="area-result-row">
+          <div class="area-result-name">${unit.name}<small>${group.region}｜${unit.english}</small></div>
+          <div class="area-result-value">${areaFormat(sqm / unit.sqm)} ${unit.symbol}</div>
+        </div>`).join("")}
+    </section>`).join("");
+}
+
+function areaCopyText(){
+  const sqm = areaSquareMetres();
+  const source = AREA_UNIT_MAP[document.getElementById("areaSourceUnit").value];
+  const amount = Number(document.getElementById("areaSourceValue").value) || 0;
+  const sourceRegion = source ? `${source.region} / ${source.regionEnglish}` : "—";
+  const lines = ["面積單位換算結果 / International Area Conversion",`原始地區：${sourceRegion}`,`原始面積：${areaFormat(amount)} ${source ? source.symbol : ""}`,`基準面積：${areaFormat(sqm)} m²`,""];
+  AREA_REGIONS.forEach(group => {
+    lines.push(`【${group.region} / ${group.english}】`);
+    group.units.forEach(unit => lines.push(`${unit.name}：${areaFormat(sqm / unit.sqm)} ${unit.symbol}`));
+    lines.push("");
+  });
+  lines.push("※ 畳・帖為1畳＝1.62㎡的概算值；正式資料請以原始㎡數為準。");
+  return lines.join("\n");
+}
+
+document.getElementById("areaSourceValue").addEventListener("input",areaRender);
+document.getElementById("areaSourceUnit").addEventListener("change",areaRender);
+document.getElementById("areaResetBtn").addEventListener("click",() => {
+  document.getElementById("areaSourceValue").value = "60";
+  document.getElementById("areaSourceUnit").value = "jp_sqm";
+  document.getElementById("areaCopyStatus").textContent = "";
+  areaRender();
+});
+document.getElementById("areaCopyBtn").addEventListener("click",() => {
+  const status = document.getElementById("areaCopyStatus");
+  const done = () => {
+    status.textContent = "已複製全部地區的換算結果 ✓";
+    setTimeout(() => { status.textContent = ""; },1800);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(areaCopyText()).then(done).catch(() => fallbackCopy(areaCopyText(),done));
+  } else {
+    fallbackCopy(areaCopyText(),done);
+  }
+});
+areaRender();
+
+</script>
