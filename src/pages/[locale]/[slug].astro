@@ -33,6 +33,5 @@ try {
   slug={page.slug}
 >
   <Fragment set:html={content} />
-  <Fragment slot="legacyFooter" set:html={await fs.readFile(path.join(process.cwd(), "src", "partials", "legacy-footer.html"), "utf8")} />
 </BaseLayout>
 
