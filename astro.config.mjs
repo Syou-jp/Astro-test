@@ -1,5 +1,8 @@
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "https://astro-test-01m.pages.dev"
+  site: "https://astro-test-01m.pages.dev",
+  experimental: {
+    contentLayer: true
+  }
 });

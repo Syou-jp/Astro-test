@@ -149,10 +149,18 @@ declare module 'astro:content' {
   collection: "ja";
   data: any;
 }>;
+"newsDigests": Record<string, {
+  id: string;
+  collection: "newsDigests";
+  data: InferEntrySchema<"newsDigests">;
+  rendered?: RenderedContent;
+  filePath?: string;
+  body?: string 
+}>;
 
 	};
 
 	type AnyEntryMap = ContentEntryMap & DataEntryMap;
 
-	export type ContentConfig = never;
+	export type ContentConfig = typeof import("./../../src/content/config.js");
 }
