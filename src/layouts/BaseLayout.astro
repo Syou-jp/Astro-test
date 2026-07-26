@@ -239,6 +239,747 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         });
       });
     </script>
+<script is:inline>
+/* ================= Whole-site language switcher ================= */
+const SITE_LANGS = {ja:"ja", "zh-TW":"zh-Hant", "zh-CN":"zh-Hans", en:"en", ko:"ko", vi:"vi"};
+const SITE_TEXT = new Map();
+function siteAdd(source,ja,en,ko,vi){ SITE_TEXT.set(source,{ja,en,ko,vi}); }
+[
+  ["外's Net","外's Net","外's Net","外's Net","外's Net"],
+  ["ETC料金概算 ETC Toll Calculator","ETC料金概算 ETC Toll Calculator","ETC Toll Calculator","ETC 요금 계산","Tính phí ETC"],
+  ["ETC概算料金 Estimated toll","ETC概算料金 Estimated toll","Estimated toll","ETC 예상 요금","Phí ETC ước tính"],
+  ["通常料金（概算）","通常料金（概算）","Standard fare (estimate)","일반 요금(개산)","Phí thông thường (ước tính)"],
+  ["適用した割引額","適用した割引額","Discount applied","적용된 할인액","Số tiền được giảm"],
+  ["割引後の概算料金","割引後の概算料金","Estimated fare after discount","할인 적용 후 개산 요금","Phí ước tính sau giảm giá"],
+  ["言語","言語","Language","언어","Ngôn ngữ"],
+  ["サイトについて","サイトについて","About","사이트 소개","Giới thiệu trang web"],
+  ["サイト紹介・作者","サイト紹介・作者","About & Author","사이트 소개・작성자","Giới thiệu trang & tác giả"],
+  ["電気・ガス・水道","電気・ガス・水道","Utilities","전기・가스・수도","Điện, gas & nước"],
+  ["不動産の税金","不動産の税金","Property Tax","부동산 세금","Thuế bất động sản"],
+  ["個人・法人の税金","個人・法人の税金","Personal & Corporate Tax","개인・법인세","Thuế cá nhân & doanh nghiệp"],
+  ["中古車・車検・免許","中古車・車検・免許","Car & License","중고차・차검・면허","Xe cũ, kiểm định & bằng lái"],
+  ["初期費用計算機","初期費用計算機","Move-in Cost Calculator","초기 비용 계산기","Máy tính chi phí ban đầu"],
+  ["購屋稅金試算","不動産購入税金試算","Property Purchase Tax","부동산 구입 세금","Thuế mua bất động sản"],
+  ["面積單位換算","面積単位換算","Area Converter","면적 단위 변환","Quy đổi diện tích"],
+  ["通勤計算","通勤計算","Commute Calculator","통근 계산","Tính toán đi làm"],
+  ["内見申込書","内見申込書","Viewing Request","내견 신청서","Phiếu đăng ký xem nhà"],
+  ["入居申込書","入居申込書","Move-in Application","입주 신청서","Đơn đăng ký thuê nhà"],
+  ["買付証明書","買付証明書","Purchase Offer","매수 의향서","Đề nghị mua bất động sản"],
+  ["仲介用書類","仲介用書類","Agent Documents","중개용 서류","Hồ sơ môi giới"],
+  ["空港アクセス","空港アクセス","Airport Access","공항 교통","Di chuyển sân bay"],
+  ["電力計算","電力計算","Electricity Bill","전기요금 계산","Tính tiền điện"],
+  ["ガス計算","ガス計算","Gas Bill","가스요금 계산","Tính tiền gas"],
+  ["ガスの種類・使用量","ガスの種類・使用量","Gas Type & Usage","가스 종류・사용량","Loại gas・lượng sử dụng"],
+  ["都市ガスの月別調整","都市ガスの月別調整","City Gas Monthly Adjustment","도시가스 월별 조정","Điều chỉnh gas đô thị hàng tháng"],
+  ["LPガスの契約単価","LPガスの契約単価","LP Gas Contract Rates","LP가스 계약 단가","Đơn giá hợp đồng gas LP"],
+  ["同じ使用量で比較","同じ使用量で比較","Compare at Same Usage","동일 사용량 비교","So sánh cùng lượng sử dụng"],
+  ["主要会社・公式料金資料","主要会社・公式料金資料","Major Companies & Official Rates","주요 회사・공식 요금 자료","Công ty lớn・bảng giá chính thức"],
+  ["電気使用量・契約","電気使用量・契約","Usage & Contract","사용량・계약","Sản lượng・hợp đồng"],
+  ["1か月の電気使用量 Monthly consumption","1か月の電気使用量","Monthly electricity consumption","월간 전기 사용량","Lượng điện dùng trong tháng"],
+  ["月ごとの調整項目","月ごとの調整項目","Monthly Adjustments","월별 조정 항목","Điều chỉnh hàng tháng"],
+  ["同じ条件で料金表比較","同じ条件で料金表比較","Compare Published Rates","동일 조건 요금표 비교","So sánh bảng giá cùng điều kiện"],
+  ["料金表の読み方・公式資料","料金表の読み方・公式資料","How to Read Rates & Official Sources","요금표 읽는 법・공식 자료","Cách đọc bảng giá・nguồn chính thức"],
+  ["到着空港","到着空港","Arrival Airport","도착 공항","Sân bay đến"],
+  ["目的地の指定方法","目的地の指定方法","Choose Destination","목적지 지정 방법","Chọn điểm đến"],
+  ["主要駅から選ぶ","主要駅から選ぶ","Choose a major station","주요 역에서 선택","Chọn ga chính"],
+  ["住所を入力する","住所を入力する","Enter an address","주소 입력","Nhập địa chỉ"],
+  ["到着・出発時刻","到着・出発時刻","Arrival & Departure Time","도착・출발 시각","Giờ đến・khởi hành"],
+  ["飛行機の到着予定","飛行機の到着予定","Flight Arrival","항공편 도착 예정","Giờ máy bay đến"],
+  ["入国・荷物の所要時間","入国・荷物の所要時間","Immigration & Baggage Time","입국・수하물 소요 시간","Thời gian nhập cảnh・hành lý"],
+  ["空港を出発する予定時刻","空港を出発する予定時刻","Airport Departure Time","공항 출발 예정 시각","Giờ rời sân bay"],
+  ["到着＋手続時間で設定","到着＋手続時間で設定","Set from arrival + buffer","도착＋수속 시간으로 설정","Đặt theo giờ đến + thủ tục"],
+  ["手取り・個人税","手取り・個人税","Take-home Pay & Tax","실수령액・개인세","Lương thực nhận・thuế cá nhân"],
+  ["ふるさと納税","ふるさと納税","Hometown Tax","고향사랑 기부금","Thuế quê hương"],
+  ["法人税・会社設立","法人税・会社設立","Company & Corporate Tax","법인세・회사 설립","Công ty・thuế doanh nghiệp"],
+  ["中古車・車検","中古車・車検","Used Car & Inspection","중고차・차량검사","Xe cũ・đăng kiểm"],
+  ["粗大ごみ","粗大ごみ","Bulky Waste","대형 폐기물","Rác cồng kềnh"],
+  ["行政書士料金","行政書士料金","Administrative Scrivener Fees","행정서사 비용","Phí hành chính thư sĩ"],
+  ["広告・提携","広告・提携","Ads & Partners","광고・제휴","Quảng cáo・đối tác"],
+  ["広告掲載・提携","広告掲載・提携","Advertise & Partner","광고 게재・제휴","Đăng quảng cáo・hợp tác"],
+  ["外国語対応サービス","外国語対応サービス","Multilingual Services","외국어 대응 서비스","Dịch vụ đa ngôn ngữ"],
+  ["求人・採用","求人・採用","Jobs & Recruiting","구인・채용","Việc làm・tuyển dụng"],
+  ["お得・紹介","お得・紹介","Offers & Referrals","혜택・소개","Ưu đãi・giới thiệu"],
+  ["紹介コード・特典","紹介コード・特典","Referral Codes & Offers","소개 코드・혜택","Mã giới thiệu・ưu đãi"],
+  ["住まい・不動産","住まい・不動産","Housing & Property","주거・부동산","Nhà ở・bất động sản"],
+  ["暮らし・移動","暮らし・移動","Daily Life & Transport","생활・이동","Đời sống・di chuyển"],
+  ["税金・専門手続","税金・専門手続","Tax & Professional Help","세금・전문 수속","Thuế・thủ tục chuyên môn"],
+  ["広告・パートナー","広告・パートナー","Ads & Partners","광고・파트너","Quảng cáo・đối tác"],
+  ["物件・お客様情報","物件・お客様情報","Property & Customer","매물・고객 정보","Bất động sản・khách hàng"],
+  ["生成語言 Output Language","出力言語","Output Language","출력 언어","Ngôn ngữ xuất"],
+  ["選擇要複製給客人的語言，下方明細會即時更新。","お客様へ送る言語を選択してください。下の明細がすぐに更新されます。","Choose the language to send to the customer. The details below update immediately.","고객에게 보낼 언어를 선택하면 아래 명세가 즉시 갱신됩니다.","Chọn ngôn ngữ gửi cho khách hàng. Chi tiết bên dưới sẽ cập nhật ngay."],
+  ["+ 新增項目 Add item","＋項目を追加","+ Add item","+ 항목 추가","+ Thêm mục"],
+  ["📋 複製文字發送","📋 送信用テキストをコピー","📋 Copy text to send","📋 전송용 텍스트 복사","📋 Sao chép nội dung để gửi"],
+  ["📋 複製全部結果 Copy all","📋 すべての結果をコピー","📋 Copy all results","📋 모든 결과 복사","📋 Sao chép toàn bộ kết quả"],
+  ["📄 生成 PDF Generate PDF","📄 PDFを生成","📄 Generate PDF","📄 PDF 생성","📄 Tạo PDF"],
+  ["重設 Reset","リセット","Reset","초기화","Đặt lại"],
+  ["輸入面積 Source Area","面積を入力","Source Area","면적 입력","Nhập diện tích"],
+  ["各地區換算結果 Regional Results","地域別換算結果","Regional Results","지역별 변환 결과","Kết quả theo khu vực"],
+  ["國際基準面積 BASE AREA","基準面積","BASE AREA","기준 면적","DIỆN TÍCH CƠ SỞ"],
+  ["估算起點 → 目的地","出発地 → 目的地を概算","Estimate origin → destination","출발지 → 목적지 예상","Ước tính điểm đi → điểm đến"],
+  ["分析起點附近","出発地周辺を分析","Analyze nearby stations","출발지 주변 분석","Phân tích khu vực điểm đi"],
+  ["Google Maps 路線","Google Mapsで経路確認","Google Maps route","Google Maps 경로","Tuyến đường Google Maps"],
+  ["NAVITIME 路線","NAVITIMEで経路確認","NAVITIME route","NAVITIME 경로","Tuyến đường NAVITIME"],
+  ["一都三縣車站","一都三県の駅","Stations in Tokyo & 3 prefectures","도쿄・3현 역","Ga tại Tokyo và 3 tỉnh lân cận"],
+  ["大學・短大校區","大学・短大キャンパス","University campuses","대학교・단기대학 캠퍼스","Cơ sở đại học・cao đẳng"],
+  ["東京日本語學校","東京の日本語学校","Japanese schools in Tokyo","도쿄 일본어학교","Trường tiếng Nhật tại Tokyo"],
+  ["全部車站","すべての駅","All stations","모든 역","Tất cả ga"],
+  ["大學各校區","大学キャンパス","University campuses","대학교 캠퍼스","Cơ sở đại học"],
+  ["自由地址","住所を自由入力","Free-form address","주소 직접 입력","Nhập địa chỉ tự do"],
+  ["緯度,經度","緯度, 経度","Latitude, longitude","위도, 경도","Vĩ độ, kinh độ"],
+  ["可分析附近車站","周辺駅を分析できます","Nearby stations can be analyzed","주변 역 분석 가능","Có thể phân tích ga gần đó"],
+  ["用於外部路線查詢","外部経路検索に使用","Used for external route search","외부 경로 검색에 사용","Dùng để tìm tuyến đường bên ngoài"],
+  ["路線圖","路線図","Line map","노선도","Sơ đồ tuyến"],
+  ["關閉","閉じる","Close","닫기","Đóng"],
+  ["選擇地點 Select Locations","地点を選択","Select Locations","장소 선택","Chọn địa điểm"],
+  ["物件 Origin","物件・出発地","Property / Origin","매물・출발지","Bất động sản・điểm đi"],
+  ["最多轉乘次數（估算起點→目的地）","最大乗換回数（出発地→目的地の概算時）","Max transfers (origin → destination estimate)","최대 환승 횟수(출발지→목적지 예상)","Số lần chuyển tuyến tối đa (ước tính điểm đi → điểm đến)"],
+  ["不限","制限なし","No limit","제한 없음","Không giới hạn"],
+  ["目的地 Destination","目的地","Destination","목적지","Điểm đến"],
+  ["電車時間・附近車站 Train Time & Station Distance","電車所要時間・周辺駅","Train Time & Station Distance","전철 시간・주변 역","Thời gian tàu・ga lân cận"],
+  ["本頁不使用 API Key，也不消耗 Google API 額度。車站之間可立即顯示離線乘車時間概算；已知座標的地點也能比較一都三縣附近車站。即時班次、快車與自由地址則可一鍵交由 Google Maps 或 NAVITIME 核對。","このページはAPIキーを使用せず、Google APIの割当も消費しません。駅間の所要時間はオフラインで概算でき、座標のある地点は一都三県の周辺駅と比較できます。リアルタイムの運行、快速列車、自由入力住所はGoogle MapsまたはNAVITIMEで確認してください。","This page uses no API key or Google API quota. It estimates station-to-station time offline and compares known coordinates with nearby stations. Check live services, express trains and free-form addresses with Google Maps or NAVITIME.","이 페이지는 API 키나 Google API 할당량을 사용하지 않습니다. 역 간 시간은 오프라인으로 예상하며 좌표가 있는 장소는 주변 역과 비교할 수 있습니다. 실시간 운행, 급행 및 자유 주소는 Google Maps 또는 NAVITIME에서 확인하세요.","Trang này không dùng khóa API hoặc hạn mức Google API. Thời gian giữa các ga được ước tính ngoại tuyến và địa điểm có tọa độ có thể so sánh với ga lân cận. Hãy kiểm tra lịch chạy thực tế, tàu nhanh và địa chỉ tự do bằng Google Maps hoặc NAVITIME."],
+  ["輸入自由地址時，不會在本站傳送或儲存地址；按下外部查詢按鈕後，才會把起點與目的地交給所選服務。","自由入力した住所はこのサイトから送信・保存されません。外部検索ボタンを押したときだけ、出発地と目的地が選択したサービスへ渡されます。","Free-form addresses are not sent or stored by this site. Origin and destination are passed to the selected service only after you press an external search button.","직접 입력한 주소는 이 사이트에서 전송하거나 저장하지 않습니다. 외부 검색 버튼을 누를 때만 출발지와 목적지가 선택한 서비스에 전달됩니다.","Địa chỉ nhập tự do không được trang này gửi hoặc lưu. Chỉ khi nhấn nút tìm kiếm bên ngoài, điểm đi và điểm đến mới được chuyển tới dịch vụ đã chọn."],
+  ["從左側選擇物件、校區或車站後，即可查看約 20 分鐘步行內的車站，或切換為一都三縣全部車站。","左側で物件、キャンパス、駅を選ぶと、徒歩約20分以内の駅を表示できます。一都三県の全駅表示にも切り替えられます。","Select a property, campus or station on the left to view stations within about a 20-minute walk, or switch to all stations in Tokyo and the three surrounding prefectures.","왼쪽에서 매물, 캠퍼스 또는 역을 선택하면 도보 약 20분 이내 역을 보거나 도쿄・3현의 모든 역으로 전환할 수 있습니다.","Chọn bất động sản, cơ sở trường hoặc ga bên trái để xem các ga trong khoảng 20 phút đi bộ, hoặc chuyển sang toàn bộ ga tại Tokyo và 3 tỉnh lân cận."],
+  ["資料來源：國土交通省「國土數值情報」鐵道 2025 年版、學校 2023 年版（CC BY 4.0）；出入國在留管理廳日本語教育機關名單（2026-07-02）；UR都市機構個別団地類型一覧（2026-03 末）。","データ出典：国土交通省「国土数値情報」鉄道2025年版・学校2023年版（CC BY 4.0）、出入国在留管理庁日本語教育機関一覧（2026-07-02）、UR都市機構団地類型一覧（2026年3月末）。","Sources: MLIT National Land Numerical Information railway 2025 and school 2023 datasets (CC BY 4.0); Immigration Services Agency Japanese-language institution list (2026-07-02); UR housing list (end of March 2026).","출처: 일본 국토교통성 국토수치정보 철도 2025・학교 2023(CC BY 4.0), 출입국재류관리청 일본어교육기관 목록(2026-07-02), UR 단지 목록(2026년 3월 말).","Nguồn: Dữ liệu số quốc gia của MLIT về đường sắt 2025 và trường học 2023 (CC BY 4.0); danh sách cơ sở tiếng Nhật của Cục Quản lý Xuất nhập cảnh (2026-07-02); danh sách khu nhà UR (cuối tháng 3/2026)."],
+  ["物件基本資料 Property Basics","物件基本情報","Property Basics","매물 기본 정보","Thông tin cơ bản"],
+  ["評價額 Assessed Values","評価額","Assessed Values","평가액","Giá trị định giá"],
+  ["購屋稅金試算結果","不動産購入税金の試算結果","Property purchase tax estimate","부동산 구입 세금 예상 결과","Kết quả ước tính thuế mua nhà"],
+  ["概算","概算","Estimate","예상","Ước tính"],
+  ["一次性稅費合計","購入時の税費用合計","Total one-time taxes","일회성 세금 합계","Tổng thuế phí một lần"],
+  ["購入時稅費＋當年日割合計","購入時税費用＋当年日割合計","Purchase taxes + current-year prorated amount","구입 시 세금 + 당해 연도 일할 합계","Thuế khi mua + phần phân bổ năm hiện tại"],
+  ["依買賣價格估算評價額 →","売買価格から評価額を概算 →","Estimate assessed value from price →","매매가로 평가액 추정 →","Ước tính giá trị định giá từ giá mua →"],
+  ["有 Yes","あり","Yes","있음","Có"],
+  ["無 No","なし","No","없음","Không"],
+  ["自用 Owner-occupied","自己居住用","Owner-occupied","실거주","Tự ở"],
+  ["投資出租 Rental / investment","賃貸・投資用","Rental / investment","임대・투자","Cho thuê・đầu tư"],
+  ["新築 New build","新築","New build","신축","Nhà mới"],
+  ["中古屋 Used","中古","Used property","중고","Nhà đã qua sử dụng"],
+  ["土地 Land only","土地のみ","Land only","토지만","Chỉ đất"],
+  ["已取得證明 Certified","証明書取得済み","Certified","증명서 취득","Đã có chứng nhận"],
+  ["尚未取得 Not certified","未取得","Not certified","미취득","Chưa có chứng nhận"],
+  ["日本在住の外国籍のお客様向け入居申込フォームです。審査に必要な項目をできるだけ漏れなく入力してください。","日本在住の外国籍のお客様向け入居申込フォームです。審査に必要な項目をできるだけ漏れなく入力してください。","This move-in application is for foreign residents in Japan. Please complete all fields required for screening.","일본에 거주하는 외국인을 위한 입주 신청서입니다. 심사에 필요한 항목을 빠짐없이 입력해 주세요.","Đây là đơn thuê nhà dành cho người nước ngoài đang sống tại Nhật. Vui lòng điền đầy đủ các mục cần thiết để xét duyệt."],
+  ["這是針對在日本居住之外國人的租屋申請表。證件請先勾選種類，再上傳檔案；未勾選的上傳欄位不會顯示。","日本在住の外国籍のお客様向けの賃貸申込書です。書類の種類を選択してからアップロードしてください。選択していないアップロード欄は表示されません。","This rental application is for foreign residents in Japan. Select each document type before uploading; unchecked upload fields remain hidden.","일본 거주 외국인을 위한 임대 신청서입니다. 서류 종류를 선택한 뒤 업로드하세요. 선택하지 않은 업로드 항목은 표시되지 않습니다.","Đây là đơn thuê nhà cho người nước ngoài tại Nhật. Hãy chọn loại giấy tờ trước khi tải lên; mục chưa chọn sẽ được ẩn."],
+  ["進学","進学","Further study","진학","Học lên"],
+  ["就職","就職","Employment","취업","Đi làm"],
+  ["転勤","転勤","Job transfer","전근","Chuyển công tác"],
+  ["結婚","結婚","Marriage","결혼","Kết hôn"],
+  ["住み替え","住み替え","Moving home","이사","Chuyển nhà"],
+  ["その他","その他","Other","기타","Khác"],
+  ["選択 Select","選択","Select","선택","Chọn"],
+  ["男性 Male","男性","Male","남성","Nam"],
+  ["女性 Female","女性","Female","여성","Nữ"],
+  ["回答しない Prefer not to say","回答しない","Prefer not to say","응답하지 않음","Không muốn trả lời"],
+  ["会社員 Employee","会社員","Employee","회사원","Nhân viên công ty"],
+  ["会社役員 Executive","会社役員","Executive","임원","Quản lý công ty"],
+  ["公務員 Public employee","公務員","Public employee","공무원","Công chức"],
+  ["自営業 Self-employed","自営業","Self-employed","자영업","Tự kinh doanh"],
+  ["学生 Student","学生","Student","학생","Sinh viên"],
+  ["派遣 Temporary staff","派遣社員","Temporary staff","파견직","Nhân viên phái cử"],
+  ["内定者 Prospective employee","内定者","Prospective employee","입사 예정자","Người đã nhận việc"],
+  ["正社員 Permanent","正社員","Permanent employee","정규직","Nhân viên chính thức"],
+  ["契約社員 Contract","契約社員","Contract employee","계약직","Nhân viên hợp đồng"],
+  ["派遣社員 Temporary","派遣社員","Temporary employee","파견직","Nhân viên phái cử"],
+  ["相談希望 Ask landlord","要相談","Ask landlord","집주인과 상담","Cần trao đổi với chủ nhà"],
+  ["日本国内 In Japan","日本国内","In Japan","일본 국내","Tại Nhật"],
+  ["海外 Overseas","海外","Overseas","해외","Ở nước ngoài"],
+  ["両方 Both","両方","Both","둘 다","Cả hai"],
+  ["未定 Undecided","未定","Undecided","미정","Chưa quyết định"],
+  ["必要な書類だけを勾選してください。勾選後、該当する上傳欄位が自動で表示されます（画像またはPDF）。","必要な書類だけを選択してください。選択すると該当するアップロード欄が自動表示されます（画像またはPDF）。","Select only the required documents. The relevant upload fields appear automatically (image or PDF).","필요한 서류만 선택하세요. 선택하면 해당 업로드 항목이 자동으로 표시됩니다(이미지 또는 PDF).","Chỉ chọn giấy tờ cần thiết. Trường tải lên tương ứng sẽ tự động hiện ra (ảnh hoặc PDF)."],
+  ["ファイル未選択","ファイル未選択","No file selected","선택된 파일 없음","Chưa chọn tệp"],
+  ["入力内容をクリア Clear","入力内容をクリア","Clear form","입력 내용 지우기","Xóa nội dung"],
+  ["申込内容を保存 Download JSON","申込内容を保存","Download JSON","신청 내용 저장","Lưu nội dung đăng ký"],
+  ["中古マンション","中古マンション","Used condominium","중고 맨션","Căn hộ đã qua sử dụng"],
+  ["新築マンション","新築マンション","New condominium","신축 맨션","Căn hộ mới"],
+  ["中古戸建","中古戸建","Used detached house","중고 단독주택","Nhà riêng đã qua sử dụng"],
+  ["新築戸建","新築戸建","New detached house","신축 단독주택","Nhà riêng mới"],
+  ["一棟収益物件","一棟収益物件","Whole-building investment","수익형 건물 전체","Tòa nhà đầu tư nguyên căn"],
+  ["区分収益物件","区分収益物件","Unit investment property","구분 수익형 부동산","Bất động sản đầu tư từng căn"],
+  ["事業用物件","事業用物件","Commercial property","사업용 부동산","Bất động sản thương mại"],
+  ["空室 Vacant","空室","Vacant","공실","Đang trống"],
+  ["居住中 Occupied by owner","居住中","Occupied by owner","거주 중","Đang có người ở"],
+  ["賃貸中 Tenant occupied","賃貸中","Tenant occupied","임대 중","Đang cho thuê"],
+  ["更地 Vacant land","更地","Vacant land","나대지","Đất trống"],
+  ["古家あり Existing building","古家あり","Existing building","구옥 있음","Có nhà cũ"],
+  ["銀行融資 Bank financing","銀行融資","Bank financing","은행 대출","Vay ngân hàng"],
+  ["現金 Cash","現金","Cash","현금","Tiền mặt"],
+  ["現金＋銀行融資 Cash + financing","現金＋銀行融資","Cash + financing","현금＋은행 대출","Tiền mặt + vay ngân hàng"],
+  ["未申込 Not applied","未申込","Not applied","미신청","Chưa đăng ký"],
+  ["申込中 Pending","申込中","Pending","신청 중","Đang đăng ký"],
+  ["承認済 Approved","承認済","Approved","승인 완료","Đã phê duyệt"],
+  ["不要 Not applicable","不要","Not applicable","불필요","Không áp dụng"],
+  ["個人 Individual","個人","Individual","개인","Cá nhân"],
+  ["法人 Company","法人","Company","법인","Doanh nghiệp"],
+  ["特になし","特になし","None","없음","Không có"],
+  ["クリア Clear","クリア","Clear","지우기","Xóa"]
+].forEach(row => siteAdd(...row));
+
+[
+  ["用於入居月家賃的日割り計算","入居月賃料の日割計算に使用します","Used to prorate the move-in month rent","입주 월세 일할 계산에 사용","Dùng để tính tiền thuê theo ngày trong tháng vào ở"],
+  ["月租金額","月額の賃料","Monthly rent amount","월 임대료","Số tiền thuê hàng tháng"],
+  ["※不算入總合計金額，只用作計算禮金、敷金、仲介手數料等的基準","※合計には含めず、礼金・敷金・仲介手数料などの計算基準としてのみ使用します。","Not included in the total; used only as the basis for deposits, key money and agency fees.","합계에는 포함하지 않으며 보증금・레이킨・중개 수수료 계산 기준으로만 사용합니다.","Không tính vào tổng; chỉ dùng làm cơ sở tính tiền cọc, tiền lễ và phí môi giới."],
+  ["初回請求分（1ヶ月）固定金額","初回請求分（1か月）の固定金額","Fixed first billing amount (one month)","최초 청구분(1개월) 고정 금액","Số tiền cố định kỳ đầu (1 tháng)"],
+  ["可填金額或家賃的%","金額または賃料に対する割合を入力できます","Enter an amount or a percentage of rent","금액 또는 월세 비율 입력 가능","Nhập số tiền hoặc tỷ lệ phần trăm tiền thuê"],
+  ["可填金額，或家賃＋管理費總和的%","金額、または賃料＋管理費合計に対する割合を入力できます","Enter an amount or a percentage of rent plus management fee","금액 또는 월세＋관리비 합계 비율 입력 가능","Nhập số tiền hoặc tỷ lệ của tiền thuê cộng phí quản lý"],
+  ["可設定月額或年額","月額または年額を設定できます","Set a monthly or annual amount","월액 또는 연액 설정 가능","Có thể đặt theo tháng hoặc năm"],
+  ["影響折舊年數與減稅年限","耐用年数と減税期間に影響します","Affects depreciation and tax-relief periods","감가상각 및 감세 기간에 영향","Ảnh hưởng thời gian khấu hao và ưu đãi thuế"],
+  ["影響登錄免許稅是否適用自用減稅","登録免許税の自己居住用軽減の適用に影響します","Affects owner-occupied registration-tax relief","실거주 등록면허세 감면 적용에 영향","Ảnh hưởng ưu đãi thuế đăng ký cho nhà tự ở"],
+  ["用於一鍵估算，非投資物件比例可調整","ワンクリック概算に使用します。物件に応じて割合を調整してください。","Used for one-click estimates; adjust the ratio for the property.","간편 추정에 사용하며 매물에 맞게 비율을 조정하세요.","Dùng cho ước tính nhanh; hãy điều chỉnh tỷ lệ theo bất động sản."],
+  ["円 (税抜)","円（税抜）","JPY (excl. tax)","엔(세금 별도)","JPY (chưa thuế)"],
+  ["不動產取得稅・土地","不動産取得税・土地","Real estate acquisition tax — land","부동산 취득세・토지","Thuế mua bất động sản・đất"],
+  ["不動產取得稅・建物","不動産取得税・建物","Real estate acquisition tax — building","부동산 취득세・건물","Thuế mua bất động sản・tòa nhà"],
+  ["登錄免許稅・土地移轉（1.5%）","登録免許税・土地移転（1.5%）","Registration tax — land transfer (1.5%)","등록면허세・토지 이전(1.5%)","Thuế đăng ký・chuyển nhượng đất (1,5%)"],
+  ["登錄免許稅・抵押權設定","登録免許税・抵当権設定","Registration tax — mortgage","등록면허세・저당권 설정","Thuế đăng ký・thế chấp"],
+  ["全年持有稅金參考（未日割）","年間保有税額の参考（未日割）","Estimated annual holding tax (not prorated)","연간 보유세 참고(일할 전)","Thuế sở hữu năm tham khảo (chưa phân bổ)"],
+  ["當年度日割分攤（購入日起算）","当年度の日割負担（購入日起算）","Current-year prorated amount from purchase date","당해 연도 일할 부담(구입일부터)","Phần phân bổ năm hiện tại từ ngày mua"],
+  ["步行估算＝直線距離 × 1.2（道路繞行係數）÷ 每分鐘 80m。電車時間則依站間距離、路線平均速度與轉乘時間推算，適合初步篩選；實際班次、快車停靠、車資及月台動線請以 Google Maps／NAVITIME 為準。","徒歩時間＝直線距離×1.2（迂回係数）÷毎分80mで概算します。電車時間は駅間距離、路線平均速度、乗換時間から推定した一次検討用です。実際のダイヤ、快速停車駅、運賃、ホーム移動はGoogle Maps／NAVITIMEで確認してください。","Walking time uses straight-line distance × 1.2 ÷ 80 m/min. Train time is estimated from station distance, average speed and transfers. Check actual schedules, express stops, fares and platform walks with Google Maps or NAVITIME.","도보 시간은 직선거리×1.2÷분당 80m로 예상합니다. 전철 시간은 역 간 거리, 평균 속도와 환승 시간의 추정치입니다. 실제 시간표, 급행 정차, 요금과 승강장 이동은 Google Maps／NAVITIME에서 확인하세요.","Thời gian đi bộ = khoảng cách thẳng × 1,2 ÷ 80m/phút. Thời gian tàu được ước tính theo khoảng cách ga, tốc độ trung bình và chuyển tuyến. Hãy kiểm tra lịch thực tế, tàu nhanh, giá vé và di chuyển trong ga bằng Google Maps／NAVITIME."],
+  ["這是把實際線形簡化後的站點示意圖，不是地理地圖，也不代表票價、班次或列車停靠型態。可直接點擊圖上的站名或白色圓點設為目的地；下方站名清單也能操作。相互直通、共用軌道或正式線籍不同的區間，可能依官方資料拆成不同路線。","実際の線形を簡略化した駅の模式図です。地理地図ではなく、運賃・ダイヤ・停車種別を表すものではありません。図の駅名または白い丸を直接押して目的地に設定できます。下の駅一覧も利用できます。相互直通、共用線路、正式線籍の違いにより、公式データ上は別路線として表示される場合があります。","This is a simplified station diagram, not a geographic map, and does not represent fares, schedules or stopping patterns. Click a station name or white dot to set the destination; the list below also works.","실제 선형을 단순화한 역 안내도이며 지리 지도나 요금・시간표・정차 유형을 나타내지 않습니다. 역명이나 흰 점을 눌러 목적지로 설정할 수 있습니다.","Đây là sơ đồ ga đơn giản hóa, không phải bản đồ địa lý và không thể hiện giá vé, lịch chạy hay kiểu dừng. Nhấn tên ga hoặc chấm trắng để đặt làm điểm đến."],
+  ["按下按鈕會將左方申込書內容轉成一份 PDF 檔案並下載，可直接傳真或email給對方公司。","ボタンを押すと左側の申込内容をPDFにしてダウンロードします。そのままFAXまたはメールで送付できます。","Press the button to convert the form on the left into a downloadable PDF for fax or email.","버튼을 누르면 왼쪽 신청 내용을 PDF로 다운로드하여 팩스나 이메일로 보낼 수 있습니다.","Nhấn nút để chuyển nội dung bên trái thành PDF có thể tải xuống và gửi qua fax hoặc email."],
+  ["本工具僅供概算參考，實際稅額以稅務機關核定及正式登記為準；稅率與減免特例均設有適用期限，請以最新法令為準。假設土地為200㎡以下小規模住宅用地，如實際面積較大請自行調整。所有計算僅於瀏覽器內完成。","本ツールは概算用です。実際の税額は税務機関の決定および正式登記に従います。税率・軽減特例には適用期限がありますので最新法令をご確認ください。土地は200㎡以下の小規模住宅用地を想定しています。計算はすべてブラウザ内で行われます。","This tool provides estimates only. Actual tax is determined by the authorities and official registration. Rates and relief measures may expire. The estimate assumes residential land of 200 m² or less. All calculations run in your browser.","본 도구는 예상용입니다. 실제 세액은 세무 당국과 정식 등기에 따르며 세율과 감면에는 적용 기한이 있습니다. 토지는 200㎡ 이하 소규모 주택용지를 가정합니다. 계산은 브라우저 안에서만 처리됩니다.","Công cụ chỉ dùng để ước tính. Thuế thực tế theo cơ quan thuế và đăng ký chính thức; thuế suất và ưu đãi có thời hạn. Giả định đất ở nhỏ không quá 200m². Mọi phép tính diễn ra trong trình duyệt."]
+].forEach(row => siteAdd(...row));
+
+siteAdd("僅當月日割り (1個月)","当月の日割のみ（1か月）","Current month prorated only (1 month)","당월 일할만(1개월)","Chỉ tính theo ngày tháng hiện tại (1 tháng)");
+siteAdd("日割り + 1個月 (共2個月)","日割＋翌月分（合計2か月）","Prorated + 1 month (2 months total)","일할＋1개월(총 2개월)","Theo ngày + 1 tháng (tổng 2 tháng)");
+siteAdd("貸款與購入日期 Loan & Purchase Date","融資・購入日","Loan & Purchase Date","대출・구입일","Khoản vay・ngày mua");
+siteAdd("中古屋建物新建時期","中古住宅の建築時期","Construction period of used property","중고 주택 건축 시기","Thời kỳ xây dựng nhà cũ");
+siteAdd("(僅中古屋需選)","（中古住宅のみ選択）","(Used property only)","(중고 주택만 선택)","(Chỉ nhà đã qua sử dụng)");
+siteAdd("耐震基準適合證明","耐震基準適合証明","Seismic compliance certificate","내진 기준 적합 증명","Chứng nhận phù hợp tiêu chuẩn động đất");
+siteAdd("※ 所有結果均先換算為平方公尺再計算。日本「畳・帖」依房產廣告常用基準以 1畳＝1.62㎡概算，實際榻榻米尺寸會因地區與規格不同。日本與台灣的坪採 1坪＝400/121㎡。本頁只保留各地住宅買賣與物件廣告中較常見的面積單位；顯示值經四捨五入，正式契約與登記請以原始㎡數及官方資料為準。","※ すべての結果は一度㎡へ換算して計算します。日本の畳・帖は不動産広告で一般的な1畳＝1.62㎡の概算で、実寸は地域や規格により異なります。日本・台湾の坪は1坪＝400/121㎡です。表示値は丸めています。正式な契約・登記では元の㎡値と公式資料をご確認ください。","All results are converted through square metres. Japanese jo/tatami uses the common real-estate estimate of 1 jo = 1.62 m²; actual sizes vary. Japanese and Taiwanese ping uses 400/121 m². Values are rounded; use original square metres and official data for contracts and registration.","모든 결과는 ㎡로 변환해 계산합니다. 일본 다다미는 부동산 광고 기준 1조=1.62㎡의 예상치이며 실제 크기는 다를 수 있습니다. 일본・대만 평은 400/121㎡입니다. 계약과 등기에는 원래 ㎡와 공식 자료를 확인하세요.","Mọi kết quả được quy đổi qua m². Đơn vị tatami Nhật dùng ước tính phổ biến 1 chiếu = 1,62m²; kích thước thực tế có thể khác. Tsubo/ping Nhật và Đài Loan = 400/121m². Giá trị đã làm tròn; hợp đồng và đăng ký phải theo số m² gốc và dữ liệu chính thức.");
+siteAdd("※ このHTML単体では選択した書類をサーバーへ送信しません。書類はこのブラウザ内でのみ選択されます。実際の提出機能には、安全なサーバー保存先と通信処理が別途必要です。","※ このHTML単体では選択した書類をサーバーへ送信しません。書類はブラウザ内でのみ選択されます。実際の提出には安全な保存先と通信処理が別途必要です。","This standalone HTML does not upload selected documents. Files are selected only in the browser. Real submission requires a secure server and upload process.","이 HTML 파일만으로 선택한 서류가 서버에 전송되지는 않습니다. 실제 제출에는 안전한 서버 저장소와 통신 처리가 필요합니다.","Tệp HTML độc lập này không gửi giấy tờ đã chọn lên máy chủ. Chức năng nộp thật cần nơi lưu trữ máy chủ và quy trình truyền an toàn.");
+siteAdd("概算（整月）或日割り計算","概算（全月）または日割計算","Estimate by full month or prorate","월 단위 예상 또는 일할 계산","Ước tính theo tháng hoặc tính theo ngày");
+siteAdd("日割り + 追加月數","日割＋追加月数","Prorated + additional months","일할＋추가 개월","Theo ngày + số tháng bổ sung");
+siteAdd("家賃の何ヶ月分 (× months of rent)","賃料の何か月分","Multiple of monthly rent","월세의 몇 개월분","Số tháng tiền thuê");
+siteAdd("家賃の %","賃料の％","Percentage of rent","월세의 %","% tiền thuê");
+siteAdd("RC／SRC","RC／SRC","RC / SRC","RC／SRC","RC／SRC");
+siteAdd("Annual Holding Tax","年間保有税","Annual Holding Tax","연간 보유세","Thuế sở hữu hàng năm");
+siteAdd("パスポート","パスポート","Passport","여권","Hộ chiếu");
+siteAdd("在留カード（表・裏）","在留カード（表・裏）","Residence card (front and back)","재류카드(앞・뒤)","Thẻ cư trú (mặt trước・sau)");
+siteAdd("ファイル未選択（表・裏を選択可）","ファイル未選択（表・裏を選択可）","No files selected (front and back allowed)","선택된 파일 없음(앞・뒤 선택 가능)","Chưa chọn tệp (có thể chọn mặt trước・sau)");
+siteAdd("土地固定資產稅評價額 Land assessed value","土地の固定資産税評価額","Land assessed value","토지 고정자산세 평가액","Giá trị định giá thuế đất");
+siteAdd("建物固定資產稅評價額 Building assessed value","建物の固定資産税評価額","Building assessed value","건물 고정자산세 평가액","Giá trị định giá thuế công trình");
+siteAdd("決定不動產取得稅控除額","不動産取得税の控除額を決定します","Determines the acquisition-tax deduction","부동산 취득세 공제액 결정","Xác định mức khấu trừ thuế mua bất động sản");
+siteAdd("此年代須有證明才適用控除／登錄免許稅減稅","この年代は証明書がある場合のみ控除・登録免許税軽減を適用できます","This period requires a certificate for deductions and registration-tax relief","이 연대는 증명서가 있어야 공제・등록면허세 감면 적용","Giai đoạn này cần chứng nhận để được khấu trừ và giảm thuế đăng ký");
+siteAdd("是否有貸款 Has loan","融資の有無","Has loan","대출 여부","Có khoản vay hay không");
+siteAdd("用於固都稅日割分攤","固定資産税・都市計画税の日割計算に使用します","Used to prorate fixed asset and city planning taxes","고정자산세・도시계획세 일할 계산에 사용","Dùng để phân bổ thuế tài sản và quy hoạch đô thị");
+siteAdd("① 購入時一次性稅費 One-time (at closing)","① 購入時の一時税費用","① One-time taxes at closing","① 구입 시 일회성 세금","① Thuế phí một lần khi mua");
+siteAdd("② 固定資產稅・都市計畫稅 Annual Holding Tax","② 固定資産税・都市計画税","② Fixed asset & city planning tax","② 고정자산세・도시계획세","② Thuế tài sản・quy hoạch đô thị");
+siteAdd("私は、下記不動産を下記条件にて購入したく、ここに買付を申し込みます。","私は、下記不動産を下記条件にて購入したく、ここに買付を申し込みます。","I hereby offer to purchase the property below under the stated terms.","아래 부동산을 다음 조건으로 구입하고자 매수를 신청합니다.","Tôi xin đề nghị mua bất động sản dưới đây theo các điều kiện nêu sau.");
+siteAdd("本書は購入希望条件を提示し、売買契約締結に向けた協議を申し込むための書面です。本書のみで売買契約の成立を保証するものではなく、最終的な取引条件は重要事項説明および別途締結する不動産売買契約書によって確定します。","本書は購入希望条件を提示し、売買契約締結に向けた協議を申し込むための書面です。本書のみで売買契約の成立を保証するものではなく、最終条件は重要事項説明および売買契約書で確定します。","This document states the proposed purchase terms and requests negotiations toward a sale contract. It does not itself create a binding sale; final terms are set by the disclosure and separate purchase agreement.","본 문서는 구입 희망 조건을 제시하고 매매계약 협의를 신청하는 문서입니다. 이 문서만으로 계약이 성립하지 않으며 최종 조건은 중요사항 설명과 별도 매매계약서로 확정됩니다.","Văn bản này nêu điều kiện mua đề xuất và đề nghị thương lượng hợp đồng. Văn bản này không tự tạo thành hợp đồng mua bán; điều kiện cuối cùng được xác định bằng bản giải thích quan trọng và hợp đồng riêng.");
+siteAdd("一般的な実務項目をまとめた買付証明書です。物件・取引内容に応じて宅地建物取引士、司法書士または弁護士へ条件をご確認ください。","一般的な実務項目をまとめた買付証明書です。物件・取引内容に応じて宅地建物取引士、司法書士または弁護士へ条件をご確認ください。","This offer form contains common transaction items. Confirm terms with a licensed real-estate professional, judicial scrivener or lawyer as appropriate.","일반적인 실무 항목을 정리한 매수 의향서입니다. 거래 내용에 따라 공인 부동산 전문가, 사법서사 또는 변호사에게 조건을 확인하세요.","Đây là mẫu đề nghị mua gồm các mục giao dịch phổ biến. Hãy xác nhận điều kiện với chuyên viên bất động sản, tư pháp thư sĩ hoặc luật sư tùy giao dịch.");
+siteAdd("分鐘","分","minutes","분","phút");
+siteAdd("乘車","乗車","Ride","승차","Đi tàu");
+siteAdd("站｜轉乘","駅｜乗換","stops | transfers","개 역｜환승","ga｜chuyển tuyến");
+siteAdd("次｜離線概算（不是即時班次）","回｜オフライン概算（リアルタイムではありません）","| offline estimate (not live)","회｜오프라인 예상(실시간 아님)","lần｜ước tính ngoại tuyến (không trực tiếp)");
+siteAdd("概算路線","概算経路","Estimated route","예상 경로","Tuyến đường ước tính");
+siteAdd("搭乘","乗車","Ride","승차","Đi");
+siteAdd("轉乘","乗換","Transfer","환승","Chuyển tuyến");
+siteAdd("時間由內建站點、站間距離、路線平均速度與每次轉乘約 4 分鐘推算；不含最初候車、班次延誤、快車停靠差異及月台實際步行。正式帶看或通勤判斷請再用 Google Maps／NAVITIME 核對。","所要時間は内蔵駅データ、駅間距離、路線平均速度、乗換1回約4分から推定しています。最初の待ち時間、遅延、快速停車駅の違い、ホーム移動は含みません。内見や通勤判断ではGoogle Maps／NAVITIMEで再確認してください。","Time is estimated from built-in station data, distance, average line speed and about four minutes per transfer. It excludes initial waiting, delays, express stopping patterns and platform walks. Verify with Google Maps or NAVITIME.","시간은 내장 역 데이터, 역 간 거리, 평균 속도와 환승 1회 약 4분으로 추정합니다. 최초 대기, 지연, 급행 정차 차이와 승강장 이동은 포함하지 않습니다. Google Maps／NAVITIME에서 다시 확인하세요.","Thời gian được ước tính từ dữ liệu ga, khoảng cách, tốc độ trung bình và khoảng 4 phút mỗi lần chuyển tuyến. Không gồm thời gian chờ đầu tiên, trễ tàu, điểm dừng tàu nhanh và đi bộ trong ga. Hãy kiểm tra lại bằng Google Maps／NAVITIME.");
+siteAdd("完成：","完了：","Complete: ","완료: ","Hoàn tất: ");
+siteAdd("離線概算","オフライン概算","offline estimate","오프라인 예상","ước tính ngoại tuyến");
+siteAdd("約 ","約 ","about ","약 ","khoảng ");
+siteAdd("站）","駅）","stops)","개 역)","ga)");
+siteAdd("住宅ローン計算","住宅ローン計算","Mortgage","주택담보대출 계산","Tính khoản vay mua nhà");
+siteAdd("不動産保有コスト","不動産保有コスト","Holding costs","부동산 보유 비용","Chi phí sở hữu bất động sản");
+siteAdd("生活費計算","生活費計算","Living expenses","생활비 계산","Tính chi phí sinh hoạt");
+siteAdd("書類作成","書類作成","Document creation","문서 작성","Tạo tài liệu");
+siteAdd("ビジネス書類","ビジネス書類","Business documents","비즈니스 문서","Tài liệu kinh doanh");
+siteAdd("中古車売買手続","中古車売買手続","Used-car transfer","중고차 명의변경","Sang tên xe cũ");
+siteAdd("交通","交通","Transport","교통","Giao thông");
+siteAdd("生活","生活","Daily Life","생활","Đời sống");
+siteAdd("お得情報","お得情報","Deals & Offers","혜택 정보","Thông tin ưu đãi");
+
+const SITE_EN_LABELS = {
+  "Mortgage Calculator":["住宅ローン金利・返済計算","주택담보대출 금리・상환 계산","Tính lãi suất・trả góp vay mua nhà"],
+  "Annual Holding Cost":["不動産保有コスト","부동산 보유 비용","Chi phí sở hữu bất động sản"],
+  "Business Document Builder":["ビジネス書類作成","비즈니스 문서 작성","Tạo tài liệu kinh doanh"],
+  "Monthly Living Expenses":["毎月の生活費計算","월 생활비 계산","Tính chi phí sinh hoạt hàng tháng"],
+  "Airport Access & Private Transfer":["空港アクセス・貸切送迎","공항 교통・전용 차량","Di chuyển sân bay・xe đưa đón riêng"],
+  "Personal Tax Calculator":["給与手取り・住民税・社会保険","급여 실수령・주민세・사회보험","Lương thực nhận・thuế cư trú・bảo hiểm"],
+  "Hometown Tax Calculator":["ふるさと納税 控除上限額シミュレーション","고향사랑 기부금 공제 한도 계산","Tính giới hạn khấu trừ thuế quê hương"],
+  "Company Setup & Corporate Tax":["会社設立費用・法人税","설립 비용・법인세","Chi phí thành lập・thuế doanh nghiệp"],
+  "Used Car & Inspection":["中古車の税金・車検費用","세금 중고차・차량검사","Thuế xe cũ・đăng kiểm"],
+  "Bulky Waste Guide":["粗大ごみ料金・回収日","대형 폐기물 요금・수거일","Phí rác cồng kềnh・ngày thu gom"],
+  "Administrative Scrivener":["行政書士・在留手続の料金相場","행정서사・체류 수속 비용","Phí hành chính thư sĩ・thủ tục cư trú"],
+  "Sponsors & Local Services":["広告・地域パートナー","광고・지역 파트너","Quảng cáo・đối tác địa phương"],
+  "Multilingual Professional Services":["外国語対応の専門サービス","다국어 전문 서비스","Dịch vụ chuyên môn đa ngôn ngữ"],
+  "Airport":["空港","공항","Sân bay"], "Terminal":["ターミナル","터미널","Nhà ga"],
+  "Destination type":["目的地タイプ","목적지 유형","Loại điểm đến"], "Destination station":["目的駅","목적역","Ga đến"], "Exact address":["自宅・ホテルの住所","정확한 주소","Địa chỉ chính xác"],
+  "Flight arrival":["飛行機の到着予定","항공편 도착 예정","Giờ máy bay đến"], "Buffer":["入国・荷物の所要時間","입국・수하물 시간","Thời gian thủ tục"], "Airport departure":["空港を出発する予定時刻","공항 출발 예정","Giờ rời sân bay"], "Passengers":["人数","인원","Số người"],
+  "Luggage":["荷物","수하물","Hành lý"], "Vehicle":["車種","차종","Loại xe"], "Time":["時間帯","시간대","Thời gian"],
+  "Route choices":["おすすめ経路","추천 경로","Tuyến đề xuất"], "Annual salary":["年収","연봉","Thu nhập năm"],
+  "Age":["年齢","나이","Tuổi"], "Dependents":["扶養人数","부양가족 수","Số người phụ thuộc"],
+  "Company type":["法人形態","회사 형태","Loại công ty"], "Capital":["資本金","자본금","Vốn điều lệ"],
+  "Taxable profit":["年間課税所得","연간 과세소득","Lợi nhuận chịu thuế"], "Model":["ブランド・代表車型","브랜드・대표 모델","Hãng・mẫu xe"],
+  "Quantity":["数量","수량","Số lượng"], "Municipality":["自治体","지자체","Địa phương"],
+  "ETC Toll Calculator":["ETC料金概算","ETC 요금 계산","Tính phí ETC","ETC通行費概算"],
+  "Distance":["走行距離","주행 거리","Quãng đường"], "Common routes":["よくある区間の目安","자주 이용하는 구간 예시","Tuyến đường phổ biến"],
+  "Vehicle class":["車種","차종","Loại xe"], "Discount":["割引区分","할인 구분","Loại giảm giá"],
+  "Estimated toll":["ETC概算料金","ETC 예상 요금","Phí ETC ước tính"], "Before discount":["割引適用前","할인 적용 전","Trước khi giảm giá"],
+  "Rate applied":["適用単価","적용 단가","Đơn giá áp dụng"],
+  "Kei/motorcycle":["軽自動車等","경차・이륜차 등","Xe kei/xe máy","輕自動車等"],
+  "Standard":["普通車","보통차","Xe tiêu chuẩn","普通車"], "Medium":["中型車","중형차","Xe cỡ trung","中型車"],
+  "Large":["大型車","대형차","Xe cỡ lớn","大型車"], "Extra-large":["特大車","특대형차","Xe siêu lớn","特大型車"],
+  "Standard fare":["割引なし","할인 없음","Không giảm giá","一般費率（未套用折扣）"],
+  "Late-night (0:00-4:00) discount -30%":["深夜割引","심야 할인","Giảm giá đêm khuya","深夜折扣 -30%"],
+  "Holiday (Sat/Sun/Holiday) discount -20%":["休日割引","휴일 할인","Giảm giá ngày lễ","假日折扣 -20%"],
+  "Move-in Application for Foreign Residents":["外国人向け入居申込書","외국인 입주 신청서","Đơn thuê nhà cho người nước ngoài"],
+  "Viewing Request Form":["内見申込書","내견 신청서","Phiếu đăng ký xem nhà"],
+  "Purchase Offer":["買付証明書・購入申込書","매수 의향서・구입 신청서","Đề nghị mua・đơn đăng ký mua"],
+  "Purchase Tax Estimate":["不動産購入税金試算","부동산 구입 세금","Ước tính thuế mua bất động sản"],
+  "International Area Converter":["面積単位換算","면적 단위 변환","Quy đổi đơn vị diện tích"],
+  "Japan Location & Nearby Stations":["地点・周辺駅","일본 장소・주변 역","Địa điểm Nhật Bản・ga lân cận"],
+  "Move-in date":["入居日","입주일","Ngày vào ở"], "Monthly rent":["月額賃料","월세","Tiền thuê hàng tháng"],
+  "Management fee":["管理費・共益費","관리비","Phí quản lý"], "Deposit":["敷金","보증금","Tiền đặt cọc"],
+  "Key money":["礼金","레이킨","Tiền lễ"], "Agency fee":["仲介手数料","중개 수수료","Phí môi giới"],
+  "Fire insurance":["火災保険料","화재보험료","Bảo hiểm hỏa hoạn"], "Key exchange fee":["鍵交換費用","열쇠 교환비","Phí thay khóa"],
+  "Other":["その他","기타","Khác"], "Property Basics":["物件基本情報","매물 기본 정보","Thông tin cơ bản"],
+  "Purchase price":["売買価格","매매 가격","Giá mua bán"], "Structure":["構造","구조","Kết cấu"],
+  "Preferred Date & Time":["希望日時","희망 날짜・시간","Ngày giờ mong muốn"],
+  "Property address":["物件所在地","매물 주소","Địa chỉ bất động sản"],
+  "Current monthly rent":["現在の月額賃料","현재 월세","Tiền thuê hiện tại"],
+  "Date of entry to Japan":["来日年月日","일본 입국일","Ngày nhập cảnh Nhật Bản"],
+  "Total occupants":["入居人数","총 입주 인원","Tổng số người ở"],
+  "Application date":["申込日","신청일","Ngày đăng ký"],
+  "Property / room":["物件名・号室","매물・호실","Bất động sản・phòng"],
+  "Address / lot number":["所在地・地番","주소・지번","Địa chỉ・số lô"],
+  "Other conditions":["その他条件","기타 조건","Điều kiện khác"],
+  "Amount":["金額","금액","Số tiền"],
+  "Building age":["築年数","건물 연식","Tuổi công trình"], "Floor area":["床面積","바닥 면적","Diện tích sàn"],
+  "Property type":["物件種別","매물 유형","Loại bất động sản"], "Usage":["用途","용도","Mục đích sử dụng"],
+  "Land ratio":["土地割合","토지 비율","Tỷ lệ đất"], "Purchase date":["購入日","구입일","Ngày mua"],
+  "Loan amount":["融資額","대출 금액","Số tiền vay"], "Area value":["面積の数値","면적 값","Giá trị diện tích"],
+  "Source unit":["元の単位","원래 단위","Đơn vị nguồn"], "Property Info":["物件情報","매물 정보","Thông tin bất động sản"],
+  "Property name":["物件名","매물명","Tên bất động sản"], "Room number":["号室","호실","Số phòng"],
+  "Address":["住所","주소","Địa chỉ"], "Date":["日付","날짜","Ngày"], "Start time":["開始時刻","시작 시간","Giờ bắt đầu"],
+  "End time":["終了時刻","종료 시간","Giờ kết thúc"], "Company name":["会社名","회사명","Tên công ty"],
+  "Phone":["電話","전화","Điện thoại"], "FAX number":["FAX番号","FAX 번호","Số FAX"],
+  "Upload image":["画像をアップロード","이미지 업로드","Tải ảnh lên"], "Room":["号室","호실","Phòng"],
+  "Desired move-in date":["入居希望日","희망 입주일","Ngày muốn vào ở"], "Applicant":["申込者","신청자","Người đăng ký"],
+  "Date of birth":["生年月日","생년월일","Ngày sinh"], "Gender":["性別","성별","Giới tính"],
+  "Nationality":["国籍","국적","Quốc tịch"], "Native language":["母国語","모국어","Tiếng mẹ đẻ"],
+  "Mobile phone":["携帯電話","휴대전화","Điện thoại di động"], "Current address":["現住所","현주소","Địa chỉ hiện tại"],
+  "Reason for moving":["転居理由","이사 사유","Lý do chuyển nhà"], "Status of residence":["在留資格","재류 자격","Tư cách lưu trú"],
+  "Expiration date":["在留期限","재류 기한","Ngày hết hạn"], "Passport no.":["旅券番号","여권 번호","Số hộ chiếu"],
+  "Japanese level":["日本語レベル","일본어 수준","Trình độ tiếng Nhật"], "Occupation":["職業","직업","Nghề nghiệp"],
+  "Employer":["勤務先","근무처","Nơi làm việc"], "School":["学校","학교","Trường học"],
+  "Employer / school name":["勤務先・学校名","직장・학교명","Tên nơi làm việc・trường"], "Telephone":["電話","전화","Điện thoại"],
+  "Employment type":["雇用形態","고용 형태","Hình thức làm việc"], "Annual income":["年収","연소득","Thu nhập năm"],
+  "Monthly income":["月収","월소득","Thu nhập tháng"], "Occupants":["入居者","입주자","Người ở"],
+  "Name":["氏名","성명","Họ tên"], "Relationship":["続柄","관계","Quan hệ"], "Language":["使用言語","사용 언어","Ngôn ngữ"],
+  "Emergency Contact":["緊急連絡先","긴급 연락처","Liên hệ khẩn cấp"], "Guarantor":["連帯保証人","연대 보증인","Người bảo lãnh"],
+  "Supporting Documents":["審査用添付書類","심사 첨부 서류","Giấy tờ xét duyệt"], "Offer date":["申込日","신청일","Ngày đề nghị"],
+  "Valid until":["有効期限","유효 기한","Có hiệu lực đến"], "Land area":["土地面積","토지 면적","Diện tích đất"],
+  "Current status":["現況","현재 상태","Hiện trạng"], "Offer Terms":["購入条件","구입 조건","Điều kiện mua"],
+  "Asking price":["売出価格","매도 희망가","Giá chào bán"], "Offer price":["購入希望価格","매수 희망가","Giá đề nghị"],
+  "Earnest money":["手付金","계약금","Tiền đặt cọc"], "Balance":["残代金","잔금","Số tiền còn lại"],
+  "Payment method":["支払方法","지불 방법","Phương thức thanh toán"], "Conditions":["その他条件","기타 조건","Điều kiện khác"],
+  "Buyer type":["買主区分","매수인 유형","Loại người mua"], "Buyer name":["氏名・法人名","매수인명","Tên người mua"],
+  "Agent company":["仲介会社","중개 회사","Công ty môi giới"], "Agent":["担当者","담당자","Người phụ trách"]
+};
+
+const SITE_NODE_SOURCE = new WeakMap(), SITE_ATTR_SOURCE = new WeakMap();
+const SITE_ZH_TW_EXACT = {
+  "外's Net":"外's Net",
+  "通常料金（概算）":"一般費率（概算）", "適用した割引額":"套用的折扣金額", "割引後の概算料金":"折扣後的概算費用",
+  "言語":"語言", "初期費用計算機":"初期費用計算器", "内見申込書":"看房申請書",
+  "入居申込書":"入住申請書", "買付証明書":"購買意向證明書", "仲介用書類":"仲介用文件", "物件・お客様情報":"物件・客戶資料",
+  "空港アクセス":"機場交通", "電力計算":"電費計算", "ガス計算":"瓦斯費計算", "住宅ローン計算":"不動產貸款計算", "不動産保有コスト":"不動產持有成本", "生活費計算":"生活開銷計算", "書類作成":"文件製作", "ビジネス書類":"商務文件", "ガスの種類・使用量":"瓦斯種類・使用量", "都市ガスの月別調整":"都市瓦斯每月調整", "LPガスの契約単価":"LP瓦斯契約單價", "同じ使用量で比較":"相同使用量比較", "主要会社・公式料金資料":"主要公司・官方價格資料", "電気使用量・契約":"用電量・契約", "1か月の電気使用量 Monthly consumption":"一個月用電量", "月ごとの調整項目":"每月調整項目", "同じ条件で料金表比較":"相同條件價格比較", "料金表の読み方・公式資料":"價格表說明・官方資料", "手取り・個人税":"到手薪資・個人稅", "法人税・会社設立":"法人稅・公司設立",
+  "到着空港":"抵達機場", "目的地の指定方法":"目的地指定方式", "主要駅から選ぶ":"選擇主要車站", "住所を入力する":"輸入地址", "到着・出発時刻":"抵達・出發時間", "飛行機の到着予定":"航班預計抵達", "入国・荷物の所要時間":"入境・領行李時間", "空港を出発する予定時刻":"預計離開機場時間", "到着＋手続時間で設定":"依抵達＋手續時間設定",
+  "ふるさと納税":"故鄉納稅", "広告掲載・提携":"廣告刊登・合作",
+  "中古車・車検":"中古車・車檢", "中古車売買手続":"中古車買賣手續", "粗大ごみ":"大型垃圾", "行政書士料金":"行政書士費用", "広告・提携":"廣告・合作",
+  "求人・採用":"求人・招募",
+  "お得・紹介":"優惠・介紹", "紹介コード・特典":"介紹碼・優惠", "お得情報":"優惠介紹",
+  "サイトについて":"關於本站", "サイト紹介・作者":"網站介紹・作者", "電気・ガス・水道":"電力・瓦斯・水道", "不動産の税金":"不動產稅金", "個人・法人の税金":"個人・法人稅金", "中古車・車検・免許":"中古車・車檢・駕照",
+  "外国語対応サービス":"外語服務", "住まい・不動産":"住宅・不動產", "暮らし・移動":"生活・交通", "税金・専門手続":"稅金・專業手續", "広告・パートナー":"廣告・合作夥伴",
+  "見積":"估價", "物件情報":"物件資料", "物件名":"物件名稱", "号室":"房號", "住所":"地址",
+  "希望日時":"希望日期與時間", "対方会社":"對方公司", "電話":"電話", "名片 Business Card":"名片",
+  "申込物件・契約条件 Property & Lease":"申請物件・租約條件", "申込者情報 Applicant":"申請人資料",
+  "在留・入国情報 Immigration":"在留・入境資料", "勤務先・学校 Employment / School":"工作單位・學校",
+  "入居者 Occupants":"入住者", "緊急連絡先 Emergency Contact":"緊急聯絡人",
+  "連帯保証人 Guarantor":"連帶保證人", "審査用添付書類 Supporting Documents":"審查附件",
+  "補足・同意 Notes & Consent":"補充說明・同意", "氏名 Name":"姓名", "所在地 Address":"地址",
+  "進学":"升學", "就職":"就職", "転勤":"工作調動", "結婚":"結婚", "住み替え":"換屋",
+  "その他":"其他", "会社員 Employee":"公司職員", "会社役員 Executive":"公司主管",
+  "公務員 Public employee":"公務員", "自営業 Self-employed":"自營業", "学生 Student":"學生",
+  "正社員 Permanent":"正式員工", "契約社員 Contract":"契約員工", "派遣社員 Temporary":"派遣員工",
+  "日本国内 In Japan":"日本國內", "海外 Overseas":"海外", "両方 Both":"兩者", "未定 Undecided":"未定",
+  "中古マンション":"中古公寓", "新築マンション":"新建公寓", "中古戸建":"中古獨棟住宅",
+  "新築戸建":"新建獨棟住宅", "土地":"土地", "一棟収益物件":"整棟收益物件",
+  "区分収益物件":"分戶收益物件", "事業用物件":"商業用物件", "空室 Vacant":"空屋",
+  "居住中 Occupied by owner":"居住中", "賃貸中 Tenant occupied":"出租中", "更地 Vacant land":"空地",
+  "古家あり Existing building":"有舊建物", "銀行融資 Bank financing":"銀行融資", "現金 Cash":"現金",
+  "未申込 Not applied":"尚未申請", "申込中 Pending":"申請中", "承認済 Approved":"已核准",
+  "不要 Not applicable":"不需要", "個人 Individual":"個人", "法人 Company":"法人", "特になし":"無",
+  "クリア Clear":"清除", "PDFを生成 Generate PDF":"生成 PDF", "ファイル未選択":"尚未選擇檔案"
+};
+const SITE_TRAD_TO_SIMP = {產:"产",買:"买",賣:"卖",費:"费",稅:"税",證:"证",體:"体",學:"学",國:"国",區:"区",間:"间",車:"车",線:"线",點:"点",選:"选",擇:"择",顯:"显",傳:"传",儲:"储",發:"发",複:"复",製:"制",應:"应",實:"实",際:"际",關:"关",開:"开",總:"总",額:"额",價:"价",樓:"楼",號:"号",聯:"联",絡:"络",務:"务",劃:"划",貸:"贷",款:"款",狀:"状",態:"态",將:"将",與:"与",為:"为",僅:"仅",據:"据",輸:"输",資:"资",訊:"讯",計:"计",時:"时",書:"书",個:"个",幣:"币",萬:"万",東:"东",門:"门",電:"电",網:"网",語:"语",讀:"读",寫:"写",現:"现",職:"职",業:"业",屬:"属",續:"续",歲:"岁",約:"约",範:"范",圍:"围",險:"险",餘:"余",審:"审",簽:"签",擔:"担",擁:"拥",護:"护",畢:"毕",離:"离",結:"结",構:"构",築:"筑",舊:"旧",單:"单",雙:"双",適:"适",願:"愿",導:"导",備:"备",註:"注",廳:"厅",縣:"县",廣:"广",東:"东",灣:"湾",馬:"马",麗:"丽",歐:"欧",亞:"亚",韓:"韩",華:"华",興:"兴",戶:"户",鑰:"钥",鎖:"锁",啟:"启",閉:"闭",刪:"删",確:"确",認:"认",無:"无",頁:"页",標:"标",較:"较",讓:"让",達:"达",邊:"边",機:"机",場:"场",轉:"转",權:"权",條:"条",類:"类",張:"张",佔:"占",壓:"压",擬:"拟",鄉:"乡",納:"纳",聯:"联",絡:"络"};
+function siteSimplify(text){ return Array.from(text).map(char => SITE_TRAD_TO_SIMP[char] || char).join(""); }
+function siteMixedEnglish(text){
+  const match = text.match(/^(.*?)([A-Z][A-Za-z0-9][A-Za-z0-9 /&+().,'’\-–—:%]*?)(?:\s*\(円\))?$/);
+  return match ? {left:match[1].trim(),english:match[2].trim()} : null;
+}
+function siteTranslateCore(core,lang){
+  if (!core || /^[-–—\d¥￥%,.／/+×→⇄①②③④\s]+$/.test(core)) return core;
+  const mixed = siteMixedEnglish(core), mixedLabel = mixed && SITE_EN_LABELS[mixed.english];
+  if (lang === "zh-TW") return SITE_ZH_TW_EXACT[core] || (mixedLabel && mixedLabel[3]) || (mixed && mixed.left) || core;
+  if (lang === "zh-CN") return siteSimplify(SITE_ZH_TW_EXACT[core] || (mixedLabel && mixedLabel[3]) || (mixed && mixed.left) || core);
+  const exact = SITE_TEXT.get(core);
+  if (exact && exact[lang]) return exact[lang];
+  let phraseResult = core, phraseChanged = false;
+  for (const [source,translations] of [...SITE_TEXT.entries()].sort((a,b) => b[0].length - a[0].length)){
+    if (source.length < 2 || !phraseResult.includes(source) || !translations[lang]) continue;
+    phraseResult = phraseResult.split(source).join(translations[lang]);
+    phraseChanged = true;
+  }
+  if (phraseChanged) return phraseResult;
+  if (mixed){
+    const label = mixedLabel;
+    if (lang === "en") return mixed.english;
+    if (label) return lang === "ja" ? label[0] : lang === "ko" ? label[1] : label[2];
+    if (lang === "ja" && /[ぁ-んァ-ヶ]/.test(mixed.left)) return mixed.left;
+    return lang === "ja" ? (mixed.left || core) : mixed.english;
+  }
+  if (lang === "ja") return core;
+  return core;
+}
+function siteTranslateString(value,lang){
+  const text = String(value ?? ""), match = text.match(/^(\s*)([\s\S]*?)(\s*)$/);
+  return match[1] + siteTranslateCore(match[2],lang) + match[3];
+}
+function siteTranslateElement(root,lang){
+  if (!root) return;
+  const walker = document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || /^(SCRIPT|STYLE|NOSCRIPT)$/.test(parent.tagName) || parent.closest("[data-no-i18n]")) return;
+    if (!SITE_NODE_SOURCE.has(node)) SITE_NODE_SOURCE.set(node,node.nodeValue);
+    const next = siteTranslateString(SITE_NODE_SOURCE.get(node),lang);
+    if (node.nodeValue !== next) node.nodeValue = next;
+  });
+  const elements = root.nodeType === 1 ? [root,...root.querySelectorAll("[placeholder],[title],[aria-label]")] : [...document.querySelectorAll("[placeholder],[title],[aria-label]")];
+  elements.forEach(element => {
+    if (element.closest("[data-no-i18n]")) return;
+    if (!SITE_ATTR_SOURCE.has(element)) SITE_ATTR_SOURCE.set(element,{});
+    const source = SITE_ATTR_SOURCE.get(element);
+    ["placeholder","title","aria-label"].forEach(attr => {
+      if (!element.hasAttribute(attr)) return;
+      if (!(attr in source)) source[attr] = element.getAttribute(attr);
+      element.setAttribute(attr,siteTranslateString(source[attr],lang));
+    });
+  });
+}
+const TAX_PAGE_COPY={
+ ja:{
+  taxPurchaseExplain:"<strong>概算について：</strong>登録免許税、不動産取得税、印紙税、固定資産税等の日割りをまとめた初期比較用です。評価額・軽減要件・契約内容により実額は変わります。",
+  taxIncomeExplain:"<span class='portal-badge new'>2026年改正</span> 所得税の基礎控除・給与所得控除、社会保険、子ども・子育て支援金、国民年金を反映した概算です。住民税・国保は自治体で異なります。",
+  taxStudentExplain:"<strong>留学生・学生：</strong>所得税がゼロでも住民税や国民健康保険が発生する場合があります。資格外活動の原則週28時間以内という在留ルールは税金とは別に守る必要があります。",
+  taxFurusatoExplain:"<span class='portal-badge new'>2026年概算</span> 給与・家族・控除から自己負担2,000円に収まりやすい寄附上限を推計します。住民税決定通知書の所得割額を入力すると精度が上がります。",
+  taxCompanyExplain:"<span class='portal-badge new'>NEW</span> 2026年4月以後開始事業年度の防衛特別法人税と、現行の会社設立費用を反映した概算です。会社規模・所在地・事業年度で税額は変わります。"
+ },
+ "zh-TW":{taxPurchaseExplain:"<strong>概算說明：</strong>合併估算登錄免許稅、不動產取得稅、印花稅及固定資產稅日割，供初期比較。實際金額會因評估額、減免條件及契約內容而異。",taxIncomeExplain:"<span class='portal-badge new'>2026修正</span> 依所得稅扣除、薪資所得扣除、社會保險、兒童育兒支援金及國民年金概算；住民稅與國保依自治體不同。",taxStudentExplain:"<strong>留學生／學生：</strong>即使所得稅為零，也可能產生住民稅或國民健康保險。留學生原則每週28小時以內的資格外活動規則，與稅金分開適用。",taxFurusatoExplain:"<span class='portal-badge new'>2026概算</span> 依薪資、家人及扣除額推算故鄉納稅自付2,000日圓附近的上限。輸入住民稅通知書的所得割額可提高準確度。",taxCompanyExplain:"<span class='portal-badge new'>NEW</span> 概算已反映2026年4月後開始事業年度的防衛特別法人稅及現行公司設立費用；實際稅額依規模、所在地與會計年度而異。"},
+ "zh-CN":{taxPurchaseExplain:"<strong>估算说明：</strong>合并估算注册许可税、不动产取得税、印花税及固定资产税按日分摊，供初步比较。实际金额会因评估额、减免条件及合同内容而异。",taxIncomeExplain:"<span class='portal-badge new'>2026修订</span> 根据所得税扣除、工资所得扣除、社会保险、育儿支援金及国民年金估算；居民税与国保因自治体而异。",taxStudentExplain:"<strong>留学生／学生：</strong>即使所得税为零，也可能产生居民税或国民健康保险。留学生原则每周28小时以内的资格外活动规则，与税金分开适用。",taxFurusatoExplain:"<span class='portal-badge new'>2026估算</span> 根据工资、家庭及扣除额推算故乡纳税自付2,000日元附近的上限。输入居民税通知书的所得割额可提高准确度。",taxCompanyExplain:"<span class='portal-badge new'>NEW</span> 已反映2026年4月后开始事业年度的防卫特别法人税及现行公司设立费用；实际税额因规模、所在地和会计年度而异。"},
+ en:{taxPurchaseExplain:"<strong>Estimate:</strong> Combines registration, property acquisition, stamp and prorated property taxes for initial comparison. Actual amounts depend on assessed value, relief eligibility and contract terms.",taxIncomeExplain:"<span class='portal-badge new'>2026 update</span> An estimate using current income deductions, social insurance, child-support levy and National Pension assumptions. Resident tax and NHI vary by municipality.",taxStudentExplain:"<strong>Students:</strong> Resident tax or National Health Insurance may apply even when income tax is zero. The usual 28-hour weekly limit for international students is a separate immigration rule.",taxFurusatoExplain:"<span class='portal-badge new'>2026 estimate</span> Estimates a donation ceiling near the ¥2,000 out-of-pocket level from salary, household and deductions. Enter the income-based resident-tax levy for better accuracy.",taxCompanyExplain:"<span class='portal-badge new'>NEW</span> Includes the special defense corporate tax for fiscal years starting from April 2026 and current incorporation costs. Results vary by size, location and fiscal year."},
+ ko:{taxPurchaseExplain:"<strong>개산 안내:</strong> 등록면허세, 부동산취득세, 인지세 및 고정자산세 일할액을 초기 비교용으로 계산합니다. 평가액과 감면 요건에 따라 달라집니다.",taxIncomeExplain:"<span class='portal-badge new'>2026 개정</span> 소득공제, 사회보험, 육아지원금 및 국민연금을 반영한 개산입니다. 주민세와 국민건강보험은 지자체마다 다릅니다.",taxStudentExplain:"<strong>유학생·학생:</strong> 소득세가 0이어도 주민세나 국민건강보험이 발생할 수 있습니다. 유학생 주 28시간 원칙은 세금과 별도의 체류 규정입니다.",taxFurusatoExplain:"<span class='portal-badge new'>2026 개산</span> 급여·가족·공제로 자기부담 2,000엔 수준의 기부 상한을 추정합니다. 주민세 소득할액 입력 시 정확도가 높아집니다.",taxCompanyExplain:"<span class='portal-badge new'>NEW</span> 2026년 4월 이후 시작 사업연도의 방위특별법인세와 현재 설립비용을 반영합니다. 실제 세액은 규모·소재지·사업연도에 따라 다릅니다."},
+ vi:{taxPurchaseExplain:"<strong>Ước tính:</strong> Gộp thuế đăng ký, thuế mua bất động sản, thuế tem và phần thuế tài sản phân bổ để so sánh ban đầu. Số thực tế phụ thuộc giá trị thẩm định và điều kiện giảm thuế.",taxIncomeExplain:"<span class='portal-badge new'>Cập nhật 2026</span> Ước tính theo khấu trừ thu nhập, bảo hiểm xã hội, khoản hỗ trợ trẻ em và lương hưu quốc dân. Thuế cư trú và NHI khác nhau theo địa phương.",taxStudentExplain:"<strong>Du học sinh/sinh viên:</strong> Vẫn có thể phải đóng thuế cư trú hoặc bảo hiểm y tế dù thuế thu nhập bằng 0. Giới hạn làm thêm 28 giờ/tuần là quy định cư trú riêng.",taxFurusatoExplain:"<span class='portal-badge new'>Ước tính 2026</span> Ước tính trần quyên góp với phần tự trả khoảng 2.000 yên dựa trên lương, gia đình và khấu trừ. Nhập số thuế cư trú theo thu nhập để chính xác hơn.",taxCompanyExplain:"<span class='portal-badge new'>NEW</span> Bao gồm thuế doanh nghiệp quốc phòng đặc biệt cho năm tài chính bắt đầu từ tháng 4/2026 và chi phí thành lập hiện hành. Kết quả thay đổi theo quy mô, địa điểm và năm tài chính."}
+};
+function siteApplyTaxCopy(lang){const copy=TAX_PAGE_COPY[lang]||TAX_PAGE_COPY.ja;Object.entries(copy).forEach(([id,html])=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
+const ABOUT_PAGE_COPY={
+ ja:{
+  aboutEyebrow:"About サイトについて",
+  aboutSiteTitle:"サイトについて",
+  aboutSiteIntro:"「外's Net」は、日本で暮らす外国人の生活をもっと便利にするための情報・計算ツールサイトです。賃貸の初期費用計算、税金試算、各種手続きの解説など、日本での生活・不動産に関わる実用的な情報をひとつにまとめました。言語の壁や複雑な制度に悩まず、必要な情報にすぐアクセスできることを目指しています。",
+  aboutAuthorTitle:"作者について",
+  aboutAuthorBio:"（ここに作者の簡単な自己紹介を入力してください。例：経歴、日本在住年数、サイト運営のきっかけなど）"
+ },
+ "zh-TW":{
+  aboutEyebrow:"About 關於本站",
+  aboutSiteTitle:"網站介紹",
+  aboutSiteIntro:"「外's Net」是為了讓在日本生活的外國人更方便，所打造的資訊與計算工具網站。從租屋初期費用試算、稅金試算，到各種手續說明，我們把在日本生活與不動產相關的實用資訊整合在同一個地方，希望大家不必再被語言隔閡或複雜制度困擾，就能快速找到需要的資訊。",
+  aboutAuthorTitle:"作者介紹",
+  aboutAuthorBio:"（請在此處填寫作者的簡短自我介紹，例如經歷、在日年數、經營本站的契機等）"
+ },
+ "zh-CN":{
+  aboutEyebrow:"About 关于本站",
+  aboutSiteTitle:"网站介绍",
+  aboutSiteIntro:"「外's Net」是为了让在日本生活的外国人更方便，所打造的信息与计算工具网站。从租房初期费用试算、税金试算，到各种手续说明，我们把在日本生活与不动产相关的实用信息整合在同一个地方，希望大家不必再被语言隔阂或复杂制度困扰，就能快速找到需要的信息。",
+  aboutAuthorTitle:"作者介绍",
+  aboutAuthorBio:"（请在此处填写作者的简短自我介绍，例如经历、在日年数、创办本站的契机等）"
+ },
+ en:{
+  aboutEyebrow:"About",
+  aboutSiteTitle:"About This Site",
+  aboutSiteIntro:"\u201c外's Net\u201d is an information and calculator hub built to make life in Japan easier for foreign residents. From move-in cost calculators and tax estimates to step-by-step guides for everyday procedures, we've gathered practical resources about living and real estate in Japan in one place \u2014 so you can find what you need without getting lost in language barriers or complex systems.",
+  aboutAuthorTitle:"About the Author",
+  aboutAuthorBio:"(Add a short author bio here \u2014 e.g. background, years in Japan, why this site was created.)"
+ },
+ ko:{
+  aboutEyebrow:"About 소개",
+  aboutSiteTitle:"사이트 소개",
+  aboutSiteIntro:"「外's Net」는 일본에서 생활하는 외국인의 삶을 더 편리하게 만들기 위한 정보・계산 도구 사이트입니다. 임대 초기비용 계산, 세금 시뮬레이션, 각종 수속 안내 등 일본 생활과 부동산에 관한 실용적인 정보를 한곳에 모았습니다. 언어 장벽이나 복잡한 제도에 얽매이지 않고 필요한 정보에 빠르게 접근할 수 있도록 돕는 것이 목표입니다.",
+  aboutAuthorTitle:"작성자 소개",
+  aboutAuthorBio:"(여기에 작성자의 간단한 자기소개를 입력하세요. 예: 경력, 일본 거주 연수, 사이트를 만든 계기 등)"
+ },
+ vi:{
+  aboutEyebrow:"About Giới thiệu",
+  aboutSiteTitle:"Giới thiệu trang web",
+  aboutSiteIntro:"\u201c外's Net\u201d là trang thông tin và công cụ tính toán được xây dựng để giúp cuộc sống của người nước ngoài tại Nhật Bản trở nên thuận tiện hơn. Từ tính chi phí thuê nhà ban đầu, ước tính thuế, đến hướng dẫn các thủ tục thường gặp, chúng tôi tổng hợp những thông tin thực tế về cuộc sống và bất động sản tại Nhật vào một nơi duy nhất, để bạn có thể nhanh chóng tìm thấy thông tin cần thiết mà không bị cản trở bởi rào cản ngôn ngữ hay hệ thống phức tạp.",
+  aboutAuthorTitle:"Giới thiệu tác giả",
+  aboutAuthorBio:"(Hãy thêm phần giới thiệu ngắn về tác giả tại đây \u2014 ví dụ: kinh nghiệm, số năm sống tại Nhật, lý do lập trang web này.)"
+ }
+};
+function siteApplyAboutCopy(lang){const copy=ABOUT_PAGE_COPY[lang]||ABOUT_PAGE_COPY.ja;Object.entries(copy).forEach(([id,html])=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
+const FIRE_INSURANCE_COPY={
+ ja:{
+  fireInsEyebrow:"火災保険 Renters Fire Insurance",
+  fireInsIntro:"賃貸契約では入居時に火災保険（正確には「家財保険」＋「借家人賠償責任保険」等のセット）への加入を求められるのが一般的です。多くは2年契約で保険料の目安は<strong>15,000円～20,000円程度</strong>。不動産会社指定の保険でなくても、補償内容が同等であれば自分で選んだ保険会社に加入できる場合があります。",
+  fireInsBasicTitle:"基本のしくみ",
+  fireInsBasicBody:"<ul class='info-list'><li><strong>家財保険（動産保険）</strong>：火災・落雷・爆発・水濡れ・盗難などで、自分の家具・家電・衣類等が被害を受けた場合の補償。</li><li><strong>借家人賠償責任保険</strong>：借りている部屋を火事や水漏れなどで損傷させ、大家さんに対して法律上の賠償責任を負った場合の補償。<strong>賃貸ではほぼ必須</strong>。</li><li><strong>個人賠償責任保険</strong>：階下や近隣など第三者に損害を与えてしまった場合（水漏れで階下を水浸しにした等）の賠償を補償。特約または単独加入。</li><li>保険期間は賃貸借契約に合わせて2年が一般的。更新時に自動更新または再加入が必要。</li></ul>",
+  fireInsUsageTitle:"賃借人がよく使う場面",
+  fireInsUsageBody:"<ul class='info-list'><li><strong>水漏れ事故</strong>：洗濯機のホース外れ、浴槽の水を溢れさせた等で自室や階下を水浸しにした → 借家人賠償責任保険・個人賠償責任保険で修繕費用をカバー。</li><li><strong>火災・ボヤ</strong>：調理中の火の不始末等で部屋の壁紙や設備を焦がした → 借家人賠償責任保険。</li><li><strong>盗難</strong>：空き巣被害で家電・貴重品が盗まれた → 家財保険（盗難特約）。</li><li><strong>破損・汚損（オプション）</strong>：家具を運んでいて壁や床を傷つけた等、うっかり事故。特約が付いていないと対象外の場合あり。</li><li><strong>台風・大雨</strong>：強風で窓が割れた、雨漏りで家財が濡れた等の自然災害。</li></ul>",
+  fireInsValueTitle:"使うと得なケース・注意点",
+  fireInsValueBody:"<ul class='info-list'><li><strong>高額な修繕・賠償が発生したとき</strong>：水漏れで階下の内装工事が数十万円～百万円単位になることもあり、この場合は必ず保険を使うべき。自己負担では大きな出費になる。</li><li><strong>免責金額（自己負担額）を上回る損害</strong>：多くのプランは免責0～1万円程度。それ以下の少額損害は請求しても実質受取額が少なく、手間だけがかかることも。</li><li><strong>小さな損害は請求を迷うことも</strong>：自動車保険と違い等級が下がる商品は少ないが、事故内容によっては次回加入を断られるケースもあるため、数千円程度の損害は自己負担のほうが合理的な場合がある。</li><li><strong>経年劣化・通常損耗は対象外</strong>：壁紙の日焼けや家具の設置跡など、故意・過失によらない自然な劣化は保険でも敷金でもなく大家負担が原則。</li><li><strong>事故発生時の鉄則</strong>：自分で直す前に写真を撮り、管理会社・大家・保険会社へ速やかに連絡。原状回復のやり取りが有利に進む。</li></ul>",
+  fireInsStepsTitle:"実際に使う時の流れ",
+  fireInsStepsBody:"<ol class='info-list fireins-steps'><li><strong>被害状況を記録する</strong>：修理や片付けの前に、被害箇所と原因が分かる写真・動画を撮影。日付入りだとなお良い。</li><li><strong>管理会社・大家へ連絡</strong>：できるだけ当日中に電話やメールで事故の経緯・被害範囲を報告。</li><li><strong>保険会社へ連絡</strong>：保険証券番号を準備し、専用窓口（電話・Webフォーム）から事故報告。盗難の場合は警察に届け出て受理番号も控える。</li><li><strong>必要書類を準備</strong>：保険金請求書、被害写真、修理見積書・領収書、（盗難時）盗難届の控えなど。</li><li><strong>保険会社の調査・査定</strong>：必要に応じて損害保険登録鑑定人が現地確認。追加書類を求められることもある。</li><li><strong>保険金の受け取り・修繕</strong>：査定確定後に指定口座へ振込。振込確認後に修理業者へ発注すると安心。</li></ol>"
+ },
+ "zh-TW":{
+  fireInsEyebrow:"火災保険 房客火災保險",
+  fireInsIntro:"簽訂租屋合約時，房東通常會要求加入火災保險（正確來說是「家財保險」+「房客賠償責任保險」等組合方案）。多數為2年期，保費行情約<strong>15,000～20,000日圓</strong>。就算不是房仲指定的保險公司，只要保障內容相當，有時也可以自己選擇保險公司投保。",
+  fireInsBasicTitle:"基本架構",
+  fireInsBasicBody:"<ul class='info-list'><li><strong>家財保險（動產保險）</strong>：因火災、雷擊、爆炸、漏水、竊盜等造成自己的家具、家電、衣物等損失時的補償。</li><li><strong>房客賠償責任保險</strong>：因火災或漏水等造成租屋本身損壞，需對房東負起法律賠償責任時的補償。<strong>租屋幾乎必備</strong>。</li><li><strong>個人賠償責任保險</strong>：對樓下住戶或鄰居等第三方造成損害時（例如漏水淹到樓下）的賠償補償，通常是特約或另外加保。</li><li>保險期間通常配合租約為2年，到期需自動續保或重新加保。</li></ul>",
+  fireInsUsageTitle:"房客最常用到的情況",
+  fireInsUsageBody:"<ul class='info-list'><li><strong>漏水事故</strong>：洗衣機軟管脫落、浴缸放水溢出導致自己房間或樓下淹水 → 由房客賠償責任保險／個人賠償責任保險理賠修繕費。</li><li><strong>火災・小火</strong>：煮飯不慎導致牆壁、設備燒焦 → 房客賠償責任保險。</li><li><strong>竊盜</strong>：遭小偷闖入導致家電、貴重物品被偷 → 家財保險（竊盜特約）。</li><li><strong>意外破損（選配）</strong>：搬家具時不小心刮傷牆壁或地板等。若未加購特約，可能不在理賠範圍內。</li><li><strong>颱風・豪雨</strong>：強風導致窗戶破裂、漏雨弄濕家財等天災損害。</li></ul>",
+  fireInsValueTitle:"什麼情況下申請最划算・注意事項",
+  fireInsValueBody:"<ul class='info-list'><li><strong>發生高額修繕或賠償時</strong>：漏水導致樓下裝修費可能高達數十萬甚至上百萬日圓，這種情況一定要申請理賠，自付會是很大的負擔。</li><li><strong>損害金額超過自負額（免責金額）時</strong>：多數方案自負額為0～1萬日圓左右，低於這個金額申請理賠實際拿到的金額有限，可能只是白忙一場。</li><li><strong>小額損害可以考慮自己吸收</strong>：雖然多數房客火險不像汽車保險會因理賠而漲保費，但部分保險公司可能因理賠紀錄而拒絕續保，因此數千日圓等級的小損失，有時自付更划算。</li><li><strong>自然耗損不在理賠範圍</strong>：牆紙泛黃、家具壓痕等正常老化屬於房東負擔範圍，不是保險或押金該處理的項目。</li><li><strong>出事後的原則</strong>：先拍照存證，別急著自己修，第一時間聯絡管理公司、房東與保險公司，後續原狀回復的協商才會對自己有利。</li></ul>",
+  fireInsStepsTitle:"實際申請理賠的流程",
+  fireInsStepsBody:"<ol class='info-list fireins-steps'><li><strong>記錄受損狀況</strong>：修理或整理前，先拍下能看出受損部位與原因的照片、影片，最好能顯示日期。</li><li><strong>聯絡管理公司・房東</strong>：盡量當天以電話或郵件通報事故經過與受損範圍。</li><li><strong>聯絡保險公司</strong>：備妥保單號碼，透過專用窗口（電話或網路表單）通報事故。竊盜案件也要報警並保留受理編號。</li><li><strong>準備必要文件</strong>：理賠申請書、受損照片、維修估價單／收據，竊盜案件附上報案證明。</li><li><strong>保險公司調查・鑑定</strong>：視情況會有鑑定人到場確認，有時需補交資料。</li><li><strong>領取理賠金・進行維修</strong>：鑑定確定後理賠金會匯入指定帳戶，建議收到款項後再委託廠商維修。</li></ol>"
+ },
+ "zh-CN":{
+  fireInsEyebrow:"火灾保险 房客火灾保险",
+  fireInsIntro:"签订租房合同时，房东通常会要求加入火灾保险（准确来说是“家财保险”+“房客赔偿责任保险”等组合方案）。多数为2年期，保费行情约<strong>15,000～20,000日元</strong>。即使不是房产中介指定的保险公司，只要保障内容相当，有时也可以自己选择保险公司投保。",
+  fireInsBasicTitle:"基本结构",
+  fireInsBasicBody:"<ul class='info-list'><li><strong>家财保险（动产保险）</strong>：因火灾、雷击、爆炸、漏水、盗窃等造成自己的家具、家电、衣物等损失时的补偿。</li><li><strong>房客赔偿责任保险</strong>：因火灾或漏水等造成租房本身损坏，需对房东承担法律赔偿责任时的补偿。<strong>租房几乎必备</strong>。</li><li><strong>个人赔偿责任保险</strong>：对楼下住户或邻居等第三方造成损害时（例如漏水淹到楼下）的赔偿补偿，通常是特约或另外加保。</li><li>保险期间通常配合租约为2年，到期需自动续保或重新加保。</li></ul>",
+  fireInsUsageTitle:"房客最常用到的情况",
+  fireInsUsageBody:"<ul class='info-list'><li><strong>漏水事故</strong>：洗衣机软管脱落、浴缸放水溢出导致自己房间或楼下被淹 → 由房客赔偿责任保险／个人赔偿责任保险理赔维修费。</li><li><strong>火灾・小火</strong>：做饭不慎导致墙壁、设备烧焦 → 房客赔偿责任保险。</li><li><strong>盗窃</strong>：遭小偷闯入导致家电、贵重物品被盗 → 家财保险（盗窃特约）。</li><li><strong>意外破损（选配）</strong>：搬家具时不小心刮伤墙壁或地板等。若未加购特约，可能不在理赔范围内。</li><li><strong>台风・暴雨</strong>：强风导致窗户破裂、漏雨弄湿家财等自然灾害。</li></ul>",
+  fireInsValueTitle:"什么情况下申请最划算・注意事项",
+  fireInsValueBody:"<ul class='info-list'><li><strong>发生高额维修或赔偿时</strong>：漏水导致楼下装修费可能高达数十万甚至上百万日元，这种情况一定要申请理赔，自付会是很大的负担。</li><li><strong>损害金额超过自付额（免赔额）时</strong>：多数方案自付额为0～1万日元左右，低于这个金额申请理赔实际拿到的金额有限，可能白忙一场。</li><li><strong>小额损害可以考虑自己承担</strong>：虽然多数房客火险不像车险会因理赔而涨保费，但部分保险公司可能因理赔记录而拒绝续保，因此数千日元等级的小损失，有时自付更划算。</li><li><strong>自然损耗不在理赔范围</strong>：墙纸泛黄、家具压痕等正常老化属于房东负担范围，不是保险或押金该处理的项目。</li><li><strong>出事后的原则</strong>：先拍照留证，别急着自己修，第一时间联系管理公司、房东与保险公司，后续恢复原状的协商才会对自己有利。</li></ul>",
+  fireInsStepsTitle:"实际申请理赔的流程",
+  fireInsStepsBody:"<ol class='info-list fireins-steps'><li><strong>记录受损状况</strong>：维修或整理前，先拍下能看出受损部位与原因的照片、视频，最好能显示日期。</li><li><strong>联系管理公司・房东</strong>：尽量当天以电话或邮件通报事故经过与受损范围。</li><li><strong>联系保险公司</strong>：备好保单号码，通过专用窗口（电话或网页表单）通报事故。盗窃案件也要报警并保留受理编号。</li><li><strong>准备必要文件</strong>：理赔申请书、受损照片、维修估价单／收据，盗窃案件附上报警证明。</li><li><strong>保险公司调查・理算</strong>：视情况会有理算人到场确认，有时需补交资料。</li><li><strong>领取理赔金・进行维修</strong>：理算确定后理赔金会汇入指定账户，建议收到款项后再委托厂商维修。</li></ol>"
+ },
+ en:{
+  fireInsEyebrow:"Fire Insurance for Renters",
+  fireInsIntro:"When signing a rental lease in Japan, landlords typically require renters to take out fire insurance (in practice a bundle of \u201ccontents insurance\u201d + \u201ctenant liability insurance\u201d). Most policies run for 2 years and cost around <strong>\u00a515,000\u2013\u00a520,000</strong> total. Even if the agency recommends a specific insurer, you can sometimes choose your own as long as the coverage is equivalent.",
+  fireInsBasicTitle:"How it's structured",
+  fireInsBasicBody:"<ul class='info-list'><li><strong>Contents insurance</strong>: Covers your own furniture, appliances, and belongings if damaged by fire, lightning, explosion, water leaks, or theft.</li><li><strong>Tenant liability insurance</strong>: Covers your legal liability to the landlord if you damage the rented unit itself (e.g. through fire or a water leak). <strong>Essentially mandatory for renters</strong>.</li><li><strong>Personal liability insurance</strong>: Covers damage you cause to a third party, such as flooding the unit below you. Usually an add-on rider or separate policy.</li><li>The policy term usually matches the 2-year lease; you'll need to renew or re-enroll when it expires.</li></ul>",
+  fireInsUsageTitle:"Situations renters use it most",
+  fireInsUsageBody:"<ul class='info-list'><li><strong>Water leaks</strong>: A washing machine hose comes loose or a bathtub overflows and floods your room or the unit below \u2014 covered by tenant/personal liability insurance.</li><li><strong>Fire / small fire</strong>: A cooking accident scorches the wall or fixtures \u2014 covered by tenant liability insurance.</li><li><strong>Theft</strong>: A break-in results in stolen appliances or valuables \u2014 covered by contents insurance (theft rider).</li><li><strong>Accidental damage (optional rider)</strong>: Scratching a wall or floor while moving furniture. May not be covered unless you added this rider.</li><li><strong>Typhoon / heavy rain</strong>: Broken windows from strong wind, or belongings damaged by a leak \u2014 natural disaster coverage.</li></ul>",
+  fireInsValueTitle:"When it's worth claiming \u2014 and what to watch for",
+  fireInsValueBody:"<ul class='info-list'><li><strong>Large repair or liability costs</strong>: Water damage to the unit below can run into the hundreds of thousands of yen or more \u2014 always file a claim in these cases; paying out of pocket would be a major burden.</li><li><strong>Damage above the deductible</strong>: Most policies have a deductible of \u00a50\u2013\u00a510,000. Claims below that threshold often aren't worth the paperwork.</li><li><strong>Small losses may be better paid yourself</strong>: Unlike car insurance, most renter policies don't raise your premium after a claim, but some insurers may decline to renew you after repeated claims \u2014 so it can be more practical to cover a loss of a few thousand yen yourself.</li><li><strong>Normal wear and tear isn't covered</strong>: Faded wallpaper or furniture marks from ordinary aging are the landlord's responsibility, not something insurance or your deposit needs to cover.</li><li><strong>Golden rule after an incident</strong>: Take photos before doing any repairs yourself, and contact the management company, landlord, and insurer right away \u2014 this puts you in a stronger position when negotiating move-out restoration costs.</li></ul>",
+  fireInsStepsTitle:"Steps to File a Claim",
+  fireInsStepsBody:"<ol class='info-list fireins-steps'><li><strong>Document the damage</strong>: Before cleaning up or repairing anything, photograph or film the damage and its cause \u2014 ideally with a visible date/time.</li><li><strong>Notify the management company / landlord</strong>: Report the incident by phone or email the same day if possible, describing what happened and how extensive the damage is.</li><li><strong>Contact the insurer</strong>: Have your policy number ready and report the incident through the insurer's claims line or web form. For theft, also file a police report and keep the report number.</li><li><strong>Gather the required documents</strong>: Claim form, photos of the damage, repair estimate/receipts, and (for theft) a copy of the police report.</li><li><strong>Insurer's assessment</strong>: A claims adjuster may visit to assess the damage; you may be asked for additional documents.</li><li><strong>Receive the payout and repair</strong>: Once assessed, the payout is transferred to your account. It's safest to arrange repairs only after the funds arrive.</li></ol>"
+ },
+ ko:{
+  fireInsEyebrow:"火災保険 세입자 화재보험",
+  fireInsIntro:"일본에서 임대 계약을 맺을 때는 대개 화재보험(정확히는 '가재보험'+'임차인배상책임보험' 등의 세트 상품) 가입을 요구받습니다. 대부분 2년 계약이며 보험료는 <strong>약 15,000~20,000엔</strong> 수준입니다. 부동산이 지정한 보험사가 아니어도 보장 내용이 동등하다면 직접 선택한 보험사에 가입할 수 있는 경우도 있습니다.",
+  fireInsBasicTitle:"기본 구조",
+  fireInsBasicBody:"<ul class='info-list'><li><strong>가재보험(동산보험)</strong>: 화재・낙뢰・폭발・누수・도난 등으로 본인의 가구・가전・의류 등이 피해를 입었을 때 보상.</li><li><strong>임차인배상책임보험</strong>: 화재나 누수 등으로 임차 중인 방 자체를 손상시켜 집주인에게 법적 배상 책임을 질 때 보상. <strong>임대 시 사실상 필수</strong>.</li><li><strong>개인배상책임보험</strong>: 아래층이나 이웃 등 제3자에게 손해를 끼쳤을 때(누수로 아래층이 침수된 경우 등)의 배상을 보상. 보통 특약이나 별도 가입.</li><li>보험 기간은 대개 임대 계약과 맞춰 2년이며, 만료 시 자동 갱신 또는 재가입이 필요합니다.</li></ul>",
+  fireInsUsageTitle:"세입자가 가장 자주 쓰는 상황",
+  fireInsUsageBody:"<ul class='info-list'><li><strong>누수 사고</strong>: 세탁기 호스 이탈, 욕조 물 넘침 등으로 본인 방이나 아래층이 침수 → 임차인/개인배상책임보험으로 수리비 보상.</li><li><strong>화재・소규모 화재</strong>: 조리 중 실수로 벽지나 설비가 그을림 → 임차인배상책임보험.</li><li><strong>도난</strong>: 빈집털이로 가전・귀중품 도난 → 가재보험(도난 특약).</li><li><strong>파손・오손(옵션)</strong>: 가구를 옮기다 벽이나 바닥에 흠집. 특약 미가입 시 보상 제외될 수 있음.</li><li><strong>태풍・폭우</strong>: 강풍으로 창문 파손, 누수로 가재도구가 젖는 등 자연재해.</li></ul>",
+  fireInsValueTitle:"청구하면 이득인 경우・주의점",
+  fireInsValueBody:"<ul class='info-list'><li><strong>고액의 수리・배상이 발생했을 때</strong>: 누수로 아래층 인테리어 공사비가 수십만~수백만 엔에 이를 수 있어, 이 경우 반드시 보험을 청구해야 합니다. 자비 부담은 큰 부담이 됩니다.</li><li><strong>자기부담금(면책금액)을 초과하는 손해</strong>: 대부분 자기부담금은 0~1만 엔 수준. 그 이하의 소액 손해는 청구해도 실수령액이 적어 번거롭기만 할 수 있습니다.</li><li><strong>소액 손해는 자비 처리도 고려</strong>: 자동차보험과 달리 청구했다고 보험료가 바로 오르지는 않지만, 청구 이력 때문에 갱신을 거절당하는 보험사도 있어 수천 엔 수준의 손해는 자비 처리가 합리적일 수 있습니다.</li><li><strong>자연 노후는 보상 대상 아님</strong>: 벽지 변색이나 가구 자국 같은 자연스러운 노후는 보험이나 보증금이 아닌 집주인 부담이 원칙입니다.</li><li><strong>사고 발생 시 원칙</strong>: 직접 수리하기 전에 사진을 찍어두고, 관리회사・집주인・보험사에 즉시 연락하세요. 원상회복 협상에서 유리해집니다.</li></ul>",
+  fireInsStepsTitle:"실제 청구 절차",
+  fireInsStepsBody:"<ol class='info-list fireins-steps'><li><strong>피해 상황 기록</strong>: 수리나 정리 전에 피해 부위와 원인을 알 수 있는 사진・영상을 촬영. 날짜가 표시되면 더 좋습니다.</li><li><strong>관리회사・집주인에게 연락</strong>: 가능한 한 당일 중 전화나 이메일로 사고 경위와 피해 범위를 알립니다.</li><li><strong>보험회사에 연락</strong>: 보험증권 번호를 준비해 전용 창구(전화・웹 양식)로 사고를 접수. 도난 시 경찰에 신고하고 접수번호도 보관하세요.</li><li><strong>필요 서류 준비</strong>: 보험금 청구서, 피해 사진, 수리 견적서・영수증, (도난 시) 도난 신고 사본 등.</li><li><strong>보험회사 조사・손해사정</strong>: 필요 시 손해사정사가 현장을 확인하며, 추가 서류를 요청받을 수 있습니다.</li><li><strong>보험금 수령・수리</strong>: 사정이 끝나면 지정 계좌로 보험금이 입금됩니다. 입금 후 수리업체에 의뢰하는 것이 안전합니다.</li></ol>"
+ },
+ vi:{
+  fireInsEyebrow:"Bảo hiểm hỏa hoạn cho người thuê nhà",
+  fireInsIntro:"Khi ký hợp đồng thuê nhà tại Nhật, chủ nhà thường yêu cầu tham gia bảo hiểm hỏa hoạn (thực chất là gói kết hợp \"bảo hiểm tài sản\" + \"bảo hiểm trách nhiệm người thuê\"). Phần lớn là hợp đồng 2 năm với mức phí khoảng <strong>15.000~20.000 yên</strong>. Ngay cả khi không phải công ty bảo hiểm do bên môi giới chỉ định, đôi khi bạn vẫn có thể tự chọn công ty bảo hiểm khác nếu phạm vi bảo hiểm tương đương.",
+  fireInsBasicTitle:"Cấu trúc cơ bản",
+  fireInsBasicBody:"<ul class='info-list'><li><strong>Bảo hiểm tài sản (động sản)</strong>: Bồi thường khi đồ đạc, thiết bị điện, quần áo... của bạn bị thiệt hại do hỏa hoạn, sét đánh, nổ, rò rỉ nước, trộm cắp.</li><li><strong>Bảo hiểm trách nhiệm người thuê</strong>: Bồi thường khi bạn làm hư hỏng chính căn phòng thuê (do hỏa hoạn, rò rỉ nước...) và phải chịu trách nhiệm pháp lý với chủ nhà. <strong>Gần như bắt buộc khi thuê nhà</strong>.</li><li><strong>Bảo hiểm trách nhiệm cá nhân</strong>: Bồi thường khi bạn gây thiệt hại cho bên thứ ba như hàng xóm, tầng dưới (ví dụ làm ngập nước tầng dưới). Thường là điều khoản bổ sung hoặc mua riêng.</li><li>Thời hạn bảo hiểm thường khớp với hợp đồng thuê 2 năm, cần gia hạn hoặc mua lại khi hết hạn.</li></ul>",
+  fireInsUsageTitle:"Những tình huống người thuê hay dùng nhất",
+  fireInsUsageBody:"<ul class='info-list'><li><strong>Sự cố rò rỉ nước</strong>: Ống nước máy giặt tuột ra, nước bồn tắm tràn ra ngoài làm ngập phòng mình hoặc tầng dưới → bảo hiểm trách nhiệm người thuê/cá nhân chi trả chi phí sửa chữa.</li><li><strong>Hỏa hoạn/cháy nhỏ</strong>: Sơ ý khi nấu ăn làm cháy sém tường hoặc thiết bị → bảo hiểm trách nhiệm người thuê.</li><li><strong>Trộm cắp</strong>: Bị đột nhập mất đồ điện tử, vật có giá trị → bảo hiểm tài sản (điều khoản trộm cắp).</li><li><strong>Hư hỏng do sơ ý (tùy chọn)</strong>: Làm xước tường hoặc sàn khi di chuyển đồ đạc. Có thể không được bồi thường nếu chưa mua thêm điều khoản này.</li><li><strong>Bão/mưa lớn</strong>: Gió mạnh làm vỡ cửa sổ, nước mưa dột làm ướt đồ đạc — thuộc phạm vi thiên tai.</li></ul>",
+  fireInsValueTitle:"Khi nào nên yêu cầu bồi thường — và lưu ý",
+  fireInsValueBody:"<ul class='info-list'><li><strong>Khi chi phí sửa chữa/bồi thường lớn</strong>: Thiệt hại do rò rỉ nước cho tầng dưới có thể lên tới hàng trăm nghìn đến cả triệu yên — trường hợp này nên luôn yêu cầu bảo hiểm chi trả, vì tự bỏ tiền túi sẽ là gánh nặng lớn.</li><li><strong>Thiệt hại vượt mức miễn thường</strong>: Hầu hết các gói có mức miễn thường 0~10.000 yên. Thiệt hại thấp hơn mức này thường không đáng để làm thủ tục yêu cầu bồi thường.</li><li><strong>Thiệt hại nhỏ có thể tự chi trả</strong>: Khác với bảo hiểm ô tô, hầu hết bảo hiểm người thuê không tăng phí ngay sau khi yêu cầu bồi thường, nhưng một số công ty có thể từ chối gia hạn nếu có nhiều lần yêu cầu — vì vậy với thiệt hại vài nghìn yên, tự chi trả đôi khi hợp lý hơn.</li><li><strong>Hao mòn tự nhiên không được bảo hiểm</strong>: Giấy dán tường phai màu, vết đồ đạc để lại theo thời gian là trách nhiệm của chủ nhà, không phải việc của bảo hiểm hay tiền đặt cọc.</li><li><strong>Nguyên tắc khi xảy ra sự cố</strong>: Chụp ảnh lại trước khi tự sửa, liên hệ ngay với công ty quản lý, chủ nhà và công ty bảo hiểm — điều này giúp bạn ở vị thế tốt hơn khi thương lượng chi phí khôi phục hiện trạng lúc trả nhà.</li></ul>",
+  fireInsStepsTitle:"Các bước khi yêu cầu bồi thường",
+  fireInsStepsBody:"<ol class='info-list fireins-steps'><li><strong>Ghi lại tình trạng thiệt hại</strong>: Trước khi dọn dẹp hay sửa chữa, hãy chụp ảnh/quay video cho thấy rõ vị trí và nguyên nhân thiệt hại, tốt nhất có hiển thị ngày giờ.</li><li><strong>Liên hệ công ty quản lý/chủ nhà</strong>: Báo cáo qua điện thoại hoặc email ngay trong ngày nếu có thể, mô tả diễn biến và mức độ thiệt hại.</li><li><strong>Liên hệ công ty bảo hiểm</strong>: Chuẩn bị số hợp đồng bảo hiểm và báo cáo sự cố qua đường dây nóng hoặc mẫu web của công ty bảo hiểm. Nếu là trộm cắp, cần trình báo công an và giữ lại số biên nhận.</li><li><strong>Chuẩn bị hồ sơ cần thiết</strong>: Đơn yêu cầu bồi thường, ảnh thiệt hại, báo giá/hóa đơn sửa chữa, và (nếu trộm cắp) bản sao biên nhận trình báo công an.</li><li><strong>Công ty bảo hiểm thẩm định</strong>: Giám định viên có thể đến hiện trường kiểm tra; bạn có thể được yêu cầu bổ sung giấy tờ.</li><li><strong>Nhận tiền bồi thường và sửa chữa</strong>: Sau khi thẩm định xong, tiền bồi thường sẽ được chuyển vào tài khoản. Nên tiến hành sửa chữa sau khi đã nhận được tiền để an toàn hơn.</li></ol>"
+ }
+};
+function siteApplyFireInsuranceCopy(lang){const copy=FIRE_INSURANCE_COPY[lang]||FIRE_INSURANCE_COPY.ja;Object.entries(copy).forEach(([id,html])=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
+const UTIL_TAB_LABELS={
+ ja:{utilTabElectric:"電気",utilTabGas:"ガス",utilTabWater:"水道",
+   taxRealBuyLabel:"購入時の税金",taxRealHoldLabel:"保有コスト",
+   taxPersonalIncomeLabel:"個人所得・住民税",taxPersonalFurusatoLabel:"ふるさと納税",taxPersonalCompanyLabel:"法人税・会社設立",
+   carUsedLabel:"中古車・車検",carTransferTabLabel:"売買・名義変更",carLicenseLabel:"運転免許"},
+ "zh-TW":{utilTabElectric:"電費",utilTabGas:"瓦斯費",utilTabWater:"水費",
+   taxRealBuyLabel:"購入稅金",taxRealHoldLabel:"保有成本",
+   taxPersonalIncomeLabel:"個人所得稅",taxPersonalFurusatoLabel:"故鄉稅",taxPersonalCompanyLabel:"法人稅・設立公司",
+   carUsedLabel:"中古車・車檢",carTransferTabLabel:"買賣・過戶",carLicenseLabel:"駕照"},
+ "zh-CN":{utilTabElectric:"电费",utilTabGas:"燃气费",utilTabWater:"水费",
+   taxRealBuyLabel:"购入税金",taxRealHoldLabel:"持有成本",
+   taxPersonalIncomeLabel:"个人所得税",taxPersonalFurusatoLabel:"故乡税",taxPersonalCompanyLabel:"法人税・设立公司",
+   carUsedLabel:"二手车・车检",carTransferTabLabel:"买卖・过户",carLicenseLabel:"驾照"},
+ en:{utilTabElectric:"Electricity",utilTabGas:"Gas",utilTabWater:"Water",
+   taxRealBuyLabel:"Purchase Tax",taxRealHoldLabel:"Holding Cost",
+   taxPersonalIncomeLabel:"Income Tax",taxPersonalFurusatoLabel:"Hometown Tax",taxPersonalCompanyLabel:"Corporate Tax",
+   carUsedLabel:"Used Car",carTransferTabLabel:"Transfer",carLicenseLabel:"License"},
+ ko:{utilTabElectric:"전기",utilTabGas:"가스",utilTabWater:"수도",
+   taxRealBuyLabel:"구입 시 세금",taxRealHoldLabel:"보유 비용",
+   taxPersonalIncomeLabel:"개인소득세",taxPersonalFurusatoLabel:"고향납세",taxPersonalCompanyLabel:"법인세・회사설립",
+   carUsedLabel:"중고차・차검",carTransferTabLabel:"매매・명의변경",carLicenseLabel:"운전면허"},
+ vi:{utilTabElectric:"Điện",utilTabGas:"Gas",utilTabWater:"Nước",
+   taxRealBuyLabel:"Thuế khi mua",taxRealHoldLabel:"Chi phí sở hữu",
+   taxPersonalIncomeLabel:"Thuế thu nhập",taxPersonalFurusatoLabel:"Thuế quê hương",taxPersonalCompanyLabel:"Thuế doanh nghiệp",
+   carUsedLabel:"Xe cũ & kiểm định",carTransferTabLabel:"Mua bán & sang tên",carLicenseLabel:"Bằng lái"}
+};
+function siteApplyUtilTabLabels(lang){const copy=UTIL_TAB_LABELS[lang]||UTIL_TAB_LABELS.ja;Object.entries(copy).forEach(([id,text])=>{const el=document.getElementById(id);if(el)el.textContent=text;});}
+const SITE_TAGLINE={
+ ja:"日本で暮らす外国人をつなぐ",
+ "zh-TW":"連結在日本生活的外國人",
+ "zh-CN":"连接在日本生活的外国人",
+ en:"Connecting foreigners living in Japan",
+ ko:"일본에 사는 외국인을 이어줍니다",
+ vi:"Kết nối người nước ngoài sống tại Nhật Bản"
+};
+function siteApplyTagline(lang){const el=document.getElementById("siteTagline");if(el)el.textContent=SITE_TAGLINE[lang]||SITE_TAGLINE.ja;}
+const ABOUT_NAV_LABEL={
+ ja:"サイトについて",
+ "zh-TW":"關於本站",
+ "zh-CN":"关于本站",
+ en:"About",
+ ko:"사이트 소개",
+ vi:"Giới thiệu"
+};
+function siteApplyAboutNavLabel(lang){const el=document.getElementById("aboutNavLabel");if(el)el.textContent=ABOUT_NAV_LABEL[lang]||ABOUT_NAV_LABEL.ja;}
+const WATER_PAGE_COPY={
+ ja:{
+  waterIntro:"東京23区とほぼ全域の多摩地域では、水道・下水道はどちらも<strong>東京都水道局</strong>が窓口です。検針は<strong>2か月に1回</strong>で、水道料金と下水道料金がまとめて請求されます（引っ越し時の精算のみ日割り計算）。",
+  waterBasicTitle:"基本のしくみ",
+  waterBasicBody:"<ul class='info-list'><li><strong>水道料金</strong>：口径（13mm・20mm等）ごとの基本料金＋2か月の使用量に応じた従量料金（水量が増えるほど単価が上がる累進制）。</li><li><strong>下水道料金</strong>：水道の使用水量を排水量とみなして別建てで計算・合算請求される。</li><li><strong>目安</strong>：単身・口径13mmで月20㎥前後の使用なら、2か月あたり合計<strong>おおむね6,000～9,000円程度</strong>（時期・使用量により変動）。</li><li>賃貸物件では管理会社が一括契約し家賃に含める「水道代込み」の場合もあるため、契約時に確認を。</li></ul>",
+  waterApplyTitle:"使用開始・中止（開栓・閉栓）の申請方法",
+  waterApplyBody:"<ul class='info-list'><li><strong>オンライン申請</strong>：東京都水道局の公式サービス「スイスイ東京水」から24時間いつでも使用開始・中止の手続きが可能。</li><li><strong>電話申請</strong>：お客さまセンター（0570-091-100／23区外・PHS等は03-5326-1100）平日・土曜受付。緊急の漏水は24時間対応。</li><li><strong>必要な情報</strong>：新旧住所、氏名、引越日、支払方法（口座振替・クレジットカード・払込票）、電話番号。</li><li><strong>タイミング</strong>：入居日の3～4日前までの申込みを推奨。当日申込みも可能な場合があるが、立会い等で対応できないことも。</li><li>退去時は使用中止（閉栓）の連絡を忘れずに。連絡が遅れると次の入居者と混在して精算トラブルの原因になることがある。</li></ul>",
+  waterOfficialTitle:"公式窓口・関連リンク",
+  waterOfficialBody:"<div class='portal-source'>東京都水道局 公式サイト：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/\" target=\"_blank\" rel=\"noopener\">waterworks.metro.tokyo.lg.jp</a>／使用開始・中止のオンライン手続き「スイスイ東京水」：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suisui/\" target=\"_blank\" rel=\"noopener\">スイスイ東京水</a>／水道料金・下水道料金の表：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suido/ryoukin/\" target=\"_blank\" rel=\"noopener\">料金表</a>／お客さまセンター：0570-091-100（一部地域 03-5326-1100）</div>"
+ },
+ "zh-TW":{
+  waterIntro:"東京23區以及多摩地區的大部分區域，自來水與下水道都是由<strong>東京都水道局</strong>統一受理。抄表週期為<strong>每2個月一次</strong>，自來水費與下水道費會合併請求（只有搬家結算時才會按日計算）。",
+  waterBasicTitle:"基本費用結構",
+  waterBasicBody:"<ul class='info-list'><li><strong>水費（水道料金）</strong>：依水表口徑（13mm、20mm等）計算基本費，再加上依2個月使用量計算的從量費（用越多單價越高，採累進制）。</li><li><strong>下水道費</strong>：以自來水使用量視為排水量另外計算，與水費合併請款。</li><li><strong>參考行情</strong>：單身、口徑13mm、月用水量約20㎥的話，2個月合計約<strong>6,000～9,000日圓左右</strong>（依時期與用量會有變動）。</li><li>部分租屋物件由管理公司統一簽約，水費已包含在房租內（水道代込み），簽約時務必確認。</li></ul>",
+  waterApplyTitle:"開通・停止用水（開栓・閉栓）申請方式",
+  waterApplyBody:"<ul class='info-list'><li><strong>線上申請</strong>：透過東京都水道局官方服務「スイスイ東京水（Suisui Tokyo Water）」，24小時皆可辦理開通或停止用水。</li><li><strong>電話申請</strong>：客服中心（0570-091-100／部分地區或使用PHS請撥03-5326-1100），平日及週六受理；緊急漏水24小時受理。</li><li><strong>需準備的資訊</strong>：新舊地址、姓名、搬遷日期、付款方式（帳戶自動扣款、信用卡或繳費單）、聯絡電話。</li><li><strong>申請時機</strong>：建議在入住日前3～4天完成申請。當天臨時申請有時也可受理，但可能無法安排到府會勘等服務。</li><li>退租搬離時，別忘了辦理停止用水（閉栓）手續，若延遲通知，可能與下一位住戶用量混算而產生結算糾紛。</li></ul>",
+  waterOfficialTitle:"官方窗口・相關連結",
+  waterOfficialBody:"<div class='portal-source'>東京都水道局 官方網站：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/\" target=\"_blank\" rel=\"noopener\">waterworks.metro.tokyo.lg.jp</a>／開通・停止用水線上申請「スイスイ東京水」：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suisui/\" target=\"_blank\" rel=\"noopener\">スイスイ東京水</a>／水費與下水道費費率表：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suido/ryoukin/\" target=\"_blank\" rel=\"noopener\">料金表</a>／客服中心：0570-091-100（部分地區 03-5326-1100）</div>"
+ },
+ "zh-CN":{
+  waterIntro:"东京23区以及多摩地区的大部分区域，自来水与下水道都是由<strong>东京都水道局</strong>统一受理。抄表周期为<strong>每2个月一次</strong>，自来水费与下水道费会合并请求（只有搬家结算时才会按日计算）。",
+  waterBasicTitle:"基本费用结构",
+  waterBasicBody:"<ul class='info-list'><li><strong>水费（水道料金）</strong>：依水表口径（13mm、20mm等）计算基本费，再加上依2个月使用量计算的从量费（用越多单价越高，采累进制）。</li><li><strong>下水道费</strong>：以自来水使用量视为排水量另外计算，与水费合并请款。</li><li><strong>参考行情</strong>：单身、口径13mm、月用水量约20㎥的话，2个月合计约<strong>6,000～9,000日元左右</strong>（依时期与用量会有变动）。</li><li>部分租房由管理公司统一签约，水费已包含在房租内（水道代込み），签约时务必确认。</li></ul>",
+  waterApplyTitle:"开通・停止用水（开栓・闭栓）申请方式",
+  waterApplyBody:"<ul class='info-list'><li><strong>在线申请</strong>：通过东京都水道局官方服务“スイスイ东京水（Suisui Tokyo Water）”，24小时皆可办理开通或停止用水。</li><li><strong>电话申请</strong>：客服中心（0570-091-100／部分地区或使用PHS请拨03-5326-1100），平日及周六受理；紧急漏水24小时受理。</li><li><strong>需准备的信息</strong>：新旧地址、姓名、搬迁日期、付款方式（账户自动扣款、信用卡或缴费单）、联系电话。</li><li><strong>申请时机</strong>：建议在入住日前3～4天完成申请。当天临时申请有时也可受理，但可能无法安排到府会勘等服务。</li><li>退租搬离时，别忘了办理停止用水（闭栓）手续，若延迟通知，可能与下一位住户用量混算而产生结算纠纷。</li></ul>",
+  waterOfficialTitle:"官方窗口・相关链接",
+  waterOfficialBody:"<div class='portal-source'>东京都水道局 官方网站：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/\" target=\"_blank\" rel=\"noopener\">waterworks.metro.tokyo.lg.jp</a>／开通・停止用水在线申请「スイスイ东京水」：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suisui/\" target=\"_blank\" rel=\"noopener\">スイスイ东京水</a>／水费与下水道费费率表：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suido/ryoukin/\" target=\"_blank\" rel=\"noopener\">料金表</a>／客服中心：0570-091-100（部分地区 03-5326-1100）</div>"
+ },
+ en:{
+  waterEyebrowNote:"",
+  waterIntro:"Across Tokyo's 23 wards and most of the Tama area, both water supply and sewerage are handled by the <strong>Tokyo Metropolitan Bureau of Waterworks</strong> (\u6771\u4eac\u90fd\u6c34\u9053\u5c40). Meters are read <strong>once every 2 months</strong>, and the water and sewerage charges are billed together (only prorated by day when you move in or out).",
+  waterBasicTitle:"How the fee is structured",
+  waterBasicBody:"<ul class='info-list'><li><strong>Water charge</strong>: A basic charge based on your meter size (13mm, 20mm, etc.) plus a usage-based charge for the 2-month period, which rises per unit as usage increases (tiered/progressive pricing).</li><li><strong>Sewerage charge</strong>: Calculated separately based on the same water usage (treated as drainage volume) and billed together with the water charge.</li><li><strong>Rough estimate</strong>: For a single person on a 13mm meter using around 20 m\u00b3/month, the combined 2-month bill is typically around <strong>\u00a56,000\u2013\u00a59,000</strong>, varying by season and usage.</li><li>In some rental units the management company holds the contract and includes water in the rent (\u201cwater included\u201d) \u2014 check your lease.</li></ul>",
+  waterApplyTitle:"How to start / stop service",
+  waterApplyBody:"<ul class='info-list'><li><strong>Online</strong>: Use the Bureau's official \u201cSuisui Tokyo Water\u201d service to start or stop service 24 hours a day.</li><li><strong>By phone</strong>: Customer Center (0570-091-100, or 03-5326-1100 for some areas / PHS), open weekdays and Saturdays; urgent leaks are handled 24/7.</li><li><strong>Information you'll need</strong>: old and new addresses, your name, move date, payment method (bank direct debit, credit card, or payment slip), and phone number.</li><li><strong>Timing</strong>: Apply about 3\u20134 days before move-in if possible. Same-day requests are sometimes accepted, but on-site visits may not always be arranged in time.</li><li>Don't forget to request stop-of-service when you move out \u2014 a late request can get mixed up with the next tenant's usage and cause billing disputes.</li></ul>",
+  waterOfficialTitle:"Official contacts \u0026 links",
+  waterOfficialBody:"<div class='portal-source'>Tokyo Bureau of Waterworks official site: <a href=\"https://www.waterworks.metro.tokyo.lg.jp/\" target=\"_blank\" rel=\"noopener\">waterworks.metro.tokyo.lg.jp</a> / Online start/stop procedure \u201cSuisui Tokyo Water\u201d: <a href=\"https://www.waterworks.metro.tokyo.lg.jp/suisui/\" target=\"_blank\" rel=\"noopener\">Suisui Tokyo Water</a> / Water \u0026 sewerage rate tables: <a href=\"https://www.waterworks.metro.tokyo.lg.jp/suido/ryoukin/\" target=\"_blank\" rel=\"noopener\">Rate table</a> / Customer Center: 0570-091-100 (03-5326-1100 for some areas)</div>"
+ },
+ ko:{
+  waterIntro:"도쿄 23구와 다마 지역 대부분에서는 상수도와 하수도 모두 <strong>도쿄도 수도국</strong>이 담당합니다. 검침은 <strong>2개월에 1회</strong>이며 수도요금과 하수도요금이 함께 청구됩니다(이사할 때만 일할 계산).",
+  waterBasicTitle:"기본 요금 구조",
+  waterBasicBody:"<ul class='info-list'><li><strong>수도요금</strong>: 계량기 구경(13mm, 20mm 등)별 기본요금 + 2개월 사용량에 따른 종량요금(사용량이 많을수록 단가가 오르는 누진제).</li><li><strong>하수도요금</strong>: 수돗물 사용량을 배수량으로 간주해 별도로 계산되어 수도요금과 함께 청구됩니다.</li><li><strong>대략적인 기준</strong>: 1인 가구, 13mm 계량기, 월 20㎥ 전후 사용 시 2개월 합계 약 <strong>6,000~9,000엔 정도</strong>(시기・사용량에 따라 변동).</li><li>일부 임대 물건은 관리회사가 일괄 계약하여 월세에 수도요금이 포함(水道代込み)된 경우도 있으니 계약 시 확인하세요.</li></ul>",
+  waterApplyTitle:"사용 개시・중지(개전・폐전) 신청 방법",
+  waterApplyBody:"<ul class='info-list'><li><strong>온라인 신청</strong>: 도쿄도 수도국 공식 서비스 '스이스이 도쿄 물(スイスイ東京水)'에서 24시간 언제든 사용 개시・중지 절차가 가능합니다.</li><li><strong>전화 신청</strong>: 고객센터(0570-091-100 / 일부 지역・PHS는 03-5326-1100), 평일・토요일 접수. 긴급 누수는 24시간 대응.</li><li><strong>필요한 정보</strong>: 신구 주소, 이름, 이사 날짜, 결제 방법(계좌 자동이체・신용카드・납부서), 전화번호.</li><li><strong>신청 시기</strong>: 입주일 3~4일 전까지 신청하는 것을 권장합니다. 당일 신청도 가능한 경우가 있으나 현장 방문 등이 어려울 수 있습니다.</li><li>퇴거 시 사용 중지(폐전) 연락을 잊지 마세요. 연락이 늦어지면 다음 입주자와 사용량이 섞여 정산 분쟁의 원인이 될 수 있습니다.</li></ul>",
+  waterOfficialTitle:"공식 창구・관련 링크",
+  waterOfficialBody:"<div class='portal-source'>도쿄도 수도국 공식 사이트：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/\" target=\"_blank\" rel=\"noopener\">waterworks.metro.tokyo.lg.jp</a>／사용 개시・중지 온라인 절차「スイスイ東京水」：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suisui/\" target=\"_blank\" rel=\"noopener\">스이스이 도쿄 물</a>／수도요금・하수도요금표：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suido/ryoukin/\" target=\"_blank\" rel=\"noopener\">요금표</a>／고객센터：0570-091-100（일부 지역 03-5326-1100）</div>"
+ },
+ vi:{
+  waterIntro:"Tại 23 quận trung tâm Tokyo và phần lớn khu vực Tama, cả nước máy và nước thải đều do <strong>Cục Cấp nước Tokyo</strong> (東京都水道局) phụ trách. Đồng hồ được ghi số <strong>2 tháng một lần</strong>, phí nước và phí nước thải được tính chung trong một hóa đơn (chỉ tính theo ngày khi bạn chuyển đến/đi).",
+  waterBasicTitle:"Cấu trúc phí cơ bản",
+  waterBasicBody:"<ul class='info-list'><li><strong>Phí nước</strong>: Phí cơ bản theo cỡ đồng hồ nước (13mm, 20mm...) cộng với phí theo lượng sử dụng trong 2 tháng, đơn giá tăng dần theo lượng dùng (biểu phí lũy tiến).</li><li><strong>Phí nước thải</strong>: Tính riêng dựa trên lượng nước sử dụng (coi như lượng nước thải ra), và được cộng chung vào hóa đơn tiền nước.</li><li><strong>Mức tham khảo</strong>: Người sống một mình, đồng hồ 13mm, dùng khoảng 20m³/tháng thì tổng phí 2 tháng thường vào khoảng <strong>6.000~9.000 yên</strong> (thay đổi theo mùa và lượng dùng).</li><li>Một số căn hộ cho thuê do công ty quản lý ký hợp đồng gộp, tiền nước đã bao gồm trong tiền thuê nhà — hãy kiểm tra hợp đồng.</li></ul>",
+  waterApplyTitle:"Cách đăng ký mở/ngừng sử dụng nước",
+  waterApplyBody:"<ul class='info-list'><li><strong>Đăng ký trực tuyến</strong>: Dùng dịch vụ chính thức \"Suisui Tokyo Water\" của Cục Cấp nước để mở hoặc ngừng sử dụng nước 24/24.</li><li><strong>Đăng ký qua điện thoại</strong>: Trung tâm chăm sóc khách hàng (0570-091-100, hoặc 03-5326-1100 cho một số khu vực/PHS), tiếp nhận các ngày trong tuần và thứ Bảy; rò rỉ nước khẩn cấp được xử lý 24/24.</li><li><strong>Thông tin cần chuẩn bị</strong>: địa chỉ cũ và mới, họ tên, ngày chuyển nhà, phương thức thanh toán (trừ tiền tự động qua tài khoản, thẻ tín dụng, hoặc phiếu nộp tiền), số điện thoại.</li><li><strong>Thời điểm đăng ký</strong>: Nên đăng ký trước ngày chuyển vào khoảng 3~4 ngày. Đôi khi có thể đăng ký trong ngày nhưng có thể không kịp sắp xếp nhân viên đến kiểm tra.</li><li>Khi chuyển đi, đừng quên đăng ký ngừng sử dụng nước — nếu báo trễ có thể bị tính lẫn với lượng dùng của người thuê tiếp theo, gây tranh chấp khi quyết toán.</li></ul>",
+  waterOfficialTitle:"Đầu mối chính thức & liên kết",
+  waterOfficialBody:"<div class='portal-source'>Trang chính thức Cục Cấp nước Tokyo：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/\" target=\"_blank\" rel=\"noopener\">waterworks.metro.tokyo.lg.jp</a>／Thủ tục trực tuyến mở/ngừng nước「スイスイ東京水」：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suisui/\" target=\"_blank\" rel=\"noopener\">Suisui Tokyo Water</a>／Bảng giá nước và nước thải：<a href=\"https://www.waterworks.metro.tokyo.lg.jp/suido/ryoukin/\" target=\"_blank\" rel=\"noopener\">Bảng giá</a>／Trung tâm chăm sóc khách hàng：0570-091-100（một số khu vực 03-5326-1100）</div>"
+ }
+};
+function siteApplyWaterCopy(lang){const copy=WATER_PAGE_COPY[lang]||WATER_PAGE_COPY.ja;Object.entries(copy).forEach(([id,html])=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
+const ETC_PAGE_COPY={
+ ja:{
+  etcIntro:"<strong>概算ツールについて：</strong>NEXCO東日本・中日本・西日本が採用する「対キロ料金制」の標準料金体系をもとにした概算です。首都高速・阪神高速など大都市高速道路や本州四国連絡高速道路は別体系のため対象外です。正確な料金・ルートは公式の料金・ルート検索サービスでご確認ください。",
+  etcMileageNote:"<strong>ETCマイレージサービス：</strong>登録すると通行料金に応じてポイントが貯まり、還元金として通行料金の支払いに充当できます。個人の利用履歴により還元率が変わるため、本ツールの概算には含まれていません。"
+ },
+ "zh-TW":{
+  etcIntro:"<strong>關於本概算工具：</strong>本工具依 NEXCO 東日本・中日本・西日本採用的「按公里計費制」標準費率概算而成。首都高速、阪神高速等都會高速公路，以及本州四國聯絡高速公路採用不同費率體系，不在本工具範圍內。正確金額與路線請至官方費率・路線查詢服務確認。",
+  etcMileageNote:"<strong>ETC 里程服務（ETCマイレージ）：</strong>註冊後可依通行費金額累積點數，並折抵日後的通行費。由於還元率會依個人使用紀錄而異，本工具的概算未包含此項折扣。"
+ },
+ "zh-CN":{
+  etcIntro:"<strong>关于本概算工具：</strong>本工具依 NEXCO 东日本・中日本・西日本采用的「按公里计费制」标准费率概算而成。首都高速、阪神高速等都会高速公路，以及本州四国联络高速公路采用不同费率体系，不在本工具范围内。正确金额与路线请至官方费率・路线查询服务确认。",
+  etcMileageNote:"<strong>ETC 里程服务（ETCマイレージ）：</strong>注册后可依通行费金额累积积分，并折抵日后的通行费。由于返还率会依个人使用记录而异，本工具的概算未包含此项折扣。"
+ },
+ en:{
+  etcIntro:"<strong>About this estimator:</strong> Based on the standard \"distance-based\" (対キロ料金制) fare structure used by NEXCO East, Central, and West Japan. Metropolitan expressways (Shuto/Hanshin, etc.) and the Honshu-Shikoku connecting expressways use separate fare systems and aren't covered here. Check the official toll/route search services for exact fares and routes.",
+  etcMileageNote:"<strong>ETC Mileage Service:</strong> Registering lets you earn points based on tolls paid, which can be applied toward future tolls. Since the return rate varies by individual usage history, this isn't included in the estimate above."
+ },
+ ko:{
+  etcIntro:"<strong>이 개산 도구에 대하여：</strong>NEXCO 히가시니혼・나카니혼・니시니혼이 채택한 「거리비례 요금제」 표준 요금 체계를 기반으로 한 개산입니다. 수도고속・한신고속 등 대도시 고속도로와 혼슈・시코쿠 연락 고속도로는 별도 체계이므로 대상에서 제외됩니다. 정확한 요금・경로는 공식 요금・경로 검색 서비스에서 확인해 주세요.",
+  etcMileageNote:"<strong>ETC 마일리지 서비스：</strong>등록하면 통행요금에 따라 포인트가 적립되어 이후 통행요금 결제에 충당할 수 있습니다. 개인 이용 이력에 따라 환원율이 달라지므로 본 도구의 개산에는 포함되어 있지 않습니다."
+ },
+ vi:{
+  etcIntro:"<strong>Về công cụ ước tính này：</strong>Ước tính dựa trên biểu phí tiêu chuẩn theo \"hệ thống tính theo khoảng cách\" (対キロ料金制) mà NEXCO Đông/Trung/Tây Nhật Bản áp dụng. Đường cao tốc đô thị (Shuto, Hanshin...) và đường cao tốc nối Honshu-Shikoku dùng hệ thống phí khác nên không nằm trong phạm vi công cụ này. Vui lòng kiểm tra dịch vụ tra cứu phí/tuyến đường chính thức để biết số liệu chính xác.",
+  etcMileageNote:"<strong>Dịch vụ ETC Mileage：</strong>Khi đăng ký, bạn tích điểm theo phí đường đã trả, có thể dùng để trừ vào phí đường sau này. Vì tỷ lệ hoàn điểm phụ thuộc vào lịch sử sử dụng cá nhân nên chưa được tính vào ước tính ở trên."
+ }
+};
+function siteApplyEtcCopy(lang){const copy=ETC_PAGE_COPY[lang]||ETC_PAGE_COPY.ja;Object.entries(copy).forEach(([id,html])=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
+
+let siteCurrentLanguage = "ja", siteTranslationBusy = false;
+function siteSetLanguage(lang,save=true){
+  if (!SITE_LANGS[lang]) lang = "ja";
+  siteCurrentLanguage = lang;
+  document.documentElement.lang = SITE_LANGS[lang];
+  document.getElementById("siteLanguage").value = lang;
+  document.title = siteTranslateCore("外's Net",lang);
+  siteTranslationBusy = true;
+  siteTranslateElement(document.body,lang);
+  siteApplyTaxCopy(lang);
+  siteApplyAboutCopy(lang);
+  siteApplyFireInsuranceCopy(lang);
+  siteApplyUtilTabLabels(lang);
+  siteApplyTagline(lang);
+  siteApplyAboutNavLabel(lang);
+  siteApplyWaterCopy(lang);
+  siteApplyEtcCopy(lang);
+  if (typeof siteApplyMoveoutCopy === "function") siteApplyMoveoutCopy(lang);
+  if (typeof etcRender === "function" && document.querySelector("#etcDistance")) etcRender();
+  if (typeof carTransferSetLanguage === "function" && document.querySelector("#carTransferVehicle")) carTransferSetLanguage(lang);
+  if (typeof jobPageSetLanguage === "function" && document.querySelector("#page-jobs")) jobPageSetLanguage(lang);
+  if (typeof friendOfferRender === "function" && document.querySelector("#friendOfferGrid")) friendOfferRender(lang);
+  siteTranslationBusy = false;
+  if (typeof T !== "undefined" && T[lang]){
+    currentLang = lang;
+    const langPickerEl = document.getElementById("langPicker");
+    if (langPickerEl) langPickerEl.value = lang;
+    render();
+  }
+  if (save) try { localStorage.setItem("kojian_site_language",lang); } catch (error) {}
+}
+document.getElementById("siteLanguage").addEventListener("change",event => siteSetLanguage(event.target.value));
+const siteObserver = new MutationObserver(records => {
+  if (siteTranslationBusy) return;
+  siteTranslationBusy = true;
+  records.forEach(record => record.addedNodes.forEach(node => {
+    if (node.nodeType === 1) siteTranslateElement(node,siteCurrentLanguage);
+    else if (node.nodeType === 3 && node.parentElement) siteTranslateElement(node.parentElement,siteCurrentLanguage);
+  }));
+  siteTranslationBusy = false;
+});
+siteObserver.observe(document.body,{childList:true,subtree:true});
+let siteInitialLanguage = "ja";
+try { siteInitialLanguage = document.getElementById("siteLanguage")?.value || "ja"; } catch (error) {}
+siteSetLanguage(siteInitialLanguage,false);
+</script>
     <script is:inline>
       (() => {
         const originalGetElementById = Document.prototype.getElementById;
