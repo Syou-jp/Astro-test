@@ -395,3 +395,387 @@
   
     </section><!-- /doc-type-broker -->
   </div><!-- /page-documents -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ================= Viewing Request Form ================= */
+function visitTimeOptions(){
+  const opts = [];
+  for (let h = 8; h <= 21; h++){
+    for (let m = 0; m < 60; m += 30){
+      if (h === 21 && m > 0) break;
+      opts.push(`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`);
+    }
+  }
+  return opts;
+}
+function fillTimeSelect(id, defaultValue){
+  const sel = document.getElementById(id);
+  const opts = visitTimeOptions();
+  sel.innerHTML = opts.map(t => `<option value="${t}" ${t === defaultValue ? "selected" : ""}>${t}</option>`).join("");
+}
+fillTimeSelect("visitStartTime", "10:00");
+fillTimeSelect("visitEndTime", "11:00");
+
+function visitRender(){
+  document.getElementById("visitTodayDate").textContent = new Date().toISOString().slice(0,10);
+  document.getElementById("vOutPropertyName").textContent = document.getElementById("visitPropertyName").value.trim() || "—";
+  document.getElementById("vOutRoomNumber").textContent = document.getElementById("visitRoomNumber").value.trim() || "—";
+  document.getElementById("vOutAddress").textContent = document.getElementById("visitAddress").value.trim() || "—";
+
+  const d = document.getElementById("visitDateInput").value;
+  const st = document.getElementById("visitStartTime").value;
+  const et = document.getElementById("visitEndTime").value;
+  document.getElementById("vOutDateTime").textContent = d ? `${d}　${st} 〜 ${et}` : "—";
+
+  document.getElementById("vOutCompanyName").textContent = document.getElementById("visitCompanyName").value.trim() || "—";
+  document.getElementById("vOutCompanyPhone").textContent = document.getElementById("visitCompanyPhone").value.trim() || "—";
+  document.getElementById("vOutCompanyFax").textContent = document.getElementById("visitCompanyFax").value.trim() || "—";
+}
+
+document.getElementById("visitFormCard").addEventListener("input", visitRender);
+document.getElementById("visitFormCard").addEventListener("change", visitRender);
+
+document.getElementById("visitCardFile").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    document.getElementById("vCardImagePreview").src = ev.target.result;
+    document.getElementById("vCardImageWrap").style.display = "block";
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById("visitPdfBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("visitPdfBtn");
+  const original = btn.innerHTML;
+  btn.textContent = "生成中... Generating...";
+  try {
+    const el = document.getElementById("visitPreviewCard");
+    const canvas = await html2canvas(el, {scale: 2, backgroundColor: "#ffffff", useCORS: true});
+    const imgData = canvas.toDataURL("image/png");
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({unit: "pt", format: "a4"});
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 30;
+    const maxWidth = pageWidth - margin * 2;
+    const maxHeight = pageHeight - margin * 2;
+    let renderWidth = maxWidth;
+    let renderHeight = canvas.height * renderWidth / canvas.width;
+    if (renderHeight > maxHeight){
+      renderHeight = maxHeight;
+      renderWidth = canvas.width * renderHeight / canvas.height;
+    }
+    const x = (pageWidth - renderWidth) / 2;
+    pdf.addImage(imgData, "PNG", x, margin, renderWidth, renderHeight);
+    const name = document.getElementById("visitPropertyName").value.trim() || "内見申込書";
+    pdf.save(`${name}_内見申込書.pdf`);
+  } catch (err){
+    alert("PDF 生成失敗，請確認網路連線正常（需要載入外部PDF程式庫）。");
+  } finally {
+    btn.innerHTML = original;
+  }
+});
+
+(function setVisitDefaultDate(){
+  const el = document.getElementById("visitDateInput");
+  if (el && !el.value) el.value = new Date().toISOString().slice(0,10);
+})();
+
+visitRender();
+
+</script>
+<script>
+/* ================= Move-in Application Form ================= */
+let occupantCounter = 0;
+
+function addOccupant(data = {}){
+  occupantCounter += 1;
+  const row = document.createElement("div");
+  row.className = "occ-row";
+  row.dataset.occupantId = occupantCounter;
+  row.innerHTML = `
+    <input name="occupantName[]" aria-label="氏名" placeholder="氏名 Name" value="${data.name || ""}">
+    <input type="date" name="occupantDob[]" aria-label="生年月日" value="${data.dob || ""}">
+    <select name="occupantGender[]" aria-label="性別"><option value="">性別</option><option>男性</option><option>女性</option><option>その他</option></select>
+    <input name="occupantRelation[]" aria-label="続柄" placeholder="続柄" value="${data.relation || ""}">
+    <input name="occupantOrganization[]" aria-label="勤務先・学校" placeholder="勤務先・学校" value="${data.organization || ""}">
+    <button type="button" class="remove-btn" title="削除 Remove">×</button>`;
+  row.querySelector(".remove-btn").addEventListener("click", () => row.remove());
+  document.getElementById("occupantRows").appendChild(row);
+}
+
+document.getElementById("addOccupantBtn").addEventListener("click", () => addOccupant());
+addOccupant();
+
+document.querySelectorAll("#applicationDocuments .doc-item").forEach(item => {
+  const checkbox = item.querySelector(".doc-check input");
+  const upload = item.querySelector(".doc-upload");
+  const fileInput = item.querySelector("input[type=file]");
+  const status = item.querySelector(".doc-status");
+
+  checkbox.addEventListener("change", () => {
+    upload.hidden = !checkbox.checked;
+    item.classList.toggle("selected", checkbox.checked);
+    fileInput.required = checkbox.checked;
+    if (!checkbox.checked){
+      fileInput.value = "";
+      status.textContent = fileInput.multiple ? "ファイル未選択（表・裏を選択可）" : "ファイル未選択";
+    }
+  });
+
+  fileInput.addEventListener("change", () => {
+    const files = Array.from(fileInput.files || []);
+    status.textContent = files.length ? files.map(file => file.name).join(" / ") : "ファイル未選択";
+  });
+});
+
+function applicationData(){
+  const form = document.getElementById("applicationForm");
+  const fd = new FormData(form);
+  const out = {};
+  for (const [key, value] of fd.entries()){
+    if (value instanceof File) continue;
+    if (key.endsWith("[]")) continue;
+    if (Object.prototype.hasOwnProperty.call(out, key)){
+      out[key] = Array.isArray(out[key]) ? [...out[key], value] : [out[key], value];
+    } else {
+      out[key] = value;
+    }
+  }
+  out.occupants = Array.from(document.querySelectorAll("#occupantRows .occ-row")).map(row => ({
+    name: row.querySelector('[name="occupantName[]"]').value,
+    dateOfBirth: row.querySelector('[name="occupantDob[]"]').value,
+    gender: row.querySelector('[name="occupantGender[]"]').value,
+    relationship: row.querySelector('[name="occupantRelation[]"]').value,
+    employerOrSchool: row.querySelector('[name="occupantOrganization[]"]').value
+  })).filter(person => Object.values(person).some(Boolean));
+  out.documents = Array.from(document.querySelectorAll("#applicationDocuments .doc-item")).filter(item => item.querySelector(".doc-check input").checked).map(item => ({
+    type: item.dataset.doc,
+    files: Array.from(item.querySelector("input[type=file]").files || []).map(file => file.name)
+  }));
+  return out;
+}
+
+document.getElementById("saveApplicationBtn").addEventListener("click", () => {
+  const form = document.getElementById("applicationForm");
+  if (!form.reportValidity()) return;
+  const data = applicationData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const safeName = (data.fullNameRoman || "applicant").replace(/[\\/:*?\"<>|]+/g, "_");
+  link.href = url;
+  link.download = `${safeName}_入居申込.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("clearApplicationBtn").addEventListener("click", () => {
+  if (!confirm("入居申込書の入力内容をすべて消去しますか？")) return;
+  const form = document.getElementById("applicationForm");
+  form.reset();
+  document.getElementById("occupantRows").innerHTML = "";
+  addOccupant();
+  document.querySelectorAll("#applicationDocuments .doc-item").forEach(item => {
+    item.classList.remove("selected");
+    item.querySelector(".doc-upload").hidden = true;
+    const fileInput = item.querySelector("input[type=file]");
+    fileInput.required = false;
+    item.querySelector(".doc-status").textContent = fileInput.multiple ? "ファイル未選択（表・裏を選択可）" : "ファイル未選択";
+  });
+  document.getElementById("applicationDate").value = new Date().toISOString().slice(0,10);
+});
+
+document.getElementById("applicationDate").value = new Date().toISOString().slice(0,10);
+
+</script>
+<script>
+/* ================= Purchase Offer / 買付証明書 ================= */
+function routeEscape(value){
+  return String(value ?? "").replace(/[&<>'"]/g,char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+}
+function buyValue(id){
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : "";
+}
+function buyNumber(id){
+  const n = Number(buyValue(id));
+  return Number.isFinite(n) ? n : 0;
+}
+function buyYen(n){
+  return n > 0 ? `金 ${Math.round(n).toLocaleString("ja-JP")} 円也` : "—";
+}
+function buyDateText(value){
+  if (!value) return "—";
+  const parts = value.split("-");
+  return `${parts[0]}年${Number(parts[1])}月${Number(parts[2])}日`;
+}
+function buyPaymentLabel(){
+  const labels = {loan:"銀行融資",cash:"現金",mixed:"現金＋銀行融資"};
+  return labels[buyValue("buyPaymentMethod")] || "—";
+}
+function buyRender(){
+  const asking = buyNumber("buyAskingPrice");
+  const offer = buyNumber("buyOfferPrice");
+  const deposit = buyNumber("buyDeposit");
+  const interim = buyNumber("buyInterim");
+  const balance = Math.max(0, offer - deposit - interim);
+  document.getElementById("buyBalance").value = balance || "";
+
+  const type = buyValue("buyPropertyType");
+  const name = buyValue("buyPropertyName");
+  document.getElementById("buyPreviewDate").textContent = buyDateText(buyValue("buyOfferDate"));
+  document.getElementById("bOutSeller").textContent = buyValue("buySeller") || "売主様";
+  document.getElementById("bOutProperty").textContent = [type,name].filter(Boolean).join("　") || "—";
+  document.getElementById("bOutAddress").textContent = buyValue("buyPropertyAddress") || "—";
+
+  const areas = [];
+  if (buyNumber("buyLandArea")) areas.push(`土地 ${buyNumber("buyLandArea").toLocaleString("ja-JP")}㎡`);
+  if (buyNumber("buyBuildingArea")) areas.push(`建物・専有 ${buyNumber("buyBuildingArea").toLocaleString("ja-JP")}㎡`);
+  document.getElementById("bOutAreas").textContent = areas.join(" ／ ") || "—";
+  document.getElementById("bOutStatus").textContent = [buyValue("buyStructure"),buyValue("buyCurrentStatus")].filter(Boolean).join(" ／ ") || "—";
+  document.getElementById("bOutOfferPrice").textContent = buyYen(offer);
+  document.getElementById("bOutPayments").textContent = `手付金 ${buyYen(deposit)} ／ 中間金 ${buyYen(interim)}`;
+  document.getElementById("bOutBalance").textContent = buyYen(balance);
+
+  const isCash = buyValue("buyPaymentMethod") === "cash";
+  const finance = [buyPaymentLabel()];
+  if (!isCash && buyNumber("buyLoanAmount")) finance.push(`融資予定 ${buyYen(buyNumber("buyLoanAmount"))}`);
+  if (buyNumber("buyOwnFunds")) finance.push(`自己資金 ${buyYen(buyNumber("buyOwnFunds"))}`);
+  if (!isCash && buyValue("buyLender")) finance.push(`申込先：${buyValue("buyLender")}`);
+  if (!isCash) finance.push(`事前審査：${buyValue("buyPreApproval")}`);
+  const contingency = {yes:"融資利用特約あり",no:"融資利用特約なし",consult:"融資利用特約は別途協議"};
+  if (!isCash) finance.push(contingency[buyValue("buyLoanContingency")]);
+  document.getElementById("bOutFinance").textContent = finance.filter(Boolean).join(" ／ ");
+  document.getElementById("bOutDates").textContent = `契約 ${buyDateText(buyValue("buyContractDate"))} ／ 決済・引渡 ${buyDateText(buyValue("buyClosingDate"))}`;
+  document.getElementById("bOutValidity").textContent = buyDateText(buyValue("buyValidUntil"));
+
+  const conditions = Array.from(document.querySelectorAll("#buyConditions input:checked")).map(el => el.value);
+  const other = buyValue("buyOtherConditions");
+  if (other) conditions.push(other);
+  document.getElementById("bOutConditions").textContent = conditions.length ? conditions.map((c,i) => `${i + 1}. ${c}`).join("\n") : "特になし";
+
+  const buyerContact = [buyValue("buyBuyerPhone"),buyValue("buyBuyerEmail")].filter(Boolean).join(" ／ ") || "—";
+  document.getElementById("bOutBuyer").textContent = `申込日：${buyDateText(buyValue("buyOfferDate"))}\n区分：${buyValue("buyBuyerType") || "—"}\n氏名・法人名：${buyValue("buyBuyerName") || "—"}\n住所：${buyValue("buyBuyerAddress") || "—"}\n連絡先：${buyerContact}`;
+  document.getElementById("bOutAgent").textContent = [buyValue("buyAgentCompany"),buyValue("buyAgentName"),buyValue("buyAgentPhone"),buyValue("buyAgentFax") ? `FAX ${buyValue("buyAgentFax")}` : ""].filter(Boolean).join(" ／ ") || "—";
+
+  const diff = asking > 0 && offer > 0 ? asking - offer : 0;
+  const pct = asking > 0 ? diff / asking * 100 : 0;
+  document.getElementById("buyPriceDiff").textContent = diff > 0 ? `売出価格との差額：${diff.toLocaleString("ja-JP")}円（${pct.toFixed(1)}%）` : diff < 0 ? `売出価格より ${Math.abs(diff).toLocaleString("ja-JP")}円高い申込です` : "";
+
+  ["buyLoanAmount","buyLender"].forEach(id => document.getElementById(id).disabled = isCash);
+  document.getElementById("buyPreApproval").disabled = isCash;
+  document.getElementById("buyLoanContingency").disabled = isCash;
+}
+
+document.getElementById("buyFormCard").addEventListener("input", buyRender);
+document.getElementById("buyFormCard").addEventListener("change", buyRender);
+
+document.getElementById("buyPdfBtn").addEventListener("click", async () => {
+  if (!buyValue("buyOfferPrice") || !buyValue("buyBuyerName")){
+    alert("購入希望価格と買主名を入力してください。");
+    return;
+  }
+  const btn = document.getElementById("buyPdfBtn");
+  const original = btn.innerHTML;
+  btn.textContent = "生成中... Generating...";
+  try {
+    const el = document.getElementById("buyPreviewCard");
+    const canvas = await html2canvas(el,{scale:2,backgroundColor:"#ffffff",useCORS:true});
+    const imgData = canvas.toDataURL("image/png");
+    const {jsPDF} = window.jspdf;
+    const pdf = new jsPDF({unit:"pt",format:"a4"});
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 24;
+    const maxWidth = pageWidth - margin * 2;
+    const maxHeight = pageHeight - margin * 2;
+    let width = maxWidth;
+    let height = canvas.height * width / canvas.width;
+    if (height > maxHeight){
+      height = maxHeight;
+      width = canvas.width * height / canvas.height;
+    }
+    pdf.addImage(imgData,"PNG",(pageWidth - width) / 2,margin,width,height);
+    const name = (buyValue("buyPropertyName") || "物件").replace(/[\\/:*?\"<>|]+/g,"_");
+    pdf.save(`${name}_買付証明書.pdf`);
+  } catch (err){
+    alert("PDF生成に失敗しました。ネットワーク接続とPDFライブラリの読込をご確認ください。");
+  } finally {
+    btn.innerHTML = original;
+  }
+});
+
+function exportSafeName(value){ return String(value || "document").replace(/[\\/:*?"<>|]+/g,"_"); }
+function exportDownload(blob,name){
+  const link=document.createElement("a");link.href=URL.createObjectURL(blob);link.download=name;link.click();
+  setTimeout(()=>URL.revokeObjectURL(link.href),1000);
+}
+function exportDocumentHtml(target,title){
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${routeEscape(title)}</title><style>body{font-family:Arial,'Noto Sans JP',sans-serif;color:#222;padding:24px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #bbb;padding:7px}img{max-width:100%}</style></head><body>${target.outerHTML}</body></html>`;
+}
+document.querySelectorAll(".export-actions").forEach(group=>{
+  const target=()=>document.getElementById(group.dataset.exportTarget),name=()=>exportSafeName(group.dataset.exportName);
+  group.querySelector(".export-word")?.addEventListener("click",()=>exportDownload(new Blob(["\ufeff",exportDocumentHtml(target(),name())],{type:"application/msword"}),`${name()}.doc`));
+  group.querySelector(".export-excel")?.addEventListener("click",()=>exportDownload(new Blob(["\ufeff",exportDocumentHtml(target(),name())],{type:"application/vnd.ms-excel"}),`${name()}.xls`));
+  group.querySelector(".export-shot")?.addEventListener("click",async()=>{
+    try{const canvas=await html2canvas(target(),{scale:2,backgroundColor:"#fff",useCORS:true});const link=document.createElement("a");link.download=`${name()}.png`;link.href=canvas.toDataURL("image/png");link.click();}
+    catch(error){alert("Screenshot 生成失敗。請確認外部程式庫已載入。");}
+  });
+});
+
+document.getElementById("buyClearBtn").addEventListener("click", () => {
+  if (!confirm("買付証明書の入力内容をすべて消去しますか？")) return;
+  document.querySelectorAll("#buyFormCard input").forEach(el => {
+    if (el.type === "checkbox") el.checked = false;
+    else el.value = "";
+  });
+  document.querySelectorAll("#buyFormCard select").forEach(el => el.selectedIndex = 0);
+  document.getElementById("buyOtherConditions").value = "";
+  setBuyDefaultDates();
+  buyRender();
+});
+
+</script>
+<script>
+function routeEscape(value){
+  return String(value ?? "").replace(/[&<>'"]/g,char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+}
+const toolYen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
+const toolNum = id => Math.max(0,Number(document.getElementById(id)?.value) || 0);
+const BUSINESS_NAMES={invoice:"請求書",receipt:"領収書",delivery:"納品書",order:"注文書",purchase:"発注書",payment:"支払明細書",contract:"業務委託契約書",memorandum:"覚書",nda:"秘密保持契約書",ringi:"稟議書",proposal:"企画書",suggestion:"提案書",incident:"顛末書",apology:"始末書"};
+const BUSINESS_FINANCE=new Set(["invoice","receipt","delivery","order","purchase","payment"]);
+const BUSINESS_TEMPLATES={
+ contract:"第1条（目的）\n甲は乙に対し、下記業務を委託し、乙はこれを受託する。\n\n第2条（業務内容）\n\n第3条（委託料・支払条件）\n\n第4条（契約期間・解除）\n\n第5条（秘密保持・成果物・協議）",
+ memorandum:"甲及び乙は、既存契約に関する下記事項について合意する。\n\n1. 変更・確認事項\n2. 適用開始日\n3. 本覚書に定めのない事項は原契約に従う。",
+ nda:"甲及び乙は、検討・取引に伴い開示される秘密情報について、次のとおり合意する。\n\n1. 秘密情報の定義\n2. 目的外利用・第三者開示の禁止\n3. 例外情報\n4. 返還・廃棄\n5. 有効期間\n6. 協議・管轄",
+ ringi:"【申請目的】\n\n【背景・必要性】\n\n【金額・予算】\n\n【実施期間】\n\n【期待効果・リスク】\n\n【承認依頼事項】",
+ proposal:"【企画の背景】\n\n【目的・目標】\n\n【対象】\n\n【実施内容・スケジュール】\n\n【予算】\n\n【期待効果・測定方法】",
+ suggestion:"【現状と課題】\n\n【提案内容】\n\n【導入手順】\n\n【費用】\n\n【期待効果】",
+ incident:"【発生日時・場所】\n\n【発生した事実と経緯】\n\n【原因】\n\n【影響・対応結果】\n\n【再発防止策】",
+ apology:"このたび、下記の件について関係者にご迷惑をおかけしました。事実を報告するとともに深く反省し、再発防止を徹底します。\n\n【発生日時・経緯】\n\n【原因】\n\n【反省・謝罪】\n\n【再発防止策】"
+};
+const businessRows=document.getElementById("businessItemRows");
+if(businessRows)businessRows.innerHTML=Array.from({length:6},(_,i)=>`<tr><td><input class="biz-desc" value="${i===0?'サービス・商品':''}"></td><td><input class="biz-qty" type="number" value="${i===0?1:''}" min="0" step="0.01"></td><td><input class="biz-unit" value="${i===0?'式':''}"></td><td><input class="biz-price" type="number" value="${i===0?100000:''}" min="0" step="1"></td></tr>`).join("");
+function businessRender(){
+  if (!document.querySelector("#businessFormCard")) return;
+  const type=document.getElementById("businessDocType").value,name=BUSINESS_NAMES[type],finance=BUSINESS_FINANCE.has(type),esc=routeEscape;
+  document.getElementById("businessFinanceFields").style.display=finance?"block":"none";
+  const items=[...document.querySelectorAll("#businessItemRows tr")].map(row=>({d:row.querySelector(".biz-desc").value,q:Number(row.querySelector(".biz-qty").value)||0,u:row.querySelector(".biz-unit").value,p:Number(row.querySelector(".biz-price").value)||0})).filter(x=>x.d||x.q||x.p);
+  const subtotal=items.reduce((s,x)=>s+x.q*x.p,0),taxRate=toolNum("businessTaxRate"),tax=Math.floor(subtotal*taxRate/100),total=subtotal+tax;
+  const date=document.getElementById("businessDate").value,no=document.getElementById("businessNo").value,subject=document.getElementById("businessSubject").value,recipient=document.getElementById("businessRecipient").value,issuer=document.getElementById("businessIssuer").value,issuerInfo=document.getElementById("businessIssuerInfo").value,body=document.getElementById("businessBody").value,due=document.getElementById("businessDue").value;
+  const table=finance?`<table><thead><tr><th>品目・内容</th><th>数量</th><th>単位</th><th>単価</th><th>金額</th></tr></thead><tbody>${items.map(x=>`<tr><td>${esc(x.d)}</td><td>${x.q}</td><td>${esc(x.u)}</td><td>${toolYen(x.p)}</td><td>${toolYen(x.q*x.p)}</td></tr>`).join("")||'<tr><td colspan="5">明細を入力してください</td></tr>'}</tbody><tfoot><tr><th colspan="4">小計</th><td>${toolYen(subtotal)}</td></tr><tr><th colspan="4">消費税 ${taxRate}%</th><td>${toolYen(tax)}</td></tr></tfoot></table><div class="doc-total">合計 ${toolYen(total)}</div>`:"";
+  document.getElementById("businessDocPreview").innerHTML=`<h2>${name}</h2><div class="business-preview-head"><div><strong>${esc(recipient||"宛先")}</strong><br>${esc(subject||"件名未入力")}${due?`<br>期限：${esc(due)}`:""}</div><div>発行日：${esc(date)}<br>No. ${esc(no)}<br><strong>${esc(issuer||"発行者")}</strong><br>${esc(issuerInfo).replace(/\n/g,"<br>")}</div></div>${table}<div class="doc-body">${esc(body||"本文・備考を入力してください。")}</div><div style="text-align:right;margin-top:36px;">署名・押印 ____________________</div>`;
+  document.querySelector('[data-export-target="businessDocPreview"]').dataset.exportName=name;
+}
+document.getElementById("businessTemplateBtn")?.addEventListener("click",()=>{const type=document.getElementById("businessDocType").value;document.getElementById("businessBody").value=BUSINESS_TEMPLATES[type]||"下記のとおりご案内いたします。\n\n振込先：\n備考：";businessRender();});
+document.querySelectorAll("#businessFormCard input,#businessFormCard select,#businessFormCard textarea").forEach(el=>el.addEventListener("input",businessRender));
+document.getElementById("businessDocType")?.addEventListener("change",businessRender);
+document.getElementById("businessPdfBtn")?.addEventListener("click",async()=>{try{const canvas=await html2canvas(document.getElementById("businessDocPreview"),{scale:2,backgroundColor:"#fff",useCORS:true});const {jsPDF}=window.jspdf,pdf=new jsPDF({unit:"pt",format:"a4"}),w=pdf.internal.pageSize.getWidth(),h=canvas.height*(w-40)/canvas.width;pdf.addImage(canvas.toDataURL("image/png"),"PNG",20,20,w-40,Math.min(h,pdf.internal.pageSize.getHeight()-40));pdf.save(BUSINESS_NAMES[document.getElementById("businessDocType").value]+".pdf");}catch(e){alert("PDF生成に失敗しました。");}});
+if(document.getElementById("businessDate")){const now=new Date(),due=new Date(now);due.setDate(due.getDate()+30);document.getElementById("businessDate").value=now.toISOString().slice(0,10);document.getElementById("businessDue").value=due.toISOString().slice(0,10);}businessRender();
+</script>
