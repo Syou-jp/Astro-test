@@ -1567,7 +1567,7 @@
 .home-news-thumb{position:absolute;inset:0;display:block;}
 .home-news-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
 .home-news-body{position:absolute;left:0;right:0;bottom:0;padding:14px 18px 16px;background:linear-gradient(0deg,rgba(15,20,25,.86) 0%,rgba(15,20,25,.55) 55%,rgba(15,20,25,0) 100%);}
-.home-news-date{display:block;font:700 9.5px "JetBrains Mono",monospace;letter-spacing:.1em;color:#fff;opacity:.85;margin-bottom:5px;}
+.home-news-date{display:block;font:700 12.5px "JetBrains Mono",monospace;letter-spacing:.08em;color:#fff;opacity:.95;margin-bottom:5px;}
 .home-news-body strong{display:block;font-size:16px;line-height:1.5;color:#fff;font-family:"Shippori Mincho",serif;font-weight:700;max-width:70%;}
 .home-popular-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
 .home-popular-card{display:block;border:1px solid var(--line);padding:16px 14px;text-decoration:none;background:var(--white);transition:border-color .15s ease,transform .15s ease;}
