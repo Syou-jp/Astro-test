@@ -110,3 +110,71 @@
     </div>
   </section><!-- /util-tax-company -->
   </div><!-- /page-tax-personal -->
+<script>
+const portalYen = value => "¥" + Math.round(Number(value) || 0).toLocaleString("ja-JP");
+const portalNum = id => Number(document.getElementById(id)?.value || 0);
+const portalRange = (low,high) => `${portalYen(low)}〜${portalYen(high)}`;
+const portalRows = (target,rows) => {
+  document.getElementById(target).innerHTML = rows.map(row => `<tr><td>${row[0]}</td><td class="money">${row[1]}</td></tr>`).join("");
+};
+/* Personal tax 2026 approximate model. */
+function salaryIncome(s){if(s<=740000)return 0;let deduction;if(s<=3600000)deduction=s*.3+80000;else if(s<=6600000)deduction=s*.2+440000;else if(s<=8500000)deduction=s*.1+1100000;else deduction=1950000;return Math.max(0,s-Math.max(740000,deduction));}
+function basicDeduction(income){if(income<=4890000)return 1040000;if(income<=6550000)return 670000;if(income<=23500000)return 620000;if(income<=24000000)return 480000;if(income<=24500000)return 320000;if(income<=25000000)return 160000;return 0;}
+function progressiveIncomeTax(base){const bands=[[1950000,.05,0],[3300000,.10,97500],[6950000,.20,427500],[9000000,.23,636000],[18000000,.33,1536000],[40000000,.40,2796000],[Infinity,.45,4796000]];const b=bands.find(x=>base<=x[0]);return Math.max(0,Math.floor((base*b[1]-b[2])*1.021/100)*100);}
+function incomeRender(){
+  if(!document.querySelector("#incomeSalary"))return;
+  const salary=portalNum("incomeSalary"),age=portalNum("incomeAge"),dep=portalNum("incomeDependents"),kind=document.getElementById("incomeInsurance").value,si=salaryIncome(salary);
+  let health=0,pension=0,employment=0,support=0;
+  if(kind==="employee"){health=salary*.0495;pension=salary*.0915;employment=salary*.0055;support=salary*.00115;if(age>=40&&age<65)health+=salary*.0081;}
+  else {const base=Math.max(0,si-430000);if(document.getElementById("incomeArea").value==="shinjuku"){health=base*.0751+47600+base*.028+17600;support=base*.0027+(age>=18?1873:0);if(age>=40&&age<65)health+=base*.0243+17800;}else health=Math.max(30000,base*.105+65000);pension=age>=20&&age<60?17920*12:0;}
+  const social=health+pension+employment+support, basic=basicDeduction(si), taxable=Math.max(0,si-social-basic-dep*380000), incomeTax=progressiveIncomeTax(taxable);
+  const residentBase=Math.max(0,si-social-430000-dep*330000),resident=Math.max(0,residentBase*.10)+(residentBase>0?5000:0);
+  const total=incomeTax+resident+social, net=Math.max(0,salary-total);
+  document.getElementById("incomeNetYear").textContent=portalYen(net);document.getElementById("incomeNetMonth").textContent=portalYen(net/12);document.getElementById("incomeBurdenRate").textContent=salary?`${(total/salary*100).toFixed(1)}%`:"0%";
+  portalRows("incomeBreakdown",[["給与収入",portalYen(salary)],["給与所得控除後",portalYen(si)],["健康保険・国保",`− ${portalYen(health+support)}`],["厚生年金・国民年金",`− ${portalYen(pension)}`],["雇用保険",`− ${portalYen(employment)}`],["所得税・復興特別所得税",`− ${portalYen(incomeTax)}`],["住民税（翌年度・概算）",`− ${portalYen(resident)}`],["年間手取り",portalYen(net)]]);
+}
+if(document.querySelector("#incomeSalary")){
+["incomeSalary","incomeAge","incomeDependents","incomeInsurance","incomeArea"].forEach(id=>document.getElementById(id).addEventListener("input",incomeRender));document.getElementById("incomeCalcBtn").addEventListener("click",incomeRender);incomeRender();
+}
+
+/* Furusato nozei: salary-earner estimate using the statutory special-deduction cap formula. */
+function furMarginalRate(base){if(base<=1950000)return .05;if(base<=3300000)return .10;if(base<=6950000)return .20;if(base<=9000000)return .23;if(base<=18000000)return .33;if(base<=40000000)return .40;return .45;}
+function furSocialEstimate(salary,age){return salary*(.0495+.0915+.0055+.00115+(age>=40&&age<65?.0081:0));}
+function furRender(){
+  if(!document.querySelector("#furSalary"))return;
+  const salary=portalNum("furSalary"),age=portalNum("furAge"),si=salaryIncome(salary),manual=document.getElementById("furSocialMode").value==="manual";
+  const social=manual?portalNum("furSocial"):furSocialEstimate(salary,age),spouse=portalNum("furSpouse"),d16=portalNum("furDep16"),d19=portalNum("furDep19"),d23=portalNum("furDep23"),d70=portalNum("furDep70"),other=portalNum("furOtherDeduction");
+  document.getElementById("furSocial").disabled=!manual;if(!manual)document.getElementById("furSocial").value=Math.round(social/1000)*1000;
+  const incomeDependents=d16*380000+d19*630000+d23*380000+d70*480000;
+  const residentDependents=d16*330000+d19*450000+d23*330000+d70*380000;
+  const incomeBase=Math.max(0,si-social-basicDeduction(si)-spouse*380000-incomeDependents-other);
+  const residentBase=Math.max(0,si-social-430000-spouse*330000-residentDependents-other);
+  const estimatedLevy=residentBase*.10,directLevy=portalNum("furResidentLevy"),residentLevy=directLevy>0?directLevy:estimatedLevy,rate=furMarginalRate(incomeBase);
+  let limitRaw=residentLevy>0?residentLevy*.20/(.90-rate*1.021)+2000:0;
+  limitRaw=Math.min(limitRaw,si*.40+2000);
+  const limit=Math.max(0,Math.floor(limitRaw/1000)*1000),safe=Math.max(0,Math.floor(limit*.90/1000)*1000),donation=portalNum("furDonation");
+  const own=donation<=2000?donation:donation<=limitRaw?2000:Math.min(donation,2000+Math.max(0,donation-limitRaw));
+  document.getElementById("furLimit").textContent=portalYen(limit);document.getElementById("furSafe").textContent=portalYen(safe);document.getElementById("furOwnCost").textContent=portalYen(own);
+  document.getElementById("furStatus").textContent=donation<=0?"寄附予定額を入力してください":donation<=safe?"安全寄りの目安以内です":donation<=limitRaw?"標準上限の範囲内です":`上限を約${portalYen(donation-limitRaw)}超える見込みです`;
+  portalRows("furBreakdown",[["給与収入",portalYen(salary)],["給与所得控除後",portalYen(si)],["社会保険料",`− ${portalYen(social)}`],["所得税の課税所得（概算）",portalYen(incomeBase)],["所得税の限界税率",`${Math.round(rate*100)}%`],[directLevy>0?"入力した住民税所得割額":"住民税所得割額（推計）",portalYen(residentLevy)],["寄附予定額",portalYen(donation)],["自己負担の概算",portalYen(own)]]);
+  const cities=portalNum("furMunicipalities"),taxReturn=document.getElementById("furTaxReturn").value==="yes";
+  document.getElementById("furProcedure").innerHTML=taxReturn?"<strong>確定申告：</strong>医療費控除などで確定申告をする場合、ワンストップ特例は使わず、すべての寄附を申告に含めてください。":cities<=5?`<strong>ワンストップ特例の対象目安：</strong>寄附先が${cities}自治体で、ほかに確定申告が不要なら利用できます。各自治体へ期限内に申請してください。`:"<strong>確定申告が必要：</strong>寄附先が6自治体以上のため、ワンストップ特例ではなく確定申告で控除を受けます。";
+}
+if(document.querySelector("#furSalary")){
+["furSalary","furAge","furSocialMode","furSocial","furSpouse","furDep16","furDep19","furDep23","furDep70","furOtherDeduction","furResidentLevy","furDonation","furMunicipalities","furTaxReturn"].forEach(id=>document.getElementById(id).addEventListener("input",furRender));document.getElementById("furCalcBtn").addEventListener("click",furRender);furRender();
+}
+
+/* Company setup and tax. Local taxes remain an explicitly labelled approximation. */
+function companyRender(){
+ if(!document.querySelector("#companyType"))return;
+ const type=document.getElementById("companyType").value,capital=portalNum("companyCapital"),paper=document.getElementById("companyArticles").value==="paper",support=document.getElementById("companySupport").value;
+ const registration=Math.max(capital*.007,type==="kk"?150000:60000);let notary=0;if(type==="kk")notary=capital<1000000?(document.getElementById("companyNotaryRule").value==="small"?15000:30000):capital<3000000?40000:50000;
+ const supportFee=support==="basic"?70000:support==="full"?180000:0,setup=registration+notary+(paper?40000:0)+12000+supportFee;
+ const profit=portalNum("companyProfit"),national=Math.min(profit,8000000)*.15+Math.max(0,profit-8000000)*.232,localCorp=national*.103,local=Math.max(70000,profit*.09),defense=Math.max(0,national-5000000)*.04,total=national+localCorp+local+defense;
+ document.getElementById("companySetupTotal").textContent=portalYen(setup);document.getElementById("companyTaxTotal").textContent=portalYen(total);document.getElementById("companyTaxRate").textContent=`課税所得に対し約 ${profit?(total/profit*100).toFixed(1):0}%`;
+ portalRows("companyBreakdown",[["登録免許税",portalYen(registration)],["定款認証（株式会社のみ）",portalYen(notary)],["定款印紙（紙のみ）",portalYen(paper?40000:0)],["謄本・印鑑等の実費目安",portalYen(12000)],["専門家サポート目安",portalYen(supportFee)],["国の法人税",portalYen(national)],["地方法人税",portalYen(localCorp)],["法人住民税・事業税等（概算）",portalYen(local)],["防衛特別法人税",portalYen(defense)]]);
+}
+if(document.querySelector("#companyType")){
+["companyType","companyCapital","companyArticles","companyNotaryRule","companySupport","companyProfit","companyLocation"].forEach(id=>document.getElementById(id).addEventListener("input",companyRender));document.getElementById("companyCalcBtn").addEventListener("click",companyRender);companyRender();
+}
+</script>

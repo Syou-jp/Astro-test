@@ -49,3 +49,78 @@
       </div>
     </div>
   </div><!-- /page-etc -->
+<script>
+const portalYen = value => "¥" + Math.round(Number(value) || 0).toLocaleString("ja-JP");
+const portalNum = id => Number(document.getElementById(id)?.value || 0);
+const portalRange = (low,high) => `${portalYen(low)}〜${portalYen(high)}`;
+const portalRows = (target,rows) => {
+  document.getElementById(target).innerHTML = rows.map(row => `<tr><td>${row[0]}</td><td class="money">${row[1]}</td></tr>`).join("");
+};
+/* ETC toll calculator: NEXCO-style distance-based (対キロ料金制) estimate. Metropolitan expressways (首都高/阪神高速) use a different fare system and are out of scope. */
+const ETC_VEHICLE = {
+ kei:{label:"軽自動車等",perKm:20.9},
+ normal:{label:"普通車",perKm:24.6},
+ medium:{label:"中型車",perKm:26.8},
+ large:{label:"大型車",perKm:34.9},
+ extra:{label:"特大車",perKm:62.5}
+};
+const ETC_NOTE_TEXT = {
+ ja:{none:"深夜・休日割引を適用しない通常料金の概算です。",
+   night:"深夜割引（0:00〜4:00の走行、30%引き）を全区間に適用したと仮定した概算です。実際は深夜帯にかかる走行区間・時間の割合により計算されます。",
+   holiday:"休日割引（土日祝・地方部区間、上限100kmまで20%引き）を適用した概算です。首都高速・都市高速や対象外区間、平日には適用されません。"},
+ "zh-TW":{none:"未套用深夜／假日折扣的一般通行費概算。",
+   night:"假設全程套用深夜折扣（0:00〜4:00行駛、折扣30%）的概算。實際上會依深夜時段涵蓋的行駛區間與時間比例計算。",
+   holiday:"套用假日折扣（週六日・國定假日、地方路段、上限100km打8折）後的概算。首都高速・都市高速及不適用路段、平日不適用此折扣。"},
+ "zh-CN":{none:"未套用深夜／假日折扣的一般通行费概算。",
+   night:"假设全程套用深夜折扣（0:00〜4:00行驶、折扣30%）的概算。实际上会依深夜时段涵盖的行驶区间与时间比例计算。",
+   holiday:"套用假日折扣（周六日・法定假日、地方路段、上限100km打8折）后的概算。首都高速・都市高速及不适用路段、平日不适用此折扣。"},
+ en:{none:"Standard fare estimate with no late-night or holiday discount applied.",
+   night:"Estimate assuming the late-night discount (30% off, 0:00-4:00) applies to the whole trip. In practice it's prorated by how much of the trip actually falls within that window.",
+   holiday:"Estimate with the holiday discount applied (Sat/Sun/public holidays, non-metropolitan sections only, 20% off up to a 100km cap). Not available on metropolitan expressways, excluded sections, or weekdays."},
+ ko:{none:"심야・휴일 할인을 적용하지 않은 일반 요금 개산입니다.",
+   night:"심야 할인(0:00〜4:00 주행, 30% 할인)을 전 구간에 적용했다고 가정한 개산입니다. 실제로는 심야 시간대에 해당하는 구간・시간 비율로 계산됩니다.",
+   holiday:"휴일 할인(토・일・공휴일, 지방부 구간, 100km 상한까지 20% 할인)을 적용한 개산입니다. 수도고속・도시고속도로나 대상 외 구간, 평일에는 적용되지 않습니다."},
+ vi:{none:"Ước tính phí thông thường, chưa áp dụng giảm giá đêm khuya hay ngày lễ.",
+   night:"Ước tính giả định giảm giá đêm khuya (giảm 30%, 0:00-4:00) áp dụng cho toàn chặng. Thực tế mức giảm được tính theo tỷ lệ quãng đường/thời gian rơi vào khung giờ đó.",
+   holiday:"Ước tính đã áp dụng giảm giá ngày lễ (thứ 7/CN/ngày lễ, chỉ các đoạn ngoài đô thị, giảm 20% tối đa 100km). Không áp dụng cho đường cao tốc đô thị (Shuto/Hanshin), đoạn không đủ điều kiện, hoặc ngày thường."}
+};
+function etcRoundTen(value){ return Math.round(value/10)*10; }
+function etcRender(){
+ if (!document.querySelector("#etcDistance")) return;
+ const distance = Math.max(0,portalNum("etcDistance"));
+ const vehicle = ETC_VEHICLE[document.getElementById("etcVehicle").value] || ETC_VEHICLE.normal;
+ const discount = document.getElementById("etcDiscount").value;
+ const baseToll = etcRoundTen(150 + vehicle.perKm * distance);
+ let finalToll = baseToll, discountAmount = 0;
+ if (discount === "night"){
+  finalToll = etcRoundTen(baseToll * 0.7);
+  discountAmount = baseToll - finalToll;
+ } else if (discount === "holiday"){
+  const cappedKm = Math.min(distance,100);
+  const cappedToll = etcRoundTen(150 + vehicle.perKm * cappedKm);
+  const cappedDiscounted = etcRoundTen(cappedToll * 0.8);
+  const remainderToll = distance > 100 ? etcRoundTen(vehicle.perKm * (distance - 100)) : 0;
+  finalToll = cappedDiscounted + remainderToll;
+  discountAmount = baseToll - finalToll;
+ }
+ document.getElementById("etcTotal").textContent = portalYen(finalToll);
+ document.getElementById("etcBefore").textContent = portalYen(baseToll);
+ document.getElementById("etcPerKm").textContent = `${vehicle.label}・${vehicle.perKm}円/km`;
+ const noteCopy = ETC_NOTE_TEXT[typeof siteCurrentLanguage !== "undefined" ? siteCurrentLanguage : "ja"] || ETC_NOTE_TEXT.ja;
+ document.getElementById("etcNote").textContent = noteCopy[discount] || noteCopy.none;
+ portalRows("etcBreakdown",[
+  ["通常料金（概算）",portalYen(baseToll)],
+  ["適用した割引額",discount==="none" ? "—" : `-${portalYen(discountAmount)}`],
+  ["割引後の概算料金",portalYen(finalToll)]
+ ]);
+}
+if (document.querySelector("#etcDistance")){
+ ["etcDistance","etcVehicle","etcDiscount"].forEach(id=>document.getElementById(id).addEventListener("input",etcRender));
+ document.getElementById("etcCalcBtn").addEventListener("click",etcRender);
+ document.querySelectorAll("[data-etc-preset]").forEach(btn=>btn.addEventListener("click",() => {
+  document.getElementById("etcDistance").value = btn.dataset.etcPreset;
+  etcRender();
+ }));
+ etcRender();
+}
+</script>

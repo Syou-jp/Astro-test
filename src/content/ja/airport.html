@@ -43,3 +43,65 @@
       </div>
     </div>
   </div><!-- /page-airport -->
+<script>
+const portalYen = value => "¥" + Math.round(Number(value) || 0).toLocaleString("ja-JP");
+const portalNum = id => Number(document.getElementById(id)?.value || 0);
+const portalRange = (low,high) => `${portalYen(low)}〜${portalYen(high)}`;
+const portalRows = (target,rows) => {
+  document.getElementById(target).innerHTML = rows.map(row => `<tr><td>${row[0]}</td><td class="money">${row[1]}</td></tr>`).join("");
+};
+/* Airport access: official major-station facts plus conservative waiting/transfer ranges. */
+const AIRPORT_ROUTES = {
+ HND:{
+  tokyo:{road:[25,45,18],charter:[9000,15000],routes:[["京急＋JR","羽田空港 → 品川（京急）→ 東京（JR）",30,42,"約¥510〜¥550","品川で1回乗換"],["モノレール＋JR","羽田空港 → 浜松町（東京モノレール）→ 東京（JR）",30,42,"約¥720","モノレール片道は通常¥520"]]},
+  shinagawa:{road:[20,35,13],charter:[8000,13000],routes:[["京急線・直通","羽田空港 → 品川",14,22,"¥330（IC ¥327）","公式最速14分・乗換なし"],["モノレール＋JR","羽田空港 → 浜松町 → 品川",30,42,"約¥720","浜松町で1回乗換"]]},
+  shibuya:{road:[30,55,22],charter:[11000,18000],routes:[["京急＋JR","羽田空港 → 品川 → 渋谷",26,40,"約¥510〜¥560","公式目安最速26分"],["空港バス","羽田空港 → 渋谷駅・ホテル方面",40,75,"約¥1,200〜¥1,500","道路状況・便により変動"]]},
+  shinjuku:{road:[35,65,25],charter:[12000,19000],routes:[["京急＋JR","羽田空港 → 品川 → 新宿",33,48,"約¥540〜¥590","公式目安最速33分"],["空港バス","羽田空港 → 新宿駅西口・バスタ新宿",40,80,"約¥1,400〜¥1,600","道路状況・便により変動"]]},
+  ikebukuro:{road:[45,75,31],charter:[14000,22000],routes:[["京急＋JR","羽田空港 → 品川 → 池袋",43,60,"約¥600〜¥650","品川で1回乗換"],["空港バス","羽田空港 → 池袋駅・ホテル方面",55,95,"約¥1,400〜¥1,800","道路状況・便により変動"]]},
+  ueno:{road:[35,60,24],charter:[11000,17000],routes:[["モノレール＋JR","羽田空港 → 浜松町 → 上野",35,50,"約¥730","浜松町で1回乗換"],["京急＋JR","羽田空港 → 品川 → 上野",38,52,"約¥550〜¥610","品川で1回乗換"]]},
+  nippori:{road:[40,65,27],charter:[12000,19000],routes:[["モノレール＋JR","羽田空港 → 浜松町 → 日暮里",38,55,"約¥730〜¥780","浜松町で1回乗換"],["京急＋JR","羽田空港 → 品川 → 日暮里",42,58,"約¥580〜¥640","品川で1回乗換"]]},
+  asakusa:{road:[35,65,27],charter:[12000,19000],routes:[["京急・都営浅草線","羽田空港 → 浅草（直通系統）",37,52,"約¥550〜¥620","公式目安最速37分・列車により直通"],["モノレール＋地下鉄","羽田空港 → 浜松町 → 大門 → 浅草",45,62,"約¥800〜¥900","徒歩連絡を含む"]]},
+  oshiage:{road:[40,70,30],charter:[13000,21000],routes:[["京急・都営浅草線","羽田空港 → 押上（直通系統）",41,56,"約¥590〜¥650","公式目安最速41分・列車により直通"],["空港バス等","羽田空港 → 東京スカイツリー方面",55,90,"便別料金","運行日・停留所を要確認"]]},
+  yokohama:{road:[30,55,25],charter:[12000,19000],routes:[["京急線・直通系統","羽田空港 → 横浜",24,32,"¥370（IC ¥363）前後","公式目安28分・列車により乗換なし"],["空港バス","羽田空港 → 横浜駅 YCAT",30,55,"約¥650〜¥800","ターミナル・道路状況で変動"]]},
+  omiya:{road:[70,110,58],charter:[23000,35000],routes:[["京急＋JR","羽田空港 → 品川／東京 → 大宮",65,85,"約¥1,100〜¥1,500","1回程度乗換"],["空港バス","羽田空港 → 大宮・さいたま新都心",80,125,"約¥1,700〜¥2,000","予約・運行日を要確認"]]},
+  chiba:{road:[65,105,49],charter:[21000,32000],routes:[["空港バス","羽田空港 → 千葉駅方面",65,100,"約¥1,400〜¥1,700","通常は荷物が多い時に便利"],["鉄道","羽田空港 → 都内乗換 → 千葉",75,105,"約¥1,100〜¥1,500","1〜2回乗換"]]}
+ },
+ NRT:{
+  tokyo:{road:[70,110,68],charter:[24000,36000],routes:[["JR成田エクスプレス","成田空港 → 東京",53,65,"¥3,140","公式最速53分・指定席"],["スカイライナー＋JR","成田空港 → 日暮里 → 東京",55,72,"約¥2,630〜¥2,740","日暮里で1回乗換"]]},
+  shinagawa:{road:[80,120,75],charter:[27000,40000],routes:[["JR成田エクスプレス","成田空港 → 品川",65,80,"¥3,330","乗換なし・指定席"],["アクセス特急","成田空港 → 押上方面 → 品川",75,100,"約¥1,500〜¥1,800","列車により直通"]]},
+  shibuya:{road:[90,130,82],charter:[29000,43000],routes:[["JR成田エクスプレス","成田空港 → 渋谷",70,88,"¥3,330","乗換なし・指定席"],["スカイライナー＋JR","成田空港 → 日暮里 → 渋谷",70,90,"約¥2,670〜¥2,800","日暮里で1回乗換"]]},
+  shinjuku:{road:[90,135,80],charter:[28000,42000],routes:[["JR成田エクスプレス","成田空港 → 新宿",75,95,"¥3,330","乗換なし・指定席"],["スカイライナー＋JR","成田空港 → 日暮里 → 新宿",65,85,"約¥2,670〜¥2,800","日暮里で1回乗換"]]},
+  ikebukuro:{road:[90,135,76],charter:[28000,42000],routes:[["スカイライナー＋JR","成田空港 → 日暮里 → 池袋",60,78,"約¥2,640〜¥2,750","公式運賃案内：日暮里乗換"],["空港バス","成田空港 → 池袋駅・ホテル方面",95,150,"約¥3,600〜¥4,000","道路状況・便により変動"]]},
+  ueno:{road:[70,105,66],charter:[23000,35000],routes:[["京成スカイライナー","成田空港 → 京成上野",41,55,"約¥2,470〜¥2,580","乗換なし・全席指定"],["アクセス特急／京成本線","成田空港 → 京成上野",70,90,"約¥1,240","列車種別で時間差あり"]]},
+  nippori:{road:[70,105,65],charter:[23000,35000],routes:[["京成スカイライナー","成田空港 → 日暮里",36,50,"約¥2,470〜¥2,580","公式最速36分・全席指定"],["アクセス特急／京成本線","成田空港 → 日暮里",65,85,"約¥1,240","列車種別で時間差あり"]]},
+  asakusa:{road:[70,105,64],charter:[23000,35000],routes:[["アクセス特急・浅草線","成田空港 → 浅草",55,72,"約¥1,170〜¥1,300","列車により直通"],["スカイライナー＋地下鉄","成田空港 → 上野 → 浅草",60,80,"約¥2,700〜¥2,900","上野で乗換・徒歩を含む"]]},
+  oshiage:{road:[65,100,61],charter:[22000,34000],routes:[["アクセス特急","成田空港 → 押上",50,68,"¥1,170前後","列車により乗換なし"],["スカイライナー＋京成線","成田空港 → 青砥 → 押上",55,75,"約¥2,000〜¥2,600","停車列車を要確認"]]},
+  yokohama:{road:[110,160,100],charter:[33000,50000],routes:[["JR成田エクスプレス","成田空港 → 横浜",85,105,"¥4,480","乗換なし・指定席"],["空港バス","成田空港 → 横浜駅 YCAT",100,155,"約¥3,700〜¥4,000","道路状況・便により変動"]]},
+  omiya:{road:[105,155,100],charter:[32000,48000],routes:[["スカイライナー＋JR","成田空港 → 京成上野／日暮里 → 大宮",75,98,"約¥2,940〜¥3,100","公式運賃案内：上野・日暮里乗換"],["空港バス","成田空港 → 大宮方面",110,165,"約¥3,000〜¥4,000","予約・運行日を要確認"]]},
+  chiba:{road:[45,75,40],charter:[15000,24000],routes:[["JR成田線","成田空港 → 千葉",45,62,"約¥700〜¥1,000","普通・快速の便により変動"],["空港バス","成田空港 → 千葉駅方面",45,80,"約¥1,200〜¥1,600","道路状況・便により変動"]]}
+ }
+};
+function airportLocalValue(date){const d=new Date(date);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);}
+function airportFormatTime(date){return date&&isFinite(date)?`${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`:"—";}
+function airportSyncDeparture(){if(!document.querySelector("#airportFrom"))return;const arrival=new Date(document.getElementById("airportArrival").value);if(!isFinite(arrival))return;arrival.setMinutes(arrival.getMinutes()+portalNum("airportArrivalBuffer"));document.getElementById("airportDeparture").value=airportLocalValue(arrival);airportRender();}
+function airportRender(){
+ if(!document.querySelector("#airportFrom"))return;
+ const airport=document.getElementById("airportFrom").value,mode=document.getElementById("airportDestinationMode").value,key=mode==="station"?document.getElementById("airportStation").value:document.getElementById("airportAddressAnchor").value,data=AIRPORT_ROUTES[airport][key];
+ document.getElementById("airportStationWrap").style.display=mode==="station"?"block":"none";document.getElementById("airportAddressWrap").style.display=mode==="address"?"block":"none";document.getElementById("airportAddressAnchorWrap").style.display=mode==="address"?"block":"none";
+ document.getElementById("airportRoutes").innerHTML=data.routes.map((r,i)=>`<div class="route-choice"><h4>${i===0?"おすすめ ":"別案 "}${r[0]}</h4><div class="route-meta">${r[2]}〜${r[3]}分 ／ ${r[4]}</div><div>${r[1]}</div><div style="font-size:10.5px;color:var(--ink-soft);margin-top:5px;">${r[5]}</div></div>`).join("");
+ const departure=new Date(document.getElementById("airportDeparture").value),validDeparture=isFinite(departure),best=data.routes[0],arrivalLow=validDeparture?new Date(departure.getTime()+best[2]*60000):null,arrivalHigh=validDeparture?new Date(departure.getTime()+best[3]*60000):null,stationSelect=mode==="station"?document.getElementById("airportStation"):document.getElementById("airportAddressAnchor"),stationName=stationSelect.selectedOptions[0].textContent;
+ document.getElementById("airportTimeSummary").innerHTML=validDeparture?`<strong>時刻の流れ：</strong> 空港到着 ${airportFormatTime(new Date(document.getElementById("airportArrival").value))} → 空港出発 ${airportFormatTime(departure)} → ${stationName} 到着見込 ${airportFormatTime(arrivalLow)}〜${airportFormatTime(arrivalHigh)}`:"空港を出発する予定時刻を入力すると、目的駅への到着見込を表示します。";
+ let [low,high]=data.charter,vehicle=document.getElementById("airportVehicle").value,multiplier=vehicle==="van"?1.3:vehicle==="bus"?2.2:1;const hour=validDeparture?departure.getHours():12,night=hour>=22||hour<5;if(night)multiplier*=1.2;if(portalNum("airportPassengers")>4||portalNum("airportLuggage")>3)low*=1.2,high*=1.2;
+ document.getElementById("airportCharter").textContent=portalRange(low*multiplier,high*multiplier);document.getElementById("airportCharterNote").textContent=`${night?"深夜・早朝割増を反映。":"通常時間帯の概算。"} 高速代・駐車代・待機料は別途の場合あり。`;
+ document.getElementById("airportRoad").textContent=`約${data.road[2]}km・${data.road[0]}〜${data.road[1]}分`;document.getElementById("airportRoadNote").textContent=mode==="address"?`${stationName}までの概算。入力住所までの正確な距離は外部地図で確認。`:"選択した主要駅までの通常時概算。";
+ const warning=document.getElementById("airportLateWarning");warning.style.display=night?"block":"none";warning.innerHTML=night?`<strong>深夜・早朝：</strong>${airport==="HND"?"羽田は一部深夜バスがありますが、": "成田は列車・バスの本数が少なくなります。"}実際の運行便、最終列車、予約可否を公式サイトで確認してください。`:"";
+ const terminal=document.getElementById("airportTerminal").value,origin=airport==="HND"?`羽田空港第${terminal}ターミナル`:`成田空港第${terminal}ターミナル`,address=document.getElementById("airportAddress").value.trim(),destination=mode==="address"&&address?address:stationName;
+ document.getElementById("airportGoogle").href=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&travelmode=transit`;
+ document.getElementById("airportNavitime").href=`https://www.navitime.co.jp/transfer/searchlist?orvStationName=${encodeURIComponent(origin)}&dnvStationName=${encodeURIComponent(stationName)}`;
+ document.getElementById("airportNavitime").textContent=mode==="address"?"NAVITIMEで最寄り主要駅まで確認":"NAVITIMEで詳細確認";
+}
+if(document.querySelector("#airportFrom")){
+["airportFrom","airportTerminal","airportDestinationMode","airportStation","airportAddressAnchor","airportVehicle","airportPassengers","airportLuggage","airportDeparture"].forEach(id=>document.getElementById(id).addEventListener("change",airportRender));document.getElementById("airportAddress").addEventListener("input",airportRender);document.getElementById("airportCalcBtn").addEventListener("click",airportRender);document.getElementById("airportSyncDeparture").addEventListener("click",airportSyncDeparture);document.getElementById("airportArrival").addEventListener("change",airportSyncDeparture);document.getElementById("airportArrivalBuffer").addEventListener("change",airportSyncDeparture);
+(function airportDate(){const d=new Date(Date.now()+86400000);d.setHours(17,0,0,0);document.getElementById("airportArrival").value=airportLocalValue(d);airportSyncDeparture();})();
+}
+</script>

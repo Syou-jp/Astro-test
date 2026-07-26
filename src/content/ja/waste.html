@@ -27,3 +27,94 @@
       </div>
     </div>
   </div><!-- /page-waste -->
+<script>
+const portalYen = value => "¥" + Math.round(Number(value) || 0).toLocaleString("ja-JP");
+const portalNum = id => Number(document.getElementById(id)?.value || 0);
+const portalRange = (low,high) => `${portalYen(low)}〜${portalYen(high)}`;
+const portalRows = (target,rows) => {
+  document.getElementById(target).innerHTML = rows.map(row => `<tr><td>${row[0]}</td><td class="money">${row[1]}</td></tr>`).join("");
+};
+/* Bulky waste price guide. Government fees are representative Shinjuku bands. */
+const WASTE_TOKYO={
+ "千代田区":["千代田清掃事務所","千代田区外神田1-1-6","03-3251-0566"],"中央区":["中央清掃事務所","中央区京橋1-19-6","03-3562-1521"],"港区":["みなとリサイクル清掃事務所","港区港南3-9-59","03-3450-8025"],"新宿区":["新宿区 粗大ごみ受付センター／ごみ減量リサイクル課","新宿区歌舞伎町1-4-1","03-5304-8080"],"文京区":["リサイクル清掃課","文京区春日1-16-21","03-5803-1184"],"台東区":["清掃リサイクル課","台東区東上野4-5-6","03-5246-1018"],"墨田区":["すみだ清掃事務所","墨田区業平5-6-2","03-5608-6922"],"江東区":["清掃リサイクル課","江東区東陽4-11-28","03-3647-9181"],"品川区":["品川区清掃事務所","品川区大崎1-14-1","03-3490-7051"],"目黒区":["清掃リサイクル課","目黒区上目黒2-19-15","03-5722-9397"],"大田区":["清掃事業課","大田区蒲田5-13-14","03-5744-1628"],"世田谷区":["清掃・リサイクル部管理課","世田谷区松原6-3-5","03-6304-3210"],"渋谷区":["清掃リサイクル課","渋谷区渋谷1-2-17","03-5467-4073"],"中野区":["ごみゼロ推進課","中野区中野4-9-4","03-3228-5563"],"杉並区":["ごみ減量対策課","杉並区阿佐谷南1-15-1","03-3312-2111"],"豊島区":["ごみ減量推進課","豊島区池袋本町1-7-3","03-3981-1320"],"北区":["リサイクル清掃課","北区王子1-12-4","03-3908-8538"],"荒川区":["清掃リサイクル推進課","荒川区町屋5-19-1","03-5692-6690"],"板橋区":["資源循環推進課","板橋区板橋2-66-1","03-3579-2217"],"練馬区":["清掃リサイクル課","練馬区豊玉北6-12-1","03-3993-1111"],"足立区":["ごみ減量推進課","足立区中央本町1-17-1","03-3880-5301"],"葛飾区":["リサイクル清掃課","葛飾区立石5-13-1","03-5654-8271"],"江戸川区":["清掃課","江戸川区中央1-4-1","03-5662-4387"]
+};
+const WASTE_CITY_GROUPS=[
+ {group:"神奈川県｜横浜市",wards:["鶴見区","神奈川区","西区","中区","南区","港南区","保土ケ谷区","旭区","磯子区","金沢区","港北区","緑区","青葉区","都筑区","戸塚区","栄区","泉区","瀬谷区"],office:"横浜市 粗大ごみ受付センター（全区共通）",address:"電話・オンライン受付（受付センター所在地は非公表）",phone:"0570-200-530／045-330-3953",url:"https://www.city.yokohama.lg.jp/kurashi/sumai-kurashi/gomi-recycle/gomi/shushu/sodai/"},
+ {group:"神奈川県｜川崎市",wards:["川崎区","幸区","中原区","高津区","宮前区","多摩区","麻生区"],office:"川崎市 粗大ごみ受付センター（全区共通）",address:"担当課：川崎区宮本町1番地",phone:"0570-044-530／044-930-5300",url:"https://www.city.kawasaki.jp/300/page/0000012773.html"},
+ {group:"神奈川県｜相模原市",wards:["緑区","中央区","南区"],office:"相模原市 粗大ごみ受付事務所（全区共通）",address:"持込：緑区下九沢2083-1／南区麻溝台1524-1",phone:"042-774-9933",url:"https://www.city.sagamihara.kanagawa.jp/kurashi/1026489/recycle/1026491/katei/1008323.html"},
+ {group:"埼玉県｜さいたま市",wards:["西区","北区","大宮区","見沼区","中央区","桜区","浦和区","南区","緑区","岩槻区"],office:"さいたま市 粗大ごみ受付センター（全区共通）",address:"電話・オンライン受付（受付センター所在地は非公表）",phone:"048-878-0053",url:"https://www.city.saitama.lg.jp/001/006/010/003/p072165.html"},
+ {group:"千葉県｜千葉市",wards:["中央区","花見川区","稲毛区","若葉区","緑区","美浜区"],office:"千葉市 粗大ごみ受付センター（全区共通）",address:"担当課：千葉市中央区千葉港1-1 市役所高層棟7階",phone:"043-302-5374",url:"https://www.city.chiba.jp/kankyo/junkan/shushugyomu/sodaigomi.html"}
+];
+const WASTE_AREAS={};
+Object.entries(WASTE_TOKYO).forEach(([ward,row])=>WASTE_AREAS[`tokyo-${ward}`]={label:`東京都｜${ward}`,office:row[0],address:row[1],phone:row[2],url:ward==="新宿区"?"https://www.city.shinjuku.lg.jp/seikatsu/file09_01_00016.html":"https://www.union.tokyo23-seisou.lg.jp/joho/index.html"});
+WASTE_CITY_GROUPS.forEach(city=>city.wards.forEach(ward=>WASTE_AREAS[`${city.group}-${ward}`]={label:`${city.group.split("｜")[1]}｜${ward}`,office:city.office,address:city.address,phone:city.phone,url:city.url}));
+const WASTE_MULTI_FACILITIES={
+ adachi:[
+  {name:"白井運輸（鹿浜）",address:"東京都足立区鹿浜3-28-7",phone:"03-6747-5100",hours:"9:00～16:00（年末年始除く）",note:"事前予約必須。足立区民のみ、自己搬入は無料。",url:"https://www.city.adachi.tokyo.jp/seso/kurashi/kankyo/gomi-wakekata/sodai.html"},
+  {name:"新井商店（北加平町）",address:"東京都足立区北加平町8-26",phone:"03-6747-5100",hours:"土・日・祝 9:00～16:00（年末年始除く）",note:"事前予約必須。足立区民のみ、自己搬入は無料。",url:"https://www.city.adachi.tokyo.jp/seso/kurashi/kankyo/gomi-wakekata/sodai.html"}
+ ],
+ katsushika:[
+  {name:"葛飾東（東水元）粗大ごみ持込ステーション",address:"東京都葛飾区東水元4-5-6",phone:"0570-099799",hours:"8:00～16:00（12/29～1/3除く）",note:"事前予約必須。申込者本人のみ。持込料金は収集料金のおおむね半額。",url:"https://www.city.katsushika.lg.jp/kurashi/1000048/1001536/1016343.html"},
+  {name:"葛飾西（奥戸）粗大ごみ持込ステーション",address:"東京都葛飾区奥戸3-23-28",phone:"0570-099799",hours:"8:00～16:00（12/29～1/3除く）",note:"事前予約必須。申込者本人のみ。持込料金は収集料金のおおむね半額。",url:"https://www.city.katsushika.lg.jp/kurashi/1000048/1001536/1016343.html"}
+ ],
+ edogawa:[
+  {name:"北部粗大ごみ持込施設",address:"東京都江戸川区篠崎町2-62-17",phone:"03-6744-5700",hours:"9:00～15:30（年末年始除く）",note:"事前予約必須。1世帯1回10個、年度内3回まで。",url:"https://www.city.edogawa.tokyo.jp/e025/qa/kurashi/gomi/sodaigomi/mochikomi.html"},
+  {name:"南部粗大ごみ持込施設",address:"東京都江戸川区西葛西1-10-16",phone:"03-6744-5700",hours:"9:00～15:30（年末年始除く）",note:"事前予約必須。1世帯1回10個、年度内3回まで。",url:"https://www.city.edogawa.tokyo.jp/e025/qa/kurashi/gomi/sodaigomi/mochikomi.html"}
+ ],
+ yokohama:[
+  {name:"鶴見資源化センター",address:"横浜市鶴見区末広町1-15-1（鶴見工場内）",phone:"0570-200-530／045-330-3953",hours:"9:00～12:00・13:00～16:00（日曜・年末年始除く）",note:"原則として事前申込が必要です。",url:"https://www.city.yokohama.lg.jp/kurashi/sumai-kurashi/gomi-recycle/gomi/shushu/sodaigomi/dashikata-shousai/jikohannyuyard.html"},
+  {name:"長坂谷ストックヤード",address:"横浜市緑区寺山町745-45",phone:"0570-200-530／045-330-3953",hours:"9:00～12:00・13:00～16:00（日曜・年末年始除く）",note:"原則として事前申込が必要です。",url:"https://www.city.yokohama.lg.jp/kurashi/sumai-kurashi/gomi-recycle/gomi/shushu/sodaigomi/dashikata-shousai/jikohannyuyard.html"},
+  {name:"神明台ストックヤード",address:"横浜市泉区池の谷3949-1（神明台処分地内）",phone:"0570-200-530／045-330-3953",hours:"9:00～12:00・13:00～16:00（日曜・年末年始除く）",note:"原則として事前申込が必要です。",url:"https://www.city.yokohama.lg.jp/kurashi/sumai-kurashi/gomi-recycle/gomi/shushu/sodaigomi/dashikata-shousai/jikohannyuyard.html"},
+  {name:"栄ストックヤード",address:"横浜市栄区上郷町1570-1",phone:"0570-200-530／045-330-3953",hours:"9:00～12:00・13:00～16:00（日曜・年末年始除く）",note:"2026年6月から簡易申込に対応。詳細は公式案内を確認してください。",url:"https://www.city.yokohama.lg.jp/kurashi/sumai-kurashi/gomi-recycle/gomi/shushu/sodaigomi/dashikata-shousai/jikohannyuyard.html"}
+ ],
+ sagamihara:[
+  {name:"南部粗大ごみ受入施設",address:"相模原市南区麻溝台1524-1",phone:"042-767-5305",hours:"月～土 9:00～16:00（12/31～1/3除く）",note:"予約不要。市内で発生した家庭粗大ごみに限ります。",url:"https://www.city.sagamihara.kanagawa.jp/kurashi/shisetsu/shikanren/recycle/1002717.html"},
+  {name:"北部粗大ごみ受入施設",address:"相模原市緑区下九沢2083-1",phone:"042-775-5333",hours:"月～土 9:00～16:00（12/31～1/3除く）",note:"予約不要。市内で発生した家庭粗大ごみに限ります。",url:"https://gomi.city.sagamihara.kanagawa.jp/contents/contact/map02.php"},
+  {name:"津久井クリーンセンター",address:"相模原市緑区青山3385-2",phone:"042-784-2711",hours:"月～土 9:00～16:00（12:00～13:00も粗大ごみ搬入可）",note:"予約不要。市内で発生した家庭粗大ごみに限ります。",url:"https://www.city.sagamihara.kanagawa.jp/kurashi/shisetsu/shikanren/recycle/1002722.html"}
+ ],
+ saitama:[
+  {name:"クリーンセンター大崎",address:"さいたま市緑区大崎317",phone:"048-878-0989",hours:"平日 8:30～12:00・13:00～16:30／土曜午前",note:"完全予約制。燃えるごみ・燃えないごみ・粗大ごみを搬入できます。",url:"https://www.city.saitama.lg.jp/001/006/010/003/p051434.html"},
+  {name:"桜環境センター",address:"さいたま市桜区新開4-2-1",phone:"048-710-6010",hours:"平日 8:30～12:00・13:00～16:30／土曜午前",note:"完全予約制。燃えるごみ・燃えないごみ・粗大ごみを搬入できます。",url:"https://www.city.saitama.lg.jp/001/006/010/003/p051434.html"},
+  {name:"見沼環境センター",address:"さいたま市見沼区膝子626-1",phone:"048-795-6350",hours:"平日 8:30～12:00・13:00～16:30／土曜午前",note:"完全予約制。燃えるごみ・燃えないごみ・粗大ごみを搬入できます。",url:"https://www.city.saitama.lg.jp/001/006/010/003/p051434.html"}
+ ],
+ chiba:[
+  {name:"中央・美浜環境事業所",address:"千葉市中央区都町8-1-17",phone:"043-231-6342",hours:"平日 9:00～16:00／土曜 9:00～12:00",note:"粗大ごみは予約不要。品目別手数料。",url:"https://www.city.chiba.jp/kankyo/junkan/shushugyomu/chuo-mihama/sodaigomitojikohannyu.html"},
+  {name:"花見川・稲毛環境事業所",address:"千葉市稲毛区宮野木町2147-7",phone:"043-259-1145",hours:"平日 9:00～16:00／土曜 9:00～12:00",note:"粗大ごみは予約不要。品目別手数料。",url:"https://www.city.chiba.jp/kankyo/junkan/shushugyomu/hanamigawa-inage/sodaigomikosizikohannyu.html"},
+  {name:"若葉・緑環境事業所",address:"千葉市緑区平山町1045-5",phone:"043-292-4930",hours:"平日 9:00～16:00／土曜 9:00～12:00",note:"粗大ごみは予約不要。品目別手数料。",url:"https://www.city.chiba.jp/kankyo/junkan/shushugyomu/wakaba-midori/gomi_no_jiko_hannyu.html"},
+  {name:"新浜リサイクルセンター",address:"千葉市中央区新浜町4",phone:"043-263-9100",hours:"平日 13:00～16:00",note:"予約不要・重量制。布団、カーペット、畳、マットレス等は別の清掃工場へ。",url:"https://www.city.chiba.jp/kankyo/junkan/shushugyomu/jikohannyu-q-a.html"}
+ ]
+};
+WASTE_AREAS["tokyo-足立区"].facilities=WASTE_MULTI_FACILITIES.adachi;
+WASTE_AREAS["tokyo-葛飾区"].facilities=WASTE_MULTI_FACILITIES.katsushika;
+WASTE_AREAS["tokyo-江戸川区"].facilities=WASTE_MULTI_FACILITIES.edogawa;
+WASTE_AREAS["tokyo-足立区"].url=WASTE_MULTI_FACILITIES.adachi[0].url;
+WASTE_AREAS["tokyo-葛飾区"].url=WASTE_MULTI_FACILITIES.katsushika[0].url;
+WASTE_AREAS["tokyo-江戸川区"].url=WASTE_MULTI_FACILITIES.edogawa[0].url;
+WASTE_CITY_GROUPS.forEach(city=>{
+ const list=city.group.includes("横浜市")?WASTE_MULTI_FACILITIES.yokohama:city.group.includes("相模原市")?WASTE_MULTI_FACILITIES.sagamihara:city.group.includes("さいたま市")?WASTE_MULTI_FACILITIES.saitama:city.group.includes("千葉市")?WASTE_MULTI_FACILITIES.chiba:null;
+ if(list) city.wards.forEach(ward=>WASTE_AREAS[`${city.group}-${ward}`].facilities=list);
+});
+const WASTE_ITEMS=[
+ ["いす・スツール",400,3000,6000],["布団（1枚）",400,3000,5000],["衣装ケース・小型箱物家具",400,3000,6000],["扇風機",400,3000,6000],["掃除機",400,3000,6000],["プリンター",400,3000,7000],["電子レンジ",900,4000,8000],["テーブル・座卓（小）",400,3000,7000],["テーブル・座卓（大）",900,5000,10000],["自転車（16インチ以上）",900,4000,8000],["カーペット・敷物（1畳超）",900,4000,8000],["ベビーカー",400,3000,6000],["スーツケース",400,3000,6000],["本棚・食器棚（小）",400,4000,8000],["本棚・食器棚（大）",1300,6000,12000],["机（片袖・学習机）",1300,6000,12000],["机（両袖）",3200,9000,18000],["シングルベッド枠",1300,6000,12000],["シングルマットレス",1300,6000,12000],["ダブルベッド枠",2300,8000,16000],["ダブルマットレス",2300,8000,18000],["ソファー（1人用）",900,5000,10000],["ソファー（2人以上・大）",2300,8000,18000],["たんす・チェスト（小）",900,5000,10000],["たんす・チェスト（大）",2300,8000,18000],["物干し台・物干し竿",400,3000,7000],["ストーブ・ファンヒーター",400,3000,7000],["オーディオ機器",400,3000,7000],["鏡・姿見",400,3000,7000],["ゴルフバッグ",400,3000,7000],["テレビ（家電リサイクル）",0,5000,12000,"recycle"],["冷蔵庫（家電リサイクル）",0,8000,18000,"recycle"],["洗濯機（家電リサイクル）",0,7000,15000,"recycle"],["エアコン（家電リサイクル）",0,8000,20000,"recycle"],["パソコン（メーカー回収）",0,3000,8000,"pc"],["タイヤ・バッテリー",0,3000,10000,"special"],["ピアノ・耐火金庫",0,15000,50000,"special"]
+];
+const wastePage = document.querySelector("#page-waste");
+const wasteSelect=document.getElementById("wasteItem"),wasteArea=document.getElementById("wasteArea"),wasteFacility=document.getElementById("wasteFacility");
+if (wastePage){
+ wasteSelect.innerHTML=WASTE_ITEMS.map((w,i)=>`<option value="${i}">${w[0]}</option>`).join("");
+ wasteArea.innerHTML=`<optgroup label="東京都｜東京23区">${Object.keys(WASTE_TOKYO).map(ward=>`<option value="tokyo-${ward}" ${ward==="新宿区"?"selected":""}>${ward}</option>`).join("")}</optgroup>`+WASTE_CITY_GROUPS.map(city=>`<optgroup label="${city.group}">${city.wards.map(ward=>`<option value="${city.group}-${ward}">${ward}</option>`).join("")}</optgroup>`).join("");
+}
+function wastePopulateFacilities(){const area=WASTE_AREAS[wasteArea.value],field=document.getElementById("wasteFacilityField"),list=area.facilities||[];field.style.display=list.length?"block":"none";wasteFacility.innerHTML=list.map((facility,index)=>`<option value="${index}">${facility.name}</option>`).join("");}
+function wasteRender(){const w=WASTE_ITEMS[wasteSelect.value],area=WASTE_AREAS[wasteArea.value],facilities=area.facilities||[],facility=facilities[Number(wasteFacility.value)||0],qty=portalNum("wasteQty"),carry=document.getElementById("wasteCarry").value,urgent=document.getElementById("wasteUrgency").value,special=w[4];let gov=w[1]*qty,low=w[2]*qty,high=w[3]*qty;if(carry==="staff"){low+=5000;high+=15000;}if(urgent==="today"){low*=1.25;high*=1.5;}
+ document.getElementById("wasteGovCost").textContent=special?"自治体収集対象外":portalYen(gov);document.getElementById("wastePrivateCost").textContent=portalRange(low,high);document.getElementById("wasteGovDays").textContent=special?"販売店・メーカー等へ":"空き枠：数日〜2週間以上";document.getElementById("wastePrivateDays").textContent=urgent==="today"?"最短当日〜翌日（要確認）":"通常1〜7日程度";
+ const box=document.getElementById("wasteSpecial");box.style.display=special?"block":"none";box.innerHTML=special==="recycle"?"テレビ・冷蔵庫・洗濯機・エアコンは家電リサイクル法の対象です。粗大ごみ券では出せません。販売店または自治体指定方法で、リサイクル料金＋収集運搬料金を確認してください。":special==="pc"?"家庭用パソコンはメーカーのPCリサイクルまたは小型家電回収を確認してください。":"区では収集できない品目です。販売店または許可を持つ専門業者へ相談してください。";
+ document.getElementById("wasteOffice").innerHTML=`<strong>${area.label}</strong><br>申込・主管窗口：${area.office}<br>窗口地址：${area.address}<br>電話：<a href="tel:${area.phone.split("／")[0].replace(/[^0-9]/g,"")}">${area.phone}</a>${facility?`<hr style="border:0;border-top:1px solid var(--line);margin:9px 0;"><strong>選択した自己搬入施設：${facility.name}</strong><br>施設地址：${facility.address}<br>施設電話：<a href="tel:${facility.phone.split("／")[0].replace(/[^0-9]/g,"")}">${facility.phone}</a><br>受付時間：${facility.hours}<br><small>※ ${facility.note}</small>`:`<br><small>※ 現在この自治体では、当ページに複数の自己搬入施設を登録していません。持込可否と指定場所は公式受付で確認してください。</small>`}`;
+ document.getElementById("wasteOfficialLink").href=facility?.url||area.url;const mapLink=document.getElementById("wasteFacilityMapLink");mapLink.style.display=facility?"inline-flex":"none";mapLink.href=facility?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.name+" "+facility.address)}`:"#";
+ portalRows("wasteBreakdown",[["選択自治体",area.label],["自己搬入施設",facility?facility.name:"公式受付で指定先を確認"],["選択品目",`${w[0]} × ${qty}`],["自治体処理券の目安",special?"対象外":portalYen(gov)],["民間回収の基本相場",portalRange(w[2]*qty,w[3]*qty)],["室内搬出・階段等",carry==="staff"?"追加料金を反映":"自分で搬出"],["急ぎ対応",urgent==="today"?"割増を反映":urgent==="week"?"空き枠確認":"通常"]]);}
+if (wastePage){
+ ["wasteItem","wasteQty","wasteCarry","wasteUrgency","wasteFacility"].forEach(id=>document.getElementById(id).addEventListener("input",wasteRender));
+ wasteArea.addEventListener("input",()=>{wastePopulateFacilities();wasteRender();});
+ document.getElementById("wasteCalcBtn").addEventListener("click",wasteRender);
+ wastePopulateFacilities();
+ wasteRender();
+}
+</script>

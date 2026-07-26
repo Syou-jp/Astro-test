@@ -15,3 +15,27 @@
     <div class="directory-grid" id="serviceDirectory"></div>
     <div class="portal-source">医療機関の掲載内容は変更される場合があります。厚生労働省の医療情報ネット、東京都外国人患者向け医療情報サービス、各士業団体または店舗へ直接確認してください。</div>
   </div><!-- /page-services -->
+<script>
+/* Multilingual professional service directory: verified public gateways + clearly separated PR slots. */
+const SERVICE_LANG={en:"English",zh:"中文",ko:"한국어",vi:"Tiếng Việt",th:"ภาษาไทย",es:"Español",pt:"Português",other:"その他"};
+const SERVICE_CAT={internal:"内科・医療",dental:"歯科",vet:"動物病院",tax:"税務・会計",law:"法律",immigration:"在留・生活相談"};
+const SERVICE_DIRECTORY=[
+ {n:"東京都 外国人患者向け医療情報サービス",c:"internal",a:"tokyo",l:["en","zh","ko","th","es"],o:1,b:"東京都公式",d:"希望地域・診療科・対応言語を伝えると、外国語で受診できる医療機関や日本の医療制度を案内。",m:"東京都｜毎日 9:00〜20:00｜03-5285-8181",u:"https://www.hokeniryo.metro.tokyo.lg.jp/iryo/iryo_hoken/gaikokujin/interpreter/himawari"},
+ {n:"医療情報ネット（ナビイ）｜病院・内科検索",c:"internal",a:"nationwide",l:["en","zh","ko"],o:1,b:"厚生労働省・都道府県",d:"全国の病院・診療所を住所、駅、診療科、診療時間、対応サービスから検索。受診前に電話確認を推奨。",m:"全国｜オンライン検索",u:"https://www.iryou.teikyouseido.mhlw.go.jp/znk-web/juminkanja/S2300/initialize"},
+ {n:"医療情報ネット（ナビイ）｜歯科診療所検索",c:"dental",a:"nationwide",l:["en","zh","ko"],o:1,b:"厚生労働省・都道府県",d:"歯科診療所を地域、現在地、駅、受付時間などから検索可能。外国語の対応方法は予約時に確認。",m:"全国｜オンライン検索",u:"https://www.iryou.teikyouseido.mhlw.go.jp/znk-web/juminkanja/S2340/initialize"},
+ {n:"JNTO 訪日外国人向け医療機関検索",c:"internal",a:"nationwide",l:["en","zh","ko"],o:1,b:"公的医療機関リスト",d:"所在地、対応言語、診療科などから外国人患者を受け入れる医療機関を検索。旅行者だけでなく候補探しにも便利。",m:"全国｜日本語・英語・中国語・韓国語",u:"https://www.jnto.go.jp/emergency/jpn/mi_guide.html"},
+ {n:"東京都獣医師会｜会員動物病院案内",c:"vet",a:"tokyo",l:["other"],o:1,b:"獣医師会",d:"東京都内の動物病院を探す入口。外国語対応は病院ごとに異なるため、診療内容・通訳方法・夜間料金を事前確認。",m:"東京都｜各病院へ直接確認",u:"https://tvma.or.jp/"},
+ {n:"法テラス 多言語情報提供サービス",c:"law",a:"nationwide",l:["en","zh","ko","vi","th","es","pt","other"],o:1,b:"公的法律案内",d:"借金、離婚、労働、事故、ビザなどについて、三者間通話で法制度や相談窓口を無料案内。通話料は利用者負担。",m:"全国｜平日 9:00〜17:00｜0570-078377",u:"https://www.houterasu.or.jp/site/foreign-nationals/"},
+ {n:"FRESC 法テラス国際室",c:"law",a:"tokyo",l:["en","zh","ko","vi","th","es","pt","other"],o:1,b:"外国人在留支援センター",d:"外国人の法律問題について多言語で情報提供。電話時に「FRESCの国際室につないで」と伝える。",m:"新宿区四谷｜0570-078377",u:"https://www.houterasu.or.jp/site/yasasiinihongo/zairyusiencentenokoto.html"},
+ {n:"東京国税局 外国人相談（英語）",c:"tax",a:"tokyo",l:["en"],o:1,b:"国税相談",d:"所得税など国税に関する英語相談窓口。相談日・受付内容は変更される場合があるため公式案内を確認。",m:"東京都｜平日 9:00〜17:00｜03-3821-9070",u:"https://www.tax.metro.tokyo.lg.jp/shitsumon/life/tozei"},
+ {n:"東京都主税局 外国語版都税ガイド",c:"tax",a:"tokyo",l:["en","zh","ko"],o:1,b:"東京都公式",d:"住民が関係する都税、自動車税、不動産取得税などを英語・中国語・韓国語で確認できるガイド。",m:"東京都｜オンライン資料",u:"https://www.tax.metro.tokyo.lg.jp/data/guidebookgaigo"},
+ {n:"東京都外国人相談",c:"immigration",a:"tokyo",l:["en","zh","ko"],o:1,b:"東京都公式",d:"入国、婚姻、国籍、仕事など日常生活の相談。言語により対応曜日と電話番号が異なる。",m:"新宿区西新宿｜英語 平日／中国語 火・金／韓国語 水",u:"https://www.seikatubunka.metro.tokyo.lg.jp/chiiki_tabunka/tabunka/tabunkasuishin/0000000144"}
+];
+function serviceRender(){
+ const keyword=document.getElementById("serviceKeyword").value.trim().toLowerCase(),cat=document.getElementById("serviceCategory").value,lang=document.getElementById("serviceLanguage").value,area=document.getElementById("serviceArea").value,official=document.getElementById("serviceOfficialOnly").checked;
+ const list=SERVICE_DIRECTORY.filter(s=>(cat==="all"||s.c===cat)&&(lang==="all"||s.l.includes(lang))&&(area==="all"||s.a===area||(area==="kanto"&&s.a==="tokyo"))&&(!official||s.o)&&(!keyword||`${s.n} ${s.d} ${s.m} ${SERVICE_CAT[s.c]}`.toLowerCase().includes(keyword)));
+ document.getElementById("serviceCount").textContent=`${list.length}件を表示 ／ 全${SERVICE_DIRECTORY.length}件`;
+ document.getElementById("serviceDirectory").innerHTML=list.length?list.map(s=>`<article class="directory-card is-official"><div class="directory-card-head"><div><span class="portal-badge">${s.b}</span><span class="portal-badge">${SERVICE_CAT[s.c]}</span></div></div><h3>${s.n}</h3><p>${s.d}</p><div class="directory-meta">📍 ${s.m}<br>🌐 ${s.l.map(x=>SERVICE_LANG[x]).join("・")}</div><div class="portal-actions"><a class="secondary-btn" href="${s.u}" target="_blank" rel="noopener">公式情報を開く</a></div></article>`).join(""):`<div class="directory-empty">条件に合う情報がありません。言語または地域を「すべて」に戻してお試しください。</div>`;
+}
+["serviceKeyword","serviceCategory","serviceLanguage","serviceArea","serviceOfficialOnly"].forEach(id=>document.getElementById(id).addEventListener(id==="serviceKeyword"?"input":"change",serviceRender));serviceRender();
+</script>
