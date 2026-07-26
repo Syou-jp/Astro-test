@@ -73,29 +73,62 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
 
       <nav class="tab-bar" id="tabBar" aria-label="ページ一覧">
         {navGroups.map((group, i) => (
-          <>
-            <input type="radio" name="nav-cat" id={`navcat-${i}`} class="tab-group-radio" checked={group.tabs.some((tab) => activeId === tab.id)} />
-            <label for={`navcat-${i}`} class:list={["tab-group-label", group.tabs.some((tab) => activeId === tab.id) && "has-active"]}>{group.label}</label>
-          </>
-        ))}
-        {navGroups.map((group, i) => (
-          <div class="tab-group-tabs" id={`navcat-${i}-panel`}>
-            {group.tabs.map((tab) => (
-              <a class:list={["doc-tab", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)}>
-                <span class="tab-glyph">{tab.glyph}</span>
-                <span class="tab-text">{tab.text}<small>{tab.small}</small></span>
-              </a>
-            ))}
+          <div class="nav-dropdown" data-nav-dropdown>
+            <button
+              type="button"
+              id={`navcat-${i}-btn`}
+              class:list={["tab-group-label", group.tabs.some((tab) => activeId === tab.id) && "has-active"]}
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls={`navcat-${i}-panel`}
+            >
+              {group.label}
+              <span class="tab-group-caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="tab-group-tabs" id={`navcat-${i}-panel`} role="menu" aria-labelledby={`navcat-${i}-btn`}>
+              {group.tabs.map((tab) => (
+                <a class:list={["doc-tab", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)} role="menuitem">
+                  <span class="tab-glyph">{tab.glyph}</span>
+                  <span class="tab-text">{tab.text}<small>{tab.small}</small></span>
+                </a>
+              ))}
+            </div>
           </div>
         ))}
       </nav>
       <script is:inline>
         (() => {
-          if (window.matchMedia("(max-width:640px)").matches) {
-            document.querySelectorAll(".tab-group-radio").forEach((radio) => {
-              radio.checked = false;
+          const dropdowns = Array.from(document.querySelectorAll("[data-nav-dropdown]"));
+
+          function closeAll(except) {
+            dropdowns.forEach((el) => {
+              if (el === except) return;
+              el.classList.remove("open");
+              const btn = el.querySelector(".tab-group-label");
+              if (btn) btn.setAttribute("aria-expanded", "false");
             });
           }
+
+          dropdowns.forEach((el) => {
+            const btn = el.querySelector(".tab-group-label");
+            if (!btn) return;
+            btn.addEventListener("click", () => {
+              const isOpen = el.classList.contains("open");
+              closeAll(el);
+              el.classList.toggle("open", !isOpen);
+              btn.setAttribute("aria-expanded", String(!isOpen));
+            });
+          });
+
+          document.addEventListener("click", (event) => {
+            if (!(event.target instanceof Node)) return;
+            if (event.target.closest("[data-nav-dropdown]")) return;
+            closeAll();
+          });
+
+          document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") closeAll();
+          });
         })();
       </script>
 
