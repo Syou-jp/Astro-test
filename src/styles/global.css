@@ -1064,19 +1064,21 @@
   }
 
   /* ---- Japan life portal pages ---- */
-  .tab-bar{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px 10px;padding:16px 0 0;background:transparent;position:relative;}
+  .tab-bar{display:flex;flex-wrap:nowrap;align-items:stretch;gap:10px;padding:16px 0 0;background:transparent;position:relative;}
   .masthead{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;min-height:70px;gap:14px;}
   .masthead h1{min-width:0;line-height:1.35;}
   .masthead-right{width:auto;justify-content:flex-end;margin-left:0;}
   .site-language-control{margin-left:0;}
-  .nav-dropdown{position:relative;}
-  .tab-group-label{display:inline-flex;align-items:center;gap:5px;text-align:left;border:1px solid var(--line);border-radius:20px;background:var(--paper-2);font:inherit;font-family:"Shippori Mincho",serif;font-size:13px;font-weight:700;letter-spacing:.05em;color:var(--ink-soft);padding:8px 16px;white-space:nowrap;cursor:pointer;user-select:none;transition:background .15s ease,color .15s ease,border-color .15s ease;}
+  .nav-dropdown{position:relative;flex:1 1 0;min-width:0;}
+  .tab-group-label{display:flex;width:100%;align-items:center;justify-content:center;gap:5px;text-align:center;border:1px solid var(--line);border-radius:20px;background:var(--paper-2);font:inherit;font-family:"Shippori Mincho",serif;font-size:13px;font-weight:700;letter-spacing:.05em;color:var(--ink-soft);padding:10px 14px;white-space:nowrap;cursor:pointer;user-select:none;transition:background .15s ease,color .15s ease,border-color .15s ease;}
   .tab-group-label:hover{color:var(--ink);border-color:var(--ink-soft);}
   .nav-dropdown.open .tab-group-label{background:var(--accent);border-color:var(--accent);color:var(--white);}
   .tab-group-label:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .tab-group-label.has-active{border-color:var(--accent);color:var(--accent);}
   .nav-dropdown.open .tab-group-label.has-active{color:var(--white);}
-  .tab-group-tabs{position:absolute;top:calc(100% + 8px);left:0;z-index:80;display:none;flex-direction:column;flex-wrap:nowrap;gap:2px;min-width:240px;margin-top:0;padding:10px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 28px rgba(0,0,0,.14);}
+  .tab-group-tabs{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);z-index:80;display:none;flex-direction:column;flex-wrap:nowrap;gap:2px;min-width:240px;margin-top:0;padding:10px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 28px rgba(0,0,0,.14);}
+  .nav-dropdown:first-child .tab-group-tabs{left:0;transform:none;}
+  .nav-dropdown:last-child .tab-group-tabs{left:auto;right:0;transform:none;}
   .nav-dropdown.open .tab-group-tabs{display:flex;}
   .doc-tab{width:auto;min-width:0;height:auto;padding:7px 10px;border:none;border-radius:6px;transform:none;background:transparent;overflow:visible;color:var(--ink-soft);position:relative;}
   .doc-tab:hover{background:var(--white);transform:none;color:var(--ink);}
