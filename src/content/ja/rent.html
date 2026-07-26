@@ -239,3 +239,555 @@
     </div>
   </div>
   </div><!-- /page-rent -->
+<script>
+const T = {
+  ja: {
+    title: "入居初期費用見積書",
+    client: "お客様",
+    property: "物件",
+    total: "初期費用合計",
+    footnote: "本見積は概算です。実際の金額は正式な契約書をご確認ください。",
+    seal: "見積",
+    copy: "📋 送信用テキストをコピー",
+    copied: "コピーしました ✓",
+    dayLabel: n => `${n}日`,
+    monthLabel: n => `${n}か月`,
+    taxNote: "（税込）",
+    rentNote: "（参考表示・合計に含まれません）",
+    perMonth: "月額",
+    perYear: "年額",
+    items: {
+      rent: "月額賃料", mgmt: "管理費・共益費", deposit: "敷金", keymoney: "礼金",
+      agency: "仲介手数料", firstRent: "入居月賃料", guarantor: "初回保証利用料",
+      insurance: "火災保険料", keyexchange: "鍵交換費用", lifesupport: "生活サポート料金", other: "その他費用"
+    }
+  },
+  en: {
+    title: "Initial Move-in Cost Estimate",
+    client: "For",
+    property: "Property",
+    total: "Total Initial Cost",
+    footnote: "This is an estimate only. Final amounts are subject to the official contract.",
+    seal: "EST.",
+    copy: "📋 Copy text to send",
+    copied: "Copied ✓",
+    dayLabel: n => `${n} day${n === 1 ? "" : "s"}`,
+    monthLabel: n => `${n} month${n === 1 ? "" : "s"}`,
+    taxNote: "(tax incl.)",
+    rentNote: "(reference only, not included in total)",
+    perMonth: "monthly",
+    perYear: "annual",
+    items: {
+      rent: "Monthly Rent",
+      mgmt: "Management Fee",
+      deposit: "Deposit",
+      keymoney: "Key Money",
+      agency: "Agency Fee",
+      firstRent: "First Month Rent",
+      guarantor: "Initial Guarantor Company Fee",
+      insurance: "Fire Insurance",
+      keyexchange: "Key Exchange Fee",
+      lifesupport: "Lifestyle Support Service Fee",
+      other: "Other"
+    }
+  },
+  "zh-CN": {
+    title: "租房初期费用估算",
+    client: "客户",
+    property: "物件",
+    total: "初期费用总计",
+    footnote: "此为费用估算，实际金额以正式合同为准。",
+    seal: "估算",
+    copy: "📋 复制文字发送",
+    copied: "已复制 ✓",
+    dayLabel: n => `${n}天`,
+    monthLabel: n => `${n}个月`,
+    taxNote: "（含税）",
+    rentNote: "（仅供参考，不计入总额）",
+    perMonth: "每月",
+    perYear: "每年",
+    items: {
+      rent: "月租金",
+      mgmt: "管理费/共益费",
+      deposit: "押金",
+      keymoney: "礼金",
+      agency: "中介手续费",
+      firstRent: "入住当月房租",
+      guarantor: "保证公司首次使用费",
+      insurance: "火灾保险费",
+      keyexchange: "换锁费",
+      lifesupport: "生活支援服务费",
+      other: "其他费用"
+    }
+  },
+  "zh-TW": {
+    title: "租屋初期費用估算",
+    client: "客戶",
+    property: "物件",
+    total: "初期費用總計",
+    footnote: "此為費用估算，實際金額以正式合約為準。",
+    seal: "估算",
+    copy: "📋 複製文字發送",
+    copied: "已複製 ✓",
+    dayLabel: n => `${n}天`,
+    monthLabel: n => `${n}個月`,
+    taxNote: "（含稅）",
+    rentNote: "（僅供參考，不計入總額）",
+    perMonth: "每月",
+    perYear: "每年",
+    items: {
+      rent: "月租金",
+      mgmt: "管理費/共益費",
+      deposit: "押金",
+      keymoney: "禮金",
+      agency: "仲介手續費",
+      firstRent: "入住當月房租",
+      guarantor: "保證公司首次使用費",
+      insurance: "火災保險費",
+      keyexchange: "換鎖費",
+      lifesupport: "生活支援服務費",
+      other: "其他費用"
+    }
+  },
+  ko: {
+    title: "입주 초기 비용 견적",
+    client: "고객",
+    property: "매물",
+    total: "초기 비용 합계",
+    footnote: "본 견적은 예상 금액이며 실제 금액은 정식 계약서에 따릅니다.",
+    seal: "견적",
+    copy: "📋 문자 복사하기",
+    copied: "복사됨 ✓",
+    dayLabel: n => `${n}일`,
+    monthLabel: n => `${n}개월`,
+    taxNote: "(세금 포함)",
+    rentNote: "(참고용, 합계에 미포함)",
+    perMonth: "매월",
+    perYear: "매년",
+    items: {
+      rent: "월세",
+      mgmt: "관리비",
+      deposit: "보증금(시키킨)",
+      keymoney: "권리금(레이킨)",
+      agency: "중개 수수료",
+      firstRent: "입주 당월 월세",
+      guarantor: "초회 보증회사 이용료",
+      insurance: "화재보험료",
+      keyexchange: "열쇠 교환비",
+      lifesupport: "생활 지원 서비스 비용",
+      other: "기타 비용"
+    }
+  },
+  vi: {
+    title: "Dự toán chi phí ban đầu khi vào nhà",
+    client: "Khách hàng",
+    property: "Bất động sản",
+    total: "Tổng chi phí ban đầu",
+    footnote: "Đây chỉ là dự toán. Số tiền thực tế căn cứ theo hợp đồng chính thức.",
+    seal: "DỰ TOÁN",
+    copy: "📋 Sao chép nội dung để gửi",
+    copied: "Đã sao chép ✓",
+    dayLabel: n => `${n} ngày`,
+    monthLabel: n => `${n} tháng`,
+    taxNote: "(đã gồm thuế)",
+    rentNote: "(chỉ tham khảo, không tính vào tổng)",
+    perMonth: "hàng tháng",
+    perYear: "hàng năm",
+    items: {
+      rent: "Tiền thuê hàng tháng", mgmt: "Phí quản lý", deposit: "Tiền đặt cọc", keymoney: "Tiền lễ",
+      agency: "Phí môi giới", firstRent: "Tiền thuê tháng đầu", guarantor: "Phí bảo lãnh ban đầu",
+      insurance: "Bảo hiểm hỏa hoạn", keyexchange: "Phí thay khóa", lifesupport: "Phí hỗ trợ sinh hoạt", other: "Chi phí khác"
+    }
+  }
+};
+
+let currentLang = "ja";
+let otherRowCounter = 0;
+let guarantorOtherRowCounter = 0;
+
+function yen(n){
+  return "¥" + Math.round(n).toLocaleString("en-US");
+}
+
+function num(id){
+  const el = document.getElementById(id);
+  if (!el) return 0;
+  const v = parseFloat(el.value);
+  return isNaN(v) ? 0 : v;
+}
+
+function getMode(toggleId){
+  const active = document.querySelector("#" + toggleId + " .mode-btn.active");
+  return active ? active.dataset.mode : null;
+}
+
+function checked(id){
+  const el = document.getElementById(id);
+  return el ? el.checked : false;
+}
+
+function applyTax(amount, isTaxed){
+  return isTaxed ? amount * 1.1 : amount;
+}
+
+function computeFirstRent(rent){
+  const mode = getMode("modeToggle");
+  if (mode === "daily"){
+    const dateStr = document.getElementById("moveInDate").value;
+    if (!dateStr) return {amount: 0, unit: "days", n: 0, extra: 1};
+    const d = new Date(dateStr + "T00:00:00");
+    const year = d.getFullYear(), month = d.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const dayOfMonth = d.getDate();
+    const remainingDays = Math.max(0, daysInMonth - dayOfMonth + 1);
+    const prorated = rent > 0 ? (rent / daysInMonth) * remainingDays : 0;
+    const extraMonths = parseInt(document.getElementById("dailyExtraMonths").value, 10) || 1;
+    const extraAmount = (extraMonths - 1) * rent;
+    return {amount: prorated + extraAmount, unit: "days", n: remainingDays, extra: extraMonths};
+  } else {
+    const months = num("firstRentMonths");
+    return {amount: rent * months, unit: "months", n: months, extra: 1};
+  }
+}
+
+function computeAgency(rent){
+  const mode = getMode("agencyModeToggle");
+  if (mode === "percent"){
+    return rent * (num("agencyPercent") / 100);
+  }
+  return num("agencyAmount");
+}
+
+function computeGuarantor(rent, mgmtRaw, guarantorOthersTotal){
+  const mode = getMode("guarantorModeToggle");
+  if (mode === "percent"){
+    return (rent + mgmtRaw + guarantorOthersTotal) * (num("guarantorPercent") / 100);
+  }
+  return num("guarantorAmount");
+}
+
+function getOtherRows(){
+  return Array.from(document.querySelectorAll("#otherRows .other-row")).map(row => {
+    const label = row.querySelector(".other-label").value.trim();
+    const raw = parseFloat(row.querySelector(".other-amount").value) || 0;
+    const tax = row.querySelector(".other-tax").checked;
+    return {label, raw, tax, amount: applyTax(raw, tax)};
+  });
+}
+
+function getGuarantorOtherRows(){
+  return Array.from(document.querySelectorAll("#guarantorOtherRows .other-row")).map(row => {
+    const label = row.querySelector(".other-label").value.trim();
+    const raw = parseFloat(row.querySelector(".other-amount").value) || 0;
+    return {label, raw, amount: raw};
+  });
+}
+
+function compute(){
+  const rent = num("rent");
+
+  const mgmt = num("mgmt");
+
+  const deposit = rent * num("depositMonths");
+  const keymoney = rent * num("keyMoneyMonths");
+
+  const agencyRaw = computeAgency(rent);
+  const agencyTax = checked("agencyTax");
+  const agency = applyTax(agencyRaw, agencyTax);
+
+  const firstRentInfo = computeFirstRent(rent);
+  const firstRent = firstRentInfo.amount;
+
+  const guarantorOthers = getGuarantorOtherRows();
+  const guarantorOthersTotal = guarantorOthers.reduce((s, o) => s + o.amount, 0);
+  const guarantor = computeGuarantor(rent, mgmt, guarantorOthersTotal);
+
+  const insurance = num("insurance");
+
+  const keyexchangeRaw = num("keyExchange");
+  const keyexchangeTax = checked("keyExchangeTax");
+  const keyexchange = applyTax(keyexchangeRaw, keyexchangeTax);
+
+  const lifesupportRaw = num("lifesupportAmount");
+  const lifesupportTax = checked("lifesupportTax");
+  const lifesupport = applyTax(lifesupportRaw, lifesupportTax);
+  const lifesupportMode = getMode("lifesupportModeToggle");
+
+  const others = getOtherRows();
+  const othersTotal = others.reduce((s, o) => s + o.amount, 0);
+
+  const total = mgmt + deposit + keymoney + agency + firstRent + guarantor + guarantorOthersTotal + insurance + keyexchange + lifesupport + othersTotal;
+
+  return {
+    rent, mgmt, deposit, keymoney,
+    agency, agencyTax,
+    firstRent, firstRentInfo,
+    guarantor, guarantorOthers,
+    insurance,
+    keyexchange, keyexchangeTax,
+    lifesupport, lifesupportTax, lifesupportMode,
+    others, total
+  };
+}
+
+function buildLineData(vals, t){
+  const lines = [];
+
+  lines.push({label: `${t.items.rent} ${t.rentNote}`, amount: vals.rent, isRent: true});
+
+  let frLabel = t.items.firstRent;
+  const fr = vals.firstRentInfo;
+  if (fr.unit === "days" && fr.n > 0){
+    let suf = t.dayLabel(fr.n);
+    if (fr.extra > 1) suf += " + " + t.monthLabel(fr.extra - 1);
+    frLabel += ` (${suf})`;
+  } else if (fr.unit === "months" && fr.n > 0){
+    frLabel += ` (${t.monthLabel(fr.n)})`;
+  }
+  if (vals.firstRent > 0) lines.push({label: frLabel, amount: vals.firstRent});
+
+  if (vals.mgmt > 0){
+    lines.push({label: t.items.mgmt, amount: vals.mgmt});
+  }
+  vals.guarantorOthers.forEach(o => {
+    if (o.raw > 0){
+      lines.push({label: o.label || t.items.other, amount: o.amount});
+    }
+  });
+  if (vals.deposit > 0) lines.push({label: t.items.deposit, amount: vals.deposit});
+  if (vals.keymoney > 0) lines.push({label: t.items.keymoney, amount: vals.keymoney});
+
+  if (vals.agency > 0){
+    let l = t.items.agency + (vals.agencyTax ? " " + t.taxNote : "");
+    lines.push({label: l, amount: vals.agency});
+  }
+  if (vals.guarantor > 0){
+    lines.push({label: t.items.guarantor, amount: vals.guarantor});
+  }
+  if (vals.insurance > 0){
+    lines.push({label: t.items.insurance, amount: vals.insurance});
+  }
+  if (vals.keyexchange > 0){
+    let l = t.items.keyexchange + (vals.keyexchangeTax ? " " + t.taxNote : "");
+    lines.push({label: l, amount: vals.keyexchange});
+  }
+  if (vals.lifesupport > 0){
+    let unit = vals.lifesupportMode === "year" ? t.perYear : t.perMonth;
+    let l = `${t.items.lifesupport} (${unit})` + (vals.lifesupportTax ? " " + t.taxNote : "");
+    lines.push({label: l, amount: vals.lifesupport});
+  }
+
+  vals.others.forEach(o => {
+    if (o.raw > 0){
+      let l = (o.label || t.items.other) + (o.tax ? " " + t.taxNote : "");
+      lines.push({label: l, amount: o.amount});
+    }
+  });
+
+  return lines;
+}
+
+function render(){
+  const t = T[currentLang];
+  const vals = compute();
+  const propertyName = document.getElementById("propertyName").value.trim();
+  const clientName = document.getElementById("clientName").value.trim();
+
+  document.getElementById("receiptTitle").textContent = t.title;
+  document.getElementById("receiptDate").textContent = new Date().toISOString().slice(0,10);
+  document.getElementById("sealMark").textContent = t.seal;
+  document.getElementById("totalLabel").textContent = t.total;
+  document.getElementById("totalValue").textContent = yen(vals.total);
+  document.getElementById("footnote").textContent = t.footnote;
+  document.getElementById("copyBtn").innerHTML = t.copy;
+
+  const taxLiveValues = {
+    agencyTaxLive: vals.agency,
+    keyExchangeTaxLive: vals.keyexchange,
+    lifesupportTaxLive: vals.lifesupport
+  };
+  Object.entries(taxLiveValues).forEach(([id,value]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = yen(value);
+  });
+
+  document.getElementById("clientLine").textContent = clientName ? (t.client + ": " + clientName) : "";
+  document.getElementById("propertyLine").textContent = propertyName ? (t.property + ": " + propertyName) : "";
+
+  const lineData = buildLineData(vals, t);
+  const itemsHtml = lineData.map(l => {
+    const cls = l.isRent ? "receipt-line line-note" : "receipt-line";
+    return `<div class="${cls}"><span>${l.label}</span><span class="amt">${yen(l.amount)}</span></div>`;
+  }).join("");
+  document.getElementById("lineItems").innerHTML = itemsHtml;
+}
+
+function buildCopyText(){
+  const t = T[currentLang];
+  const vals = compute();
+  const propertyName = document.getElementById("propertyName").value.trim();
+  const clientName = document.getElementById("clientName").value.trim();
+  const lineData = buildLineData(vals, t);
+
+  let lines = [];
+  lines.push(t.title);
+  if (propertyName) lines.push(`${t.property}: ${propertyName}`);
+  if (clientName) lines.push(`${t.client}: ${clientName}`);
+  lines.push("------------------------------");
+  lineData.forEach(l => {
+    lines.push(`${l.label}: ${yen(l.amount)}`);
+  });
+  lines.push("------------------------------");
+  lines.push(`${t.total}: ${yen(vals.total)}`);
+  lines.push("");
+  lines.push(t.footnote);
+
+  return lines.join("\n");
+}
+
+/* ---------- Mode toggle groups ---------- */
+function bindModeToggle(toggleId, showMap){
+  const toggle = document.getElementById(toggleId);
+  toggle.querySelectorAll(".mode-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      toggle.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const mode = btn.dataset.mode;
+      Object.keys(showMap).forEach(m => {
+        const el = document.getElementById(showMap[m]);
+        if (el) el.style.display = (m === mode) ? (el.dataset.showAs || "block") : "none";
+      });
+      render();
+    });
+  });
+}
+
+document.getElementById("monthsModeWrap").dataset.showAs = "flex";
+document.getElementById("dailyModeWrap").dataset.showAs = "flex";
+bindModeToggle("modeToggle", {months: "monthsModeWrap", daily: "dailyModeWrap"});
+
+document.getElementById("agencyPercentWrap").dataset.showAs = "flex";
+document.getElementById("agencyAmountWrap").dataset.showAs = "flex";
+bindModeToggle("agencyModeToggle", {percent: "agencyPercentWrap", amount: "agencyAmountWrap"});
+
+document.getElementById("guarantorPercentWrap").dataset.showAs = "flex";
+document.getElementById("guarantorAmountWrap").dataset.showAs = "flex";
+bindModeToggle("guarantorModeToggle", {percent: "guarantorPercentWrap", amount: "guarantorAmountWrap"});
+
+bindModeToggle("lifesupportModeToggle", {});
+
+/* ---------- Other rows (dynamic) ---------- */
+function createOtherRow(label, amount, tax){
+  otherRowCounter += 1;
+  const row = document.createElement("div");
+  row.className = "other-row";
+  row.dataset.id = otherRowCounter;
+  row.innerHTML = `
+    <input type="text" class="other-label" placeholder="項目名" value="${label || ""}">
+    <input type="number" class="other-amount" value="${amount || 0}" min="0" step="500">
+    <label class="tax-check mini"><input type="checkbox" class="other-tax" ${tax ? "checked" : ""}> 税込み</label>
+    <button type="button" class="remove-btn" title="削除">×</button>
+  `;
+  row.querySelector(".other-label").addEventListener("input", render);
+  row.querySelector(".other-amount").addEventListener("input", render);
+  row.querySelector(".other-tax").addEventListener("change", render);
+  row.querySelector(".remove-btn").addEventListener("click", () => {
+    row.remove();
+    render();
+  });
+  document.getElementById("otherRows").appendChild(row);
+}
+
+document.getElementById("addOtherBtn").addEventListener("click", () => {
+  createOtherRow("", 0, false);
+  render();
+});
+
+createOtherRow("", 0, false);
+
+/* ---------- Guarantor "other" rows (dynamic, non-taxable) ---------- */
+function createGuarantorOtherRow(label, amount){
+  guarantorOtherRowCounter += 1;
+  const row = document.createElement("div");
+  row.className = "other-row";
+  row.dataset.id = guarantorOtherRowCounter;
+  row.innerHTML = `
+    <input type="text" class="other-label" placeholder="項目名（例：駐輪場代）" value="${label || ""}">
+    <input type="number" class="other-amount" value="${amount || 0}" min="0" step="500">
+    <button type="button" class="remove-btn" title="削除">×</button>
+  `;
+  row.querySelector(".other-label").addEventListener("input", render);
+  row.querySelector(".other-amount").addEventListener("input", render);
+  row.querySelector(".remove-btn").addEventListener("click", () => {
+    row.remove();
+    render();
+  });
+  document.getElementById("guarantorOtherRows").appendChild(row);
+}
+
+document.getElementById("addGuarantorOtherBtn").addEventListener("click", () => {
+  createGuarantorOtherRow("", 0);
+  render();
+});
+
+/* ---------- Language picker ---------- */
+document.getElementById("langPicker")?.addEventListener("change", (e) => {
+  currentLang = e.target.value;
+  render();
+});
+
+/* ---------- Generic input/change delegation for the form ---------- */
+const formCard = document.getElementById("formCard");
+formCard.addEventListener("input", (e) => {
+  if (e.target.matches(".other-label, .other-amount")) return;
+  render();
+});
+formCard.addEventListener("change", render);
+
+document.getElementById("propertyName").addEventListener("input", render);
+document.getElementById("clientName").addEventListener("input", render);
+
+/* ---------- Copy to clipboard ---------- */
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const text = buildCopyText();
+  const t = T[currentLang];
+  const btn = document.getElementById("copyBtn");
+
+  function flashCopied(){
+    const original = t.copy;
+    btn.textContent = t.copied;
+    setTimeout(() => { btn.innerHTML = original; }, 1600);
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(flashCopied).catch(() => fallbackCopy(text, flashCopied));
+  } else {
+    fallbackCopy(text, flashCopied);
+  }
+});
+
+function fallbackCopy(text, cb){
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand("copy"); } catch(e) {}
+  document.body.removeChild(ta);
+  cb();
+}
+
+/* ---------- Init ---------- */
+(function setDefaultDate(){
+  const el = document.getElementById("moveInDate");
+  if (el && !el.value){
+    const today = new Date();
+    el.value = today.toISOString().slice(0,10);
+  }
+})();
+
+render();
+
+</script>
