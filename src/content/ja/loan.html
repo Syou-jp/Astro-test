@@ -45,3 +45,35 @@
       </div>
     </div>
   </div><!-- /page-loan -->
+<script>
+const toolYen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
+const toolNum = id => Math.max(0,Number(document.getElementById(id)?.value) || 0);
+function loanRender(){
+  const price=toolNum("loanPrice"),down=Math.min(price,toolNum("loanDown")),principal=Math.max(0,price-down);
+  const years=toolNum("loanTerm"),months=years*12,annualRate=toolNum("loanRate"),r=annualRate/1200;
+  const monthly=months ? (r ? principal*r*Math.pow(1+r,months)/(Math.pow(1+r,months)-1) : principal/months) : 0;
+  const total=monthly*months, income=toolNum("loanIncome"),other=toolNum("loanOtherDebt");
+  const dti=income ? ((monthly*12+other)/income*100) : 0, downRate=price ? down/price*100 : 0;
+  document.getElementById("loanPrincipalOut").textContent=toolYen(principal);
+  document.getElementById("loanMonthlyOut").textContent=toolYen(monthly);
+  document.getElementById("loanInterestOut").textContent=toolYen(Math.max(0,total-principal));
+  document.getElementById("loanTotalOut").textContent=toolYen(total);
+  document.getElementById("loanDtiOut").textContent=dti.toFixed(1)+"%";
+  document.getElementById("loanDownRateOut").textContent=downRate.toFixed(1)+"%";
+  const status=document.getElementById("loanStatus").value,employment=document.getElementById("loanEmployment").value,tenure=toolNum("loanTenure"),visa=toolNum("loanVisaYears"),age=toolNum("loanAge"),limit=income<4000000?30:35;
+  const statusText={japanese:"国内銀行・フラット35の一般条件を確認できます。",special:"特別永住者はフラット35の国籍要件対象です。",pr:"永住者はフラット35の国籍要件対象です。",'pr-pending':"永住許可前は銀行が限定されます。許可後の再相談も検討してください。",spouse:"配偶者の収入合算・連帯保証を含め銀行へ個別相談してください。",work:"永住権なしの就労資格は対応銀行が限定されます。頭金、在留期間、日本での勤続実績を確認されることがあります。",student:"単独の住宅ローンは非常に難しい区分です。収入のある配偶者・共同申込などを専門窓口へ相談してください。"}[status];
+  const jobText=employment==="self"||employment==="owner"?`確定申告・決算を通常2～3期分求められることがあります（現在 ${tenure}年）。`:employment==="permanent"||employment==="civil"?`継続収入を示しやすい働き方です（勤続 ${tenure}年）。`:`雇用更新、収入の継続性、勤続期間を個別審査されます（勤続 ${tenure}年）。`;
+  const rows=[
+    ["在留・国籍",statusText],
+    ["就業・収入",jobText],
+    ["返済比率",dti<=limit?`参考上限${limit}%以内です。ただし他の審査条件があります。`:`参考上限${limit}%を超えています。借入額・期間・他債務を見直してください。`],
+    ["期間・年齢",age+years<=80?`完済時年齢は約${age+years}歳です。銀行ごとの完済時年齢上限を確認してください。`:`完済時年齢が約${age+years}歳となるため、期間短縮や銀行条件の確認が必要です。`],
+    ["在留期限",status==="japanese"||status==="pr"||status==="special"?"在留期限の確認対象外です。":`入力上の残存期間は${visa}年。更新予定と在留カードを準備してください。`]
+  ];
+  document.getElementById("loanReadiness").innerHTML=rows.map(x=>`<div class="readiness-item"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
+}
+document.getElementById("loanRatePlan")?.addEventListener("change",e=>{if(e.target.value!=="custom")document.getElementById("loanRate").value=e.target.value;loanRender();});
+document.querySelectorAll("#page-loan input,#page-loan select").forEach(el=>el.addEventListener("input",loanRender));
+document.getElementById("loanCalcBtn")?.addEventListener("click",loanRender); loanRender();
+if(window.matchMedia("(max-width:640px)").matches) document.querySelector(".readiness-details")?.removeAttribute("open");
+</script>

@@ -461,3 +461,21 @@ if (document.querySelector("#taxFormCard")){
 }
 
 </script>
+<script>
+const toolYen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
+const toolNum = id => Math.max(0,Number(document.getElementById(id)?.value) || 0);
+function holdingRender(){
+  const land=toolNum("holdLand"),building=toolNum("holdBuilding"),treatment=document.getElementById("holdLandTreatment").value;
+  const fixedFactor={small:1/6,general:1/3,none:1}[treatment],cityFactor={small:1/3,general:2/3,none:1}[treatment];
+  const landFixed=land*fixedFactor*.014,buildingFixed=building*.014*(document.getElementById("holdNewReduction").value==="yes"?.5:1);
+  const tokyoSmallReduction=document.getElementById("holdArea").value==="tokyo23"&&treatment==="small"?.5:1;
+  const city=document.getElementById("holdCityPlan").value==="yes"?(land*cityFactor*tokyoSmallReduction+building)*.003:0;
+  const management=toolNum("holdManagement")*12,repair=toolNum("holdRepair")*12,parking=toolNum("holdParking")*12,insurance=toolNum("holdInsurance"),rental=toolNum("holdRentalManagement"),other=toolNum("holdOther");
+  const tax=landFixed+buildingFixed+city,total=tax+management+repair+parking+insurance+rental+other,price=toolNum("holdPrice");
+  document.getElementById("holdTaxOut").textContent=toolYen(tax);document.getElementById("holdAnnualOut").textContent=toolYen(total);document.getElementById("holdMonthlyOut").textContent=toolYen(total/12);
+  const rows=[["土地の固定資産税",landFixed],["建物の固定資産税",buildingFixed],["都市計画税",city],["管理費",management],["修繕積立金",repair],["駐車場",parking],["火災・地震保険",insurance],["賃貸管理等",rental],["その他・修繕予備費",other],["年間合計",total]];
+  document.getElementById("holdBreakdown").innerHTML=rows.map(x=>`<tr><td>${x[0]}</td><td class="money">${toolYen(x[1])}</td></tr>`).join("");
+  document.getElementById("holdRateNote").innerHTML=price?`購入価格に対する年間保有コストは <strong>${(total/price*100).toFixed(2)}%</strong> です。ローン返済、室内設備の突発修理、空室損失は含みません。`:"購入価格を入力すると、価格に対する年間コスト率も表示します。";
+}
+document.querySelectorAll("#page-holding input,#page-holding select").forEach(el=>el.addEventListener("input",holdingRender));document.getElementById("holdCalcBtn")?.addEventListener("click",()=>{holdingRender();document.getElementById("holdTaxOut")?.closest(".calc-kpi-grid")?.scrollIntoView({behavior:"smooth",block:"start"});});holdingRender();
+</script>
