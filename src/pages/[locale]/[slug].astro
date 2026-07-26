@@ -39,7 +39,7 @@ if (page.slug === "route") {
 // themselves live as individual markdown files in src/content/news-digests
 // so each day's entry can be authored/edited independently.
 let newsDigestsData = "";
-if (page.slug === "news") {
+if (page.slug === "news" || page.slug === "home") {
   const entries = await getCollection("newsDigests");
   const digests = entries
     .map((entry) => ({ id: entry.id, ...entry.data }))

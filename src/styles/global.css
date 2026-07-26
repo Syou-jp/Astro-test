@@ -1561,6 +1561,14 @@
 .home-featured-tag{display:block;font:700 9.5px "JetBrains Mono",monospace;letter-spacing:.1em;color:var(--accent);margin-bottom:5px;}
 .home-featured-body strong{display:block;font-size:15px;color:var(--ink);margin-bottom:5px;font-family:"Shippori Mincho",serif;}
 .home-featured-body p{margin:0;font-size:11.5px;line-height:1.7;color:var(--ink-soft);}
+.home-news-card{position:relative;display:block;aspect-ratio:21/6;overflow:hidden;background:var(--paper-2);text-decoration:none;border:1px solid var(--line);}
+.home-news-card:hover .home-news-thumb img{transform:scale(1.04);}
+.home-news-card:hover .home-news-body strong{text-decoration:underline;}
+.home-news-thumb{position:absolute;inset:0;display:block;}
+.home-news-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
+.home-news-body{position:absolute;left:0;right:0;bottom:0;padding:14px 18px 16px;background:linear-gradient(0deg,rgba(15,20,25,.86) 0%,rgba(15,20,25,.55) 55%,rgba(15,20,25,0) 100%);}
+.home-news-date{display:block;font:700 9.5px "JetBrains Mono",monospace;letter-spacing:.1em;color:#fff;opacity:.85;margin-bottom:5px;}
+.home-news-body strong{display:block;font-size:16px;line-height:1.5;color:#fff;font-family:"Shippori Mincho",serif;font-weight:700;max-width:70%;}
 .home-popular-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
 .home-popular-card{display:block;border:1px solid var(--line);padding:16px 14px;text-decoration:none;background:var(--white);transition:border-color .15s ease,transform .15s ease;}
 .home-popular-card:hover{border-color:var(--accent);transform:translateY(-2px);}
@@ -1578,7 +1586,7 @@
 .home-link-list a:hover{color:var(--accent);}
 .home-link-list a small{font-size:9.5px;color:var(--ink-soft);opacity:.7;font-family:"JetBrains Mono",monospace;white-space:nowrap;}
 @media(max-width:860px){.home-hero{grid-template-columns:1fr;}.home-featured-grid{grid-template-columns:1fr;}.home-popular-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:520px){.home-popular-grid{grid-template-columns:1fr;}.home-category-grid{grid-template-columns:1fr;}.home-hero h2{font-size:22px;}}
+@media(max-width:520px){.home-popular-grid{grid-template-columns:1fr;}.home-category-grid{grid-template-columns:1fr;}.home-hero h2{font-size:22px;}.home-news-card{aspect-ratio:16/9;}.home-news-body strong{max-width:100%;font-size:14px;}}
 
 /* ---- Mobile readability pass ----
    Originally trialed on the 住まい・不動産 tabs only (.cat-realestate); the fixes target

@@ -68,14 +68,39 @@
 
   <div class="card" style="margin-bottom:18px;">
     <div class="section-title"><span class="idx">日報</span>時事日報 Daily News</div>
-    <div class="home-popular-grid">
-      <a class="home-popular-card" href="/ja/news/">
-        <span class="home-cat-glyph">報</span>
-        <strong>今日の時事ニュース</strong>
-        <small>DAILY NEWS DIGEST</small>
-      </a>
-    </div>
+    <a class="home-news-card" href="/ja/news/" id="homeNewsCard">
+      <span class="home-news-thumb" id="homeNewsThumb"></span>
+      <span class="home-news-body">
+        <span class="home-news-date" id="homeNewsDate">DAILY NEWS DIGEST</span>
+        <strong id="homeNewsTitle">今日の時事ニュースをまとめてチェック</strong>
+      </span>
+    </a>
   </div>
+
+  <script>
+    (function () {
+      var dataEl = document.getElementById("newsDigestsData");
+      if (!dataEl) return;
+      var digests;
+      try { digests = JSON.parse(dataEl.textContent); } catch (e) { return; }
+      if (!digests || !digests.length) return;
+      var latest = digests[0];
+
+      var thumb = document.getElementById("homeNewsThumb");
+      var dateEl = document.getElementById("homeNewsDate");
+      var titleEl = document.getElementById("homeNewsTitle");
+      if (!thumb || !dateEl || !titleEl) return;
+
+      var img = document.createElement("img");
+      img.src = latest.coverImage;
+      img.alt = latest.coverAlt || "";
+      img.loading = "lazy";
+      thumb.appendChild(img);
+
+      dateEl.textContent = latest.date;
+      titleEl.textContent = latest.title;
+    })();
+  </script>
 
   <div class="card" style="margin-bottom:18px;">
     <div class="section-title"><span class="idx">01</span>今、よく見られているページ Most Viewed</div>
