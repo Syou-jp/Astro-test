@@ -237,8 +237,13 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
       <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
         <div class="mobile-drawer-handle" id="mobileDrawerHandle" aria-hidden="true"></div>
         <div class="mobile-drawer-head">
-          <span class="mobile-drawer-title">メニュー</span>
-          <button type="button" id="mobileDrawerClose" class="mobile-drawer-close" data-close-sheet aria-label="閉じる">✕</button>
+          <a class="mobile-drawer-home-btn" href={localePath(currentLocale.code)} aria-label="ホームへ戻る">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 11.5 12 4l9 7.5"></path>
+              <path d="M5.5 10v9a1 1 0 0 0 1 1h4v-6h3v6h4a1 1 0 0 0 1-1v-9"></path>
+            </svg>
+            <span>ホーム</span>
+          </a>
         </div>
 
         <div class="mobile-drawer-section mobile-drawer-nav">
@@ -259,7 +264,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
                   <div class="mobile-drawer-group-inner">
                     {group.tabs.map((tab) => (
                       <a class:list={["mobile-drawer-link", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)}>
-                        <span>{tab.text}</span>{tab.small && <small>{tab.small}</small>}
+                        <span>{tab.text}</span>
                       </a>
                     ))}
                   </div>
@@ -449,12 +454,13 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         });
 
         /* ---- Swipe: drag up from the bottom edge to open the main menu, drag the
-           handle/head of the open sheet down to close it. A generous edge-grab zone
-           and a low open threshold (~30% dragged open snaps fully open) so a short,
-           imprecise swipe still registers for one-handed use. ---- */
+           handle/head of the open sheet down to close it. Opening and closing use
+           separate low thresholds (not mirror images of each other) so a short,
+           imprecise swipe reliably registers each way for one-handed use. ---- */
         const mobileMq = window.matchMedia("(max-width:640px)");
         const EDGE_ZONE = 36;
         const OPEN_THRESHOLD = 0.3;
+        const CLOSE_THRESHOLD = 0.18;
         const menuEntry = entries[entries.length - 1];
         let dragMode = null;
         let dragStartY = 0;
@@ -506,13 +512,18 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           if (!dragMode || !dragSheet) return;
           const h = dragSheet.getBoundingClientRect().height || 400;
           const translate = currentTranslateY(dragSheet);
+          const closedFraction = translate / h;
           dragSheet.style.transition = "";
           overlay.style.transition = "";
           dragSheet.style.transform = "";
           overlay.style.opacity = "";
-          const openedFraction = 1 - translate / h;
-          if (openedFraction >= OPEN_THRESHOLD) openEntry(dragMode === "open" ? menuEntry : active || menuEntry);
-          else closeActive();
+          if (dragMode === "open") {
+            if (1 - closedFraction >= OPEN_THRESHOLD) openEntry(menuEntry);
+            else closeActive();
+          } else {
+            if (closedFraction >= CLOSE_THRESHOLD) closeActive();
+            else openEntry(active || menuEntry);
+          }
           dragMode = null;
           dragSheet = null;
         }
