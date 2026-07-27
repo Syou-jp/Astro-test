@@ -38,6 +38,9 @@
     #page-rent .fire-key-row .field-block{flex:1;min-width:0;padding:0;border-bottom:none;}
     #page-rent .fire-key-row .input-tax-row{flex-wrap:wrap;gap:5px 8px;}
     #page-rent .fire-key-row .input-tax-row input[type=number]{width:min(140px,100%);box-sizing:border-box;}
+    #page-rent .fire-key-row .other-row{flex-wrap:wrap;}
+    #page-rent .fire-key-row .other-row .other-label{flex:1 1 100%;}
+    #page-rent .fire-key-row .other-row .other-amount{flex:0 1 100px;}
 
     #page-rent .add-btn.mini{font-size:11.5px;padding:6px 9px;margin-top:8px;}
 
@@ -180,22 +183,24 @@
         </div>
       </div>
 
-      <div class="field-block">
-        <label>生活サポート料金<span class="hint">月額または年額で設定</span></label>
-        <div class="mode-toggle" id="lifesupportModeToggle">
-          <div class="mode-btn active" data-mode="month">月額</div>
-          <div class="mode-btn" data-mode="year">年額</div>
+      <div class="fire-key-row">
+        <div class="field-block">
+          <label>生活サポート料金<span class="hint">月額または年額で設定</span></label>
+          <div class="mode-toggle" id="lifesupportModeToggle">
+            <div class="mode-btn active" data-mode="month">月額</div>
+            <div class="mode-btn" data-mode="year">年額</div>
+          </div>
+          <div class="input-tax-row">
+            <input type="number" id="lifesupportAmount" value="0" min="0" step="500" style="text-align:right;">
+            <label class="tax-check mini"><input type="checkbox" id="lifesupportTax">税込み <span class="tax-live" id="lifesupportTaxLive">¥0</span></label>
+          </div>
         </div>
-        <div class="input-tax-row">
-          <input type="number" id="lifesupportAmount" value="0" min="0" step="500" style="text-align:right;">
-          <label class="tax-check mini"><input type="checkbox" id="lifesupportTax">税込み <span class="tax-live" id="lifesupportTaxLive">¥0</span></label>
-        </div>
-      </div>
 
-      <div class="field-block">
-        <label>その他<span class="hint">複数行を自由に追加できます</span></label>
-        <div id="otherRows"></div>
-        <button type="button" class="add-btn" id="addOtherBtn">＋ 項目を追加</button>
+        <div class="field-block">
+          <label>その他<span class="hint">複数行を自由に追加できます</span></label>
+          <div id="otherRows"></div>
+          <button type="button" class="add-btn" id="addOtherBtn">＋ 項目を追加</button>
+        </div>
       </div>
     </div>
 
