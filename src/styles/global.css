@@ -1130,7 +1130,8 @@
     .portal-table--compare th:nth-child(1),.portal-table--compare td:nth-child(1){width:32%;}
     .portal-table--compare th:nth-child(2),.portal-table--compare td:nth-child(2){width:26%;}
     .portal-table--compare th:nth-child(3),.portal-table--compare td:nth-child(3){width:42%;}
-    .portal-table--compare .money{white-space:normal;display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
+    .portal-table--compare .money{white-space:normal;}
+    .portal-table--compare .money .money-lo,.portal-table--compare .money .money-hi{display:block;text-align:right;}
     .portal-table--compare .money .money-sep{display:none;}
   }
   .portal-badge{display:inline-block;padding:3px 7px;border:1px solid var(--line);border-radius:0;background:var(--white);font-size:10px;font-weight:700;margin:2px 3px 2px 0;}
