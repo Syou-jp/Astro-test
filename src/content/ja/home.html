@@ -88,6 +88,7 @@
         </div>
         <button type="button" class="home-slider-nav home-slider-prev" aria-label="前へ">‹</button>
         <button type="button" class="home-slider-nav home-slider-next" aria-label="次へ">›</button>
+        <div class="home-slider-dots"></div>
       </div>
     </div>
   </div>
@@ -114,32 +115,6 @@
 
       dateEl.textContent = latest.date;
       titleEl.textContent = latest.title;
-    })();
-  </script>
-
-  <script>
-    (function () {
-      var wraps = document.querySelectorAll(".home-slider-wrap");
-      wraps.forEach(function (wrap) {
-        var track = wrap.querySelector(".home-slider-track");
-        var prev = wrap.querySelector(".home-slider-prev");
-        var next = wrap.querySelector(".home-slider-next");
-        if (!track || !prev || !next) return;
-
-        function update() {
-          prev.hidden = track.scrollLeft <= 4;
-          next.hidden = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
-        }
-
-        prev.addEventListener("click", function () {
-          track.scrollBy({ left: -track.clientWidth * 0.8, behavior: "smooth" });
-        });
-        next.addEventListener("click", function () {
-          track.scrollBy({ left: track.clientWidth * 0.8, behavior: "smooth" });
-        });
-        track.addEventListener("scroll", update, { passive: true });
-        update();
-      });
     })();
   </script>
 
@@ -181,6 +156,7 @@
       </div>
       <button type="button" class="home-slider-nav home-slider-prev" aria-label="前へ">‹</button>
       <button type="button" class="home-slider-nav home-slider-next" aria-label="次へ">›</button>
+      <div class="home-slider-dots"></div>
     </div>
   </div>
 
@@ -252,4 +228,67 @@
       </div>
     </div>
   </div>
+
+  <script>
+    (function () {
+      var wraps = document.querySelectorAll(".home-slider-wrap");
+      wraps.forEach(function (wrap) {
+        var track = wrap.querySelector(".home-slider-track");
+        var prev = wrap.querySelector(".home-slider-prev");
+        var next = wrap.querySelector(".home-slider-next");
+        var dotsBox = wrap.querySelector(".home-slider-dots");
+        if (!track || !prev || !next || !dotsBox) return;
+
+        var slides = Array.prototype.slice.call(track.children);
+        if (slides.length < 2) {
+          prev.hidden = true;
+          next.hidden = true;
+          return;
+        }
+
+        var dots = slides.map(function (_, i) {
+          var dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = "home-slider-dot";
+          dot.setAttribute("aria-label", (i + 1) + " / " + slides.length);
+          dot.addEventListener("click", function () {
+            goTo(i);
+          });
+          dotsBox.appendChild(dot);
+          return dot;
+        });
+
+        var current = 0;
+
+        function goTo(index) {
+          current = Math.max(0, Math.min(slides.length - 1, index));
+          track.scrollTo({ left: slides[current].offsetLeft, behavior: "smooth" });
+        }
+
+        function updateFromScroll() {
+          var closest = 0;
+          var closestDist = Infinity;
+          slides.forEach(function (slide, i) {
+            var dist = Math.abs(slide.offsetLeft - track.scrollLeft);
+            if (dist < closestDist) {
+              closestDist = dist;
+              closest = i;
+            }
+          });
+          current = closest;
+          dots.forEach(function (dot, i) {
+            dot.classList.toggle("is-active", i === current);
+          });
+          prev.hidden = current === 0;
+          next.hidden = current === slides.length - 1;
+        }
+
+        prev.addEventListener("click", function () { goTo(current - 1); });
+        next.addEventListener("click", function () { goTo(current + 1); });
+        track.addEventListener("scroll", updateFromScroll, { passive: true });
+
+        updateFromScroll();
+      });
+    })();
+  </script>
 </div><!-- /page-home -->
