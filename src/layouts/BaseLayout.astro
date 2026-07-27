@@ -374,6 +374,66 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
             label.setAttribute("aria-expanded", String(willOpen));
           });
         });
+
+        /* ---- Edge swipe: drag from the right edge to open, drag right on the open drawer to close ---- */
+        const mobileMq = window.matchMedia("(max-width:640px)");
+        const EDGE_ZONE = 24;
+        const DRAG_THRESHOLD = 0.35;
+        let dragMode = null;
+        let dragStartX = 0;
+
+        function currentTranslateX() {
+          const m = getComputedStyle(drawer).transform.match(/matrix\(([^)]+)\)/);
+          if (!m) return 0;
+          return parseFloat(m[1].split(",")[4]) || 0;
+        }
+
+        document.addEventListener("touchstart", (event) => {
+          if (!mobileMq.matches) return;
+          const x = event.touches[0].clientX;
+          const isOpen = drawer.classList.contains("open");
+          if (!isOpen && x >= window.innerWidth - EDGE_ZONE) {
+            dragMode = "open";
+            dragStartX = x;
+            drawer.style.transition = "none";
+            overlay.style.transition = "none";
+          } else if (isOpen && event.target.closest("#mobileDrawer")) {
+            dragMode = "close";
+            dragStartX = x;
+            drawer.style.transition = "none";
+            overlay.style.transition = "none";
+          }
+        }, { passive: true });
+
+        document.addEventListener("touchmove", (event) => {
+          if (!dragMode) return;
+          const x = event.touches[0].clientX;
+          const w = drawer.getBoundingClientRect().width || 315;
+          let translate;
+          if (dragMode === "open") {
+            translate = Math.min(w, Math.max(0, w - (dragStartX - x)));
+          } else {
+            translate = Math.min(w, Math.max(0, x - dragStartX));
+          }
+          drawer.style.transform = `translateX(${translate}px)`;
+          overlay.style.opacity = String(1 - translate / w);
+        }, { passive: true });
+
+        function endDrag() {
+          if (!dragMode) return;
+          const w = drawer.getBoundingClientRect().width || 315;
+          const translate = currentTranslateX();
+          drawer.style.transition = "";
+          overlay.style.transition = "";
+          drawer.style.transform = "";
+          overlay.style.opacity = "";
+          if (translate / w < DRAG_THRESHOLD) open();
+          else close();
+          dragMode = null;
+        }
+
+        document.addEventListener("touchend", endDrag);
+        document.addEventListener("touchcancel", endDrag);
       })();
     </script>
     <script is:inline>
