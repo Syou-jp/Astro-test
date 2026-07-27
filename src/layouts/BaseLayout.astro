@@ -178,44 +178,67 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         })();
       </script>
 
-      <button type="button" id="mobileMenuBtn" class="mobile-menu-bar" aria-label="メニューを開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileDrawer">
-        <span class="mobile-menu-bar-icon" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="mobile-menu-bar-label">メニュー</span>
-      </button>
+      <div class="mobile-menu-bar" id="mobileMenuBar">
+        <button type="button" id="mobileSettingsBtn" class="mobile-menu-bar-btn" aria-label="設定を開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileSettingsSheet">
+          <span class="mobile-menu-bar-icon" aria-hidden="true">⚙</span>
+          <span class="mobile-menu-bar-label">設定</span>
+        </button>
+        <button type="button" id="mobileLangBtn" class="mobile-menu-bar-btn" aria-label="言語を開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileLangSheet">
+          <span class="mobile-menu-bar-icon" aria-hidden="true">文</span>
+          <span class="mobile-menu-bar-label">言語</span>
+        </button>
+        <button type="button" id="mobileMenuBtn" class="mobile-menu-bar-btn" aria-label="メニューを開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileDrawer">
+          <span class="mobile-menu-bar-icon mobile-menu-bar-icon-burger" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="mobile-menu-bar-label">メニュー</span>
+        </button>
+      </div>
 
       <div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
+
+      <div class="mobile-drawer mobile-sheet-compact" id="mobileSettingsSheet" aria-hidden="true">
+        <div class="mobile-drawer-handle" aria-hidden="true"></div>
+        <div class="mobile-drawer-head">
+          <span class="mobile-drawer-title">設定</span>
+          <button type="button" class="mobile-drawer-close" data-close-sheet aria-label="閉じる">✕</button>
+        </div>
+        <div class="mobile-drawer-section">
+          <div class="mobile-drawer-label">配色</div>
+          <div class="theme-swatch-row" id="themeSwatchRow" role="radiogroup" aria-label="配色テーマ">
+            <button type="button" class="theme-swatch" data-theme-value="paper" style="background:#FAF8F5" aria-label="ベージュ" title="ベージュ"></button>
+            <button type="button" class="theme-swatch" data-theme-value="light" style="background:#FFFFFF" aria-label="淺色" title="淺色"></button>
+            <button type="button" class="theme-swatch" data-theme-value="dark" style="background:#18191A" aria-label="深色" title="深色"></button>
+            <button type="button" class="theme-swatch" data-theme-value="pink" style="background:#FFF4F7" aria-label="粉紅色" title="粉紅色"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mobile-drawer mobile-sheet-compact" id="mobileLangSheet" aria-hidden="true">
+        <div class="mobile-drawer-handle" aria-hidden="true"></div>
+        <div class="mobile-drawer-head">
+          <span class="mobile-drawer-title">言語</span>
+          <button type="button" class="mobile-drawer-close" data-close-sheet aria-label="閉じる">✕</button>
+        </div>
+        <div class="mobile-drawer-section">
+          <div class="mobile-lang-list" id="mobileLangList" data-current-slug={slug} role="radiogroup" aria-label="表示言語">
+            {LOCALES.map((option) => (
+              <button
+                type="button"
+                class:list={["mobile-lang-option", option.code === currentLocale.code && "is-active"]}
+                data-locale={option.code}
+                disabled={!option.enabled}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
         <div class="mobile-drawer-handle" id="mobileDrawerHandle" aria-hidden="true"></div>
         <div class="mobile-drawer-head">
           <span class="mobile-drawer-title">メニュー</span>
-          <button type="button" id="mobileDrawerClose" class="mobile-drawer-close" aria-label="閉じる">✕</button>
-        </div>
-
-        <div class="mobile-drawer-section">
-          <a class:list={["mobile-drawer-about", activeId === "page-about" && "active"]} href={localePath(currentLocale.code, "about")} data-no-i18n>
-            <span>サイトについて</span>
-            <span class="mobile-drawer-arrow" aria-hidden="true">›</span>
-          </a>
-        </div>
-
-        <div class="mobile-drawer-section">
-          <div class="mobile-drawer-group">
-            <button type="button" class="mobile-drawer-group-label" id="mobileSettingsToggle" aria-expanded="false" aria-controls="mobileSettingsBody">
-              <span>設定</span>
-              <span class="mobile-drawer-chevron" aria-hidden="true">›</span>
-            </button>
-            <div class="mobile-drawer-group-body" id="mobileSettingsBody">
-              <div class="mobile-drawer-group-inner mobile-drawer-settings-inner">
-                <div class="mobile-drawer-label">配色</div>
-                <div class="theme-swatch-row" id="themeSwatchRow" role="radiogroup" aria-label="配色テーマ">
-                  <button type="button" class="theme-swatch" data-theme-value="paper" style="background:#FAF8F5" aria-label="ベージュ" title="ベージュ"></button>
-                  <button type="button" class="theme-swatch" data-theme-value="light" style="background:#FFFFFF" aria-label="淺色" title="淺色"></button>
-                  <button type="button" class="theme-swatch" data-theme-value="dark" style="background:#18191A" aria-label="深色" title="深色"></button>
-                  <button type="button" class="theme-swatch" data-theme-value="pink" style="background:#FFF4F7" aria-label="粉紅色" title="粉紅色"></button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <button type="button" id="mobileDrawerClose" class="mobile-drawer-close" data-close-sheet aria-label="閉じる">✕</button>
         </div>
 
         <div class="mobile-drawer-section mobile-drawer-nav">
@@ -247,12 +270,10 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         </div>
 
         <div class="mobile-drawer-section">
-          <div class="mobile-drawer-label">言語</div>
-          <select id="localeSwitcherMobile" aria-label="表示言語" data-no-i18n data-current-slug={slug}>
-            {LOCALES.map((option) => (
-              <option value={option.code} selected={option.code === currentLocale.code} disabled={!option.enabled}>{option.label}</option>
-            ))}
-          </select>
+          <a class:list={["mobile-drawer-about", activeId === "page-about" && "active"]} href={localePath(currentLocale.code, "about")} data-no-i18n>
+            <span>サイトについて</span>
+            <span class="mobile-drawer-arrow" aria-hidden="true">›</span>
+          </a>
         </div>
       </div>
 
@@ -341,63 +362,74 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
     </script>
     <script is:inline>
       (() => {
-        const btn = document.getElementById("mobileMenuBtn");
-        const drawer = document.getElementById("mobileDrawer");
         const overlay = document.getElementById("mobileDrawerOverlay");
-        const closeBtn = document.getElementById("mobileDrawerClose");
-        const handle = document.getElementById("mobileDrawerHandle");
-        if (!btn || !drawer || !overlay) return;
+        const entries = [
+          { btn: document.getElementById("mobileSettingsBtn"), sheet: document.getElementById("mobileSettingsSheet") },
+          { btn: document.getElementById("mobileLangBtn"), sheet: document.getElementById("mobileLangSheet") },
+          { btn: document.getElementById("mobileMenuBtn"), sheet: document.getElementById("mobileDrawer") },
+        ].filter((entry) => entry.btn && entry.sheet);
+        if (!overlay || !entries.length) return;
 
-        function open() {
-          drawer.classList.add("open");
+        let active = null;
+
+        function openEntry(entry) {
+          if (active && active !== entry) closeActive();
+          entry.sheet.classList.add("open");
+          entry.sheet.setAttribute("aria-hidden", "false");
+          entry.btn.setAttribute("aria-expanded", "true");
           overlay.classList.add("open");
-          drawer.setAttribute("aria-hidden", "false");
-          btn.setAttribute("aria-expanded", "true");
           document.body.classList.add("mobile-drawer-open");
+          active = entry;
         }
-        function close() {
-          drawer.classList.remove("open");
+        function closeActive() {
+          if (!active) return;
+          active.sheet.classList.remove("open");
+          active.sheet.setAttribute("aria-hidden", "true");
+          active.btn.setAttribute("aria-expanded", "false");
           overlay.classList.remove("open");
-          drawer.setAttribute("aria-hidden", "true");
-          btn.setAttribute("aria-expanded", "false");
           document.body.classList.remove("mobile-drawer-open");
+          active = null;
         }
 
-        btn.addEventListener("click", () => {
-          if (drawer.classList.contains("open")) close();
-          else open();
+        entries.forEach((entry) => {
+          entry.btn.addEventListener("click", () => {
+            if (active === entry) closeActive();
+            else openEntry(entry);
+          });
         });
 
         /* click fires ~300ms after touchend on many mobile browsers (double-tap-zoom
            detection); closing on touchend/pointerdown as well makes the tap feel instant. */
         let closedViaTouch = false;
-        function closeFast(event) {
+        function closeFast() {
           closedViaTouch = true;
-          close();
+          closeActive();
         }
         function closeClick() {
           if (closedViaTouch) {
             closedViaTouch = false;
             return;
           }
-          close();
+          closeActive();
         }
-        closeBtn?.addEventListener("touchend", closeFast, { passive: true });
-        closeBtn?.addEventListener("click", closeClick);
+        document.querySelectorAll("[data-close-sheet]").forEach((closeBtn) => {
+          closeBtn.addEventListener("touchend", closeFast, { passive: true });
+          closeBtn.addEventListener("click", closeClick);
+        });
         overlay.addEventListener("touchend", closeFast, { passive: true });
         overlay.addEventListener("click", closeClick);
 
         document.addEventListener("keydown", (event) => {
-          if (event.key === "Escape") close();
+          if (event.key === "Escape") closeActive();
         });
-        drawer.querySelectorAll(".mobile-drawer-link, .mobile-drawer-about").forEach((link) => {
-          link.addEventListener("click", close);
+        document.querySelectorAll(".mobile-drawer-link, .mobile-drawer-about").forEach((link) => {
+          link.addEventListener("click", closeActive);
         });
         window.matchMedia("(min-width:641px)").addEventListener("change", (event) => {
-          if (event.matches) close();
+          if (event.matches) closeActive();
         });
 
-        drawer.querySelectorAll(".mobile-drawer-group-label").forEach((label) => {
+        document.querySelectorAll(".mobile-drawer-group-label").forEach((label) => {
           label.addEventListener("click", () => {
             const group = label.closest(".mobile-drawer-group");
             if (!group) return;
@@ -407,18 +439,29 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           });
         });
 
-        /* ---- Swipe: drag up from the bottom edge to open, drag the handle/head
-           down on the open sheet to close. A generous edge-grab zone and a low
-           open threshold (~30% dragged open snaps fully open) so a short,
+        const langList = document.getElementById("mobileLangList");
+        langList?.querySelectorAll(".mobile-lang-option").forEach((option) => {
+          option.addEventListener("click", () => {
+            if (option.disabled) return;
+            const slug = langList.dataset.currentSlug || "rent";
+            window.location.href = `/${option.dataset.locale}/${slug}/`;
+          });
+        });
+
+        /* ---- Swipe: drag up from the bottom edge to open the main menu, drag the
+           handle/head of the open sheet down to close it. A generous edge-grab zone
+           and a low open threshold (~30% dragged open snaps fully open) so a short,
            imprecise swipe still registers for one-handed use. ---- */
         const mobileMq = window.matchMedia("(max-width:640px)");
         const EDGE_ZONE = 36;
         const OPEN_THRESHOLD = 0.3;
+        const menuEntry = entries[entries.length - 1];
         let dragMode = null;
         let dragStartY = 0;
+        let dragSheet = null;
 
-        function currentTranslateY() {
-          const m = getComputedStyle(drawer).transform.match(/matrix\(([^)]+)\)/);
+        function currentTranslateY(el) {
+          const m = getComputedStyle(el).transform.match(/matrix\(([^)]+)\)/);
           if (!m) return 0;
           return parseFloat(m[1].split(",")[5]) || 0;
         }
@@ -426,62 +469,57 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         document.addEventListener("touchstart", (event) => {
           if (!mobileMq.matches) return;
           const y = event.touches[0].clientY;
-          const isOpen = drawer.classList.contains("open");
           const nearBottomEdge = y >= window.innerHeight - EDGE_ZONE;
-          if (!isOpen && nearBottomEdge) {
+          if (!active && nearBottomEdge) {
             dragMode = "open";
+            dragSheet = menuEntry.sheet;
             dragStartY = y;
-            drawer.style.transition = "none";
+            dragSheet.style.transition = "none";
             overlay.style.transition = "none";
           } else if (
-            isOpen &&
-            !event.target.closest("#mobileDrawerClose") &&
-            (event.target.closest("#mobileDrawerHandle") || event.target.closest(".mobile-drawer-head"))
+            active &&
+            !event.target.closest("[data-close-sheet]") &&
+            (event.target.closest(".mobile-drawer-handle") || event.target.closest(".mobile-drawer-head"))
           ) {
             dragMode = "close";
+            dragSheet = active.sheet;
             dragStartY = y;
-            drawer.style.transition = "none";
+            dragSheet.style.transition = "none";
             overlay.style.transition = "none";
           }
         }, { passive: true });
 
         document.addEventListener("touchmove", (event) => {
-          if (!dragMode) return;
+          if (!dragMode || !dragSheet) return;
           const y = event.touches[0].clientY;
-          const h = drawer.getBoundingClientRect().height || 400;
+          const h = dragSheet.getBoundingClientRect().height || 400;
           const delta = y - dragStartY;
           const translate =
             dragMode === "open"
               ? Math.min(h, Math.max(0, h + delta))
               : Math.min(h, Math.max(0, delta));
-          drawer.style.transform = `translateY(${translate}px)`;
+          dragSheet.style.transform = `translateY(${translate}px)`;
           overlay.style.opacity = String(1 - translate / h);
         }, { passive: true });
 
         function endDrag() {
-          if (!dragMode) return;
-          const h = drawer.getBoundingClientRect().height || 400;
-          const translate = currentTranslateY();
-          drawer.style.transition = "";
+          if (!dragMode || !dragSheet) return;
+          const h = dragSheet.getBoundingClientRect().height || 400;
+          const translate = currentTranslateY(dragSheet);
+          dragSheet.style.transition = "";
           overlay.style.transition = "";
-          drawer.style.transform = "";
+          dragSheet.style.transform = "";
           overlay.style.opacity = "";
           const openedFraction = 1 - translate / h;
-          if (openedFraction >= OPEN_THRESHOLD) open();
-          else close();
+          if (openedFraction >= OPEN_THRESHOLD) openEntry(dragMode === "open" ? menuEntry : active || menuEntry);
+          else closeActive();
           dragMode = null;
+          dragSheet = null;
         }
 
         document.addEventListener("touchend", endDrag);
         document.addEventListener("touchcancel", endDrag);
       })();
-    </script>
-    <script is:inline>
-      document.getElementById("localeSwitcherMobile")?.addEventListener("change", (event) => {
-        const select = event.currentTarget;
-        const slug = select.dataset.currentSlug || "rent";
-        window.location.href = `/${select.value}/${slug}/`;
-      });
     </script>
     <script is:inline>
       (() => {
