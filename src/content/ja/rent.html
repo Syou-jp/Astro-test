@@ -41,6 +41,10 @@
 
     #page-rent .add-btn.mini{font-size:11.5px;padding:6px 9px;margin-top:8px;}
 
+    #page-rent .rent-two-col{display:flex;gap:14px;padding:7px 0;border-bottom:1px dashed var(--line-soft);}
+    #page-rent .rent-two-col .field-row{flex:1;min-width:0;padding:0;border-bottom:none;}
+    #page-rent .rent-two-col .field-row:first-child{grid-template-columns:1fr 138px;}
+
     @media(max-width:640px){
       .rent-subinput-label{font-size:12px;}
       .rent-lang-hint{font-size:12px;}
@@ -58,6 +62,9 @@
       #page-rent .compact-pair-item .compact-label{font-size:12.5px;}
       #page-rent .compact-pair-item input{width:56px;}
       #page-rent .fire-key-row{gap:10px;}
+      #page-rent .rent-two-col{flex-direction:column;gap:0;}
+      #page-rent .rent-two-col .field-row{border-bottom:1px dashed var(--line-soft);padding:7px 0;}
+      #page-rent .rent-two-col .field-row:last-child{border-bottom:none;}
     }
   </style>
   <div class="grid">
@@ -65,24 +72,21 @@
     <div class="card" id="formCard">
       <div class="section-title"><span class="idx">01</span>費用項目（¥）</div>
 
-      <div class="field-block">
-        <label>入居日<span class="hint">入居月家賃の日割り計算に使用します</span></label>
-        <div class="input-tax-row">
-          <input type="date" id="moveInDate" style="width:100%;max-width:220px;">
+      <div class="rent-two-col">
+        <div class="field-row">
+          <label>入居日<span class="hint">日割り計算に使用</span></label>
+          <input type="date" id="moveInDate">
         </div>
-      </div>
-
-      <div class="field-row" style="border-bottom:none;">
-        <label>家賃<span class="hint">月額賃料</span></label>
-        <input type="number" id="rent" value="0" min="0" step="1000">
+        <div class="field-row">
+          <label>家賃<span class="hint">月額賃料</span></label>
+          <input type="number" id="rent" value="0" min="0" step="1000">
+        </div>
       </div>
       <div class="rent-note">※合計には含まれません。礼金・敷金・仲介手数料の計算基準としてのみ使用します</div>
 
-      <div class="field-block">
-        <label>管理費・共益費<span class="hint">初回請求分（1ヶ月）の固定金額（非課税）</span></label>
-        <div class="input-tax-row">
-          <input type="number" id="mgmt" value="5000" min="0" step="500" style="text-align:right;">
-        </div>
+      <div class="field-row">
+        <label>管理費・共益費<span class="hint">初回請求分（1ヶ月・非課税）</span></label>
+        <input type="number" id="mgmt" value="5000" min="0" step="500">
       </div>
 
       <div class="field-block">
@@ -702,8 +706,6 @@ document.getElementById("addOtherBtn").addEventListener("click", () => {
   createOtherRow("", 0, false);
   render();
 });
-
-createOtherRow("", 0, false);
 
 /* ---------- Guarantor "other" rows (dynamic, non-taxable) ---------- */
 function createGuarantorOtherRow(label, amount){
