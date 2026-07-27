@@ -35,7 +35,8 @@
     #page-rent .compact-pair-item input:focus{outline:2px solid var(--accent-2);outline-offset:1px;}
 
     #page-rent .fire-key-row{display:flex;gap:16px;padding:7px 0;border-bottom:1px dashed var(--line-soft);}
-    #page-rent .fire-key-row .field-block{flex:1;min-width:0;padding:0;border-bottom:none;}
+    #page-rent .fire-key-row .field-block,
+    #page-rent .fire-key-row > .field-row{flex:1;min-width:0;padding:0;border-bottom:none;}
     #page-rent .fire-key-row .input-tax-row{flex-wrap:wrap;gap:5px 8px;}
     #page-rent .fire-key-row .input-tax-row input[type=number]{width:min(140px,100%);box-sizing:border-box;}
     #page-rent .fire-key-row .other-row{flex-wrap:wrap;}
@@ -77,20 +78,15 @@
 
       <div class="rent-two-col">
         <div class="field-row">
-          <label>入居日<span class="hint">日割り計算に使用</span></label>
-          <input type="date" id="moveInDate">
-        </div>
-        <div class="field-row">
           <label>家賃<span class="hint">月額賃料</span></label>
           <input type="number" id="rent" value="0" min="0" step="1000">
         </div>
+        <div class="field-row">
+          <label>管理費・共益費<span class="hint">初回請求分（1ヶ月・非課税）</span></label>
+          <input type="number" id="mgmt" value="5000" min="0" step="500">
+        </div>
       </div>
-      <div class="rent-note">※合計には含まれません。礼金・敷金・仲介手数料の計算基準としてのみ使用します</div>
-
-      <div class="field-row">
-        <label>管理費・共益費<span class="hint">初回請求分（1ヶ月・非課税）</span></label>
-        <input type="number" id="mgmt" value="5000" min="0" step="500">
-      </div>
+      <div class="rent-note"><strong>家賃</strong>　※合計には含まれません。礼金・敷金・仲介手数料の計算基準としてのみ使用します</div>
 
       <div class="field-block">
         <label>その他<span class="hint">駐輪場代・駐車場代など、項目名を自由に入力できます。初回保証利用料の基準（家賃+管理費+その他）にも加算されます（非課税）</span></label>
@@ -98,22 +94,28 @@
         <button type="button" class="add-btn mini" id="addGuarantorOtherBtn">＋ 項目を追加</button>
       </div>
 
-      <div class="field-block">
-        <label>入居月家賃<span class="hint">概算（整月）または日割り計算</span></label>
-        <div class="mode-toggle" id="modeToggle">
-          <div class="mode-btn active" data-mode="months">概算（整月）</div>
-          <div class="mode-btn" data-mode="daily">日割り計算</div>
+      <div class="fire-key-row">
+        <div class="field-row">
+          <label>入居日<span class="hint">日割り計算に使用</span></label>
+          <input type="date" id="moveInDate">
         </div>
-        <div class="input-tax-row">
-          <div id="monthsModeWrap" class="sub-input-wrap" style="display:flex;align-items:center;gap:8px;">
-            <span class="rent-subinput-label">月数</span>
-            <input type="number" id="firstRentMonths" value="1" min="0" step="1" style="width:64px;text-align:right;">
+        <div class="field-block">
+          <label>入居月家賃<span class="hint">概算（整月）または日割り計算</span></label>
+          <div class="mode-toggle" id="modeToggle">
+            <div class="mode-btn active" data-mode="months">概算（整月）</div>
+            <div class="mode-btn" data-mode="daily">日割り計算</div>
           </div>
-          <div id="dailyModeWrap" class="sub-input-wrap" style="display:none;align-items:center;">
-            <select id="dailyExtraMonths" style="width:200px;">
-              <option value="1">当月のみ日割り（1ヶ月）</option>
-              <option value="2">日割り＋翌月分（合計2ヶ月）</option>
-            </select>
+          <div class="input-tax-row">
+            <div id="monthsModeWrap" class="sub-input-wrap" style="display:flex;align-items:center;gap:8px;">
+              <span class="rent-subinput-label">月数</span>
+              <input type="number" id="firstRentMonths" value="1" min="0" step="1" style="width:64px;text-align:right;">
+            </div>
+            <div id="dailyModeWrap" class="sub-input-wrap" style="display:none;align-items:center;">
+              <select id="dailyExtraMonths" style="width:200px;">
+                <option value="1">当月のみ日割り（1ヶ月）</option>
+                <option value="2">日割り＋翌月分（合計2ヶ月）</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
