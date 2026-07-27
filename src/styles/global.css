@@ -91,6 +91,9 @@
   .site-title-link:hover{
     text-decoration:underline;
   }
+  .masthead .site-tagline{
+    margin-left:10px;
+  }
   .masthead .sub{
     font-size:12px;
     color:var(--ink-soft);
