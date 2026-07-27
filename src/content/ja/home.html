@@ -67,23 +67,27 @@
           <strong id="homeNewsTitle">今日の時事ニュースをまとめてチェック</strong>
         </span>
       </a>
-      <div class="home-slider-group">
-        <a class="home-featured-card" href="/ja/jobs/">
-          <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-            <img src="/jobs/cover.jpg" loading="lazy" alt="">
-          </div>
-          <div class="home-featured-body">
-            <strong>求人・採用</strong>
-          </div>
-        </a>
-        <a class="home-featured-card" href="/ja/listings/">
-          <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-            <img src="/listings/house-share.jpg" loading="lazy" alt="">
-          </div>
-          <div class="home-featured-body">
-            <strong>房源招租</strong>
-          </div>
-        </a>
+      <div class="home-slider-wrap">
+        <div class="home-slider-group home-slider-track">
+          <a class="home-featured-card" href="/ja/jobs/">
+            <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
+              <img src="/jobs/cover.jpg" loading="lazy" alt="">
+            </div>
+            <div class="home-featured-body">
+              <strong>求人・採用</strong>
+            </div>
+          </a>
+          <a class="home-featured-card" href="/ja/listings/">
+            <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
+              <img src="/listings/house-share.jpg" loading="lazy" alt="">
+            </div>
+            <div class="home-featured-body">
+              <strong>房源招租</strong>
+            </div>
+          </a>
+        </div>
+        <button type="button" class="home-slider-nav home-slider-prev" aria-label="前へ">‹</button>
+        <button type="button" class="home-slider-nav home-slider-next" aria-label="次へ">›</button>
       </div>
     </div>
   </div>
@@ -113,40 +117,70 @@
     })();
   </script>
 
+  <script>
+    (function () {
+      var wraps = document.querySelectorAll(".home-slider-wrap");
+      wraps.forEach(function (wrap) {
+        var track = wrap.querySelector(".home-slider-track");
+        var prev = wrap.querySelector(".home-slider-prev");
+        var next = wrap.querySelector(".home-slider-next");
+        if (!track || !prev || !next) return;
+
+        function update() {
+          prev.hidden = track.scrollLeft <= 4;
+          next.hidden = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+        }
+
+        prev.addEventListener("click", function () {
+          track.scrollBy({ left: -track.clientWidth * 0.8, behavior: "smooth" });
+        });
+        next.addEventListener("click", function () {
+          track.scrollBy({ left: track.clientWidth * 0.8, behavior: "smooth" });
+        });
+        track.addEventListener("scroll", update, { passive: true });
+        update();
+      });
+    })();
+  </script>
+
   <div class="card" style="margin-bottom:18px;">
-    <div class="home-featured-grid">
-      <a class="home-featured-card" href="/ja/used-market/">
-        <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-          <img src="/used-market/cover.jpg" loading="lazy" alt="">
-        </div>
-        <div class="home-featured-body">
-          <strong>中古譲り合い市場</strong>
-        </div>
-      </a>
-      <a class="home-featured-card" href="/ja/events/">
-        <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-          <img src="/events/cover.jpg" loading="lazy" alt="">
-        </div>
-        <div class="home-featured-body">
-          <strong>イベント・交流会</strong>
-        </div>
-      </a>
-      <a class="home-featured-card" href="/ja/restaurant-list/">
-        <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-          <img src="/restaurant-list/cover.jpg" loading="lazy" alt="">
-        </div>
-        <div class="home-featured-body">
-          <strong>お店リスト</strong>
-        </div>
-      </a>
-      <a class="home-featured-card" href="/ja/help-request/">
-        <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-          <img src="/help-request/cover.jpg" loading="lazy" alt="">
-        </div>
-        <div class="home-featured-body">
-          <strong>助け合い掲示板</strong>
-        </div>
-      </a>
+    <div class="home-slider-wrap">
+      <div class="home-featured-grid home-slider-track">
+        <a class="home-featured-card" href="/ja/used-market/">
+          <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
+            <img src="/used-market/cover.jpg" loading="lazy" alt="">
+          </div>
+          <div class="home-featured-body">
+            <strong>中古譲り合い市場</strong>
+          </div>
+        </a>
+        <a class="home-featured-card" href="/ja/events/">
+          <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
+            <img src="/events/cover.jpg" loading="lazy" alt="">
+          </div>
+          <div class="home-featured-body">
+            <strong>イベント・交流会</strong>
+          </div>
+        </a>
+        <a class="home-featured-card" href="/ja/restaurant-list/">
+          <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
+            <img src="/restaurant-list/cover.jpg" loading="lazy" alt="">
+          </div>
+          <div class="home-featured-body">
+            <strong>お店リスト</strong>
+          </div>
+        </a>
+        <a class="home-featured-card" href="/ja/help-request/">
+          <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
+            <img src="/help-request/cover.jpg" loading="lazy" alt="">
+          </div>
+          <div class="home-featured-body">
+            <strong>助け合い掲示板</strong>
+          </div>
+        </a>
+      </div>
+      <button type="button" class="home-slider-nav home-slider-prev" aria-label="前へ">‹</button>
+      <button type="button" class="home-slider-nav home-slider-next" aria-label="次へ">›</button>
     </div>
   </div>
 
