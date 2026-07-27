@@ -23,6 +23,10 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           if (saved && saved !== "paper") {
             document.documentElement.setAttribute("data-theme", saved);
           }
+          const savedSide = localStorage.getItem("site-menu-side");
+          if (savedSide === "left") {
+            document.documentElement.setAttribute("data-menu-side", "left");
+          }
         } catch (e) {}
       })();
     </script>
@@ -196,12 +200,27 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         </div>
 
         <div class="mobile-drawer-section">
-          <div class="mobile-drawer-label">配色</div>
-          <div class="theme-swatch-row" id="themeSwatchRow" role="radiogroup" aria-label="配色テーマ">
-            <button type="button" class="theme-swatch" data-theme-value="paper" style="background:#FAF8F5" aria-label="ベージュ" title="ベージュ"></button>
-            <button type="button" class="theme-swatch" data-theme-value="light" style="background:#FFFFFF" aria-label="淺色" title="淺色"></button>
-            <button type="button" class="theme-swatch" data-theme-value="dark" style="background:#1B1B1D" aria-label="深色" title="深色"></button>
-            <button type="button" class="theme-swatch" data-theme-value="pink" style="background:#FFF4F7" aria-label="粉紅色" title="粉紅色"></button>
+          <div class="mobile-drawer-group">
+            <button type="button" class="mobile-drawer-group-label" id="mobileSettingsToggle" aria-expanded="false" aria-controls="mobileSettingsBody">
+              <span>設定</span>
+              <span class="mobile-drawer-chevron" aria-hidden="true">›</span>
+            </button>
+            <div class="mobile-drawer-group-body" id="mobileSettingsBody">
+              <div class="mobile-drawer-group-inner mobile-drawer-settings-inner">
+                <div class="mobile-drawer-label">配色</div>
+                <div class="theme-swatch-row" id="themeSwatchRow" role="radiogroup" aria-label="配色テーマ">
+                  <button type="button" class="theme-swatch" data-theme-value="paper" style="background:#FAF8F5" aria-label="ベージュ" title="ベージュ"></button>
+                  <button type="button" class="theme-swatch" data-theme-value="light" style="background:#FFFFFF" aria-label="淺色" title="淺色"></button>
+                  <button type="button" class="theme-swatch" data-theme-value="dark" style="background:#1B1B1D" aria-label="深色" title="深色"></button>
+                  <button type="button" class="theme-swatch" data-theme-value="pink" style="background:#FFF4F7" aria-label="粉紅色" title="粉紅色"></button>
+                </div>
+                <div class="mobile-drawer-label" style="margin-top:14px;">メニューの位置</div>
+                <div class="menu-side-row" id="menuSideRow" role="radiogroup" aria-label="メニューの位置">
+                  <button type="button" class="menu-side-btn" data-side-value="right">右</button>
+                  <button type="button" class="menu-side-btn" data-side-value="left">左</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -328,11 +347,49 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
     </script>
     <script is:inline>
       (() => {
+        const sideButtons = Array.from(document.querySelectorAll("#menuSideRow .menu-side-btn"));
+        if (!sideButtons.length) return;
+
+        function applyMenuSide(value, persist) {
+          const side = value === "left" ? "left" : "right";
+          if (side === "right") {
+            document.documentElement.removeAttribute("data-menu-side");
+          } else {
+            document.documentElement.setAttribute("data-menu-side", side);
+          }
+          if (persist) {
+            try {
+              localStorage.setItem("site-menu-side", side);
+            } catch (e) {}
+          }
+          sideButtons.forEach((btn) => {
+            btn.classList.toggle("is-active", btn.dataset.sideValue === side);
+            btn.setAttribute("aria-checked", String(btn.dataset.sideValue === side));
+          });
+        }
+
+        let savedSide = "right";
+        try {
+          savedSide = localStorage.getItem("site-menu-side") || "right";
+        } catch (e) {}
+        applyMenuSide(savedSide, false);
+
+        sideButtons.forEach((btn) => {
+          btn.addEventListener("click", () => applyMenuSide(btn.dataset.sideValue, true));
+        });
+      })();
+    </script>
+    <script is:inline>
+      (() => {
         const btn = document.getElementById("mobileMenuBtn");
         const drawer = document.getElementById("mobileDrawer");
         const overlay = document.getElementById("mobileDrawerOverlay");
         const closeBtn = document.getElementById("mobileDrawerClose");
         if (!btn || !drawer || !overlay) return;
+
+        function menuSide() {
+          return document.documentElement.getAttribute("data-menu-side") === "left" ? "left" : "right";
+        }
 
         function open() {
           drawer.classList.add("open");
@@ -353,8 +410,26 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           if (drawer.classList.contains("open")) close();
           else open();
         });
-        closeBtn?.addEventListener("click", close);
-        overlay.addEventListener("click", close);
+
+        /* click fires ~300ms after touchend on many mobile browsers (double-tap-zoom
+           detection); closing on touchend/pointerdown as well makes the tap feel instant. */
+        let closedViaTouch = false;
+        function closeFast(event) {
+          closedViaTouch = true;
+          close();
+        }
+        function closeClick() {
+          if (closedViaTouch) {
+            closedViaTouch = false;
+            return;
+          }
+          close();
+        }
+        closeBtn?.addEventListener("touchend", closeFast, { passive: true });
+        closeBtn?.addEventListener("click", closeClick);
+        overlay.addEventListener("touchend", closeFast, { passive: true });
+        overlay.addEventListener("click", closeClick);
+
         document.addEventListener("keydown", (event) => {
           if (event.key === "Escape") close();
         });
@@ -375,12 +450,16 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           });
         });
 
-        /* ---- Edge swipe: drag from the right edge to open, drag right on the open drawer to close ---- */
+        /* ---- Edge swipe: drag in from the screen edge to open, drag back toward
+           the edge on the open drawer to close. Tuned for one-handed right-thumb use:
+           a generous edge-grab zone and a low open threshold (~30% dragged open snaps
+           fully open) so a short, imprecise swipe still registers. ---- */
         const mobileMq = window.matchMedia("(max-width:640px)");
-        const EDGE_ZONE = 24;
-        const DRAG_THRESHOLD = 0.35;
+        const EDGE_ZONE = 36;
+        const OPEN_THRESHOLD = 0.3;
         let dragMode = null;
         let dragStartX = 0;
+        let dragSide = "right";
 
         function currentTranslateX() {
           const m = getComputedStyle(drawer).transform.match(/matrix\(([^)]+)\)/);
@@ -392,7 +471,9 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           if (!mobileMq.matches) return;
           const x = event.touches[0].clientX;
           const isOpen = drawer.classList.contains("open");
-          if (!isOpen && x >= window.innerWidth - EDGE_ZONE) {
+          dragSide = menuSide();
+          const nearEdge = dragSide === "right" ? x >= window.innerWidth - EDGE_ZONE : x <= EDGE_ZONE;
+          if (!isOpen && nearEdge) {
             dragMode = "open";
             dragStartX = x;
             drawer.style.transition = "none";
@@ -409,14 +490,15 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           if (!dragMode) return;
           const x = event.touches[0].clientX;
           const w = drawer.getBoundingClientRect().width || 315;
+          const delta = x - dragStartX;
           let translate;
-          if (dragMode === "open") {
-            translate = Math.min(w, Math.max(0, w - (dragStartX - x)));
+          if (dragSide === "right") {
+            translate = dragMode === "open" ? Math.min(w, Math.max(0, w - (dragStartX - x))) : Math.min(w, Math.max(0, delta));
           } else {
-            translate = Math.min(w, Math.max(0, x - dragStartX));
+            translate = dragMode === "open" ? Math.max(-w, Math.min(0, -w + delta)) : Math.max(-w, Math.min(0, delta));
           }
           drawer.style.transform = `translateX(${translate}px)`;
-          overlay.style.opacity = String(1 - translate / w);
+          overlay.style.opacity = String(1 - Math.abs(translate) / w);
         }, { passive: true });
 
         function endDrag() {
@@ -427,7 +509,8 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           overlay.style.transition = "";
           drawer.style.transform = "";
           overlay.style.opacity = "";
-          if (translate / w < DRAG_THRESHOLD) open();
+          const openedFraction = 1 - Math.abs(translate) / w;
+          if (openedFraction >= OPEN_THRESHOLD) open();
           else close();
           dragMode = null;
         }
