@@ -41,6 +41,9 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
     <div class="wrap">
       <div class="masthead">
         <h1><a href={localePath(currentLocale.code)} class="site-title-link">Sotocom</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">国から日本へ。外で生きるコミュニティ。</span></h1>
+        <button type="button" id="mobileMenuBtn" class="hamburger-btn" aria-label="メニューを開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileDrawer">
+          <span></span><span></span><span></span>
+        </button>
         <div class="masthead-right">
           <a class:list={["about-nav-btn", activeId === "page-about" && "active"]} id="aboutNavBtn" href={localePath(currentLocale.code, "about")} data-no-i18n><span id="aboutNavLabel">サイトについて</span></a>
           <div class="site-theme-control">
@@ -178,6 +181,50 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         })();
       </script>
 
+      <div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
+      <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+        <div class="mobile-drawer-head">
+          <span class="mobile-drawer-title">メニュー</span>
+          <button type="button" id="mobileDrawerClose" class="mobile-drawer-close" aria-label="閉じる">✕</button>
+        </div>
+
+        <div class="mobile-drawer-section">
+          <a class:list={["mobile-drawer-about", activeId === "page-about" && "active"]} href={localePath(currentLocale.code, "about")} data-no-i18n>サイトについて</a>
+        </div>
+
+        <div class="mobile-drawer-section">
+          <div class="mobile-drawer-label">配色</div>
+          <div class="theme-swatch-row" id="themeSwatchRow" role="radiogroup" aria-label="配色テーマ">
+            <button type="button" class="theme-swatch" data-theme-value="paper" style="background:#FAF8F5" aria-label="ベージュ" title="ベージュ"></button>
+            <button type="button" class="theme-swatch" data-theme-value="light" style="background:#FFFFFF" aria-label="淺色" title="淺色"></button>
+            <button type="button" class="theme-swatch" data-theme-value="dark" style="background:#1B1B1D" aria-label="深色" title="深色"></button>
+            <button type="button" class="theme-swatch" data-theme-value="pink" style="background:#FFF4F7" aria-label="粉紅色" title="粉紅色"></button>
+          </div>
+        </div>
+
+        <div class="mobile-drawer-section">
+          <div class="mobile-drawer-label">言語</div>
+          <select id="localeSwitcherMobile" aria-label="表示言語" data-no-i18n data-current-slug={slug}>
+            {LOCALES.map((option) => (
+              <option value={option.code} selected={option.code === currentLocale.code} disabled={!option.enabled}>{option.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="mobile-drawer-section mobile-drawer-nav">
+          {navGroups.map((group) => (
+            <div class="mobile-drawer-group">
+              <div class="mobile-drawer-group-label">{group.label}</div>
+              {group.tabs.map((tab) => (
+                <a class:list={["mobile-drawer-link", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)}>
+                  <span>{tab.text}</span>{tab.small && <small>{tab.small}</small>}
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <main class="tab-panel">
         <slot />
       </main>
@@ -229,24 +276,84 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
     <script is:inline>
       (() => {
         const select = document.getElementById("themeSwitcher");
-        if (!select) return;
-        let saved = "paper";
-        try {
-          saved = localStorage.getItem("site-theme") || "paper";
-        } catch (e) {}
-        select.value = saved;
-        select.addEventListener("change", () => {
-          const value = select.value;
+        const swatches = Array.from(document.querySelectorAll("#themeSwatchRow .theme-swatch"));
+
+        function applyTheme(value, persist) {
           if (value === "paper") {
             document.documentElement.removeAttribute("data-theme");
           } else {
             document.documentElement.setAttribute("data-theme", value);
           }
-          try {
-            localStorage.setItem("site-theme", value);
-          } catch (e) {}
+          if (persist) {
+            try {
+              localStorage.setItem("site-theme", value);
+            } catch (e) {}
+          }
+          if (select) select.value = value;
+          swatches.forEach((btn) => {
+            btn.classList.toggle("is-active", btn.dataset.themeValue === value);
+            btn.setAttribute("aria-checked", String(btn.dataset.themeValue === value));
+          });
+        }
+
+        let saved = "paper";
+        try {
+          saved = localStorage.getItem("site-theme") || "paper";
+        } catch (e) {}
+        applyTheme(saved, false);
+
+        select?.addEventListener("change", () => applyTheme(select.value, true));
+        swatches.forEach((btn) => {
+          btn.addEventListener("click", () => applyTheme(btn.dataset.themeValue, true));
         });
       })();
+    </script>
+    <script is:inline>
+      (() => {
+        const btn = document.getElementById("mobileMenuBtn");
+        const drawer = document.getElementById("mobileDrawer");
+        const overlay = document.getElementById("mobileDrawerOverlay");
+        const closeBtn = document.getElementById("mobileDrawerClose");
+        if (!btn || !drawer || !overlay) return;
+
+        function open() {
+          drawer.classList.add("open");
+          overlay.classList.add("open");
+          drawer.setAttribute("aria-hidden", "false");
+          btn.setAttribute("aria-expanded", "true");
+          document.body.classList.add("mobile-drawer-open");
+        }
+        function close() {
+          drawer.classList.remove("open");
+          overlay.classList.remove("open");
+          drawer.setAttribute("aria-hidden", "true");
+          btn.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("mobile-drawer-open");
+        }
+
+        btn.addEventListener("click", () => {
+          if (drawer.classList.contains("open")) close();
+          else open();
+        });
+        closeBtn?.addEventListener("click", close);
+        overlay.addEventListener("click", close);
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") close();
+        });
+        drawer.querySelectorAll(".mobile-drawer-link, .mobile-drawer-about").forEach((link) => {
+          link.addEventListener("click", close);
+        });
+        window.matchMedia("(min-width:641px)").addEventListener("change", (event) => {
+          if (event.matches) close();
+        });
+      })();
+    </script>
+    <script is:inline>
+      document.getElementById("localeSwitcherMobile")?.addEventListener("change", (event) => {
+        const select = event.currentTarget;
+        const slug = select.dataset.currentSlug || "rent";
+        window.location.href = `/${select.value}/${slug}/`;
+      });
     </script>
     <script is:inline>
       (() => {
