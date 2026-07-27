@@ -1,4 +1,18 @@
 :root{
+    --paper:#FAFAF9;
+    --paper-2:#F1F5F9;
+    --ink:#0F172A;
+    --ink-soft:#475569;
+    --accent:#1E3A8A;
+    --accent-2:#334155;
+    --seal:#F59E0B;
+    --seal-2:#D97706;
+    --gold:#F59E0B;
+    --line:#E2E8F0;
+    --line-soft:#F1F5F9;
+    --white:#FFFFFF;
+  }
+  :root[data-theme="beige"]{
     --paper:#FAF8F5;
     --paper-2:#F2ECE4;
     --ink:#2C2523;
