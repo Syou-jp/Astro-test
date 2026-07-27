@@ -1,5 +1,21 @@
 <div id="page-tax-personal" class="page-view active theme-tax">
   <div class="eyebrow" id="taxPersonalEyebrow">個人・法人の税金 Personal &amp; Corporate Tax</div>
+
+  <button type="button" class="expert-cta" data-expert-cta-open>
+    <span class="expert-cta-avatars">
+      <img class="expert-cta-avatar" src="/experts/tax-advisor.jpg" alt="税務専門家のアイコン画像">
+      <img class="expert-cta-avatar" src="/experts/tax-advisor-2.jpg" alt="税務専門家のアイコン画像">
+      <img class="expert-cta-avatar" src="/experts/tax-advisor-3.jpg" alt="税務専門家のアイコン画像">
+      <img class="expert-cta-avatar" src="/experts/tax-advisor-4.jpg" alt="税務専門家のアイコン画像">
+    </span>
+    <span class="expert-cta-body">
+      <span class="expert-cta-label">今すぐ専門家に相談できます</span>
+      <span class="expert-cta-title">この分野の専門家とつながる</span>
+      <span class="expert-cta-name">言語別に4名の税理士・専門家を掲載</span>
+    </span>
+    <span class="expert-cta-arrow" aria-hidden="true">›</span>
+  </button>
+
   <div class="util-doc-switch" role="tablist" aria-label="個人法人稅金種別切替" data-no-i18n>
     <button type="button" class="util-doc-tab active" data-util-target="util-tax-income"><span id="taxPersonalIncomeLabel">個人所得・住民税</span></button>
     <button type="button" class="util-doc-tab" data-util-target="util-tax-furusato"><span id="taxPersonalFurusatoLabel">ふるさと納税</span></button>
@@ -109,6 +125,189 @@
       </div>
     </div>
   </section><!-- /util-tax-company -->
+
+  <div class="expert-modal-backdrop" id="expertModalBackdrop" hidden>
+    <div class="expert-modal" role="dialog" aria-modal="true" aria-labelledby="expertModalTitle">
+      <button type="button" class="expert-modal-close" id="expertModalClose" aria-label="閉じる">×</button>
+      <div class="expert-modal-body">
+
+        <div id="expertListView">
+          <h3 id="expertModalTitle" class="expert-modal-title">専門家を選ぶ</h3>
+          <p class="expert-list-intro">会社・対応言語が異なる専門家の一覧です。気になる方をクリックするとプロフィールと連絡先を確認できます。</p>
+          <div class="expert-grid" id="expertGrid"></div>
+        </div>
+
+        <div id="expertDetailView" hidden>
+          <button type="button" class="expert-back-btn" id="expertBackBtn">← 一覧に戻る</button>
+          <div id="expertDetailBody"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var experts = [
+        {
+          id: "sato-akiko",
+          name: "佐藤 明子（さとう あきこ）",
+          company: "さとう会計事務所",
+          country: "日本",
+          languages: ["日本語", "English"],
+          role: "税理士登録番号：第000000号（仮）",
+          avatar: "/experts/tax-advisor.jpg",
+          bio: "外国人の個人所得税・住民税・確定申告を専門とする税理士です。在留資格ごとの課税区分の判定から、非永住者の国外送金課税、出国時の準確定申告、扶養控除の書類整備まで、外国籍のお客様からのご相談に日本語・英語で対応しています。",
+          email: "contact@example.com",
+          phone: "03-0000-0000（平日 10:00〜18:00）",
+          address: "東京都千代田区〇〇 1-2-3（仮住所）",
+          specialties: [
+            "居住者・非居住者・非永住者の判定と課税範囲の確認",
+            "確定申告書の作成代行（給与所得・国外所得を含む）",
+            "出国（帰国）時の準確定申告・納税管理人の選任サポート"
+          ]
+        },
+        {
+          id: "emily-chen",
+          name: "Emily Chen（陳 怡君）",
+          company: "Chen Tax Advisory",
+          country: "台湾",
+          languages: ["English", "中文"],
+          role: "税理士登録番号：第000000号（仮）",
+          avatar: "/experts/tax-advisor-2.jpg",
+          bio: "台湾・中華圏出身の外国人クライアントを中心に、英語・中国語で確定申告や国外資産の税務相談に対応しています。NISA・国外送金・二重課税の相談実績が豊富です。",
+          email: "emily@example.com",
+          phone: "03-0000-0001（平日 9:30〜18:30）",
+          address: "東京都港区〇〇 2-3-4（仮住所）",
+          specialties: [
+            "外国税額控除・租税条約の適用可否の相談",
+            "国外資産・海外送金に関する課税確認",
+            "英語・中国語での確定申告サポート"
+          ]
+        },
+        {
+          id: "nguyen-van-minh",
+          name: "Nguyễn Văn Minh（グエン・バン・ミン）",
+          company: "Minh & Associates 税理士事務所",
+          country: "ベトナム",
+          languages: ["日本語", "Tiếng Việt"],
+          role: "税理士登録番号：第000000号（仮）",
+          avatar: "/experts/tax-advisor-3.jpg",
+          bio: "技能実習・特定技能で来日するベトナム人の税務相談を専門とし、日本語・ベトナム語で対応します。年末調整と確定申告の違い、扶養控除の書類準備など基礎からサポートします。",
+          email: "minh@example.com",
+          phone: "03-0000-0002（平日 10:00〜19:00）",
+          address: "埼玉県川口市〇〇 3-4-5（仮住所）",
+          specialties: [
+            "技能実習・特定技能者向けの税務相談",
+            "国外に住む家族の扶養控除に関する書類確認",
+            "日本語・ベトナム語での申告書作成サポート"
+          ]
+        },
+        {
+          id: "kevin-park",
+          name: "Kevin Park（박준혁）",
+          company: "Park International Tax",
+          country: "韓国",
+          languages: ["한국어", "日本語"],
+          role: "税理士登録番号：第000000号（仮）",
+          avatar: "/experts/tax-advisor-4.jpg",
+          bio: "韓国系企業の駐在員・個人事業主を対象に、韓国語・日本語で確定申告と法人税務のサポートを行っています。租税条約に基づく源泉徴収の軽減手続きにも対応します。",
+          email: "kevin@example.com",
+          phone: "03-0000-0003（平日 10:00〜18:00）",
+          address: "東京都新宿区〇〇 4-5-6（仮住所）",
+          specialties: [
+            "駐在員・個人事業主の確定申告サポート",
+            "租税条約に関する届出書の作成支援",
+            "韓国語・日本語での税務相談"
+          ]
+        }
+      ];
+
+      var openBtns = document.querySelectorAll("[data-expert-cta-open]");
+      var backdrop = document.getElementById("expertModalBackdrop");
+      var closeBtn = document.getElementById("expertModalClose");
+      var grid = document.getElementById("expertGrid");
+      var listView = document.getElementById("expertListView");
+      var detailView = document.getElementById("expertDetailView");
+      var detailBody = document.getElementById("expertDetailBody");
+      var backBtn = document.getElementById("expertBackBtn");
+      if (!openBtns.length || !backdrop || !closeBtn || !grid) return;
+
+      function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value == null ? "" : value; return el.innerHTML; }
+
+      grid.innerHTML = experts.map(function (e) {
+        return '<button type="button" class="expert-mini-card" data-expert-id="' + escapeHtml(e.id) + '">' +
+          '<img class="expert-mini-avatar" src="' + escapeHtml(e.avatar) + '" alt="' + escapeHtml(e.name) + 'のアイコン画像">' +
+          '<span>' +
+            '<span class="expert-mini-name">' + escapeHtml(e.name) + '</span>' +
+            '<span class="expert-mini-company">' + escapeHtml(e.company) + '</span>' +
+            '<span class="expert-mini-tags">' +
+            e.languages.map(function (lang) { return "<span>" + escapeHtml(lang) + "</span>"; }).join("") +
+            '</span>' +
+          '</span>' +
+        '</button>';
+      }).join("");
+
+      function showDetail(id) {
+        var e = experts.filter(function (item) { return item.id === id; })[0];
+        if (!e) return;
+
+        detailBody.innerHTML =
+          '<div class="expert-profile-head">' +
+            '<img class="expert-profile-avatar" src="' + escapeHtml(e.avatar) + '" alt="' + escapeHtml(e.name) + 'のプロフィール画像（仮アイコン）">' +
+            '<div style="flex:1;min-width:220px;">' +
+              '<div class="expert-profile-name">' + escapeHtml(e.name) + '</div>' +
+              '<div class="expert-profile-role">' + escapeHtml(e.company) + '　|　' + escapeHtml(e.role) + '</div>' +
+              '<div class="expert-profile-bio">' + escapeHtml(e.bio) + '<br><br>※このプロフィールはサンプル（仮）です。実際の担当者情報に差し替えてご利用ください。</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="expert-modal-section">' +
+            '<h4>連絡先</h4>' +
+            '<ul class="expert-contact-list">' +
+              '<li><b>メール</b><a href="mailto:' + escapeHtml(e.email) + '">' + escapeHtml(e.email) + '</a></li>' +
+              '<li><b>電話</b><span>' + escapeHtml(e.phone) + '</span></li>' +
+              '<li><b>事務所</b><span>' + escapeHtml(e.address) + '</span></li>' +
+              '<li><b>対応言語</b><span>' + escapeHtml(e.languages.join("・")) + '</span></li>' +
+            '</ul>' +
+          '</div>' +
+          '<div class="expert-modal-section">' +
+            '<h4>対応分野</h4>' +
+            '<ul class="info-list">' + e.specialties.map(function (s) { return "<li>" + escapeHtml(s) + "</li>"; }).join("") + '</ul>' +
+          '</div>' +
+          '<p class="expert-modal-note">※本ページの氏名・登録番号・連絡先はすべてサンプルです。実在の専門家情報ではありません。</p>';
+
+        listView.hidden = true;
+        detailView.hidden = false;
+      }
+
+      function showList() {
+        detailView.hidden = true;
+        listView.hidden = false;
+      }
+
+      grid.addEventListener("click", function (event) {
+        var card = event.target.closest("[data-expert-id]");
+        if (!card) return;
+        showDetail(card.dataset.expertId);
+      });
+      backBtn.addEventListener("click", showList);
+
+      function openModal() {
+        showList();
+        backdrop.hidden = false;
+        document.body.style.overflow = "hidden";
+      }
+      function closeModal() {
+        backdrop.hidden = true;
+        document.body.style.overflow = "";
+      }
+
+      openBtns.forEach(function (btn) { btn.addEventListener("click", openModal); });
+      closeBtn.addEventListener("click", closeModal);
+      backdrop.addEventListener("click", function (event) { if (event.target === backdrop) closeModal(); });
+      document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !backdrop.hidden) closeModal(); });
+    })();
+  </script>
   </div><!-- /page-tax-personal -->
 <script>
 const portalYen = value => "¥" + Math.round(Number(value) || 0).toLocaleString("ja-JP");

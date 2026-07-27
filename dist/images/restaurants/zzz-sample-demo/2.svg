@@ -1,14 +1,23 @@
-<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="サンプル軒（デモ用ダミー店舗） placeholder photo 2">
+<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="サンプル軒（デモ用ダミー店舗） placeholder photo 2 - 絲襪奶茶">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform="rotate(31 0.5 0.5)">
-      <stop offset="0%" stop-color="#6b5f56"/>
-      <stop offset="100%" stop-color="#443c35"/>
+    <linearGradient id="g2" x1="0%" y1="100%" x2="100%" y2="0%" gradientTransform="rotate(30 0.5 0.5)">
+      <stop offset="0%" stop-color="#7a2620"/>
+      <stop offset="100%" stop-color="#b23b2e"/>
     </linearGradient>
   </defs>
-  <rect width="600" height="600" fill="url(#g)"/>
-  <circle cx="131" cy="71" r="67" fill="#ffffff" opacity="0.08"/>
-  <circle cx="469" cy="529" r="46.9" fill="#ffffff" opacity="0.06"/>
-  <text x="300" y="330" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="34" fill="#ffffff" opacity="0.92">サンプル軒（デモ用ダミー店舗）</text>
-  <text x="300" y="368" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="15" letter-spacing="2" fill="#ffffff" opacity="0.7">デモ用カテゴリ</text>
+  <rect width="600" height="600" fill="url(#g2)"/>
+  <circle cx="500" cy="90" r="70" fill="#ffffff" opacity="0.06"/>
+  <circle cx="90" cy="500" r="55" fill="#e8b84b" opacity="0.08"/>
+
+  <!-- milk tea cup icon -->
+  <g transform="translate(300,235)" fill="none" stroke="#f4e3c1" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+    <path d="M -70 -50 L -58 60 Q -55 82 -30 82 L 30 82 Q 55 82 58 60 L 70 -50 Z"/>
+    <path d="M 70 -30 Q 118 -30 118 5 Q 118 40 70 40"/>
+    <line x1="-70" y1="-50" x2="70" y2="-50"/>
+    <path d="M -55 -12 Q 0 -28 55 -12" opacity="0.6"/>
+  </g>
+
+  <text x="300" y="380" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="34" fill="#ffffff" opacity="0.94">サンプル軒（デモ用ダミー店舗）</text>
+  <text x="300" y="418" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="15" letter-spacing="2" fill="#f4e3c1" opacity="0.85">絲襪奶茶・茶餐廳</text>
   <text x="300" y="560" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" letter-spacing="1.5" fill="#ffffff" opacity="0.5">PLACEHOLDER PHOTO 2 / デモ</text>
 </svg>

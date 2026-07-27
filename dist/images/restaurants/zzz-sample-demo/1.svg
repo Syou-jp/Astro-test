@@ -1,14 +1,26 @@
-<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="サンプル軒（デモ用ダミー店舗） placeholder photo 1">
+<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="サンプル軒（デモ用ダミー店舗） placeholder photo 1 - 点心">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform="rotate(30 0.5 0.5)">
-      <stop offset="0%" stop-color="#6b5f56"/>
-      <stop offset="100%" stop-color="#443c35"/>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform="rotate(30 0.5 0.5)">
+      <stop offset="0%" stop-color="#b23b2e"/>
+      <stop offset="100%" stop-color="#7a2620"/>
     </linearGradient>
   </defs>
-  <rect width="600" height="600" fill="url(#g)"/>
-  <circle cx="130" cy="71" r="67" fill="#ffffff" opacity="0.08"/>
-  <circle cx="470" cy="529" r="46.9" fill="#ffffff" opacity="0.06"/>
-  <text x="300" y="330" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="34" fill="#ffffff" opacity="0.92">サンプル軒（デモ用ダミー店舗）</text>
-  <text x="300" y="368" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="15" letter-spacing="2" fill="#ffffff" opacity="0.7">デモ用カテゴリ</text>
+  <rect width="600" height="600" fill="url(#g1)"/>
+  <circle cx="120" cy="80" r="60" fill="#ffffff" opacity="0.07"/>
+  <circle cx="480" cy="520" r="80" fill="#e8b84b" opacity="0.08"/>
+
+  <!-- dim sum steamer basket icon -->
+  <g transform="translate(300,225)" fill="none" stroke="#f4e3c1" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+    <ellipse cx="0" cy="-38" rx="98" ry="20"/>
+    <path d="M -98 -38 L -80 40 Q -80 62 -55 62 L 55 62 Q 80 62 80 40 L 98 -38"/>
+    <line x1="-64" y1="-14" x2="-64" y2="46"/>
+    <line x1="-21" y1="-18" x2="-21" y2="54"/>
+    <line x1="21" y1="-18" x2="21" y2="54"/>
+    <line x1="64" y1="-14" x2="64" y2="46"/>
+    <path d="M -98 -38 Q 0 -66 98 -38" opacity="0.6"/>
+  </g>
+
+  <text x="300" y="380" text-anchor="middle" font-family="'Shippori Mincho', serif" font-size="34" fill="#ffffff" opacity="0.94">サンプル軒（デモ用ダミー店舗）</text>
+  <text x="300" y="418" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="15" letter-spacing="2" fill="#f4e3c1" opacity="0.85">点心・飲茶</text>
   <text x="300" y="560" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" letter-spacing="1.5" fill="#ffffff" opacity="0.5">PLACEHOLDER PHOTO 1 / デモ</text>
 </svg>
