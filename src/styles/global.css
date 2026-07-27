@@ -1637,7 +1637,7 @@
      Each keeps its cover photo (dimmed) so the row reads as a real destination
      card rather than a flat text/ad button, while staying compact and tidy. */
   .home-slider-track{display:flex;flex-direction:column;gap:10px;overflow:visible;}
-  .home-slider-track .home-featured-card{flex:none;width:100%;aspect-ratio:auto;height:68px;border-radius:999px;border:none;overflow:hidden;box-shadow:0 3px 10px rgba(20,15,10,.16),inset 0 0 0 1.5px rgba(255,255,255,.22);}
+  .home-slider-track .home-featured-card{flex:none;width:100%;aspect-ratio:auto;height:68px;border-radius:0;border:1px solid var(--line);overflow:hidden;box-shadow:0 2px 8px rgba(20,15,10,.12);}
   .home-slider-track .home-featured-card:hover{transform:none;}
   .home-slider-track .home-featured-thumb{filter:saturate(1.05);}
   .home-slider-track .home-featured-body{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 20px;text-align:center;background:linear-gradient(0deg,rgba(8,10,14,.62) 0%,rgba(8,10,14,.5) 100%);}
