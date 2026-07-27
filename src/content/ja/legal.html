@@ -2,7 +2,7 @@
     <div class="eyebrow">行政書士・在留手続の料金相場 Administrative Scrivener</div>
     <div class="portal-alert"><span class="portal-badge new">2026</span> 行政書士報酬は自由設定です。表示額は複数事務所でよく見られる税込・税別混在の市場帯を整理した<strong>依頼前の比較目安</strong>で、入管等へ納める法定手数料、翻訳、公証・認証、戸籍取得等は別途の場合があります。</div>
     <div class="service-filter" id="legalFilters"><button class="active" data-filter="all">すべて</button><button data-filter="visa">在留・ビザ</button><button data-filter="family">結婚・家族</button><button data-filter="company">起業・許認可</button></div>
-    <div class="card legal-fee-card"><table class="portal-table portal-table--compare"><thead><tr><th>手続・相談</th><th>報酬目安</th><th>官公署手数料等</th><th>期間・注意</th></tr></thead><tbody id="legalTable"></tbody></table></div>
+    <div class="card legal-fee-card"><table class="portal-table portal-table--compare"><thead><tr><th>手続・相談</th><th>報酬目安</th><th>官公署手数料等</th></tr></thead><tbody id="legalTable"></tbody></table></div>
     <div class="portal-grid" style="margin-top:16px;">
       <div class="market-note"><strong>料金比較のポイント</strong><br>相談料、追加資料、理由書、翻訳、同行、再申請、成功報酬、消費税が含まれるかを見積書で確認。極端に安い広告は対象業務が限定されている場合があります。</div>
       <div class="market-note"><strong>2026年の重要変更</strong><br>改正行政書士法は2026年1月1日施行。特定在留カードは2026年6月14日開始。「経営・管理」の新基準も適用中です。2026年成立の入管法改正による手数料上限引上げは、政令で定める将来日から施行予定のため、申請時の最新額を確認してください。</div>
@@ -14,6 +14,6 @@
 const LEGAL_SERVICES=[
  ["在留期間更新（事情変更なし）","visa","¥30,000〜¥70,000","許可時：オンライン¥5,500／窓口¥6,000目安","1〜2か月程度。追加資料で変動"],["在留期間更新（転職・事情変更あり）","visa","¥60,000〜¥120,000","上記と同様","理由書・会社資料が増える場合"],["在留資格変更（留学→就労等）","visa","¥80,000〜¥150,000","許可時手数料別","1〜3か月以上"],["在留資格認定証明書 COE","visa","¥100,000〜¥180,000","通常申請手数料なし","海外からの呼寄せ。業種で資料差"],["永住許可申請","visa","¥100,000〜¥220,000","許可時¥10,000目安","審査は長期。家族同時は加算"],["帰化許可申請サポート","visa","¥150,000〜¥350,000","申請手数料なし","法務局。収集書類・翻訳が多い"],["家族滞在・配偶者ビザ","family","¥90,000〜¥180,000","手続別","交際・生計・家族資料を確認"],["国際結婚の届出・書類整理","family","¥50,000〜¥150,000","翻訳・公証等は別","国籍・提出先で大きく異なる"],["経営・管理ビザ","company","¥180,000〜¥400,000","在留手続費用別","2025-10-16新基準を要確認"],["会社設立書類サポート","company","¥80,000〜¥200,000","登録免許税・定款認証等は別","登記申請は司法書士領域"],["古物商許可","company","¥40,000〜¥80,000","警察手数料別","営業所・管理者確認"],["飲食店営業許可","company","¥40,000〜¥100,000","保健所手数料別","内装前に施設基準確認"],["建設業許可（知事・一般・新規）","company","¥120,000〜¥250,000","法定手数料¥90,000目安","専任技術者・財産要件等"],["内容証明・契約書作成","family","¥20,000〜¥100,000","郵送料・公証別","紛争代理は弁護士へ"]
 ];
-let legalFilter="all";function legalRender(){document.getElementById("legalTable").innerHTML=LEGAL_SERVICES.filter(s=>legalFilter==="all"||s[1]===legalFilter).map(s=>`<tr><td><strong>${s[0]}</strong></td><td class="money">${s[2]}</td><td>${s[3]}</td><td>${s[4]}</td></tr>`).join("");}
+let legalFilter="all";function legalRender(){document.getElementById("legalTable").innerHTML=LEGAL_SERVICES.filter(s=>legalFilter==="all"||s[1]===legalFilter).map(s=>`<tr><td><strong>${s[0]}</strong></td><td class="money">${s[2]}</td><td>${s[3]}</td></tr>`).join("");}
 document.querySelectorAll("#legalFilters button").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("#legalFilters button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");legalFilter=btn.dataset.filter;legalRender();}));legalRender();
 </script>
