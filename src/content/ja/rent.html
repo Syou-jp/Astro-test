@@ -95,7 +95,7 @@
 
       <div class="fire-key-row">
         <div class="field-row">
-          <label>入居日<span class="hint">日割り計算に使用</span></label>
+          <label>入居日<span class="hint">任意・日割り計算に使用</span></label>
           <input type="date" id="moveInDate">
         </div>
         <div class="field-block">
@@ -134,15 +134,15 @@
         <div class="field-block">
           <label>初回保証利用料<span class="hint">金額または割合で入力（非課税）</span></label>
           <div class="mode-toggle" id="guarantorModeToggle">
-            <div class="mode-btn" data-mode="percent">%（家賃+管理費+他）</div>
-            <div class="mode-btn active" data-mode="amount">金額</div>
+            <div class="mode-btn active" data-mode="percent">%（家賃+管理費+他）</div>
+            <div class="mode-btn" data-mode="amount">金額</div>
           </div>
           <div class="input-tax-row">
-            <div id="guarantorPercentWrap" class="sub-input-wrap" style="display:none;align-items:center;gap:8px;">
+            <div id="guarantorPercentWrap" class="sub-input-wrap" style="display:flex;align-items:center;gap:8px;">
               <span class="rent-subinput-label">(家賃+管理費+他) の %</span>
               <input type="number" id="guarantorPercent" value="50" min="0" step="5" style="width:70px;text-align:right;">
             </div>
-            <div id="guarantorAmountWrap" class="sub-input-wrap" style="display:flex;align-items:center;">
+            <div id="guarantorAmountWrap" class="sub-input-wrap" style="display:none;align-items:center;">
               <input type="number" id="guarantorAmount" value="40000" min="0" step="1000" style="text-align:right;">
             </div>
           </div>
