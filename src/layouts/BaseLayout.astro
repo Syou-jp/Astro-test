@@ -23,10 +23,6 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           if (saved && saved !== "paper") {
             document.documentElement.setAttribute("data-theme", saved);
           }
-          const savedSide = localStorage.getItem("site-menu-side");
-          if (savedSide === "left") {
-            document.documentElement.setAttribute("data-menu-side", "left");
-          }
         } catch (e) {}
       })();
     </script>
@@ -187,6 +183,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
 
       <div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
       <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+        <div class="mobile-drawer-handle" id="mobileDrawerHandle" aria-hidden="true"></div>
         <div class="mobile-drawer-head">
           <span class="mobile-drawer-title">メニュー</span>
           <button type="button" id="mobileDrawerClose" class="mobile-drawer-close" aria-label="閉じる">✕</button>
@@ -214,23 +211,9 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
                   <button type="button" class="theme-swatch" data-theme-value="dark" style="background:#18191A" aria-label="深色" title="深色"></button>
                   <button type="button" class="theme-swatch" data-theme-value="pink" style="background:#FFF4F7" aria-label="粉紅色" title="粉紅色"></button>
                 </div>
-                <div class="mobile-drawer-label" style="margin-top:14px;">メニューの位置</div>
-                <div class="menu-side-row" id="menuSideRow" role="radiogroup" aria-label="メニューの位置">
-                  <button type="button" class="menu-side-btn" data-side-value="right">右</button>
-                  <button type="button" class="menu-side-btn" data-side-value="left">左</button>
-                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="mobile-drawer-section">
-          <div class="mobile-drawer-label">言語</div>
-          <select id="localeSwitcherMobile" aria-label="表示言語" data-no-i18n data-current-slug={slug}>
-            {LOCALES.map((option) => (
-              <option value={option.code} selected={option.code === currentLocale.code} disabled={!option.enabled}>{option.label}</option>
-            ))}
-          </select>
         </div>
 
         <div class="mobile-drawer-section mobile-drawer-nav">
@@ -259,6 +242,15 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
               </div>
             );
           })}
+        </div>
+
+        <div class="mobile-drawer-section">
+          <div class="mobile-drawer-label">言語</div>
+          <select id="localeSwitcherMobile" aria-label="表示言語" data-no-i18n data-current-slug={slug}>
+            {LOCALES.map((option) => (
+              <option value={option.code} selected={option.code === currentLocale.code} disabled={!option.enabled}>{option.label}</option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -347,49 +339,12 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
     </script>
     <script is:inline>
       (() => {
-        const sideButtons = Array.from(document.querySelectorAll("#menuSideRow .menu-side-btn"));
-        if (!sideButtons.length) return;
-
-        function applyMenuSide(value, persist) {
-          const side = value === "left" ? "left" : "right";
-          if (side === "right") {
-            document.documentElement.removeAttribute("data-menu-side");
-          } else {
-            document.documentElement.setAttribute("data-menu-side", side);
-          }
-          if (persist) {
-            try {
-              localStorage.setItem("site-menu-side", side);
-            } catch (e) {}
-          }
-          sideButtons.forEach((btn) => {
-            btn.classList.toggle("is-active", btn.dataset.sideValue === side);
-            btn.setAttribute("aria-checked", String(btn.dataset.sideValue === side));
-          });
-        }
-
-        let savedSide = "right";
-        try {
-          savedSide = localStorage.getItem("site-menu-side") || "right";
-        } catch (e) {}
-        applyMenuSide(savedSide, false);
-
-        sideButtons.forEach((btn) => {
-          btn.addEventListener("click", () => applyMenuSide(btn.dataset.sideValue, true));
-        });
-      })();
-    </script>
-    <script is:inline>
-      (() => {
         const btn = document.getElementById("mobileMenuBtn");
         const drawer = document.getElementById("mobileDrawer");
         const overlay = document.getElementById("mobileDrawerOverlay");
         const closeBtn = document.getElementById("mobileDrawerClose");
+        const handle = document.getElementById("mobileDrawerHandle");
         if (!btn || !drawer || !overlay) return;
-
-        function menuSide() {
-          return document.documentElement.getAttribute("data-menu-side") === "left" ? "left" : "right";
-        }
 
         function open() {
           drawer.classList.add("open");
@@ -450,37 +405,39 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           });
         });
 
-        /* ---- Edge swipe: drag in from the screen edge to open, drag back toward
-           the edge on the open drawer to close. Tuned for one-handed right-thumb use:
-           a generous edge-grab zone and a low open threshold (~30% dragged open snaps
-           fully open) so a short, imprecise swipe still registers. ---- */
+        /* ---- Swipe: drag up from the bottom edge to open, drag the handle/head
+           down on the open sheet to close. A generous edge-grab zone and a low
+           open threshold (~30% dragged open snaps fully open) so a short,
+           imprecise swipe still registers for one-handed use. ---- */
         const mobileMq = window.matchMedia("(max-width:640px)");
         const EDGE_ZONE = 36;
         const OPEN_THRESHOLD = 0.3;
         let dragMode = null;
-        let dragStartX = 0;
-        let dragSide = "right";
+        let dragStartY = 0;
 
-        function currentTranslateX() {
+        function currentTranslateY() {
           const m = getComputedStyle(drawer).transform.match(/matrix\(([^)]+)\)/);
           if (!m) return 0;
-          return parseFloat(m[1].split(",")[4]) || 0;
+          return parseFloat(m[1].split(",")[5]) || 0;
         }
 
         document.addEventListener("touchstart", (event) => {
           if (!mobileMq.matches) return;
-          const x = event.touches[0].clientX;
+          const y = event.touches[0].clientY;
           const isOpen = drawer.classList.contains("open");
-          dragSide = menuSide();
-          const nearEdge = dragSide === "right" ? x >= window.innerWidth - EDGE_ZONE : x <= EDGE_ZONE;
-          if (!isOpen && nearEdge) {
+          const nearBottomEdge = y >= window.innerHeight - EDGE_ZONE;
+          if (!isOpen && nearBottomEdge) {
             dragMode = "open";
-            dragStartX = x;
+            dragStartY = y;
             drawer.style.transition = "none";
             overlay.style.transition = "none";
-          } else if (isOpen && event.target.closest("#mobileDrawer")) {
+          } else if (
+            isOpen &&
+            !event.target.closest("#mobileDrawerClose") &&
+            (event.target.closest("#mobileDrawerHandle") || event.target.closest(".mobile-drawer-head"))
+          ) {
             dragMode = "close";
-            dragStartX = x;
+            dragStartY = y;
             drawer.style.transition = "none";
             overlay.style.transition = "none";
           }
@@ -488,28 +445,26 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
 
         document.addEventListener("touchmove", (event) => {
           if (!dragMode) return;
-          const x = event.touches[0].clientX;
-          const w = drawer.getBoundingClientRect().width || 315;
-          const delta = x - dragStartX;
-          let translate;
-          if (dragSide === "right") {
-            translate = dragMode === "open" ? Math.min(w, Math.max(0, w - (dragStartX - x))) : Math.min(w, Math.max(0, delta));
-          } else {
-            translate = dragMode === "open" ? Math.max(-w, Math.min(0, -w + delta)) : Math.max(-w, Math.min(0, delta));
-          }
-          drawer.style.transform = `translateX(${translate}px)`;
-          overlay.style.opacity = String(1 - Math.abs(translate) / w);
+          const y = event.touches[0].clientY;
+          const h = drawer.getBoundingClientRect().height || 400;
+          const delta = y - dragStartY;
+          const translate =
+            dragMode === "open"
+              ? Math.min(h, Math.max(0, h + delta))
+              : Math.min(h, Math.max(0, delta));
+          drawer.style.transform = `translateY(${translate}px)`;
+          overlay.style.opacity = String(1 - translate / h);
         }, { passive: true });
 
         function endDrag() {
           if (!dragMode) return;
-          const w = drawer.getBoundingClientRect().width || 315;
-          const translate = currentTranslateX();
+          const h = drawer.getBoundingClientRect().height || 400;
+          const translate = currentTranslateY();
           drawer.style.transition = "";
           overlay.style.transition = "";
           drawer.style.transform = "";
           overlay.style.opacity = "";
-          const openedFraction = 1 - Math.abs(translate) / w;
+          const openedFraction = 1 - translate / h;
           if (openedFraction >= OPEN_THRESHOLD) open();
           else close();
           dragMode = null;
