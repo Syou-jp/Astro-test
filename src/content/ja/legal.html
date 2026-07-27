@@ -11,7 +11,7 @@
       <span class="expert-cta-body">
         <span class="expert-cta-label">今すぐ専門家に相談できます</span>
         <span class="expert-cta-title">この分野の専門家とつながる</span>
-        <span class="expert-cta-name">国籍・言語別に4名の行政書士・専門家を掲載</span>
+        <span class="expert-cta-name">言語別に4名の行政書士・専門家を掲載</span>
       </span>
       <span class="expert-cta-arrow" aria-hidden="true">›</span>
     </button>
@@ -35,7 +35,7 @@
       <span class="expert-cta-body">
         <span class="expert-cta-label">今すぐ専門家に相談できます</span>
         <span class="expert-cta-title">この分野の専門家とつながる</span>
-        <span class="expert-cta-name">国籍・言語別に4名の行政書士・専門家を掲載</span>
+        <span class="expert-cta-name">言語別に4名の行政書士・専門家を掲載</span>
       </span>
       <span class="expert-cta-arrow" aria-hidden="true">›</span>
     </button>
@@ -47,7 +47,7 @@
 
           <div id="expertListView">
             <h3 id="expertModalTitle" class="expert-modal-title">専門家を選ぶ</h3>
-            <p class="expert-list-intro">会社・対応言語・国籍が異なる行政書士の一覧です。気になる方をクリックするとプロフィールと連絡先を確認できます。</p>
+            <p class="expert-list-intro">会社・対応言語が異なる行政書士の一覧です。気になる方をクリックするとプロフィールと連絡先を確認できます。</p>
             <div class="expert-grid" id="expertGrid"></div>
           </div>
 
@@ -155,7 +155,7 @@
             '<span>' +
               '<span class="expert-mini-name">' + escapeHtml(e.name) + '</span>' +
               '<span class="expert-mini-company">' + escapeHtml(e.company) + '</span>' +
-              '<span class="expert-mini-tags"><span>' + escapeHtml(e.country) + '</span>' +
+              '<span class="expert-mini-tags">' +
               e.languages.map(function (lang) { return "<span>" + escapeHtml(lang) + "</span>"; }).join("") +
               '</span>' +
             '</span>' +
@@ -182,7 +182,6 @@
                 '<li><b>電話</b><span>' + escapeHtml(e.phone) + '</span></li>' +
                 '<li><b>事務所</b><span>' + escapeHtml(e.address) + '</span></li>' +
                 '<li><b>対応言語</b><span>' + escapeHtml(e.languages.join("・")) + '</span></li>' +
-                '<li><b>国籍</b><span>' + escapeHtml(e.country) + '</span></li>' +
               '</ul>' +
             '</div>' +
             '<div class="expert-modal-section">' +
