@@ -83,6 +83,9 @@
     letter-spacing:0.06em;
     margin:0;
     color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
   }
   .site-title-link{
     color:inherit;
@@ -1070,9 +1073,9 @@
 
   /* ---- Japan life portal pages ---- */
   .tab-bar{display:flex;flex-wrap:nowrap;align-items:stretch;gap:10px;padding:16px 0 0;background:transparent;position:relative;}
-  .masthead{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;min-height:70px;gap:14px;}
-  .masthead h1{min-width:0;line-height:1.35;}
-  .masthead-right{width:auto;justify-content:flex-end;margin-left:0;}
+  .masthead{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;min-height:70px;gap:14px;}
+  .masthead h1{min-width:0;line-height:1.35;grid-column:2;align-items:center;text-align:center;}
+  .masthead-right{width:auto;justify-content:flex-end;margin-left:0;grid-column:3;}
   .site-language-control{margin-left:0;}
   .nav-dropdown{position:relative;flex:1 1 0;min-width:0;}
   .tab-group-label{display:flex;width:100%;align-items:center;justify-content:center;gap:5px;text-align:center;border:1px solid var(--line);border-radius:20px;background:var(--paper-2);font:inherit;font-family:"Shippori Mincho",serif;font-size:13px;font-weight:700;letter-spacing:.05em;color:var(--ink-soft);padding:10px 14px;white-space:nowrap;cursor:pointer;user-select:none;transition:background .15s ease,color .15s ease,border-color .15s ease;}
