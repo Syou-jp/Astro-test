@@ -1768,11 +1768,12 @@
   #jobPostingForm.is-collapsed ~ *{display:none;}
 }
 
-/* ---- Expert CTA: bottom-of-page link to a specialist's profile/contact page ---- */
+/* ---- Expert CTA: bottom-of-page button opening a specialist's profile/contact modal ---- */
 .expert-cta{
   display:flex;
   align-items:center;
   gap:16px;
+  width:100%;
   margin-top:26px;
   padding:16px 20px;
   border:1px solid rgba(255,255,255,.28);
@@ -1782,7 +1783,10 @@
   backdrop-filter:blur(10px) saturate(140%);
   box-shadow:0 10px 34px rgba(28,56,45,.18);
   text-decoration:none;
+  text-align:left;
+  font:inherit;
   color:var(--white);
+  cursor:pointer;
   transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
 }
 .expert-cta:hover{
