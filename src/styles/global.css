@@ -1633,21 +1633,16 @@
   .home-slider-wrap{display:block;position:static;padding-bottom:0;}
   .home-slider-nav,.home-slider-dots{display:none;}
 
-  /* Mobile home: swap the featured-links slider for a stack of pill buttons —
-     text-only so each destination reads at a glance without waiting on an image. */
+  /* Mobile home: swap the featured-links slider for a stack of pill buttons.
+     Each keeps its cover photo (dimmed) so the row reads as a real destination
+     card rather than a flat text/ad button, while staying compact and tidy. */
   .home-slider-track{display:flex;flex-direction:column;gap:10px;overflow:visible;}
-  .home-slider-track .home-featured-card{flex:none;width:100%;aspect-ratio:auto;border-radius:999px;border:1.5px solid var(--gold);background:none;box-shadow:none;}
-  .home-slider-track .home-featured-card:hover{transform:none;box-shadow:none;background:var(--paper-2);}
-  .home-slider-track .home-featured-thumb{display:none;}
-  .home-slider-track .home-featured-body{position:static;padding:13px 18px;background:none;text-align:center;}
+  .home-slider-track .home-featured-card{flex:none;width:100%;aspect-ratio:auto;height:68px;border-radius:999px;border:none;overflow:hidden;box-shadow:0 3px 10px rgba(20,15,10,.16),inset 0 0 0 1.5px rgba(255,255,255,.22);}
+  .home-slider-track .home-featured-card:hover{transform:none;}
+  .home-slider-track .home-featured-thumb{filter:saturate(1.05);}
+  .home-slider-track .home-featured-body{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 20px;text-align:center;background:linear-gradient(0deg,rgba(8,10,14,.62) 0%,rgba(8,10,14,.5) 100%);}
   .home-slider-track .home-featured-body::before{display:none;}
-  .home-slider-track .home-featured-body strong{font-family:inherit;font-size:14.5px;font-weight:700;text-shadow:none;letter-spacing:.02em;}
-  .home-slider-track .home-featured-card:nth-child(1) strong{color:#6B4FA0;}
-  .home-slider-track .home-featured-card:nth-child(2) strong{color:#2F5D8A;}
-  .home-slider-track .home-featured-card:nth-child(3) strong{color:#3F7566;}
-  .home-slider-track .home-featured-card:nth-child(4) strong{color:#B4744A;}
-  .home-slider-track .home-featured-card:nth-child(5) strong{color:#A8482F;}
-  .home-slider-track .home-featured-card:nth-child(6) strong{color:var(--ink);}
+  .home-slider-track .home-featured-body strong{font-size:15px;letter-spacing:.02em;}
 
   .tab-panel{padding:16px 14px 16px;}
 
