@@ -64,7 +64,11 @@
       #page-rent .compact-pair-item{gap:6px;}
       #page-rent .compact-pair-item .compact-label{font-size:12.5px;}
       #page-rent .compact-pair-item input{width:56px;}
-      #page-rent .fire-key-row{gap:10px;}
+      #page-rent .fire-key-row{flex-direction:column;gap:0;}
+      #page-rent .fire-key-row > .field-block,
+      #page-rent .fire-key-row > .field-row{padding:7px 0;border-bottom:1px dashed var(--line-soft);}
+      #page-rent .fire-key-row > .field-block:last-child,
+      #page-rent .fire-key-row > .field-row:last-child{border-bottom:none;}
       #page-rent .rent-two-col{flex-direction:column;gap:0;}
       #page-rent .rent-two-col .field-row{border-bottom:1px dashed var(--line-soft);padding:7px 0;}
       #page-rent .rent-two-col .field-row:last-child{border-bottom:none;}
