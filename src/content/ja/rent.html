@@ -15,7 +15,6 @@
     #page-rent .mode-toggle{margin-top:5px;}
     #page-rent .mode-btn{font-size:10.5px;padding:6px 5px;line-height:1.25;}
     #page-rent .tax-check{font-size:11px;}
-    #page-rent .tax-live{font-size:10px;}
     #page-rent .add-btn{font-size:12.5px;padding:8px 10px;}
     #page-rent .rent-note{padding:2px 0 7px;}
 
@@ -146,7 +145,7 @@
             <div id="agencyAmountWrap" class="sub-input-wrap" style="display:none;align-items:center;">
               <input type="number" id="agencyAmount" value="0" min="0" step="1000" style="text-align:right;">
             </div>
-            <label class="tax-check mini"><input type="checkbox" id="agencyTax">税込み <span class="tax-live" id="agencyTaxLive">¥0</span></label>
+            <label class="tax-check mini"><input type="checkbox" id="agencyTax">税込み</label>
           </div>
         </div>
 
@@ -180,7 +179,7 @@
           <label>鍵交換費用<span class="hint">固定金額</span></label>
           <div class="input-tax-row">
             <input type="number" id="keyExchange" value="20000" min="0" step="1000" style="text-align:right;">
-            <label class="tax-check mini"><input type="checkbox" id="keyExchangeTax">税込み <span class="tax-live" id="keyExchangeTaxLive">¥16,500</span></label>
+            <label class="tax-check mini"><input type="checkbox" id="keyExchangeTax">税込み</label>
           </div>
         </div>
       </div>
@@ -194,7 +193,7 @@
           </div>
           <div class="input-tax-row">
             <input type="number" id="lifesupportAmount" value="0" min="0" step="500" style="text-align:right;">
-            <label class="tax-check mini"><input type="checkbox" id="lifesupportTax">税込み <span class="tax-live" id="lifesupportTaxLive">¥0</span></label>
+            <label class="tax-check mini"><input type="checkbox" id="lifesupportTax">税込み</label>
           </div>
         </div>
 
@@ -440,7 +439,7 @@ function checked(id){
 }
 
 function applyTax(amount, isTaxed){
-  return isTaxed ? amount * 1.1 : amount;
+  return amount;
 }
 
 function computeFirstRent(rent){
@@ -613,16 +612,6 @@ function render(){
   document.getElementById("totalValue").textContent = yen(vals.total);
   document.getElementById("footnote").textContent = t.footnote;
   document.getElementById("copyBtn").innerHTML = t.copy;
-
-  const taxLiveValues = {
-    agencyTaxLive: vals.agency,
-    keyExchangeTaxLive: vals.keyexchange,
-    lifesupportTaxLive: vals.lifesupport
-  };
-  Object.entries(taxLiveValues).forEach(([id,value]) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = yen(value);
-  });
 
   document.getElementById("clientLine").textContent = clientName ? (t.client + ": " + clientName) : "";
   document.getElementById("propertyLine").textContent = propertyName ? (t.property + ": " + propertyName) : "";
