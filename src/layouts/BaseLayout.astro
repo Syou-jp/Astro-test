@@ -98,6 +98,26 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         (() => {
           const dropdowns = Array.from(document.querySelectorAll("[data-nav-dropdown]"));
           const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+          const mobileTabBarMq = window.matchMedia("(max-width:640px)");
+          const tabBarEl = document.getElementById("tabBar");
+
+          function positionMobilePanel(panel) {
+            if (!mobileTabBarMq.matches || !tabBarEl) return;
+            const rect = tabBarEl.getBoundingClientRect();
+            panel.style.position = "fixed";
+            panel.style.top = rect.bottom + "px";
+            panel.style.left = "20px";
+            panel.style.right = "20px";
+            panel.style.width = "auto";
+          }
+
+          function resetMobilePanel(panel) {
+            panel.style.position = "";
+            panel.style.top = "";
+            panel.style.left = "";
+            panel.style.right = "";
+            panel.style.width = "";
+          }
 
           function closeAll(except) {
             dropdowns.forEach((el) => {
@@ -105,6 +125,8 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
               el.classList.remove("open");
               const btn = el.querySelector(".tab-group-label");
               if (btn) btn.setAttribute("aria-expanded", "false");
+              const panel = el.querySelector(".tab-group-tabs");
+              if (panel) resetMobilePanel(panel);
             });
           }
 
@@ -114,8 +136,14 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
             btn.addEventListener("click", () => {
               const isOpen = el.classList.contains("open");
               closeAll(el);
-              el.classList.toggle("open", !isOpen);
-              btn.setAttribute("aria-expanded", String(!isOpen));
+              const willOpen = !isOpen;
+              el.classList.toggle("open", willOpen);
+              btn.setAttribute("aria-expanded", String(willOpen));
+              const panel = el.querySelector(".tab-group-tabs");
+              if (panel) {
+                if (willOpen) positionMobilePanel(panel);
+                else resetMobilePanel(panel);
+              }
             });
 
             if (canHover) {
