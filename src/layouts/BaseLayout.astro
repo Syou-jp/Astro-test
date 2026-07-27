@@ -181,12 +181,13 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
 
       <div class="mobile-menu-bar" id="mobileMenuBar">
         <button type="button" id="mobileSettingsBtn" class="mobile-menu-bar-btn" aria-label="設定を開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileSettingsSheet">
-          <span class="mobile-menu-bar-icon" aria-hidden="true">⚙</span>
+          <span class="mobile-menu-bar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2.06 2.06 0 1 1-2.92 2.92l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56v.17a2.06 2.06 0 1 1-4.12 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2.06 2.06 0 1 1-2.92-2.92l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1.03h-.17a2.06 2.06 0 1 1 0-4.12h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2.06 2.06 0 1 1 2.92-2.92l.06.06a1.7 1.7 0 0 0 1.87.34h.08a1.7 1.7 0 0 0 1.03-1.56v-.17a2.06 2.06 0 1 1 4.12 0v.09a1.7 1.7 0 0 0 1.03 1.56h.08a1.7 1.7 0 0 0 1.87-.34l.06-.06a2.06 2.06 0 1 1 2.92 2.92l-.06.06a1.7 1.7 0 0 0-.34 1.87v.08a1.7 1.7 0 0 0 1.56 1.03h.17a2.06 2.06 0 1 1 0 4.12h-.09a1.7 1.7 0 0 0-1.56 1.03z"/>
+            </svg>
+          </span>
           <span class="mobile-menu-bar-label">設定</span>
-        </button>
-        <button type="button" id="mobileMenuBtn" class="mobile-menu-bar-btn" aria-label="メニューを開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileDrawer">
-          <span class="mobile-menu-bar-icon mobile-menu-bar-icon-burger" aria-hidden="true"><span></span><span></span><span></span></span>
-          <span class="mobile-menu-bar-label">メニュー</span>
         </button>
         <button type="button" id="mobileLangBtn" class="mobile-menu-bar-btn" aria-label="言語を開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileLangSheet">
           <span class="mobile-menu-bar-icon mobile-menu-bar-icon-globe" aria-hidden="true">
@@ -199,6 +200,10 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
             </svg>
           </span>
           <span class="mobile-menu-bar-label">言語</span>
+        </button>
+        <button type="button" id="mobileMenuBtn" class="mobile-menu-bar-btn" aria-label="メニューを開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileDrawer">
+          <span class="mobile-menu-bar-icon mobile-menu-bar-icon-burger" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="mobile-menu-bar-label">メニュー</span>
         </button>
       </div>
 
