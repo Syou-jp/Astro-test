@@ -1636,6 +1636,7 @@
 .home-news-card:hover .home-news-thumb img{transform:scale(1.04);}
 .home-news-card:hover .home-news-body strong{text-decoration:underline;}
 .home-news-thumb{position:absolute;inset:0;display:block;}
+.home-news-tag{position:absolute;top:12px;left:12px;z-index:1;padding:4px 10px;font:700 11px "JetBrains Mono",monospace;letter-spacing:.06em;color:#fff;background:var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.3);}
 .home-news-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
 .home-news-body{position:absolute;left:0;right:0;bottom:0;padding:16px 18px 16px;background:linear-gradient(0deg,rgba(8,10,14,.96) 0%,rgba(8,10,14,.8) 40%,rgba(8,10,14,.35) 70%,rgba(8,10,14,0) 100%);}
 .home-news-date{display:block;font:700 12.5px "JetBrains Mono",monospace;letter-spacing:.08em;color:#fff;opacity:.95;margin-bottom:6px;text-shadow:0 1px 2px rgba(0,0,0,.4);}
