@@ -1,5 +1,16 @@
 <div id="page-legal" class="page-view active theme-apply">
     <div class="eyebrow">行政書士・在留手続の料金相場 Administrative Scrivener</div>
+
+    <button type="button" class="expert-cta" data-expert-cta-open>
+      <img class="expert-cta-avatar" src="/experts/gyosei-advisor.svg" alt="行政書士専門家のアイコン画像">
+      <span class="expert-cta-body">
+        <span class="expert-cta-label">今すぐ専門家に相談できます</span>
+        <span class="expert-cta-title">この分野の専門家とつながる</span>
+        <span class="expert-cta-name">国籍・言語別に4名の行政書士・専門家を掲載</span>
+      </span>
+      <span class="expert-cta-arrow" aria-hidden="true">›</span>
+    </button>
+
     <div class="portal-alert"><span class="portal-badge new">2026</span> 行政書士報酬は自由設定です。表示額は複数事務所でよく見られる税込・税別混在の市場帯を整理した<strong>依頼前の比較目安</strong>で、入管等へ納める法定手数料、翻訳、公証・認証、戸籍取得等は別途の場合があります。</div>
     <div class="service-filter" id="legalFilters"><button class="active" data-filter="all">すべて</button><button data-filter="visa">在留・ビザ</button><button data-filter="family">結婚・家族</button><button data-filter="company">起業・許認可</button></div>
     <div class="card legal-fee-card"><table class="portal-table portal-table--compare"><thead><tr><th>手続・相談</th><th>報酬目安</th><th>官公署手数料等</th></tr></thead><tbody id="legalTable"></tbody></table></div>
@@ -8,6 +19,200 @@
       <div class="market-note"><strong>2026年の重要変更</strong><br>改正行政書士法は2026年1月1日施行。特定在留カードは2026年6月14日開始。「経営・管理」の新基準も適用中です。2026年成立の入管法改正による手数料上限引上げは、政令で定める将来日から施行予定のため、申請時の最新額を確認してください。</div>
     </div>
     <div class="portal-actions"><a class="secondary-btn" href="https://www.gyosei.or.jp/" target="_blank" rel="noopener">日本行政書士会連合会</a><a class="secondary-btn" href="https://www.moj.go.jp/isa/" target="_blank" rel="noopener">出入国在留管理庁</a><a class="secondary-btn" href="https://www.moj.go.jp/isa/11_00053.html" target="_blank" rel="noopener">現在の在留手数料</a></div>
+
+    <button type="button" class="expert-cta" data-expert-cta-open>
+      <img class="expert-cta-avatar" src="/experts/gyosei-advisor.svg" alt="行政書士専門家のアイコン画像">
+      <span class="expert-cta-body">
+        <span class="expert-cta-label">今すぐ専門家に相談できます</span>
+        <span class="expert-cta-title">この分野の専門家とつながる</span>
+        <span class="expert-cta-name">国籍・言語別に4名の行政書士・専門家を掲載</span>
+      </span>
+      <span class="expert-cta-arrow" aria-hidden="true">›</span>
+    </button>
+
+    <div class="expert-modal-backdrop" id="expertModalBackdrop" hidden>
+      <div class="expert-modal" role="dialog" aria-modal="true" aria-labelledby="expertModalTitle">
+        <button type="button" class="expert-modal-close" id="expertModalClose" aria-label="閉じる">×</button>
+        <div class="expert-modal-body">
+
+          <div id="expertListView">
+            <h3 id="expertModalTitle" class="expert-modal-title">専門家を選ぶ</h3>
+            <p class="expert-list-intro">会社・対応言語・国籍が異なる行政書士の一覧です。気になる方をクリックするとプロフィールと連絡先を確認できます。</p>
+            <div class="expert-grid" id="expertGrid"></div>
+          </div>
+
+          <div id="expertDetailView" hidden>
+            <button type="button" class="expert-back-btn" id="expertBackBtn">← 一覧に戻る</button>
+            <div id="expertDetailBody"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var experts = [
+          {
+            id: "yamamoto-takashi",
+            name: "山本 隆（やまもと たかし）",
+            company: "山本行政書士事務所",
+            country: "日本",
+            languages: ["日本語", "English"],
+            role: "特定行政書士登録番号：第000000号（仮）",
+            avatar: "/experts/gyosei-advisor.svg",
+            bio: "在留期間更新、在留資格変更、永住許可申請を専門とする特定行政書士です。就労系・身分系いずれの在留資格にも対応し、申請理由書の作成から入管への申請取次まで一貫してサポートします。",
+            email: "contact@example.com",
+            phone: "03-0000-1000（平日 9:00〜18:00）",
+            address: "東京都新宿区〇〇 1-2-3（仮住所）",
+            specialties: [
+              "在留期間更新・在留資格変更の申請取次",
+              "永住許可・帰化許可申請サポート",
+              "経営・管理ビザ、会社設立書類の作成"
+            ]
+          },
+          {
+            id: "sarah-johnson",
+            name: "Sarah Johnson（サラ・ジョンソン）",
+            company: "Johnson Immigration Office",
+            country: "アメリカ",
+            languages: ["English", "日本語"],
+            role: "行政書士登録番号：第000000号（仮）",
+            avatar: "/experts/gyosei-advisor-4.svg",
+            bio: "国際結婚・配偶者ビザ・家族滞在の手続きを英語・日本語で案内する行政書士です。書類の取り寄せから提出まで、パートナーが外国籍の方向けに分かりやすくサポートします。",
+            email: "sarah@example.com",
+            phone: "03-0000-1001（平日 10:00〜19:00）",
+            address: "東京都港区〇〇 2-3-4（仮住所）",
+            specialties: [
+              "日本人の配偶者等・永住者の配偶者等の在留手続",
+              "国際結婚の届出・必要書類の整理",
+              "英語での申請サポート・面談"
+            ]
+          },
+          {
+            id: "tran-thi-lan",
+            name: "Trần Thị Lan（チャン・ティ・ラン）",
+            company: "Lan & Partners 行政書士事務所",
+            country: "ベトナム",
+            languages: ["日本語", "Tiếng Việt"],
+            role: "行政書士登録番号：第000000号（仮）",
+            avatar: "/experts/gyosei-advisor-2.svg",
+            bio: "技能実習・特定技能で来日するベトナム人の在留資格手続きを専門とし、日本語・ベトナム語で対応します。転職に伴う在留資格変更や、家族滞在の呼び寄せ相談にも応じます。",
+            email: "lan@example.com",
+            phone: "03-0000-1002（平日 10:00〜18:00）",
+            address: "埼玉県川口市〇〇 3-4-5（仮住所）",
+            specialties: [
+              "技能実習・特定技能者の在留資格手続き",
+              "転職に伴う在留資格変更のサポート",
+              "日本語・ベトナム語での相談対応"
+            ]
+          },
+          {
+            id: "li-wei",
+            name: "Li Wei（李 偉／リ・ウェイ）",
+            company: "李行政書士事務所",
+            country: "中国",
+            languages: ["中文", "日本語"],
+            role: "行政書士登録番号：第000000号（仮）",
+            avatar: "/experts/gyosei-advisor-3.svg",
+            bio: "中華圏出身の経営者・起業家を中心に、経営・管理ビザの取得や会社設立に伴う許認可手続きを中国語・日本語でサポートしています。",
+            email: "liwei@example.com",
+            phone: "03-0000-1003（平日 9:30〜18:30）",
+            address: "東京都豊島区〇〇 4-5-6（仮住所）",
+            specialties: [
+              "経営・管理ビザの取得サポート",
+              "会社設立に伴う許認可手続き（古物商・飲食店営業許可等）",
+              "中国語・日本語での申請サポート"
+            ]
+          }
+        ];
+
+        var openBtns = document.querySelectorAll("[data-expert-cta-open]");
+        var backdrop = document.getElementById("expertModalBackdrop");
+        var closeBtn = document.getElementById("expertModalClose");
+        var grid = document.getElementById("expertGrid");
+        var listView = document.getElementById("expertListView");
+        var detailView = document.getElementById("expertDetailView");
+        var detailBody = document.getElementById("expertDetailBody");
+        var backBtn = document.getElementById("expertBackBtn");
+        if (!openBtns.length || !backdrop || !closeBtn || !grid) return;
+
+        function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value == null ? "" : value; return el.innerHTML; }
+
+        grid.innerHTML = experts.map(function (e) {
+          return '<button type="button" class="expert-mini-card" data-expert-id="' + escapeHtml(e.id) + '">' +
+            '<img class="expert-mini-avatar" src="' + escapeHtml(e.avatar) + '" alt="' + escapeHtml(e.name) + 'のアイコン画像">' +
+            '<span>' +
+              '<span class="expert-mini-name">' + escapeHtml(e.name) + '</span>' +
+              '<span class="expert-mini-company">' + escapeHtml(e.company) + '</span>' +
+              '<span class="expert-mini-tags"><span>' + escapeHtml(e.country) + '</span>' +
+              e.languages.map(function (lang) { return "<span>" + escapeHtml(lang) + "</span>"; }).join("") +
+              '</span>' +
+            '</span>' +
+          '</button>';
+        }).join("");
+
+        function showDetail(id) {
+          var e = experts.filter(function (item) { return item.id === id; })[0];
+          if (!e) return;
+
+          detailBody.innerHTML =
+            '<div class="expert-profile-head">' +
+              '<img class="expert-profile-avatar" src="' + escapeHtml(e.avatar) + '" alt="' + escapeHtml(e.name) + 'のプロフィール画像（仮アイコン）">' +
+              '<div style="flex:1;min-width:220px;">' +
+                '<div class="expert-profile-name">' + escapeHtml(e.name) + '</div>' +
+                '<div class="expert-profile-role">' + escapeHtml(e.company) + '　|　' + escapeHtml(e.role) + '</div>' +
+                '<div class="expert-profile-bio">' + escapeHtml(e.bio) + '<br><br>※このプロフィールはサンプル（仮）です。実際の担当者情報に差し替えてご利用ください。</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="expert-modal-section">' +
+              '<h4>連絡先</h4>' +
+              '<ul class="expert-contact-list">' +
+                '<li><b>メール</b><a href="mailto:' + escapeHtml(e.email) + '">' + escapeHtml(e.email) + '</a></li>' +
+                '<li><b>電話</b><span>' + escapeHtml(e.phone) + '</span></li>' +
+                '<li><b>事務所</b><span>' + escapeHtml(e.address) + '</span></li>' +
+                '<li><b>対応言語</b><span>' + escapeHtml(e.languages.join("・")) + '</span></li>' +
+                '<li><b>国籍</b><span>' + escapeHtml(e.country) + '</span></li>' +
+              '</ul>' +
+            '</div>' +
+            '<div class="expert-modal-section">' +
+              '<h4>対応分野</h4>' +
+              '<ul class="info-list">' + e.specialties.map(function (s) { return "<li>" + escapeHtml(s) + "</li>"; }).join("") + '</ul>' +
+            '</div>' +
+            '<p class="expert-modal-note">※本ページの氏名・登録番号・連絡先はすべてサンプルです。実在の専門家情報ではありません。</p>';
+
+          listView.hidden = true;
+          detailView.hidden = false;
+        }
+
+        function showList() {
+          detailView.hidden = true;
+          listView.hidden = false;
+        }
+
+        grid.addEventListener("click", function (event) {
+          var card = event.target.closest("[data-expert-id]");
+          if (!card) return;
+          showDetail(card.dataset.expertId);
+        });
+        backBtn.addEventListener("click", showList);
+
+        function openModal() {
+          showList();
+          backdrop.hidden = false;
+          document.body.style.overflow = "hidden";
+        }
+        function closeModal() {
+          backdrop.hidden = true;
+          document.body.style.overflow = "";
+        }
+
+        openBtns.forEach(function (btn) { btn.addEventListener("click", openModal); });
+        closeBtn.addEventListener("click", closeModal);
+        backdrop.addEventListener("click", function (event) { if (event.target === backdrop) closeModal(); });
+        document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !backdrop.hidden) closeModal(); });
+      })();
+    </script>
   </div><!-- /page-legal -->
 <script>
 /* Administrative scrivener market ranges. */
