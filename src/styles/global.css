@@ -1601,7 +1601,7 @@
 .home-slider-wrap{display:contents;}
 .home-slider-nav{display:none;}
 .home-slider-dots{display:none;}
-.home-news-card{grid-column:span 3;position:relative;display:block;height:100%;overflow:hidden;background:var(--paper-2);text-decoration:none;border:1px solid var(--line);}
+.home-news-card{grid-column:span 3;grid-row:span 2;position:relative;display:block;height:100%;overflow:hidden;background:var(--paper-2);text-decoration:none;border:1px solid var(--line);}
 .home-news-card:hover .home-news-thumb img{transform:scale(1.04);}
 .home-news-card:hover .home-news-body strong{text-decoration:underline;}
 .home-news-thumb{position:absolute;inset:0;display:block;}
@@ -1625,7 +1625,7 @@
 .home-link-list a{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:7px 0;text-decoration:none;color:var(--ink-soft);font-size:12.5px;}
 .home-link-list a:hover{color:var(--accent);}
 .home-link-list a small{font-size:9.5px;color:var(--ink-soft);opacity:.7;font-family:"JetBrains Mono",monospace;white-space:nowrap;}
-@media(max-width:860px){.home-hero{grid-template-columns:1fr;}.home-popular-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-top-row{grid-template-columns:1fr 1fr;}.home-news-card{grid-column:span 2;height:auto;aspect-ratio:21/9;}}
+@media(max-width:860px){.home-hero{grid-template-columns:1fr;}.home-popular-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-top-row{grid-template-columns:1fr 1fr;}.home-news-card{grid-column:span 2;grid-row:span 1;height:auto;aspect-ratio:21/9;}}
 @media(max-width:520px){.home-popular-grid{grid-template-columns:1fr;}.home-category-grid{grid-template-columns:1fr;}.home-hero h2{font-size:22px;}.home-news-card{aspect-ratio:16/9;}.home-news-body strong{max-width:100%;font-size:14px;}.home-top-row{grid-template-columns:1fr;}.home-news-card{grid-column:span 1;}}
 
 /* ---- Mobile readability pass ----
@@ -1767,3 +1767,81 @@
   .card.is-collapsed .card-body{display:none;}
   #jobPostingForm.is-collapsed ~ *{display:none;}
 }
+
+/* ---- Expert CTA: bottom-of-page link to a specialist's profile/contact page ---- */
+.expert-cta{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-top:26px;
+  padding:16px 20px;
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(76,107,87,.42),rgba(44,74,58,.32));
+  -webkit-backdrop-filter:blur(10px) saturate(140%);
+  backdrop-filter:blur(10px) saturate(140%);
+  box-shadow:0 10px 34px rgba(28,56,45,.18);
+  text-decoration:none;
+  color:var(--white);
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.expert-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 16px 44px rgba(28,56,45,.26);
+  background:linear-gradient(135deg,rgba(76,107,87,.52),rgba(44,74,58,.42));
+}
+.expert-cta-avatar{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  object-fit:cover;
+  flex:0 0 auto;
+  border:2px solid rgba(255,255,255,.55);
+  background:var(--paper-2);
+}
+.expert-cta-body{flex:1;min-width:0;}
+.expert-cta-label{
+  display:block;
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:.08em;
+  color:rgba(255,255,255,.82);
+  margin-bottom:3px;
+}
+.expert-cta-title{
+  display:block;
+  font-family:"Shippori Mincho",serif;
+  font-size:16px;
+  font-weight:700;
+  color:var(--white);
+  line-height:1.5;
+}
+.expert-cta-name{
+  display:block;
+  font-size:11.5px;
+  color:rgba(255,255,255,.82);
+  margin-top:2px;
+}
+.expert-cta-arrow{
+  flex:0 0 auto;
+  font-size:20px;
+  color:var(--white);
+  opacity:.85;
+}
+@media(max-width:520px){
+  .expert-cta{padding:13px 15px;gap:12px;}
+  .expert-cta-avatar{width:46px;height:46px;}
+  .expert-cta-title{font-size:14.5px;}
+}
+
+/* ---- Expert profile page (bio + contact) ---- */
+.expert-profile-head{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-bottom:6px;}
+.expert-profile-avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;background:var(--paper-2);border:1px solid var(--line);flex:0 0 auto;}
+.expert-profile-name{font-family:"Shippori Mincho",serif;font-size:19px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.expert-profile-role{font-size:12.5px;color:var(--accent);font-weight:700;margin-bottom:10px;}
+.expert-profile-bio{font-size:13px;line-height:1.9;color:var(--ink-soft);}
+.expert-contact-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
+.expert-contact-list li{display:flex;gap:10px;align-items:baseline;font-size:12.5px;border-bottom:1px solid var(--line-soft);padding-bottom:10px;}
+.expert-contact-list li:last-child{border-bottom:0;padding-bottom:0;}
+.expert-contact-list b{flex:0 0 92px;color:var(--ink-soft);font-weight:700;font-size:11px;letter-spacing:.03em;}
+.expert-contact-list a{color:var(--accent);font-weight:700;}
