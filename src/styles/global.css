@@ -1832,6 +1832,19 @@
   border:2px solid var(--gold);
   background:var(--paper-2);
 }
+.expert-cta-avatars{
+  display:flex;
+  align-items:center;
+  flex:0 0 auto;
+}
+.expert-cta-avatars .expert-cta-avatar{
+  width:52px;
+  height:52px;
+  box-shadow:0 2px 6px rgba(0,0,0,.3);
+}
+.expert-cta-avatars .expert-cta-avatar + .expert-cta-avatar{
+  margin-left:-16px;
+}
 .expert-cta-body{flex:1;min-width:0;}
 .expert-cta-label{
   display:block;
@@ -1864,6 +1877,8 @@
 @media(max-width:520px){
   .expert-cta{padding:13px 15px;gap:12px;}
   .expert-cta-avatar{width:46px;height:46px;}
+  .expert-cta-avatars .expert-cta-avatar{width:40px;height:40px;}
+  .expert-cta-avatars .expert-cta-avatar + .expert-cta-avatar{margin-left:-13px;}
   .expert-cta-title{font-size:14.5px;}
 }
 
