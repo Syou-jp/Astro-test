@@ -1793,23 +1793,21 @@
   width:100%;
   margin-top:26px;
   padding:16px 20px;
-  border:1px solid rgba(255,255,255,.28);
+  border:1px solid var(--gold);
   border-radius:16px;
-  background:linear-gradient(135deg,rgba(76,107,87,.42),rgba(44,74,58,.32));
-  -webkit-backdrop-filter:blur(10px) saturate(140%);
-  backdrop-filter:blur(10px) saturate(140%);
-  box-shadow:0 10px 34px rgba(28,56,45,.18);
+  background:linear-gradient(135deg,var(--accent-2),var(--accent));
+  box-shadow:0 10px 30px -6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.16);
   text-decoration:none;
   text-align:left;
   font:inherit;
-  color:var(--white);
+  color:#fff;
   cursor:pointer;
-  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease,background .2s ease,border-color .2s ease;
 }
 .expert-cta:hover{
   transform:translateY(-2px);
-  box-shadow:0 16px 44px rgba(28,56,45,.26);
-  background:linear-gradient(135deg,rgba(76,107,87,.52),rgba(44,74,58,.42));
+  box-shadow:0 16px 38px -6px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.22);
+  filter:brightness(1.07) saturate(1.08);
 }
 .expert-cta-avatar{
   width:56px;
@@ -1817,7 +1815,7 @@
   border-radius:50%;
   object-fit:cover;
   flex:0 0 auto;
-  border:2px solid rgba(255,255,255,.55);
+  border:2px solid var(--gold);
   background:var(--paper-2);
 }
 .expert-cta-body{flex:1;min-width:0;}
@@ -1826,7 +1824,7 @@
   font-size:10.5px;
   font-weight:700;
   letter-spacing:.08em;
-  color:rgba(255,255,255,.82);
+  color:rgba(255,255,255,.85);
   margin-bottom:3px;
 }
 .expert-cta-title{
@@ -1834,19 +1832,19 @@
   font-family:"Shippori Mincho",serif;
   font-size:16px;
   font-weight:700;
-  color:var(--white);
+  color:#fff;
   line-height:1.5;
 }
 .expert-cta-name{
   display:block;
   font-size:11.5px;
-  color:rgba(255,255,255,.82);
+  color:rgba(255,255,255,.85);
   margin-top:2px;
 }
 .expert-cta-arrow{
   flex:0 0 auto;
   font-size:20px;
-  color:var(--white);
+  color:#fff;
   opacity:.85;
 }
 @media(max-width:520px){
