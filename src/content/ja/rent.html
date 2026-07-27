@@ -6,7 +6,7 @@
     .rent-property-line{font-size:13.5px;font-weight:700;margin-bottom:10px;color:var(--accent);}
 
     #page-rent .section-title{font-size:14px;margin-bottom:12px;}
-    #page-rent .field-row{padding:7px 0;}
+    #page-rent .field-row{padding:7px 0;grid-template-columns:1fr 140px;}
     #page-rent .field-row label,
     #page-rent .field-block > label{font-size:12.5px;}
     #page-rent .field-row .hint,
@@ -37,7 +37,7 @@
     #page-rent .fire-key-row{display:flex;gap:16px;padding:7px 0;border-bottom:1px dashed var(--line-soft);}
     #page-rent .fire-key-row .field-block{flex:1;min-width:0;padding:0;border-bottom:none;}
     #page-rent .fire-key-row .input-tax-row{flex-wrap:wrap;gap:5px 8px;}
-    #page-rent .fire-key-row .input-tax-row input[type=number]{width:100%;max-width:none;min-width:0;box-sizing:border-box;}
+    #page-rent .fire-key-row .input-tax-row input[type=number]{width:min(140px,100%);box-sizing:border-box;}
 
     #page-rent .add-btn.mini{font-size:11.5px;padding:6px 9px;margin-top:8px;}
 
@@ -146,14 +146,14 @@
         </div>
 
         <div class="field-block">
-          <label>初回保証利用料<span class="hint">金額、または家賃＋管理費＋その他合計に対する割合で入力（非課税）</span></label>
+          <label>初回保証利用料<span class="hint">金額または割合で入力（非課税）</span></label>
           <div class="mode-toggle" id="guarantorModeToggle">
-            <div class="mode-btn" data-mode="percent">%（家賃+管理費+その他基準）</div>
+            <div class="mode-btn" data-mode="percent">%（家賃+管理費+他）</div>
             <div class="mode-btn active" data-mode="amount">金額</div>
           </div>
           <div class="input-tax-row">
             <div id="guarantorPercentWrap" class="sub-input-wrap" style="display:none;align-items:center;gap:8px;">
-              <span class="rent-subinput-label">(家賃+管理費+その他) の %</span>
+              <span class="rent-subinput-label">(家賃+管理費+他) の %</span>
               <input type="number" id="guarantorPercent" value="50" min="0" step="5" style="width:70px;text-align:right;">
             </div>
             <div id="guarantorAmountWrap" class="sub-input-wrap" style="display:flex;align-items:center;">
