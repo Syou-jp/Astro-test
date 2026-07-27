@@ -189,7 +189,10 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         </div>
 
         <div class="mobile-drawer-section">
-          <a class:list={["mobile-drawer-about", activeId === "page-about" && "active"]} href={localePath(currentLocale.code, "about")} data-no-i18n>サイトについて</a>
+          <a class:list={["mobile-drawer-about", activeId === "page-about" && "active"]} href={localePath(currentLocale.code, "about")} data-no-i18n>
+            <span>サイトについて</span>
+            <span class="mobile-drawer-arrow" aria-hidden="true">›</span>
+          </a>
         </div>
 
         <div class="mobile-drawer-section">
@@ -212,16 +215,31 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         </div>
 
         <div class="mobile-drawer-section mobile-drawer-nav">
-          {navGroups.map((group) => (
-            <div class="mobile-drawer-group">
-              <div class="mobile-drawer-group-label">{group.label}</div>
-              {group.tabs.map((tab) => (
-                <a class:list={["mobile-drawer-link", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)}>
-                  <span>{tab.text}</span>{tab.small && <small>{tab.small}</small>}
-                </a>
-              ))}
-            </div>
-          ))}
+          {navGroups.map((group, i) => {
+            const hasActive = group.tabs.some((tab) => activeId === tab.id);
+            return (
+              <div class:list={["mobile-drawer-group", hasActive && "is-open"]}>
+                <button
+                  type="button"
+                  class:list={["mobile-drawer-group-label", hasActive && "has-active"]}
+                  aria-expanded={hasActive ? "true" : "false"}
+                  aria-controls={`mdrawer-group-${i}`}
+                >
+                  <span>{group.label}</span>
+                  <span class="mobile-drawer-chevron" aria-hidden="true">›</span>
+                </button>
+                <div class="mobile-drawer-group-body" id={`mdrawer-group-${i}`}>
+                  <div class="mobile-drawer-group-inner">
+                    {group.tabs.map((tab) => (
+                      <a class:list={["mobile-drawer-link", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)}>
+                        <span>{tab.text}</span>{tab.small && <small>{tab.small}</small>}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -345,6 +363,16 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         });
         window.matchMedia("(min-width:641px)").addEventListener("change", (event) => {
           if (event.matches) close();
+        });
+
+        drawer.querySelectorAll(".mobile-drawer-group-label").forEach((label) => {
+          label.addEventListener("click", () => {
+            const group = label.closest(".mobile-drawer-group");
+            if (!group) return;
+            const willOpen = !group.classList.contains("is-open");
+            group.classList.toggle("is-open", willOpen);
+            label.setAttribute("aria-expanded", String(willOpen));
+          });
         });
       })();
     </script>
