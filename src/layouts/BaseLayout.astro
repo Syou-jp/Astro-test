@@ -41,9 +41,6 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
     <div class="wrap">
       <div class="masthead">
         <h1><a href={localePath(currentLocale.code)} class="site-title-link">Sotocom</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">国から日本へ。外で生きるコミュニティ。</span></h1>
-        <button type="button" id="mobileMenuBtn" class="hamburger-btn" aria-label="メニューを開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileDrawer">
-          <span></span><span></span><span></span>
-        </button>
         <div class="masthead-right">
           <a class:list={["about-nav-btn", activeId === "page-about" && "active"]} id="aboutNavBtn" href={localePath(currentLocale.code, "about")} data-no-i18n><span id="aboutNavLabel">サイトについて</span></a>
           <div class="site-theme-control">
@@ -180,6 +177,11 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           });
         })();
       </script>
+
+      <button type="button" id="mobileMenuBtn" class="mobile-menu-bar" aria-label="メニューを開く" aria-haspopup="true" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="mobile-menu-bar-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="mobile-menu-bar-label">メニュー</span>
+      </button>
 
       <div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
       <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
