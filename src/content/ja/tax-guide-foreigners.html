@@ -20,6 +20,16 @@
     </aside>
   </section>
 
+  <button type="button" class="expert-cta" data-expert-cta-open>
+    <img class="expert-cta-avatar" src="/experts/tax-advisor.svg" alt="税務専門家のアイコン画像">
+    <span class="expert-cta-body">
+      <span class="expert-cta-label">今すぐ専門家に相談できます</span>
+      <span class="expert-cta-title">この分野の専門家とつながる</span>
+      <span class="expert-cta-name">国籍・言語別に4名の税理士・専門家を掲載</span>
+    </span>
+    <span class="expert-cta-arrow" aria-hidden="true">›</span>
+  </button>
+
   <div class="portal-alert">
     <strong>まず確認すること：</strong>
     自分が税法上「居住者」なのか「非居住者」なのか、居住者の中でも「非永住者」なのかによって、日本で課税される所得の範囲がまったく異なります。
@@ -168,7 +178,7 @@
     税制は年度ごとに改正されます。個別の申告要否・控除の適否は、必ず所轄の税務署、市区町村の税務窓口、または税理士にご確認ください。
   </div>
 
-  <button type="button" class="expert-cta" id="expertCtaOpen">
+  <button type="button" class="expert-cta" data-expert-cta-open>
     <img class="expert-cta-avatar" src="/experts/tax-advisor.svg" alt="税務専門家のアイコン画像">
     <span class="expert-cta-body">
       <span class="expert-cta-label">今すぐ専門家に相談できます</span>
@@ -305,7 +315,7 @@
         }
       ];
 
-      var openBtn = document.getElementById("expertCtaOpen");
+      var openBtns = document.querySelectorAll("[data-expert-cta-open]");
       var backdrop = document.getElementById("expertModalBackdrop");
       var closeBtn = document.getElementById("expertModalClose");
       var grid = document.getElementById("expertGrid");
@@ -313,7 +323,7 @@
       var detailView = document.getElementById("expertDetailView");
       var detailBody = document.getElementById("expertDetailBody");
       var backBtn = document.getElementById("expertBackBtn");
-      if (!openBtn || !backdrop || !closeBtn || !grid) return;
+      if (!openBtns.length || !backdrop || !closeBtn || !grid) return;
 
       function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value == null ? "" : value; return el.innerHTML; }
 
@@ -385,7 +395,7 @@
         document.body.style.overflow = "";
       }
 
-      openBtn.addEventListener("click", openModal);
+      openBtns.forEach(function (btn) { btn.addEventListener("click", openModal); });
       closeBtn.addEventListener("click", closeModal);
       backdrop.addEventListener("click", function (event) { if (event.target === backdrop) closeModal(); });
       document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !backdrop.hidden) closeModal(); });
