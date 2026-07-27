@@ -1552,6 +1552,7 @@
 .home-featured-card:hover .home-featured-body strong{text-decoration:underline;}
 .home-top-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:stretch;}
 .home-top-row .home-featured-card{grid-column:span 1;}
+.home-slider-group{display:contents;}
 .home-news-card{grid-column:span 2;position:relative;display:block;height:100%;overflow:hidden;background:var(--paper-2);text-decoration:none;border:1px solid var(--line);}
 .home-news-card:hover .home-news-thumb img{transform:scale(1.04);}
 .home-news-card:hover .home-news-body strong{text-decoration:underline;}
@@ -1585,6 +1586,15 @@
    shared component classes (.field-row, .card, .lang-picker, .apply-field, etc.) used across
    every page, so the rules are now applied site-wide instead of re-written per page. */
 @media(max-width:640px){
+  .home-top-row{display:block;}
+  .home-top-row .home-news-card{margin-bottom:12px;}
+  .home-slider-group,
+  .home-featured-grid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -14px;padding:0 14px;}
+  .home-slider-group::-webkit-scrollbar,
+  .home-featured-grid::-webkit-scrollbar{display:none;}
+  .home-slider-group .home-featured-card,
+  .home-featured-grid .home-featured-card{flex:0 0 74%;scroll-snap-align:start;}
+
   .tab-panel{padding:16px 14px 16px;}
 
   /* Grid tracks default to min-content width, which let a wide child (e.g. lang-picker)
