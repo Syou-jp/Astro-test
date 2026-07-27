@@ -40,7 +40,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
   <body>
     <div class="wrap">
       <div class="masthead">
-        <h1><a href={localePath(currentLocale.code)} class="site-title-link">Sotocom</a><span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">国から日本へ。ともに生きるコミュニティ。</span></h1>
+        <h1><a href={localePath(currentLocale.code)} class="site-title-link">Sotocom</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">国から日本へ。ともに生きるコミュニティ。</span></h1>
         <div class="masthead-right">
           <a class:list={["about-nav-btn", activeId === "page-about" && "active"]} id="aboutNavBtn" href={localePath(currentLocale.code, "about")} data-no-i18n><span id="aboutNavLabel">サイトについて</span></a>
           <div class="site-theme-control">
