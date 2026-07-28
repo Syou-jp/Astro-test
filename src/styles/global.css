@@ -1682,7 +1682,8 @@
   .card{padding:16px 14px;}
   .section-title{font-size:14px;margin-bottom:12px;}
   .eyebrow{font-size:11px;}
-  .portal-alert{font-size:12px;line-height:1.7;}
+  .portal-alert{font-size:12px;line-height:1.7;text-align:left;}
+  .portal-alert .portal-badge{display:block;width:fit-content;margin:0 0 8px;}
 
   .field-row{grid-template-columns:1fr 112px;padding:9px 0;}
   .field-row label,
