@@ -81,11 +81,16 @@
         <button type="button" class="btn-copy" id="furCalcBtn" style="margin-top:14px;width:100%;">控除上限額を計算</button>
       </div>
       <div>
-        <div class="portal-grid three">
+        <div class="portal-grid three fur-result-grid">
           <div class="portal-result"><span>上限の標準目安</span><strong id="furLimit">—</strong><small>自己負担2,000円の概算上限</small></div>
           <div class="portal-result"><span>安全寄りの目安</span><strong id="furSafe">—</strong><small>標準目安の90%・千円未満切捨て</small></div>
           <div class="portal-result"><span>予定額の自己負担</span><strong id="furOwnCost">—</strong><small id="furStatus">寄附予定額を入力してください</small></div>
         </div>
+        <style>
+          .fur-result-grid .portal-result{padding:11px;}
+          .fur-result-grid .portal-result strong{font-size:17px;margin-top:2px;}
+          .fur-result-grid .portal-result small{margin-top:4px;font-size:10.5px;}
+        </style>
         <div class="card" style="margin-top:14px;padding:14px;"><table class="portal-table"><tbody id="furBreakdown"></tbody></table></div>
         <div class="market-note" id="furProcedure" style="margin-top:14px;"></div>
         <div class="portal-source">給与以外の所得、住宅ローン控除、医療費控除、iDeCo、配偶者・扶養の所得、人的控除差などで結果は変わります。最終確認は住民税決定通知書と自治体の試算、または税理士へ。根拠：<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm" target="_blank" rel="noopener">国税庁 ふるさと納税</a>／<a href="https://www.city.uwajima.ehime.jp/soshiki/12/kojin-133.html" target="_blank" rel="noopener">自治体の上限計算式</a></div>

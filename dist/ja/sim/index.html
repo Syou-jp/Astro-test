@@ -1403,4 +1403,20 @@ siteSetLanguage(siteInitialLanguage,false);
           return originalGetElementById.call(this, id) || missingElement;
         };
       })();
+    </script> <script>
+      (() => {
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest(".btn-copy");
+          if (!btn) return;
+          if (window.matchMedia("(max-width:860px)").matches === false) return;
+          setTimeout(() => {
+            const grid = btn.closest(".grid");
+            if (!grid) return;
+            const btnCol = btn.closest(".grid > *");
+            const resultCol = Array.from(grid.children).find((child) => child !== btnCol);
+            if (!resultCol) return;
+            resultCol.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 60);
+        });
+      })();
     </script> </body> </html>

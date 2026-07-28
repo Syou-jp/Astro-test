@@ -156,9 +156,10 @@
 
     <style>
       #itBreakdownBody td{padding:6px 4px;font-size:12.5px;border-bottom:1px solid var(--line,#ddd6c5);}
-      #itBreakdownBody td:first-child{color:var(--ink-soft,#6b665a);}
+      #itBreakdownBody td:first-child{color:var(--ink-soft,#6b665a);white-space:nowrap;}
       #itBreakdownBody td:last-child{text-align:right;font-family:"JetBrains Mono",monospace;font-weight:700;}
       #itBreakdownBody tr.hl td{color:var(--accent);font-weight:700;}
+      @media(max-width:480px){#itBreakdownBody td:first-child{font-size:11.5px;}}
     </style>
 
     <script>
@@ -244,9 +245,9 @@
           ["控除後所得税", fmtYen(afterCreditTax)],
           ["復興特別所得税", fmtYen(reconstructionTax)],
           ["合計所得税", fmtYen(totalIncomeTax)],
-          ["【差引所得税（源泉徴収済み分を差引）】", fmtYen(diffIncomeTax)],
+          ["【差引所得税（源泉徴収分差引）】", fmtYen(diffIncomeTax)],
           ["住民税課税所得（概算）", fmtYen(taxableResident)],
-          ["【住民税額（概算・所得割＋均等割）】", fmtYen(residentTax)],
+          ["【住民税額（概算）】", fmtYen(residentTax)],
           ["【合計納税額の目安】", fmtYen(totalDue)]
         ];
         var body = document.getElementById("itBreakdownBody");
@@ -1561,5 +1562,21 @@ siteSetLanguage(siteInitialLanguage,false);
         Document.prototype.getElementById = function patchedGetElementById(id) {
           return originalGetElementById.call(this, id) || missingElement;
         };
+      })();
+    </script> <script>
+      (() => {
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest(".btn-copy");
+          if (!btn) return;
+          if (window.matchMedia("(max-width:860px)").matches === false) return;
+          setTimeout(() => {
+            const grid = btn.closest(".grid");
+            if (!grid) return;
+            const btnCol = btn.closest(".grid > *");
+            const resultCol = Array.from(grid.children).find((child) => child !== btnCol);
+            if (!resultCol) return;
+            resultCol.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 60);
+        });
       })();
     </script> </body> </html>
