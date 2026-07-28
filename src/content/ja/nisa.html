@@ -32,19 +32,26 @@
       <div>
         <div class="card">
           <div class="section-title">元本・資産の推移</div>
-          <table class="hcal-table" id="nisaTable" style="width:100%;">
-            <thead><tr><th>経過年</th><th>西暦</th><th>元本</th><th>資産評価額</th><th>運用収益</th></tr></thead>
-            <tbody id="nisaTableBody"></tbody>
-          </table>
+          <div class="nisa-table-scroll">
+            <table class="hcal-table" id="nisaTable">
+              <thead><tr><th>経過年</th><th>西暦</th><th>元本</th><th>資産評価額</th><th>運用収益</th></tr></thead>
+              <tbody id="nisaTableBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
 
     <style>
-      #nisaTable{border-collapse:collapse;font-size:12.5px;}
-      #nisaTable th,#nisaTable td{border-bottom:1px solid var(--line,#ddd6c5);padding:7px 6px;text-align:right;}
+      .nisa-table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+      #nisaTable{border-collapse:collapse;font-size:12.5px;width:100%;}
+      #nisaTable th,#nisaTable td{border-bottom:1px solid var(--line,#ddd6c5);padding:7px 6px;text-align:right;white-space:nowrap;}
       #nisaTable th:first-child,#nisaTable td:first-child,#nisaTable th:nth-child(2),#nisaTable td:nth-child(2){text-align:left;}
       #nisaTable th{color:var(--ink-soft,#6b665a);font-weight:700;font-size:11px;}
+      @media(max-width:520px){
+        #nisaTable{font-size:11.5px;min-width:480px;}
+        #nisaTable th,#nisaTable td{padding:6px 8px;}
+      }
 
       #page-nisa .calc-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
       #page-nisa .calc-kpi{position:relative;padding:14px 14px 14px 16px;border:1px solid var(--line);border-left:3px solid #F59E0B;border-radius:2px;background:var(--paper);transition:box-shadow .15s ease,transform .15s ease;}
