@@ -3,7 +3,7 @@
     <div class="portal-alert"><strong>參考：</strong>此計算機參考 <a href="https://nisa.eon.jp/" target="_blank" rel="noopener">新NISA計算ツール（zei.eon.jp系列）</a> 製作，用複利公式試算每月定額投資在新NISA制度下的資產成長，僅供概算參考，不構成投資建議，實際報酬會隨市場波動。</div>
     <div class="grid">
       <div class="card">
-        <div class="section-title"><span class="idx">01</span>運用条件を入力</div>
+        <div class="section-title">運用条件を入力</div>
         <div class="apply-fields">
           <div class="apply-field full"><label>毎月の積立額 Monthly investment</label><div class="input-wrap"><input type="number" id="nisaMonthly" value="30000" min="0" step="1000"><span>円/月</span></div></div>
           <div class="apply-field"><label>投資する期間 Period</label><select id="nisaYears">
@@ -31,7 +31,7 @@
           <div class="calc-kpi"><span>年間投資額</span><strong id="nisaYearlyOut">—</strong></div>
         </div>
         <div class="card">
-          <div class="section-title"><span class="idx">02</span>元本・資産の推移</div>
+          <div class="section-title">元本・資産の推移</div>
           <table class="hcal-table" id="nisaTable" style="width:100%;">
             <thead><tr><th>経過年</th><th>西暦</th><th>元本</th><th>資産評価額</th><th>運用収益</th></tr></thead>
             <tbody id="nisaTableBody"></tbody>

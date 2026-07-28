@@ -10,7 +10,7 @@
     <div class="portal-alert"><span class="portal-badge new">2026年4月</span> 自動車税・軽自動車税の「環境性能割」は廃止されました。車名を選ぶと代表的な排気量・車両重量を自動入力しますが、年式・グレードで異なるため車検証を確認してください。</div>
     <div class="grid">
       <div class="card">
-        <div class="section-title"><span class="idx">01</span>車両</div>
+        <div class="section-title">車両</div>
         <div class="apply-fields">
           <div class="apply-field"><label>ブランド Brand</label><select id="carBrand"></select></div>
           <div class="apply-field"><label>代表車型 Model</label><select id="carModel"></select></div>
@@ -19,7 +19,7 @@
           <div class="apply-field"><label>車種区分</label><select id="carClass"><option value="normal">普通・小型乗用車</option><option value="kei">軽自動車</option><option value="ev">電気自動車</option></select></div>
           <div class="apply-field"><label>初度登録から</label><select id="carAge"><option value="new">13年未満</option><option value="13">13年以上</option><option value="18">18年以上</option></select></div>
         </div>
-        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>購入・車検条件</div>
+        <div class="section-title" style="margin-top:18px;">購入・車検条件</div>
         <div class="apply-fields">
           <div class="apply-field"><label>車両本体価格 Price</label><input type="number" id="carPrice" value="1500000" min="0" step="10000"></div>
           <div class="apply-field"><label>環境性能割</label><select id="carEcoRate" disabled><option value="0">2026-04-01から廃止</option></select></div>
@@ -45,7 +45,7 @@
     <div class="eyebrow" id="carTransferEyebrow">中古車売買・名義変更 Used Car Transfer Guide</div>
     <div class="portal-alert" id="carTransferAlert"></div>
     <div class="card">
-      <div class="section-title"><span class="idx">01</span><span id="carTransferConditionTitle">条件を選ぶ</span></div>
+      <div class="section-title"><span id="carTransferConditionTitle">条件を選ぶ</span></div>
       <div class="car-transfer-controls">
         <div class="apply-field"><label id="carTransferVehicleLabel">車両区分</label><select id="carTransferVehicle"></select></div>
         <div class="apply-field"><label id="carTransferRoleLabel">あなたの立場</label><select id="carTransferRole"></select></div>
@@ -57,11 +57,11 @@
 
     <div class="grid" style="margin-top:18px;">
       <div class="card">
-        <div class="section-title"><span class="idx">02</span><span id="carTransferChecklistTitle">必要書類チェックリスト</span></div>
+        <div class="section-title"><span id="carTransferChecklistTitle">必要書類チェックリスト</span></div>
         <div class="car-transfer-checklist" id="carTransferChecklist"></div>
       </div>
       <div class="card" id="carTransferInputCard">
-        <div class="section-title"><span class="idx">03</span><span id="carTransferMemoInputTitle">記入用メモを作る</span></div>
+        <div class="section-title"><span id="carTransferMemoInputTitle">記入用メモを作る</span></div>
         <div class="apply-fields">
           <div class="apply-field"><label id="ctSellerNameLabel">旧所有者・売主氏名</label><input id="ctSellerName"></div>
           <div class="apply-field"><label id="ctBuyerNameLabel">新所有者・買主氏名</label><input id="ctBuyerName"></div>
@@ -81,7 +81,7 @@
 
     <div class="grid" style="margin-top:18px;">
       <div>
-        <div class="section-title"><span class="idx">04</span><span id="carTransferMemoTitle">手続記入メモ</span></div>
+        <div class="section-title"><span id="carTransferMemoTitle">手続記入メモ</span></div>
         <div class="car-transfer-memo" id="carTransferMemo"></div>
         <div class="actions export-actions" data-export-target="carTransferMemo" data-export-name="中古車名義変更_記入メモ">
           <button type="button" class="btn-copy" id="carTransferPdfBtn">📄 PDF</button>
@@ -91,13 +91,13 @@
         </div>
       </div>
       <div>
-        <div class="section-title"><span class="idx">05</span><span id="carTransferGuideTitle">外国人向け記入ガイド</span></div>
+        <div class="section-title"><span id="carTransferGuideTitle">外国人向け記入ガイド</span></div>
         <div class="car-transfer-guide" id="carTransferGuide"></div>
       </div>
     </div>
 
     <div class="card" style="margin-top:18px;">
-      <div class="section-title"><span class="idx">06</span><span id="carTransferDownloadTitle">公式様式・記載例ダウンロード</span></div>
+      <div class="section-title"><span id="carTransferDownloadTitle">公式様式・記載例ダウンロード</span></div>
       <div class="car-form-downloads" id="carTransferDownloads"></div>
       <div class="portal-source" id="carTransferSource" style="margin-top:14px;"></div>
     </div>
@@ -111,7 +111,7 @@
 
     <div class="grid">
       <div class="card">
-        <div class="section-title"><span class="idx">01</span>外国免許から日本免許への切替え</div>
+        <div class="section-title">外国免許から日本免許への切替え</div>
         <p>海外で取得した有効な運転免許証を、日本の運転免許証へ切り替える手続きが「外免切替」です。申請先は、原則として日本の住所地を管轄する都道府県警察の運転免許センター等です。</p>
         <table class="portal-table">
           <tbody>
@@ -124,7 +124,7 @@
       </div>
 
       <div class="card">
-        <div class="section-title"><span class="idx">02</span>知識確認・技能確認の免除</div>
+        <div class="section-title">知識確認・技能確認の免除</div>
         <p>次の国・地域等の免許は、知識確認と技能確認が免除されます。</p>
         <p class="market-note">アイスランド、アイルランド、イギリス、イタリア、オーストラリア、オーストリア、オランダ、カナダ、韓国、ギリシャ、スイス、スウェーデン、スペイン、スロベニア、チェコ、デンマーク、ドイツ、ニュージーランド、ノルウェー、ハンガリー、フィンランド、フランス、ベルギー、ポーランド、ポルトガル、モナコ、ルクセンブルク、台湾、アメリカ合衆国の一部州（オハイオ、オレゴン、コロラド、バージニア、ハワイ、メリーランド、ワシントン）</p>
         <table class="portal-table">
@@ -139,7 +139,7 @@
 
     <div class="grid" style="margin-top:18px;">
       <div class="card">
-        <div class="section-title"><span class="idx">03</span>国際運転免許証と公式翻訳文</div>
+        <div class="section-title">国際運転免許証と公式翻訳文</div>
         <table class="portal-table">
           <tbody>
             <tr><th>国際運転免許証</th><td>1949年ジュネーブ条約に基づく国際運転免許証であれば、日本上陸日から1年間、または国際運転免許証の有効期限のいずれか短い期間まで運転できます。</td></tr>
@@ -151,7 +151,7 @@
       </div>
 
       <div class="card">
-        <div class="section-title"><span class="idx">04</span>合宿免許という選択肢</div>
+        <div class="section-title">合宿免許という選択肢</div>
         <p>合宿免許は、地方の指定自動車教習所に短期滞在し、集中的に教習を受ける日本独自の取得スタイルです。</p>
         <table class="portal-table">
           <tbody>
@@ -165,7 +165,7 @@
     </div>
 
     <div class="card" style="margin-top:18px;">
-      <div class="section-title"><span class="idx">05</span>一都三県の外国語対応・外国人向け教習所</div>
+      <div class="section-title">一都三県の外国語対応・外国人向け教習所</div>
       <table class="portal-table">
         <thead>
           <tr><th>都県</th><th>教習所</th><th>対応・特徴</th><th>形態</th></tr>
@@ -184,7 +184,7 @@
     </div>
 
     <div class="card" style="margin-top:18px;">
-      <div class="section-title"><span class="idx">06</span>一都三県の申請先</div>
+      <div class="section-title">一都三県の申請先</div>
       <table class="portal-table">
         <tbody>
           <tr><th>東京都</th><td>府中・鮫洲・江東運転免許試験場。江東は免除対象国等の手続きに限定される場合があります。</td></tr>

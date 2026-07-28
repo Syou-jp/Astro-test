@@ -3,7 +3,7 @@
     <div class="portal-alert"><strong>外国人の方向け：</strong>在留資格と働き方は審査の目安として表示し、返済額の金利には自動加算しません。実際の可否・金利は銀行の本審査、物件担保評価、信用情報などで決まります。</div>
     <div class="grid">
       <div class="card">
-        <div class="section-title"><span class="idx">01</span>本人・在留状況</div>
+        <div class="section-title">本人・在留状況</div>
         <div class="apply-fields">
           <div class="apply-field full"><label>国籍・在留資格 Status</label><select id="loanStatus"><option value="japanese">日本国籍</option><option value="special">特別永住者</option><option value="pr">永住者</option><option value="pr-pending">永住申請中</option><option value="spouse">日本人・永住者の配偶者等</option><option value="work" selected>就労ビザ・高度専門職</option><option value="student">留学・家族滞在・その他</option></select></div>
           <div class="apply-field"><label>日本居住年数 Years in Japan</label><input type="number" id="loanResidenceYears" value="5" min="0" max="80" step="0.5"></div>
@@ -14,7 +14,7 @@
           <div class="apply-field"><label>税込年収 Gross income</label><div class="input-wrap"><input type="number" id="loanIncome" value="5000000" min="0" step="10000"><span>円</span></div></div>
           <div class="apply-field full"><label>他のローン年間返済額 Other annual debt</label><div class="input-wrap"><input type="number" id="loanOtherDebt" value="0" min="0" step="10000"><span>円/年</span></div></div>
         </div>
-        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>物件・借入条件</div>
+        <div class="section-title" style="margin-top:18px;">物件・借入条件</div>
         <div class="apply-fields">
           <div class="apply-field"><label>物件価格 Property price</label><div class="input-wrap"><input type="number" id="loanPrice" value="50000000" min="0" step="100000"><span>円</span></div></div>
           <div class="apply-field"><label>自己資金 Down payment</label><div class="input-wrap"><input type="number" id="loanDown" value="10000000" min="0" step="100000"><span>円</span></div></div>
@@ -34,7 +34,7 @@
           <div class="calc-kpi"><span>頭金比率</span><strong id="loanDownRateOut">—</strong></div>
         </div>
         <div class="card">
-          <div class="section-title"><span class="idx">03</span>申込準備の目安</div>
+          <div class="section-title">申込準備の目安</div>
           <details class="readiness-details" open>
             <summary class="readiness-summary">準備の目安を見る</summary>
             <div class="readiness-list" id="loanReadiness"></div>

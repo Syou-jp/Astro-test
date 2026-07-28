@@ -19,7 +19,7 @@
     <div class="portal-alert"><strong>參考：</strong>此計算機參考 <a href="https://tax.eon.jp/" target="_blank" rel="noopener">確定申告計算ツール（tax.eon.jp）</a> 製作，用於估算薪資＋副業收入應繳的所得税・住民税。<strong>僅供概算參考</strong>，未涵蓋全部特殊扣除項目（例如老年扶養、特定扶養等差異化金額），正式申告請以 e-Tax／稅務署／稅理士確認為準。</div>
     <div class="grid">
       <div class="card">
-        <div class="section-title"><span class="idx">01</span>1年間の収入</div>
+        <div class="section-title">1年間の収入</div>
         <div class="apply-fields">
           <div class="apply-field"><label>給与収入（総額） Salary income</label><div class="input-wrap"><input type="number" id="itSalary" value="4000000" min="0" step="10000"><span>円</span></div></div>
           <div class="apply-field"><label>給与の源泉徴収税額 Withheld tax</label><div class="input-wrap"><input type="number" id="itWithheld" value="80000" min="0" step="1000"><span>円</span></div></div>
@@ -27,7 +27,7 @@
           <div class="apply-field"><label>副業の経費 Side expenses</label><div class="input-wrap"><input type="number" id="itSideExpense" value="100000" min="0" step="1000"><span>円</span></div></div>
         </div>
 
-        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>控除額入力</div>
+        <div class="section-title" style="margin-top:18px;">控除額入力</div>
         <div class="apply-fields">
           <div class="apply-field full">
             <label>配偶者控除 Spouse deduction（配偶者の年収123万円以下）</label>
@@ -55,7 +55,7 @@
           <div class="calc-kpi"><span>追加で納める税金 合計</span><strong id="itTotalOut">—</strong></div>
         </div>
         <div class="card">
-          <div class="section-title"><span class="idx">03</span>内訳</div>
+          <div class="section-title">内訳</div>
           <table class="hcal-table" style="width:100%;">
             <tbody id="itBreakdownBody"></tbody>
           </table>

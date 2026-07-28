@@ -160,7 +160,7 @@
     <div class="portal-alert"><strong>毎年の支出をまとめて概算：</strong>固定資産税・都市計画税は購入価格ではなく固定資産税評価額を入力してください。マンションの管理費・修繕積立金、保険、駐車場なども合算します。</div>
     <div class="grid">
       <div class="card">
-        <div class="section-title"><span class="idx">01</span>課税評価・土地</div>
+        <div class="section-title">課税評価・土地</div>
         <div class="apply-fields">
           <div class="apply-field"><label>購入価格（任意）Purchase price</label><div class="input-wrap"><input type="number" id="holdPrice" value="50000000" min="0" step="100000"><span>円</span></div></div>
           <div class="apply-field"><label>物件タイプ Property type</label><select id="holdType"><option>マンション</option><option>戸建住宅</option><option>投資用住宅</option><option>土地</option></select></div>
@@ -171,7 +171,7 @@
           <div class="apply-field"><label>都市計画税 City planning tax</label><select id="holdCityPlan"><option value="yes" selected>課税あり（0.3%で試算）</option><option value="no">課税なし</option></select></div>
           <div class="apply-field"><label>新築住宅の建物減額</label><select id="holdNewReduction"><option value="no" selected>なし・期間終了</option><option value="yes">適用中（建物税額1/2で概算）</option></select></div>
         </div>
-        <div class="section-title" style="margin-top:18px;"><span class="idx">02</span>管理・維持費</div>
+        <div class="section-title" style="margin-top:18px;">管理・維持費</div>
         <div class="apply-fields">
           <div class="apply-field"><label>管理費（月額）</label><div class="input-wrap"><input type="number" id="holdManagement" value="12000" min="0"><span>円/月</span></div></div>
           <div class="apply-field"><label>修繕積立金（月額）</label><div class="input-wrap"><input type="number" id="holdRepair" value="15000" min="0"><span>円/月</span></div></div>
@@ -184,7 +184,7 @@
       </div>
       <div>
         <div class="calc-kpi-grid"><div class="calc-kpi"><span>税金合計／年</span><strong id="holdTaxOut">—</strong></div><div class="calc-kpi"><span>保有コスト合計／年</span><strong id="holdAnnualOut">—</strong></div><div class="calc-kpi"><span>月平均</span><strong id="holdMonthlyOut">—</strong></div></div>
-        <div class="card"><div class="section-title"><span class="idx">03</span>年間内訳</div><table class="portal-table"><tbody id="holdBreakdown"></tbody></table><div class="market-note" id="holdRateNote" style="margin-top:12px;"></div></div>
+        <div class="card"><div class="section-title">年間内訳</div><table class="portal-table"><tbody id="holdBreakdown"></tbody></table><div class="market-note" id="holdRateNote" style="margin-top:12px;"></div></div>
         <div class="portal-source">最終確認：<strong>2026年7月20日</strong>。東京都23区は固定資産税1.4%、都市計画税0.3%を基礎とし、小規模住宅用地の2026年度都独自の都市計画税1/2軽減も選択時に反映。公式：<a href="https://www.tax.metro.tokyo.lg.jp/kazei/real_estate/kotei_tosi" target="_blank" rel="noopener">東京都主税局 固定資産税・都市計画税</a>。負担調整、軽減期間、評価替えにより実額は変わります。</div>
       </div>
     </div>
