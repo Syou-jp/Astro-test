@@ -3,15 +3,15 @@
     <div class="portal-alert" id="livingAlert"><strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。</div>
     <div class="card" style="margin-bottom:16px;">
       <div class="section-title">保存した設定（新居 vs 旧居など比較用）</div>
-      <div id="livingConfigLoaded" style="display:none;font-size:12px;margin-bottom:8px;padding:6px 10px;border-radius:6px;background:var(--accent-soft,#eef4ff);"></div>
+      <div id="livingConfigLoaded" style="display:none;font-size:11px;margin-bottom:8px;padding:4px 10px;border-radius:6px;background:var(--accent-soft,#eef4ff);"></div>
       <div class="apply-fields" style="margin-bottom:10px;">
         <div class="apply-field full"><label>設定名</label><div class="input-wrap"><input type="text" id="livingConfigName" placeholder="例：新居プラン" maxlength="30"></div></div>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
-        <button type="button" class="btn-copy" id="livingConfigSaveBtn">新規保存</button>
-        <button type="button" class="btn-copy" id="livingConfigOverwriteBtn" style="display:none;">読込中の設定に上書き保存</button>
+        <button type="button" class="btn-copy" id="livingConfigSaveBtn" style="flex:0 0 auto;padding:8px 16px;font-size:12px;">新規保存</button>
+        <button type="button" class="btn-copy" id="livingConfigOverwriteBtn" style="display:none;flex:0 0 auto;padding:8px 16px;font-size:12px;">読込中の設定に上書き保存</button>
       </div>
-      <div id="livingConfigList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;"></div>
+      <div id="livingConfigList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;"></div>
     </div>
     <div class="grid">
       <div class="card">
