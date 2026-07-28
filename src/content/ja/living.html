@@ -1,6 +1,14 @@
 <div id="page-living" class="page-view active theme-rent">
     <div class="eyebrow">毎月の生活費計算</div>
     <div class="portal-alert" id="livingAlert"><strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-title">保存した設定（新居 vs 旧居など比較用）</div>
+      <div class="apply-fields" style="margin-bottom:10px;">
+        <div class="apply-field full"><label>設定名</label><div class="input-wrap"><input type="text" id="livingConfigName" placeholder="例：新居プラン" maxlength="30"></div></div>
+      </div>
+      <button type="button" class="btn-copy" id="livingConfigSaveBtn" style="margin-bottom:14px;">現在の内容を保存</button>
+      <div id="livingConfigList" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
     <div class="grid">
       <div class="card">
         <div class="apply-fields" style="margin-bottom:14px;">
@@ -43,4 +51,71 @@ function livingUpdateIncomeLabel(){
 }
 document.getElementById("livingIncomeType").addEventListener("change",()=>{livingUpdateIncomeLabel();livingRender();});
 document.querySelectorAll("#page-living input").forEach(el=>el.addEventListener("input",livingRender));livingUpdateIncomeLabel();livingRender();
+
+const LIVING_CONFIG_KEY="livingConfigsV1";
+function livingReadConfigs(){try{return JSON.parse(localStorage.getItem(LIVING_CONFIG_KEY))||[];}catch(e){return [];}}
+function livingWriteConfigs(list){localStorage.setItem(LIVING_CONFIG_KEY,JSON.stringify(list));}
+function livingSnapshot(){
+  return {
+    incomeType:document.getElementById("livingIncomeType").value,
+    income:document.getElementById("livingIncome").value,
+    expenses:[...document.querySelectorAll("#livingExpenseGroups .living-expense")].map(x=>x.value),
+    customLabels:[document.getElementById("livingCustomLabel1").value,document.getElementById("livingCustomLabel2").value]
+  };
+}
+function livingApplySnapshot(data){
+  document.getElementById("livingIncomeType").value=data.incomeType||"net";
+  document.getElementById("livingIncome").value=data.income||0;
+  const inputs=[...document.querySelectorAll("#livingExpenseGroups .living-expense")];
+  (data.expenses||[]).forEach((v,i)=>{if(inputs[i])inputs[i].value=v;});
+  if(data.customLabels){
+    document.getElementById("livingCustomLabel1").value=data.customLabels[0]??"その他1";
+    document.getElementById("livingCustomLabel2").value=data.customLabels[1]??"その他2";
+  }
+  livingUpdateIncomeLabel();livingRender();
+}
+function livingConfigBalance(data){
+  const income=Number(data.income)||0;const values=(data.expenses||[]).map(Number);
+  const total=values.reduce((s,v)=>s+(v||0),0);
+  return income-total;
+}
+function livingRenderConfigList(){
+  const list=livingReadConfigs();const el=document.getElementById("livingConfigList");
+  if(!list.length){el.innerHTML='<div style="font-size:12px;color:var(--muted,#888);">保存された設定はまだありません。</div>';return;}
+  el.innerHTML=list.map((c,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;padding:8px 10px;border:1px solid var(--border,#e5e5e5);border-radius:8px;">
+      <div style="min-width:0;">
+        <div style="font-weight:600;font-size:13px;">${c.name}</div>
+        <div style="font-size:11px;color:var(--muted,#888);">残額（月）: ${toolYen(livingConfigBalance(c))}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button type="button" class="btn-copy" data-load="${i}" style="padding:4px 10px;font-size:12px;">読込</button>
+        <button type="button" class="btn-copy" data-rename="${i}" style="padding:4px 10px;font-size:12px;">名前変更</button>
+        <button type="button" class="btn-copy" data-delete="${i}" style="padding:4px 10px;font-size:12px;">削除</button>
+      </div>
+    </div>`).join("");
+}
+document.getElementById("livingConfigSaveBtn").addEventListener("click",()=>{
+  const nameInput=document.getElementById("livingConfigName");
+  const name=nameInput.value.trim()||`設定${livingReadConfigs().length+1}`;
+  const list=livingReadConfigs();
+  list.push({name,...livingSnapshot()});
+  livingWriteConfigs(list);
+  nameInput.value="";
+  livingRenderConfigList();
+});
+document.getElementById("livingConfigList").addEventListener("click",(e)=>{
+  const btn=e.target.closest("button");if(!btn)return;
+  const list=livingReadConfigs();
+  if(btn.dataset.load!==undefined){livingApplySnapshot(list[+btn.dataset.load]);}
+  else if(btn.dataset.rename!==undefined){
+    const idx=+btn.dataset.rename;const next=prompt("新しい名前を入力してください",list[idx].name);
+    if(next&&next.trim()){list[idx].name=next.trim();livingWriteConfigs(list);livingRenderConfigList();}
+  }
+  else if(btn.dataset.delete!==undefined){
+    const idx=+btn.dataset.delete;
+    if(confirm(`「${list[idx].name}」を削除しますか？`)){list.splice(idx,1);livingWriteConfigs(list);livingRenderConfigList();}
+  }
+});
+livingRenderConfigList();
 </script>
