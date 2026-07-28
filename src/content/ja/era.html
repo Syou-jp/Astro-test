@@ -1,74 +1,80 @@
 <div id="page-era" class="page-view active theme-area">
   <div class="eyebrow">元号・紀年 換算ツール ERA &amp; CALENDAR CONVERTER</div>
 
-  <div class="card" style="margin-bottom:12px;">
-    <div class="section-title"><span class="idx">01</span>日付から元号・紀年を調べる</div>
-    <div class="apply-fields">
-      <div class="apply-field full">
-        <label for="eraDateInput">基準日 Date</label>
-        <input type="date" id="eraDateInput">
+  <div class="era-columns">
+    <div class="era-col">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title"><span class="idx">01</span>日付から元号・紀年を調べる</div>
+        <div class="apply-fields">
+          <div class="apply-field full">
+            <label for="eraDateInput">基準日 Date</label>
+            <input type="date" id="eraDateInput">
+          </div>
+        </div>
+        <div id="eraDateResults" style="margin-top:14px;"></div>
       </div>
-    </div>
-    <div id="eraDateResults" style="margin-top:14px;"></div>
-  </div>
 
-  <div class="card" style="margin-bottom:12px;">
-    <div class="section-title"><span class="idx">02</span>日本の元号 → 西暦</div>
-    <div class="apply-fields">
-      <div class="apply-field">
-        <label for="eraNameSelect">元号 Era</label>
-        <select id="eraNameSelect">
-          <option value="reiwa" selected>令和（Reiwa）</option>
-          <option value="heisei">平成（Heisei）</option>
-          <option value="showa">昭和（Showa）</option>
-          <option value="taisho">大正（Taisho）</option>
-          <option value="meiji">明治（Meiji）</option>
-        </select>
-      </div>
-      <div class="apply-field">
-        <label for="eraYearInput">和暦年 Era year<span class="required-mark">*</span></label>
-        <input type="number" id="eraYearInput" value="8" min="1" step="1" inputmode="numeric">
-        <small>元年（がんねん）は「1」を入力してください。</small>
+      <div class="card">
+        <div class="section-title"><span class="idx">02</span>日本の元号 → 西暦</div>
+        <div class="apply-fields">
+          <div class="apply-field">
+            <label for="eraNameSelect">元号 Era</label>
+            <select id="eraNameSelect">
+              <option value="reiwa" selected>令和（Reiwa）</option>
+              <option value="heisei">平成（Heisei）</option>
+              <option value="showa">昭和（Showa）</option>
+              <option value="taisho">大正（Taisho）</option>
+              <option value="meiji">明治（Meiji）</option>
+            </select>
+          </div>
+          <div class="apply-field">
+            <label for="eraYearInput">和暦年 Era year<span class="required-mark">*</span></label>
+            <input type="number" id="eraYearInput" value="8" min="1" step="1" inputmode="numeric">
+            <small>元年（がんねん）は「1」を入力してください。</small>
+          </div>
+        </div>
+        <div class="area-base-summary">
+          <span class="label">西暦 WESTERN YEAR</span>
+          <span class="value" id="eraToWesternResult">—</span>
+        </div>
       </div>
     </div>
-    <div class="area-base-summary">
-      <span class="label">西暦 WESTERN YEAR</span>
-      <span class="value" id="eraToWesternResult">—</span>
-    </div>
-  </div>
 
-  <div class="card" style="margin-bottom:12px;">
-    <div class="section-title"><span class="idx">03</span>台湾 民国紀年 ⇔ 西暦</div>
-    <div class="apply-fields">
-      <div class="apply-field">
-        <label for="twWesternInput">西暦 Western year</label>
-        <input type="number" id="twWesternInput" value="2026" step="1" inputmode="numeric">
+    <div class="era-col">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title"><span class="idx">03</span>台湾 民国紀年 ⇔ 西暦</div>
+        <div class="apply-fields">
+          <div class="apply-field">
+            <label for="twWesternInput">西暦 Western year</label>
+            <input type="number" id="twWesternInput" value="2026" step="1" inputmode="numeric">
+          </div>
+          <div class="apply-field">
+            <label for="twMinguoInput">民国 Minguo year</label>
+            <input type="number" id="twMinguoInput" value="115" step="1" inputmode="numeric">
+          </div>
+        </div>
+        <div class="area-note">※ 台湾の民国紀年は「西暦－1911」で計算します（例：2026年＝民国115年）。北朝鮮の主体暦も同じく1912年を元年とする紀年法で、計算式は民国紀年と同じです。</div>
       </div>
-      <div class="apply-field">
-        <label for="twMinguoInput">民国 Minguo year</label>
-        <input type="number" id="twMinguoInput" value="115" step="1" inputmode="numeric">
-      </div>
-    </div>
-    <div class="area-note">※ 台湾の民国紀年は「西暦－1911」で計算します（例：2026年＝民国115年）。北朝鮮の主体暦も同じく1912年を元年とする紀年法で、計算式は民国紀年と同じです。</div>
-  </div>
 
-  <div class="card" style="margin-bottom:12px;">
-    <div class="section-title"><span class="idx">04</span>韓国の年齢を計算する</div>
-    <div class="apply-fields">
-      <div class="apply-field">
-        <label for="krBirthInput">生年月日 Date of birth</label>
-        <input type="date" id="krBirthInput">
+      <div class="card">
+        <div class="section-title"><span class="idx">04</span>韓国の年齢を計算する</div>
+        <div class="apply-fields">
+          <div class="apply-field">
+            <label for="krBirthInput">生年月日 Date of birth</label>
+            <input type="date" id="krBirthInput">
+          </div>
+          <div class="apply-field">
+            <label for="krRefInput">基準日 Reference date</label>
+            <input type="date" id="krRefInput">
+          </div>
+        </div>
+        <div class="era-age-grid" id="krAgeResults"></div>
+        <div class="area-note">
+          <strong>만 나이（満年齢）</strong>：日本の満年齢と同じ数え方で、誕生日を迎えるたびに1歳加算します。2023年6月28日以降、韓国の法令上の年齢表記の原則となりました。<br>
+          <strong>세는나이（数え年）</strong>：生まれた時点で1歳とし、以後は元日（1月1日）を迎えるごとに1歳加算する韓国の伝統的な数え方です。日常会話では今も使われています。<br>
+          <strong>연나이（年年齢）</strong>：その年の西暦から生年の西暦を引いた年齢です。誕生日前でもその年の1月1日時点で加算済みとして扱う数え方で、兵役法や青少年保護法など一部の法律で使われます。
+        </div>
       </div>
-      <div class="apply-field">
-        <label for="krRefInput">基準日 Reference date</label>
-        <input type="date" id="krRefInput">
-      </div>
-    </div>
-    <div class="era-age-grid" id="krAgeResults"></div>
-    <div class="area-note">
-      <strong>만 나이（満年齢）</strong>：日本の満年齢と同じ数え方で、誕生日を迎えるたびに1歳加算します。2023年6月28日以降、韓国の法令上の年齢表記の原則となりました。<br>
-      <strong>세는나이（数え年）</strong>：生まれた時点で1歳とし、以後は元日（1月1日）を迎えるごとに1歳加算する韓国の伝統的な数え方です。日常会話では今も使われています。<br>
-      <strong>연나이（年年齢）</strong>：その年の西暦から生年の西暦を引いた年齢です。誕生日前でもその年の1月1日時点で加算済みとして扱う数え方で、兵役法や青少年保護法など一部の法律で使われます。
     </div>
   </div>
 
@@ -78,7 +84,8 @@
   </div>
 
   <style>
-    #page-era{max-width:680px;margin:0 auto;}
+    #page-era .era-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;}
+    #page-era .era-col{min-width:0;}
     #page-era .card{padding:16px;}
     #page-era .section-title{margin-bottom:12px;padding-bottom:6px;font-size:14px;}
     #page-era .apply-fields{margin-bottom:0;}
@@ -91,6 +98,9 @@
     #page-era .era-age-card strong{margin-top:4px;font-size:19px;}
     #page-era .area-note{font-size:11.5px;line-height:1.6;padding:10px 12px;}
     #page-era .eyebrow{margin-bottom:12px;}
+    @media (max-width:860px){
+      #page-era .era-columns{grid-template-columns:1fr;}
+    }
   </style>
 
   <script>
