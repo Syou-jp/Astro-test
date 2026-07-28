@@ -1,9 +1,12 @@
 <div id="page-living" class="page-view active theme-rent">
-    <div class="eyebrow">毎月の生活費計算 Monthly Living Expenses</div>
-    <div class="portal-alert"><strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。</div>
+    <div class="eyebrow">毎月の生活費計算</div>
+    <div class="portal-alert" id="livingAlert"><strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。</div>
     <div class="grid">
       <div class="card">
-        <div class="apply-fields" style="margin-bottom:14px;"><div class="apply-field full"><label>月の手取り収入 Net monthly income</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span>円/月</span></div></div></div>
+        <div class="apply-fields" style="margin-bottom:14px;">
+          <div class="apply-field"><label>収入の種類</label><select id="livingIncomeType"><option value="net">手取り</option><option value="gross">税前</option></select></div>
+          <div class="apply-field"><label id="livingIncomeLabel">月の手取り収入</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span>円/月</span></div></div>
+        </div>
         <div class="expense-groups" id="livingExpenseGroups">
           <div class="expense-group" data-expense-group="住居"><h3>住居 Housing</h3><div class="expense-line"><span>家賃・住宅ローン</span><input class="living-expense" value="90000" type="number" min="0"></div><div class="expense-line"><span>管理費・共益費</span><input class="living-expense" value="8000" type="number" min="0"></div><div class="expense-line"><span>駐車場・駐輪場</span><input class="living-expense" value="0" type="number" min="0"></div></div>
           <div class="expense-group" data-expense-group="光熱・通信"><h3>光熱・通信 Utilities</h3><div class="expense-line"><span>電気</span><input class="living-expense" value="8000" type="number" min="0"></div><div class="expense-line"><span>ガス</span><input class="living-expense" value="5000" type="number" min="0"></div><div class="expense-line"><span>水道</span><input class="living-expense" value="3000" type="number" min="0"></div><div class="expense-line"><span>携帯・インターネット</span><input class="living-expense" value="8000" type="number" min="0"></div></div>
@@ -33,5 +36,11 @@ function livingRender(){
   const max=Math.max(1,...summary.map(x=>x[1]));document.getElementById("livingBreakdown").innerHTML=summary.filter(x=>x[1]>0).map(x=>`<div style="margin-top:10px;font-size:11px;"><div style="display:flex;justify-content:space-between;"><span>${x[0]}</span><strong>${toolYen(x[1])}</strong></div><div class="expense-bar"><i style="width:${x[1]/max*100}%"></i></div></div>`).join("");
   document.getElementById("livingAdvice").innerHTML=balance<0?`毎月 <strong>${toolYen(Math.abs(balance))}</strong> の赤字です。固定費と大きいカテゴリーから見直してください。`:balance<income*.1?`残額は <strong>${toolYen(balance)}</strong>。突発費に備え、使途未定の余裕資金も確保してください。`:`毎月の未配分額は <strong>${toolYen(balance)}</strong> です。`;
 }
-document.querySelectorAll("#page-living input").forEach(el=>el.addEventListener("input",livingRender));livingRender();
+function livingUpdateIncomeLabel(){
+  const isGross=document.getElementById("livingIncomeType").value==="gross";
+  document.getElementById("livingIncomeLabel").textContent=isGross?"月の税前収入（額面）":"月の手取り収入";
+  document.getElementById("livingAlert").innerHTML=isGross?'<strong>税前収入から残額を自動計算：</strong>「税・保険」に所得税・住民税・社会保険料を入力してください。貯蓄・投資は消費と分けて表示します。':'<strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。';
+}
+document.getElementById("livingIncomeType").addEventListener("change",()=>{livingUpdateIncomeLabel();livingRender();});
+document.querySelectorAll("#page-living input").forEach(el=>el.addEventListener("input",livingRender));livingUpdateIncomeLabel();livingRender();
 </script>
