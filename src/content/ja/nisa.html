@@ -1,6 +1,6 @@
 <div id="page-nisa" class="page-view active theme-tax">
     <div class="eyebrow">新NISA計算機 New NISA Calculator</div>
-    <div class="portal-alert"><strong>參考：</strong>用複利公式試算每月定額投資在新NISA制度下的資產成長，僅供概算參考，不構成投資建議，實際報酬會隨市場波動。</div>
+    <div class="portal-alert"><strong>ご参考：</strong>複利計算式により、新NISA制度下での毎月定額積立の資産成長を試算します。あくまで概算の参考値であり、投資助言ではありません。実際の運用成果は市場の変動により異なります。</div>
     <div class="grid">
       <div class="card">
         <div class="section-title">運用条件を入力</div>
@@ -22,14 +22,14 @@
         </div>
         <button type="button" class="btn-copy" id="nisaCalcBtn" style="width:100%;margin-top:14px;">資産運用をシミュレーション</button>
         <div class="market-note" style="margin-top:12px;">新NISAは「つみたて投資枠」「成長投資枠」をあわせて<strong>年間360万円</strong>、生涯投資上限<strong>1,800万円</strong>までが非課税対象です。毎月積立額×12が年間360万円を超える場合は上限を超えている可能性がありますのでご注意ください。</div>
-      </div>
-      <div>
-        <div class="calc-kpi-grid">
+        <div class="calc-kpi-grid" style="margin-top:14px;">
           <div class="calc-kpi"><span>積立元本合計</span><strong id="nisaPrincipalOut">—</strong></div>
           <div class="calc-kpi"><span>最終資産評価額</span><strong id="nisaAssetOut">—</strong></div>
           <div class="calc-kpi"><span>運用収益（非課税）</span><strong id="nisaProfitOut">—</strong></div>
           <div class="calc-kpi"><span>年間投資額</span><strong id="nisaYearlyOut">—</strong></div>
         </div>
+      </div>
+      <div>
         <div class="card">
           <div class="section-title">元本・資産の推移</div>
           <table class="hcal-table" id="nisaTable" style="width:100%;">
