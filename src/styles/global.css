@@ -1097,7 +1097,7 @@
   .doc-tab .tab-text small{display:inline;height:auto;line-height:1;margin:0 0 0 4px;white-space:nowrap;overflow:visible;text-overflow:clip;font-size:9px;opacity:.6;}
   .tab-panel{border-radius:0;margin-top:20px;}
   .back-to-top{display:none;position:fixed;right:16px;bottom:16px;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--accent);color:var(--white);font-family:"Shippori Mincho",serif;font-size:16px;font-weight:700;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:60;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .2s ease,transform .2s ease;}
-  .portal-alert{padding:14px 18px;border-left:3px solid var(--accent);border-radius:0;background:var(--paper-2);font-size:12.5px;line-height:2;text-align:justify;letter-spacing:.02em;margin-bottom:20px;}
+  .portal-alert{padding:14px 18px;border-left:3px solid var(--accent);border-radius:0;background:var(--paper-2);font-size:12.5px;line-height:2;text-align:justify;text-justify:inter-character;letter-spacing:.02em;margin-bottom:20px;}
   .fireins-flyer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px;}
   .fireins-flyer-card{border:1px solid var(--line);background:var(--paper-2);padding:16px 14px;text-align:center;}
   .fireins-flyer-icon{font-size:26px;line-height:1;margin-bottom:8px;}
@@ -1291,6 +1291,7 @@
   .electric-company small{display:block;margin-top:5px;color:var(--ink-soft);line-height:1.55;}
   .electric-company.is-unavailable{background:#f5f3ec;}
   .calc-kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0;}
+  .living-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .calc-kpi{padding:14px;border:1px solid var(--line);border-radius:0;background:var(--paper);min-width:0;}
   .calc-kpi span{display:block;font-size:10px;color:var(--ink-soft);line-height:1.4;}
   .calc-kpi strong{display:block;margin-top:6px;font:700 19px "JetBrains Mono",monospace;color:var(--accent);overflow-wrap:anywhere;}
@@ -1682,7 +1683,7 @@
   .card{padding:16px 14px;}
   .section-title{font-size:14px;margin-bottom:12px;}
   .eyebrow{font-size:11px;}
-  .portal-alert{font-size:12px;line-height:1.7;text-align:left;}
+  .portal-alert{font-size:12px;line-height:1.7;text-align:justify;text-justify:inter-character;}
   .portal-alert .portal-badge{display:block;width:fit-content;margin:0 0 8px;}
 
   .field-row{grid-template-columns:1fr 112px;padding:9px 0;}

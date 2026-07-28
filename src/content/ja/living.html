@@ -2,7 +2,7 @@
     <div class="eyebrow">毎月の生活費計算</div>
     <div class="portal-alert" id="livingAlert"><strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。</div>
     <div class="card" style="margin-bottom:16px;">
-      <div class="section-title">保存した設定（新居 vs 旧居など比較用）</div>
+      <div class="section-title">保存した設定（比較用）</div>
       <div id="livingConfigLoaded" style="display:none;font-size:11px;margin-bottom:8px;padding:4px 10px;border-radius:6px;background:var(--accent-soft,#eef4ff);"></div>
       <div class="apply-fields" style="margin-bottom:10px;">
         <div class="apply-field full"><label>設定名</label><div class="input-wrap"><input type="text" id="livingConfigName" placeholder="例：新居プラン" maxlength="30"></div></div>
@@ -39,7 +39,7 @@
         </div>
       </div>
       <div>
-        <div class="calc-kpi-grid"><div class="calc-kpi"><span>生活支出（月）</span><strong id="livingExpenseOut">—</strong></div><div class="calc-kpi"><span>貯蓄・投資（月）</span><strong id="livingSavingsOut">—</strong></div><div class="calc-kpi"><span>残額（月）</span><strong id="livingBalanceOut">—</strong></div><div class="calc-kpi"><span>年間支出</span><strong id="livingAnnualOut">—</strong></div><div class="calc-kpi"><span>貯蓄率</span><strong id="livingSavingsRateOut">—</strong></div><div class="calc-kpi"><span>貯蓄・投資（年）</span><strong id="livingSavingsAnnualOut">—</strong></div><div class="calc-kpi"><span>残額（年）</span><strong id="livingBalanceAnnualOut">—</strong></div></div>
+        <div class="calc-kpi-grid living-kpi-grid"><div class="calc-kpi"><span>生活支出（月）</span><strong id="livingExpenseOut">—</strong></div><div class="calc-kpi"><span>生活支出（年）</span><strong id="livingAnnualOut">—</strong></div><div class="calc-kpi"><span>貯蓄・投資（月）</span><strong id="livingSavingsOut">—</strong></div><div class="calc-kpi"><span>貯蓄・投資（年）</span><strong id="livingSavingsAnnualOut">—</strong></div><div class="calc-kpi"><span>残額（月）</span><strong id="livingBalanceOut">—</strong></div><div class="calc-kpi"><span>残額（年）</span><strong id="livingBalanceAnnualOut">—</strong></div><div class="calc-kpi"><span>貯蓄率</span><strong id="livingSavingsRateOut">—</strong></div></div>
         <div class="card"><div class="section-title">カテゴリー別内訳</div><div id="livingBreakdown"></div><div class="market-note" id="livingAdvice" style="margin-top:14px;"></div></div>
       </div>
     </div>
