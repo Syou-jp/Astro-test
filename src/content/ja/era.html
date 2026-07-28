@@ -1,7 +1,7 @@
 <div id="page-era" class="page-view active theme-area">
   <div class="eyebrow">元号・紀年 換算ツール ERA &amp; CALENDAR CONVERTER</div>
 
-  <div class="card" style="margin-bottom:16px;">
+  <div class="card" style="margin-bottom:12px;">
     <div class="section-title"><span class="idx">01</span>日付から元号・紀年を調べる</div>
     <div class="apply-fields">
       <div class="apply-field full">
@@ -12,7 +12,7 @@
     <div id="eraDateResults" style="margin-top:14px;"></div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
+  <div class="card" style="margin-bottom:12px;">
     <div class="section-title"><span class="idx">02</span>日本の元号 → 西暦</div>
     <div class="apply-fields">
       <div class="apply-field">
@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
+  <div class="card" style="margin-bottom:12px;">
     <div class="section-title"><span class="idx">03</span>台湾 民国紀年 ⇔ 西暦</div>
     <div class="apply-fields">
       <div class="apply-field">
@@ -52,7 +52,7 @@
     <div class="area-note">※ 台湾の民国紀年は「西暦－1911」で計算します（例：2026年＝民国115年）。北朝鮮の主体暦も同じく1912年を元年とする紀年法で、計算式は民国紀年と同じです。</div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
+  <div class="card" style="margin-bottom:12px;">
     <div class="section-title"><span class="idx">04</span>韓国の年齢を計算する</div>
     <div class="apply-fields">
       <div class="apply-field">
@@ -76,6 +76,21 @@
     ※ 元号が切り替わる年（改元の年）は月日によって元号が異なります。01の早見表は入力した日付をもとに正確な元号へ換算しますが、02の「元号→西暦」は年のみの簡易換算です。改元日は下記のとおりです。<br>
     明治→大正：1912年7月30日／大正→昭和：1926年12月25日／昭和→平成：1989年1月8日／平成→令和：2019年5月1日。
   </div>
+
+  <style>
+    #page-era .card{padding:16px;}
+    #page-era .section-title{margin-bottom:12px;padding-bottom:6px;font-size:14px;}
+    #page-era .apply-fields{margin-bottom:0;}
+    #page-era .area-base-summary{padding:10px 14px;}
+    #page-era .area-base-summary .value{font-size:18px;}
+    #page-era .area-region-card{padding:12px;}
+    #page-era .area-result-row{padding:6px 0;}
+    #page-era .era-age-grid{gap:8px;margin-top:10px;}
+    #page-era .era-age-card{padding:10px;}
+    #page-era .era-age-card strong{margin-top:4px;font-size:19px;}
+    #page-era .area-note{font-size:11.5px;line-height:1.6;padding:10px 12px;}
+    #page-era .eyebrow{margin-bottom:12px;}
+  </style>
 
   <script>
     (function () {
