@@ -65,11 +65,16 @@
       @media(max-width:640px){
         .cc-compare-table{border:none;background:transparent;}
         .cc-compare-table thead{display:none;}
-        .cc-compare-table tbody{display:grid;gap:10px;}
-        .cc-compare-table tr{display:block;border:1px solid var(--line);background:var(--white);}
-        .cc-compare-table td{display:block;width:auto!important;border:none;border-bottom:1px solid var(--line-soft);padding:8px 12px;font-size:11.5px;}
+        .cc-compare-table tbody{display:grid;gap:12px;}
+        .cc-compare-table tr{display:block;border:1px solid var(--line);background:var(--white);border-radius:2px;overflow:hidden;}
+        .cc-compare-table td{display:block;width:auto!important;border:none;border-bottom:1px solid var(--line-soft);padding:9px 14px;font-size:12px;line-height:1.7;}
         .cc-compare-table td:last-child{border-bottom:none;}
-        .cc-compare-table td::before{content:attr(data-label);display:block;font:700 10px "JetBrains Mono",monospace;color:var(--accent);letter-spacing:.04em;margin-bottom:3px;}
+        .cc-compare-table td::before{content:attr(data-label);display:block;font:700 9.5px "JetBrains Mono",monospace;color:var(--accent);letter-spacing:.05em;margin-bottom:3px;}
+        .cc-compare-table td[data-label="カード"]{background:var(--paper-2);padding:12px 14px;}
+        .cc-compare-table td[data-label="カード"]::before{display:none;}
+        .cc-compare-table td[data-label="カード"] strong{font-size:14.5px;font-weight:700;}
+        .cc-compare-table td[data-label="年会費（税込）"]{display:flex;align-items:center;gap:8px;}
+        .cc-compare-table td[data-label="年会費（税込）"]::before{margin-bottom:0;}
       }
     </style>
   </section>
