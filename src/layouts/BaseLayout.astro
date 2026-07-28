@@ -1067,7 +1067,7 @@ const TAX_PAGE_COPY={
 function siteApplyTaxCopy(lang){const copy=TAX_PAGE_COPY[lang]||TAX_PAGE_COPY.ja;Object.entries(copy).forEach(([id,html])=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
 const ABOUT_PAGE_COPY={
  ja:{
-  aboutEyebrow:"About サイトについて",
+  aboutEyebrow:"サイトについて",
   aboutSiteTitle:"サイトについて",
   aboutSiteIntro:"「Sotocom」は、日本で暮らす外国人の生活をもっと便利にするための情報・計算ツールサイトです。賃貸の初期費用計算、税金試算、各種手続きの解説など、日本での生活・不動産に関わる実用的な情報をひとつにまとめました。言語の壁や複雑な制度に悩まず、必要な情報にすぐアクセスできることを目指しています。",
   aboutAuthorTitle:"作者について",
@@ -1112,7 +1112,7 @@ const ABOUT_PAGE_COPY={
 function siteApplyAboutCopy(lang){const copy=ABOUT_PAGE_COPY[lang]||ABOUT_PAGE_COPY.ja;Object.entries(copy).forEach(([id,html])=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
 const FIRE_INSURANCE_COPY={
  ja:{
-  fireInsEyebrow:"火災保険 Renters Fire Insurance",
+  fireInsEyebrow:"火災保険",
   fireInsIntro:"賃貸契約では入居時に火災保険（正確には「家財保険」＋「借家人賠償責任保険」等のセット）への加入を求められるのが一般的です。多くは2年契約で保険料の目安は<strong>15,000円～20,000円程度</strong>。不動産会社指定の保険でなくても、補償内容が同等であれば自分で選んだ保険会社に加入できる場合があります。",
   fireInsBasicTitle:"基本のしくみ",
   fireInsBasicBody:"<ul class='info-list'><li><strong>家財保険（動産保険）</strong>：火災・落雷・爆発・水濡れ・盗難などで、自分の家具・家電・衣類等が被害を受けた場合の補償。</li><li><strong>借家人賠償責任保険</strong>：借りている部屋を火事や水漏れなどで損傷させ、大家さんに対して法律上の賠償責任を負った場合の補償。<strong>賃貸ではほぼ必須</strong>。</li><li><strong>個人賠償責任保険</strong>：階下や近隣など第三者に損害を与えてしまった場合（水漏れで階下を水浸しにした等）の賠償を補償。特約または単独加入。</li><li>保険期間は賃貸借契約に合わせて2年が一般的。更新時に自動更新または再加入が必要。</li></ul>",
