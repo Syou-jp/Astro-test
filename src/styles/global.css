@@ -1140,7 +1140,7 @@
   .portal-badge.new{border-color:var(--seal);color:var(--seal);background:rgba(178,64,47,.05);}
   .portal-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
   .portal-actions a{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;}
-  .portal-source{font-size:10.5px;color:var(--ink-soft);line-height:1.7;margin-top:12px;}
+  .portal-source{font-size:10.5px;color:var(--ink-soft);line-height:1.85;margin-top:18px;text-align:justify;}
   .portal-source a{color:var(--accent);}
   .visa-hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:18px;align-items:stretch;margin-bottom:18px;}
   .visa-hero h2{font-family:"Shippori Mincho",serif;font-size:27px;line-height:1.35;margin:8px 0 10px;letter-spacing:.03em;}
