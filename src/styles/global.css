@@ -1876,11 +1876,16 @@
   opacity:.85;
 }
 @media(max-width:520px){
-  .expert-cta{padding:13px 15px;gap:12px;}
+  .expert-cta{flex-wrap:wrap;row-gap:12px;padding:15px;gap:10px;}
   .expert-cta-avatar{width:46px;height:46px;}
+  .expert-cta-avatars{order:1;}
   .expert-cta-avatars .expert-cta-avatar{width:40px;height:40px;}
   .expert-cta-avatars .expert-cta-avatar + .expert-cta-avatar{margin-left:-13px;}
-  .expert-cta-title{font-size:14.5px;}
+  .expert-cta-arrow{order:2;margin-left:auto;}
+  .expert-cta-body{order:3;flex:0 0 100%;width:100%;}
+  .expert-cta-label{font-size:11px;}
+  .expert-cta-title{font-size:16px;}
+  .expert-cta-name{font-size:12px;}
 }
 
 /* ---- Expert profile page (bio + contact) ---- */
