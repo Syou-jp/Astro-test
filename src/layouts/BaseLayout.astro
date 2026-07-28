@@ -43,7 +43,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         <h1><a href={localePath(currentLocale.code)} class="site-title-link">Sotocom</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">国から日本へ。ともに生きるコミュニティ。</span></h1>
         <div class="masthead-right">
           <a class:list={["about-nav-btn", activeId === "page-about" && "active"]} id="aboutNavBtn" href={localePath(currentLocale.code, "about")} data-no-i18n><span id="aboutNavLabel">サイトについて</span></a>
-          <div class="site-theme-control">
+          <div class="site-theme-control" style="display:none;">
             <label for="themeSwitcher">配色</label>
             <select id="themeSwitcher" aria-label="配色テーマ" data-no-i18n>
               <option value="paper">海軍藍</option>
@@ -215,7 +215,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           <span class="mobile-drawer-title">設定</span>
           <button type="button" class="mobile-drawer-close" data-close-sheet aria-label="閉じる">✕</button>
         </div>
-        <div class="mobile-drawer-section">
+        <div class="mobile-drawer-section" style="display:none;">
           <div class="mobile-drawer-label">配色</div>
           <div class="theme-swatch-row" id="themeSwatchRow" role="radiogroup" aria-label="配色テーマ">
             <button type="button" class="theme-swatch" data-theme-value="paper" style="background:#FAFAF9" aria-label="海軍藍" title="海軍藍"></button>

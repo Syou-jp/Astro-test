@@ -301,13 +301,6 @@
         "small": "DOCUMENT BUILDER"
       },
       {
-        "id": "page-services",
-        "slug": "services",
-        "glyph": "語",
-        "text": "外国語対応サービス",
-        "small": "MULTILINGUAL SERVICES"
-      },
-      {
         "id": "page-japanese",
         "slug": "japanese",
         "glyph": "語",
