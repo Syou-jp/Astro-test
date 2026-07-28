@@ -1753,6 +1753,10 @@
   .calc-kpi span{font-size:9.5px;}
   .calc-kpi strong{font-size:15px;margin-top:3px;}
 
+  .expense-line{grid-template-columns:minmax(0,1fr) 84px;gap:6px;font-size:10.5px;}
+  .expense-line span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .expense-line input{padding:6px 5px;font-size:12.5px;}
+
   .portal-grid,.portal-grid.three{gap:8px;}
   .portal-result{padding:10px 12px;}
   .portal-result strong{font-size:17px;margin-top:2px;}
