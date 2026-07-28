@@ -1750,6 +1750,7 @@
   .area-base-summary .value{font-size:18px;}
 
   .calc-kpi-grid{gap:8px;margin:10px 0;}
+  .living-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .calc-kpi{padding:10px 12px;}
   .calc-kpi span{font-size:9.5px;}
   .calc-kpi strong{font-size:15px;margin-top:3px;}
