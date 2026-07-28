@@ -19,9 +19,9 @@
     <div class="grid">
       <div class="card">
         <div class="section-title">金額を入力</div>
-        <div class="util-doc-switch" style="display:flex;gap:8px;margin-bottom:14px;">
-          <button type="button" class="util-doc-tab active" id="ctModeExcl" data-ct-mode="excl">税抜金額から計算</button>
-          <button type="button" class="util-doc-tab" id="ctModeIncl" data-ct-mode="incl">税込金額から計算</button>
+        <div class="util-doc-switch" style="display:inline-flex;gap:8px;margin-bottom:14px;border:none;background:none;width:auto;">
+          <button type="button" class="util-doc-tab active" id="ctModeExcl" data-ct-mode="excl" style="min-height:auto;padding:8px 14px;border:1px solid var(--line);border-radius:6px;">税抜金額から計算</button>
+          <button type="button" class="util-doc-tab" id="ctModeIncl" data-ct-mode="incl" style="min-height:auto;padding:8px 14px;border:1px solid var(--line);border-radius:6px;">税込金額から計算</button>
         </div>
         <div class="apply-fields">
           <div class="apply-field full"><label id="ctAmountLabel">税抜金額 Amount (excl. tax)</label><div class="input-wrap"><input type="number" id="ctAmount" value="10000" min="0" step="1"><span>円</span></div></div>
