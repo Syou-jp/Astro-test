@@ -1759,7 +1759,7 @@
   .portal-result small{font-size:10.5px;margin-top:3px;}
   .readiness-item{font-size:12px;}
   .market-note{font-size:12px;}
-  .portal-source{font-size:11px;}
+  .portal-source{font-size:11px;text-align:left;line-height:1.7;}
 
   .util-doc-tab{display:flex;align-items:center;justify-content:center;text-align:center;padding:8px 6px;font-size:11px;line-height:1.35;min-height:56px;}
   .util-doc-tab small{font-size:10px;}
