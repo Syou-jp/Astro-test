@@ -88,7 +88,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
             <div class="tab-group-tabs" id={`navcat-${i}-panel`} role="menu" aria-labelledby={`navcat-${i}-btn`}>
               {group.tabs.map((tab) => (
                 <a class:list={["doc-tab", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)} role="menuitem">
-                  <span class="tab-text">{tab.text}<small>{tab.small}</small></span>
+                  <span class="tab-text">{tab.text}</span>
                 </a>
               ))}
             </div>
