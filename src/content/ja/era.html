@@ -29,8 +29,8 @@
           </div>
           <div class="apply-field">
             <label for="eraYearInput">和暦年 Era year<span class="required-mark">*</span></label>
-            <input type="number" id="eraYearInput" value="8" min="1" step="1" inputmode="numeric">
-            <small>元年（がんねん）は「1」を入力してください。</small>
+            <select id="eraYearInput"></select>
+            <small>元年（がんねん）は「元」と表示されます。</small>
           </div>
         </div>
         <div class="area-base-summary">
@@ -46,12 +46,12 @@
         <div class="apply-fields era-eq-fields">
           <div class="apply-field">
             <label for="twWesternInput">西暦 Western year</label>
-            <input type="number" id="twWesternInput" value="2026" step="1" inputmode="numeric">
+            <select id="twWesternInput"></select>
           </div>
           <div class="era-eq-sign">=</div>
           <div class="apply-field">
             <label for="twMinguoInput">民国 Minguo year</label>
-            <input type="number" id="twMinguoInput" value="115" step="1" inputmode="numeric">
+            <select id="twMinguoInput"></select>
           </div>
         </div>
         <div class="area-note">※ 台湾の民国紀年は「西暦－1911」で計算します（例：2026年＝民国115年）。北朝鮮の主体暦も同じく1912年を元年とする紀年法で、計算式は民国紀年と同じです。</div>
@@ -156,22 +156,42 @@
       dateInput.addEventListener('input', renderDateCard);
       renderDateCard();
 
+      function fillSelect(select, values, formatLabel, selectedValue) {
+        select.innerHTML = values.map(function (v) {
+          return '<option value="' + v + '"' + (v === selectedValue ? ' selected' : '') + '>' + formatLabel(v) + '</option>';
+        }).join('');
+      }
+      function range(start, end) {
+        var arr = [];
+        for (var i = start; i <= end; i++) arr.push(i);
+        return arr;
+      }
+
       var eraNameSelect = document.getElementById('eraNameSelect');
       var eraYearInput = document.getElementById('eraYearInput');
       var eraToWesternResult = document.getElementById('eraToWesternResult');
+      function fillEraYearOptions() {
+        var prev = Number(eraYearInput.value) || 8;
+        fillSelect(eraYearInput, range(1, 65), function (n) { return (n === 1 ? '元' : n) + '年'; }, prev);
+        if (!eraYearInput.value) eraYearInput.selectedIndex = 0;
+      }
       function renderEraToWestern() {
         var era = JP_ERAS.filter(function (e) { return e.key === eraNameSelect.value; })[0];
         var n = Math.max(1, Math.round(Number(eraYearInput.value) || 1));
         eraToWesternResult.textContent = (era.startYear + n - 1) + '年';
       }
+      fillEraYearOptions();
       eraNameSelect.addEventListener('change', renderEraToWestern);
-      eraYearInput.addEventListener('input', renderEraToWestern);
+      eraYearInput.addEventListener('change', renderEraToWestern);
       renderEraToWestern();
 
       var twWestern = document.getElementById('twWesternInput');
       var twMinguo = document.getElementById('twMinguoInput');
-      twWestern.addEventListener('input', function () { twMinguo.value = (Number(twWestern.value) || 0) - 1911; });
-      twMinguo.addEventListener('input', function () { twWestern.value = (Number(twMinguo.value) || 0) + 1911; });
+      var TW_MIN_WESTERN = 1912, TW_MAX_WESTERN = 2050;
+      fillSelect(twWestern, range(TW_MIN_WESTERN, TW_MAX_WESTERN), function (y) { return y + '年'; }, 2026);
+      fillSelect(twMinguo, range(TW_MIN_WESTERN - 1911, TW_MAX_WESTERN - 1911), function (y) { return y + '年'; }, 115);
+      twWestern.addEventListener('change', function () { twMinguo.value = Number(twWestern.value) - 1911; });
+      twMinguo.addEventListener('change', function () { twWestern.value = Number(twMinguo.value) + 1911; });
 
       var krBirth = document.getElementById('krBirthInput');
       var krRef = document.getElementById('krRefInput');
