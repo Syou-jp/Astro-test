@@ -49,8 +49,9 @@
       #nisaTable th:first-child,#nisaTable td:first-child,#nisaTable th:nth-child(2),#nisaTable td:nth-child(2){text-align:left;}
       #nisaTable th{color:var(--ink-soft,#6b665a);font-weight:700;font-size:11px;}
       @media(max-width:520px){
-        #nisaTable{font-size:11.5px;min-width:480px;}
+        #nisaTable{font-size:11.5px;min-width:420px;}
         #nisaTable th,#nisaTable td{padding:6px 8px;}
+        .nisa-suffix{display:none;}
       }
 
       #page-nisa .calc-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
@@ -106,7 +107,7 @@
         var tbody = document.getElementById("nisaTableBody");
         var html = "";
         rows.forEach(function(row){
-          html += "<tr><td>" + row.year + "年後</td><td>" + (thisYear + row.year) + "年</td><td>" + fmtYen(row.principal) + "</td><td>" + fmtYen(row.asset) + "</td><td>" + fmtYen(row.profit) + "</td></tr>";
+          html += "<tr><td>" + row.year + "<span class=\"nisa-suffix\">年後</span></td><td>" + (thisYear + row.year) + "<span class=\"nisa-suffix\">年</span></td><td>" + fmtYen(row.principal) + "</td><td>" + fmtYen(row.asset) + "</td><td>" + fmtYen(row.profit) + "</td></tr>";
         });
         tbody.innerHTML = html;
       }
