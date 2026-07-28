@@ -1786,6 +1786,16 @@
   .card.is-collapsed > .section-title.card-toggle::after{transform:rotate(-90deg);}
   .card.is-collapsed .card-body{display:none;}
   #jobPostingForm.is-collapsed ~ *{display:none;}
+
+  .visa-hero h2,.japanese-hero h2{font-size:19px;}
+  .visa-hero p,.japanese-hero p{font-size:12px;line-height:1.75;}
+  .visa-summary,.japanese-summary{padding:14px 15px;}
+  .visa-summary dd,.japanese-summary dd{font-size:12px;}
+  .visa-callout,.visa-doc-card,.visa-warning-grid article{padding:14px;}
+  .visa-callout h3,.visa-doc-card h3,.visa-warning-grid h3{font-size:13px;}
+  .visa-callout p,.visa-warning-grid p,.visa-doc-card .info-list{font-size:11.5px;}
+  .portal-actions{flex-direction:column;align-items:stretch;gap:9px;}
+  .portal-actions .secondary-btn{width:100%;text-align:center;font-size:12.5px;padding:12px 14px;}
 }
 
 /* ---- Expert CTA: bottom-of-page button opening a specialist's profile/contact modal ---- */
