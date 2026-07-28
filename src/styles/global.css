@@ -1747,13 +1747,20 @@
   .area-base-summary .label{font-size:11px;}
   .area-base-summary .value{font-size:18px;}
 
-  .calc-kpi span{font-size:10.5px;}
-  .calc-kpi strong{font-size:17px;}
+  .calc-kpi-grid{gap:8px;margin:10px 0;}
+  .calc-kpi{padding:10px 12px;}
+  .calc-kpi span{font-size:9.5px;}
+  .calc-kpi strong{font-size:15px;margin-top:3px;}
+
+  .portal-grid,.portal-grid.three{gap:8px;}
+  .portal-result{padding:10px 12px;}
+  .portal-result strong{font-size:17px;margin-top:2px;}
+  .portal-result small{font-size:10.5px;margin-top:3px;}
   .readiness-item{font-size:12px;}
   .market-note{font-size:12px;}
   .portal-source{font-size:11px;}
 
-  .util-doc-tab{font-size:12px;}
+  .util-doc-tab{display:flex;align-items:center;justify-content:center;text-align:center;padding:8px 6px;font-size:11px;line-height:1.35;min-height:56px;}
   .util-doc-tab small{font-size:10px;}
 
   .receipt-head h2{font-size:15px;}
