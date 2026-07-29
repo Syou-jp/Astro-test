@@ -1,160 +1,104 @@
 <div id="page-home" class="page-view active theme-home">
   <div class="card" style="margin-bottom:18px;">
     <div class="home-top-row">
-      <div class="home-left-col">
-        <a class="home-news-card" href="/ja/news/" id="homeNewsCard">
-          <span class="home-news-thumb" id="homeNewsThumb">
-            <span class="home-news-tag">ニュース日報</span>
-          </span>
-          <span class="home-news-body">
-            <span class="home-news-date" id="homeNewsDate">DAILY NEWS DIGEST</span>
-            <strong id="homeNewsTitle">今日の時事ニュースをまとめてチェック</strong>
-          </span>
-        </a>
+      <a class="home-news-card" href="/ja/news/" id="homeNewsCard">
+        <span class="home-news-thumb" id="homeNewsThumb">
+          <span class="home-news-tag">ニュース日報</span>
+        </span>
+        <span class="home-news-body">
+          <span class="home-news-date" id="homeNewsDate">DAILY NEWS DIGEST</span>
+          <strong id="homeNewsTitle">今日の時事ニュースをまとめてチェック</strong>
+        </span>
+      </a>
 
-        <div class="home-fx-card">
-          <div class="home-fx-head">
-            <div class="home-fx-title">
-              <span class="home-fx-flag"><img class="home-fx-flag-img" src="https://flagcdn.com/w40/jp.png" alt="" loading="lazy" width="20" height="15" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'home-fx-flag-fallback',textContent:'JP'}))"></span>
-              <span>今日の為替レート</span>
-            </div>
-            <div class="home-fx-head-actions">
-              <button type="button" class="home-fx-swap-btn" id="homeFxSwapBtn" aria-label="円と外貨を入れ替え">
-                <span class="home-fx-swap-from" id="homeFxSwapFrom">¥ 円</span>
-                <span class="home-fx-swap-icon">⇄</span>
-                <span class="home-fx-swap-to" id="homeFxSwapTo">外貨</span>
-              </button>
-              <button type="button" class="home-fx-calc-btn" id="homeFxCalcBtn" aria-label="電卓を開く">🖩</button>
-            </div>
+      <div class="home-fx-card">
+        <div class="home-fx-head">
+          <div class="home-fx-title">
+            <span class="home-fx-flag"><img class="home-fx-flag-img" src="https://flagcdn.com/w40/jp.png" alt="" loading="lazy" width="20" height="15" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'home-fx-flag-fallback',textContent:'JP'}))"></span>
+            <span>今日の為替レート</span>
           </div>
-          <div class="home-fx-amount-toggle" id="homeFxAmountToggle"></div>
-          <div class="home-fx-grid" id="homeFxGrid">
-            <div class="home-fx-loading">為替レートを取得中…</div>
+          <div class="home-fx-head-actions">
+            <button type="button" class="home-fx-swap-btn" id="homeFxSwapBtn" aria-label="円と外貨を入れ替え">
+              <span class="home-fx-swap-from" id="homeFxSwapFrom">¥ 円</span>
+              <span class="home-fx-swap-icon">⇄</span>
+              <span class="home-fx-swap-to" id="homeFxSwapTo">外貨</span>
+            </button>
+            <button type="button" class="home-fx-calc-btn" id="homeFxCalcBtn" aria-label="電卓を開く">🖩</button>
           </div>
-          <div class="home-fx-custom" id="homeFxCustom">
-            <div class="home-fx-custom-side">
-              <input type="number" inputmode="decimal" class="home-fx-custom-input" id="homeFxCustomAmount" value="5000000" min="0" step="any" aria-label="金額">
-              <select class="home-fx-custom-select" id="homeFxCustomFrom" aria-label="変換元の通貨"></select>
-            </div>
-            <span class="home-fx-custom-eq">≈</span>
-            <div class="home-fx-custom-side home-fx-custom-side--result">
-              <span class="home-fx-custom-result" id="homeFxCustomResult">-</span>
-              <select class="home-fx-custom-select" id="homeFxCustomTo" aria-label="変換先の通貨"></select>
-            </div>
-          </div>
-          <div class="home-fx-foot" id="homeFxFoot">&nbsp;</div>
         </div>
-
-        <div class="home-calc-overlay" id="homeCalcOverlay" hidden>
-          <div class="home-calc-modal" role="dialog" aria-modal="true" aria-label="電卓">
-            <div class="home-calc-head">
-              <span>電卓</span>
-              <button type="button" class="home-calc-close" id="homeCalcClose" aria-label="閉じる">×</button>
-            </div>
-            <div class="home-calc-display" id="homeCalcDisplay">0</div>
-            <div class="home-calc-keys" id="homeCalcKeys">
-              <button type="button" class="home-calc-key home-calc-key--fn" data-key="clear">C</button>
-              <button type="button" class="home-calc-key home-calc-key--fn" data-key="sign">±</button>
-              <button type="button" class="home-calc-key home-calc-key--fn" data-key="percent">%</button>
-              <button type="button" class="home-calc-key home-calc-key--op" data-key="divide">÷</button>
-              <button type="button" class="home-calc-key" data-key="7">7</button>
-              <button type="button" class="home-calc-key" data-key="8">8</button>
-              <button type="button" class="home-calc-key" data-key="9">9</button>
-              <button type="button" class="home-calc-key home-calc-key--op" data-key="multiply">×</button>
-              <button type="button" class="home-calc-key" data-key="4">4</button>
-              <button type="button" class="home-calc-key" data-key="5">5</button>
-              <button type="button" class="home-calc-key" data-key="6">6</button>
-              <button type="button" class="home-calc-key home-calc-key--op" data-key="subtract">−</button>
-              <button type="button" class="home-calc-key" data-key="1">1</button>
-              <button type="button" class="home-calc-key" data-key="2">2</button>
-              <button type="button" class="home-calc-key" data-key="3">3</button>
-              <button type="button" class="home-calc-key home-calc-key--op" data-key="add">+</button>
-              <button type="button" class="home-calc-key home-calc-key--wide" data-key="0">0</button>
-              <button type="button" class="home-calc-key" data-key="decimal">.</button>
-              <button type="button" class="home-calc-key home-calc-key--eq" data-key="equals">=</button>
-            </div>
+        <div class="home-fx-amount-toggle" id="homeFxAmountToggle"></div>
+        <div class="home-fx-grid" id="homeFxGrid">
+          <div class="home-fx-loading">為替レートを取得中…</div>
+        </div>
+        <div class="home-fx-custom" id="homeFxCustom">
+          <div class="home-fx-custom-side">
+            <input type="number" inputmode="decimal" class="home-fx-custom-input" id="homeFxCustomAmount" value="5000000" min="0" step="any" aria-label="金額">
+            <select class="home-fx-custom-select" id="homeFxCustomFrom" aria-label="変換元の通貨"></select>
           </div>
+          <span class="home-fx-custom-eq">≈</span>
+          <div class="home-fx-custom-side home-fx-custom-side--result">
+            <span class="home-fx-custom-result" id="homeFxCustomResult">-</span>
+            <select class="home-fx-custom-select" id="homeFxCustomTo" aria-label="変換先の通貨"></select>
+          </div>
+        </div>
+        <div class="home-fx-foot" id="homeFxFoot">&nbsp;</div>
+      </div>
+    </div>
+
+    <div class="home-calc-overlay" id="homeCalcOverlay" hidden>
+      <div class="home-calc-modal" role="dialog" aria-modal="true" aria-label="電卓">
+        <div class="home-calc-head">
+          <span>電卓</span>
+          <button type="button" class="home-calc-close" id="homeCalcClose" aria-label="閉じる">×</button>
+        </div>
+        <div class="home-calc-display" id="homeCalcDisplay">0</div>
+        <div class="home-calc-keys" id="homeCalcKeys">
+          <button type="button" class="home-calc-key home-calc-key--fn" data-key="clear">C</button>
+          <button type="button" class="home-calc-key home-calc-key--fn" data-key="sign">±</button>
+          <button type="button" class="home-calc-key home-calc-key--fn" data-key="percent">%</button>
+          <button type="button" class="home-calc-key home-calc-key--op" data-key="divide">÷</button>
+          <button type="button" class="home-calc-key" data-key="7">7</button>
+          <button type="button" class="home-calc-key" data-key="8">8</button>
+          <button type="button" class="home-calc-key" data-key="9">9</button>
+          <button type="button" class="home-calc-key home-calc-key--op" data-key="multiply">×</button>
+          <button type="button" class="home-calc-key" data-key="4">4</button>
+          <button type="button" class="home-calc-key" data-key="5">5</button>
+          <button type="button" class="home-calc-key" data-key="6">6</button>
+          <button type="button" class="home-calc-key home-calc-key--op" data-key="subtract">−</button>
+          <button type="button" class="home-calc-key" data-key="1">1</button>
+          <button type="button" class="home-calc-key" data-key="2">2</button>
+          <button type="button" class="home-calc-key" data-key="3">3</button>
+          <button type="button" class="home-calc-key home-calc-key--op" data-key="add">+</button>
+          <button type="button" class="home-calc-key home-calc-key--wide" data-key="0">0</button>
+          <button type="button" class="home-calc-key" data-key="decimal">.</button>
+          <button type="button" class="home-calc-key home-calc-key--eq" data-key="equals">=</button>
         </div>
       </div>
-      <div class="home-slider-wrap">
-        <div class="home-slider-group home-slider-track">
-          <a class="home-featured-card" href="/ja/jobs/">
-            <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-              <img src="/jobs/cover.jpg" loading="lazy" alt="">
-            </div>
-            <div class="home-featured-body">
-              <span class="home-slider-icon"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/><path d="M3 12.5h18"/></svg></span>
-              <span class="home-slider-text">
-                <strong>求人・採用</strong>
-                <small>JOBS</small>
-              </span>
-            </div>
-          </a>
-          <a class="home-featured-card" href="/ja/listings/">
-            <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-              <img src="/listings/house-share.jpg" loading="lazy" alt="">
-            </div>
-            <div class="home-featured-body">
-              <span class="home-slider-icon"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.2V20h12v-9.8"/><path d="M10 20v-5.5h4V20"/></svg></span>
-              <span class="home-slider-text">
-                <strong>入居募集</strong>
-                <small>LISTINGS</small>
-              </span>
-            </div>
-          </a>
-          <a class="home-featured-card" href="/ja/used-market/">
-            <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-              <img src="/used-market/cover.jpg" loading="lazy" alt="">
-            </div>
-            <div class="home-featured-body">
-              <span class="home-slider-icon"><svg viewBox="0 0 24 24"><path d="M12.6 3.6 20 11c.6.6.6 1.5 0 2.1l-6.4 6.4c-.6.6-1.5.6-2.1 0L4 12c-.3-.3-.5-.7-.5-1.1V5a1.4 1.4 0 0 1 1.4-1.4h6.6c.4 0 .8.2 1.1.5Z"/><circle cx="8.2" cy="8.2" r="1.1"/></svg></span>
-              <span class="home-slider-text">
-                <strong>中古市場</strong>
-                <small>MARKET</small>
-              </span>
-            </div>
-          </a>
-          <a class="home-featured-card" href="/ja/events/">
-            <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-              <img src="/events/cover.jpg" loading="lazy" alt="">
-            </div>
-            <div class="home-featured-body">
-              <span class="home-slider-icon"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v4M16 3v4"/></svg></span>
-              <span class="home-slider-text">
-                <strong>イベント・交流会</strong>
-                <small>EVENTS</small>
-              </span>
-            </div>
-          </a>
-          <a class="home-featured-card" href="/ja/restaurant-list/">
-            <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-              <img src="/restaurant-list/cover.jpg" loading="lazy" alt="">
-            </div>
-            <div class="home-featured-body">
-              <span class="home-slider-icon"><svg viewBox="0 0 24 24"><path d="M7 3v6.5A2 2 0 0 0 9 11.5V21"/><path d="M5 3v4.5M9 3v4.5"/><path d="M17 3c-1.8 0-3 2-3 5.5S15.2 13 17 13v8"/></svg></span>
-              <span class="home-slider-text">
-                <strong>お店リスト</strong>
-                <small>WORLD FOOD</small>
-              </span>
-            </div>
-          </a>
-          <a class="home-featured-card" href="/ja/help-request/">
-            <div class="home-featured-thumb home-featured-thumb--listings" data-no-i18n>
-              <img src="/help-request/cover.jpg" loading="lazy" alt="">
-            </div>
-            <div class="home-featured-body">
-              <span class="home-slider-icon"><svg viewBox="0 0 24 24"><path d="M3 11 7 7l4 3 4-3 4 4"/><path d="M3 11v3l4 4 3-2 2 2 3-2 4-4v-3"/></svg></span>
-              <span class="home-slider-text">
-                <strong>助け合い掲示板</strong>
-                <small>HELP BOARD</small>
-              </span>
-            </div>
-          </a>
-        </div>
-        <button type="button" class="home-slider-nav home-slider-prev" aria-label="前へ">‹</button>
-        <button type="button" class="home-slider-nav home-slider-next" aria-label="次へ">›</button>
-        <div class="home-slider-dots"></div>
-      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px;">
+    <div class="home-quick-nav-grid">
+      <a class="home-quick-nav-item" href="/ja/listings/">
+        <span class="home-quick-nav-icon"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.2V20h12v-9.8"/><path d="M10 20v-5.5h4V20"/></svg></span>
+        <span class="home-quick-nav-label">入居募集<small>LISTINGS</small></span>
+      </a>
+      <a class="home-quick-nav-item" href="/ja/used-market/">
+        <span class="home-quick-nav-icon"><svg viewBox="0 0 24 24"><path d="M12.6 3.6 20 11c.6.6.6 1.5 0 2.1l-6.4 6.4c-.6.6-1.5.6-2.1 0L4 12c-.3-.3-.5-.7-.5-1.1V5a1.4 1.4 0 0 1 1.4-1.4h6.6c.4 0 .8.2 1.1.5Z"/><circle cx="8.2" cy="8.2" r="1.1"/></svg></span>
+        <span class="home-quick-nav-label">中古市場<small>MARKET</small></span>
+      </a>
+      <a class="home-quick-nav-item" href="/ja/jobs/">
+        <span class="home-quick-nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/><path d="M3 12.5h18"/></svg></span>
+        <span class="home-quick-nav-label">求人・採用<small>JOBS</small></span>
+      </a>
+      <a class="home-quick-nav-item" href="/ja/events/">
+        <span class="home-quick-nav-icon"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v4M16 3v4"/></svg></span>
+        <span class="home-quick-nav-label">イベント・交流会<small>EVENTS</small></span>
+      </a>
+      <a class="home-quick-nav-item" href="/ja/help-request/">
+        <span class="home-quick-nav-icon"><svg viewBox="0 0 24 24"><path d="M3 11 7 7l4 3 4-3 4 4"/><path d="M3 11v3l4 4 3-2 2 2 3-2 4-4v-3"/></svg></span>
+        <span class="home-quick-nav-label">助け合い掲示板<small>HELP BOARD</small></span>
+      </a>
     </div>
   </div>
 
@@ -649,6 +593,40 @@
     <a class="secondary-btn home-pros-cta" href="/ja/partners/">専門家・お店を検索する →</a>
   </div>
 
+  <div class="card home-food-section" style="margin-bottom:18px;">
+    <div class="home-pros-head">
+      <div class="section-title" style="margin-bottom:6px;">お店リスト World Food</div>
+      <p class="home-pros-lead">香港・台湾料理から東南アジア・韓国グルメまで。世界各国の味が楽しめるお店を紹介しています。</p>
+    </div>
+    <div class="home-food-grid">
+      <a class="home-food-photo" href="/ja/restaurant-list/">
+        <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy" onerror="this.closest('.home-food-photo').classList.add('home-food-photo--fallback')">
+        <span class="home-food-tag">香港</span>
+      </a>
+      <a class="home-food-photo" href="/ja/restaurant-list/">
+        <img src="https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy" onerror="this.closest('.home-food-photo').classList.add('home-food-photo--fallback')">
+        <span class="home-food-tag">台湾</span>
+      </a>
+      <a class="home-food-photo" href="/ja/restaurant-list/">
+        <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy" onerror="this.closest('.home-food-photo').classList.add('home-food-photo--fallback')">
+        <span class="home-food-tag">タイ</span>
+      </a>
+      <a class="home-food-photo" href="/ja/restaurant-list/">
+        <img src="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy" onerror="this.closest('.home-food-photo').classList.add('home-food-photo--fallback')">
+        <span class="home-food-tag">ベトナム</span>
+      </a>
+      <a class="home-food-photo" href="/ja/restaurant-list/">
+        <img src="https://images.unsplash.com/photo-1583224964978-2257b960c3d3?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy" onerror="this.closest('.home-food-photo').classList.add('home-food-photo--fallback')">
+        <span class="home-food-tag">韓国</span>
+      </a>
+      <a class="home-food-photo" href="/ja/restaurant-list/">
+        <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy" onerror="this.closest('.home-food-photo').classList.add('home-food-photo--fallback')">
+        <span class="home-food-tag">インド</span>
+      </a>
+    </div>
+    <a class="secondary-btn home-food-cta" href="/ja/restaurant-list/">お店リストを見る →</a>
+  </div>
+
   <div class="card home-category-section" style="margin-bottom:18px;">
     <div class="section-title">カテゴリーから探す Browse by Category</div>
     <div class="home-category-grid">
@@ -729,66 +707,4 @@
     @media(max-width:640px){.home-latest-cols{grid-template-columns:1fr;}}
   </style>
 
-  <script>
-    (function () {
-      var wraps = document.querySelectorAll(".home-slider-wrap");
-      wraps.forEach(function (wrap) {
-        var track = wrap.querySelector(".home-slider-track");
-        var prev = wrap.querySelector(".home-slider-prev");
-        var next = wrap.querySelector(".home-slider-next");
-        var dotsBox = wrap.querySelector(".home-slider-dots");
-        if (!track || !prev || !next || !dotsBox) return;
-
-        var slides = Array.prototype.slice.call(track.children);
-        if (slides.length < 2) {
-          prev.hidden = true;
-          next.hidden = true;
-          return;
-        }
-
-        var dots = slides.map(function (_, i) {
-          var dot = document.createElement("button");
-          dot.type = "button";
-          dot.className = "home-slider-dot";
-          dot.setAttribute("aria-label", (i + 1) + " / " + slides.length);
-          dot.addEventListener("click", function () {
-            goTo(i);
-          });
-          dotsBox.appendChild(dot);
-          return dot;
-        });
-
-        var current = 0;
-
-        function goTo(index) {
-          current = Math.max(0, Math.min(slides.length - 1, index));
-          track.scrollTo({ left: slides[current].offsetLeft, behavior: "smooth" });
-        }
-
-        function updateFromScroll() {
-          var closest = 0;
-          var closestDist = Infinity;
-          slides.forEach(function (slide, i) {
-            var dist = Math.abs(slide.offsetLeft - track.scrollLeft);
-            if (dist < closestDist) {
-              closestDist = dist;
-              closest = i;
-            }
-          });
-          current = closest;
-          dots.forEach(function (dot, i) {
-            dot.classList.toggle("is-active", i === current);
-          });
-          prev.hidden = current === 0;
-          next.hidden = current === slides.length - 1;
-        }
-
-        prev.addEventListener("click", function () { goTo(current - 1); });
-        next.addEventListener("click", function () { goTo(current + 1); });
-        track.addEventListener("scroll", updateFromScroll, { passive: true });
-
-        updateFromScroll();
-      });
-    })();
-  </script>
 </div><!-- /page-home -->
