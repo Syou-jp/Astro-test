@@ -316,7 +316,14 @@
         customTo.value = "CNY";
       }
 
+      function fitInputFontSize(el) {
+        var digitCount = el.value.replace(/[^0-9]/g, "").length;
+        var size = digitCount > 15 ? 10.5 : digitCount > 11 ? 12 : digitCount > 8 ? 13.5 : 15;
+        el.style.fontSize = size + "px";
+      }
+
       function renderCustom() {
+        if (customAmount) fitInputFontSize(customAmount);
         if (!customResult || !customFrom || !customTo) return;
         if (!rates) {
           customResult.textContent = "-";
