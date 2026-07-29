@@ -198,10 +198,7 @@
 
           var nameSpan = document.createElement("span");
           nameSpan.className = "home-fx-name";
-          var nameSmall = document.createElement("small");
-          nameSmall.textContent = cur.code;
-          nameSpan.appendChild(document.createTextNode(cur.label));
-          nameSpan.appendChild(nameSmall);
+          nameSpan.textContent = cur.code;
 
           var valueSpan = document.createElement("span");
           valueSpan.className = "home-fx-value";
