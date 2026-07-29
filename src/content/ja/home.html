@@ -93,6 +93,117 @@
     })();
   </script>
 
+  <div class="card home-fx-card" style="margin-bottom:18px;">
+    <div class="home-fx-head">
+      <div class="home-fx-title">
+        <span class="home-fx-flag">🇯🇵</span>
+        <span>今日の為替レート<small>JPY EXCHANGE RATE</small></span>
+      </div>
+      <div class="home-fx-amount-toggle" id="homeFxAmountToggle">
+        <button type="button" class="home-fx-amount-btn" data-amount="100">¥100</button>
+        <button type="button" class="home-fx-amount-btn is-active" data-amount="1000">¥1,000</button>
+        <button type="button" class="home-fx-amount-btn" data-amount="10000">¥10,000</button>
+      </div>
+    </div>
+    <div class="home-fx-grid" id="homeFxGrid">
+      <div class="home-fx-loading">為替レートを取得中…</div>
+    </div>
+    <div class="home-fx-foot" id="homeFxFoot">&nbsp;</div>
+  </div>
+
+  <script>
+    (function () {
+      var CURRENCIES = [
+        { code: "USD", flag: "🇺🇸", label: "アメリカ" },
+        { code: "CNY", flag: "🇨🇳", label: "中国" },
+        { code: "KRW", flag: "🇰🇷", label: "韓国" },
+        { code: "TWD", flag: "🇹🇼", label: "台湾" },
+        { code: "HKD", flag: "🇭🇰", label: "香港" },
+        { code: "VND", flag: "🇻🇳", label: "ベトナム" },
+        { code: "THB", flag: "🇹🇭", label: "タイ" },
+        { code: "IDR", flag: "🇮🇩", label: "インドネシア" },
+        { code: "PHP", flag: "🇵🇭", label: "フィリピン" }
+      ];
+      var STORAGE_KEY = "sotocom_fx_rates_v1";
+      var grid = document.getElementById("homeFxGrid");
+      var foot = document.getElementById("homeFxFoot");
+      var toggle = document.getElementById("homeFxAmountToggle");
+      if (!grid || !foot || !toggle) return;
+
+      var amount = 1000;
+      var rates = null;
+      var updatedAt = null;
+
+      function formatNumber(value) {
+        var maxFrac = value >= 100 ? 0 : value >= 1 ? 2 : 4;
+        return value.toLocaleString("ja-JP", { maximumFractionDigits: maxFrac });
+      }
+
+      function render() {
+        if (!rates) return;
+        grid.innerHTML = "";
+        CURRENCIES.forEach(function (cur) {
+          var rate = rates[cur.code];
+          if (!rate) return;
+          var converted = amount * rate;
+          var row = document.createElement("div");
+          row.className = "home-fx-row";
+          row.innerHTML =
+            '<span class="home-fx-flag">' + cur.flag + '</span>' +
+            '<span class="home-fx-name">' + cur.label + '<small>' + cur.code + '</small></span>' +
+            '<span class="home-fx-value">' + formatNumber(converted) + '<small>' + cur.code + '</small></span>';
+          grid.appendChild(row);
+        });
+        foot.textContent = updatedAt
+          ? "更新: " + updatedAt + "（参考値、送金・両替時のレートとは異なります）"
+          : " ";
+      }
+
+      toggle.addEventListener("click", function (e) {
+        var btn = e.target.closest(".home-fx-amount-btn");
+        if (!btn) return;
+        amount = Number(btn.dataset.amount);
+        toggle.querySelectorAll(".home-fx-amount-btn").forEach(function (b) {
+          b.classList.toggle("is-active", b === btn);
+        });
+        render();
+      });
+
+      function showError() {
+        grid.innerHTML = '<div class="home-fx-loading">為替レートを取得できませんでした</div>';
+      }
+
+      function applyPayload(payload) {
+        rates = payload.rates;
+        updatedAt = payload.date;
+        render();
+      }
+
+      var todayKey = new Date().toISOString().slice(0, 10);
+      var cached = null;
+      try { cached = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch (e) {}
+      if (cached && cached.day === todayKey && cached.rates) {
+        applyPayload(cached);
+      }
+
+      fetch("https://open.er-api.com/v6/latest/JPY")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (!data || data.result !== "success" || !data.rates) throw new Error("bad payload");
+          var payload = {
+            day: todayKey,
+            date: data.time_last_update_utc ? new Date(data.time_last_update_utc).toLocaleDateString("ja-JP") : todayKey,
+            rates: data.rates
+          };
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch (e) {}
+          applyPayload(payload);
+        })
+        .catch(function () {
+          if (!rates) showError();
+        });
+    })();
+  </script>
+
   <div class="card home-category-section" style="margin-bottom:18px;">
     <div class="section-title">カテゴリーから探す Browse by Category</div>
     <div class="home-category-grid">
