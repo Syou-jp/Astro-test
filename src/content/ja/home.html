@@ -96,15 +96,16 @@
   <div class="card home-fx-card" style="margin-bottom:18px;">
     <div class="home-fx-head">
       <div class="home-fx-title">
-        <span class="home-fx-flag">🇯🇵</span>
+        <span class="home-fx-flag"><img class="home-fx-flag-img" src="https://flagcdn.com/w40/jp.png" alt="" loading="lazy" width="20" height="15" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'home-fx-flag-fallback',textContent:'JP'}))"></span>
         <span>今日の為替レート<small>JPY EXCHANGE RATE</small></span>
       </div>
-      <div class="home-fx-amount-toggle" id="homeFxAmountToggle">
-        <button type="button" class="home-fx-amount-btn" data-amount="100">¥100</button>
-        <button type="button" class="home-fx-amount-btn is-active" data-amount="1000">¥1,000</button>
-        <button type="button" class="home-fx-amount-btn" data-amount="10000">¥10,000</button>
-      </div>
+      <button type="button" class="home-fx-swap-btn" id="homeFxSwapBtn" aria-label="円と外貨を入れ替え">
+        <span class="home-fx-swap-from" id="homeFxSwapFrom">¥ 円</span>
+        <span class="home-fx-swap-icon">⇄</span>
+        <span class="home-fx-swap-to" id="homeFxSwapTo">外貨</span>
+      </button>
     </div>
+    <div class="home-fx-amount-toggle" id="homeFxAmountToggle"></div>
     <div class="home-fx-grid" id="homeFxGrid">
       <div class="home-fx-loading">為替レートを取得中…</div>
     </div>
@@ -114,58 +115,136 @@
   <script>
     (function () {
       var CURRENCIES = [
-        { code: "USD", flag: "🇺🇸", label: "アメリカ" },
-        { code: "CNY", flag: "🇨🇳", label: "中国" },
-        { code: "KRW", flag: "🇰🇷", label: "韓国" },
-        { code: "TWD", flag: "🇹🇼", label: "台湾" },
-        { code: "HKD", flag: "🇭🇰", label: "香港" },
-        { code: "VND", flag: "🇻🇳", label: "ベトナム" },
-        { code: "THB", flag: "🇹🇭", label: "タイ" },
-        { code: "IDR", flag: "🇮🇩", label: "インドネシア" },
-        { code: "PHP", flag: "🇵🇭", label: "フィリピン" }
+        { code: "USD", cc: "us", label: "アメリカ" },
+        { code: "CNY", cc: "cn", label: "中国" },
+        { code: "KRW", cc: "kr", label: "韓国" },
+        { code: "TWD", cc: "tw", label: "台湾" },
+        { code: "HKD", cc: "hk", label: "香港" },
+        { code: "VND", cc: "vn", label: "ベトナム" },
+        { code: "THB", cc: "th", label: "タイ" },
+        { code: "IDR", cc: "id", label: "インドネシア" },
+        { code: "PHP", cc: "ph", label: "フィリピン" }
       ];
+      var FORWARD_AMOUNTS = [100, 1000, 10000];
+      var REVERSE_AMOUNTS = [1, 10, 100];
       var STORAGE_KEY = "sotocom_fx_rates_v1";
+
       var grid = document.getElementById("homeFxGrid");
       var foot = document.getElementById("homeFxFoot");
       var toggle = document.getElementById("homeFxAmountToggle");
-      if (!grid || !foot || !toggle) return;
+      var swapBtn = document.getElementById("homeFxSwapBtn");
+      var swapFrom = document.getElementById("homeFxSwapFrom");
+      var swapTo = document.getElementById("homeFxSwapTo");
+      if (!grid || !foot || !toggle || !swapBtn) return;
 
-      var amount = 1000;
+      function flagImg(cc) {
+        var img = document.createElement("img");
+        img.className = "home-fx-flag-img";
+        img.src = "https://flagcdn.com/w40/" + cc + ".png";
+        img.alt = "";
+        img.loading = "lazy";
+        img.width = 20;
+        img.height = 15;
+        img.onerror = function () {
+          var span = document.createElement("span");
+          span.className = "home-fx-flag-fallback";
+          span.textContent = cc.toUpperCase();
+          img.replaceWith(span);
+        };
+        return img;
+      }
+
+      var reverse = false;
+      var amountIndex = 1;
       var rates = null;
       var updatedAt = null;
+
+      function currentAmounts() {
+        return reverse ? REVERSE_AMOUNTS : FORWARD_AMOUNTS;
+      }
 
       function formatNumber(value) {
         var maxFrac = value >= 100 ? 0 : value >= 1 ? 2 : 4;
         return value.toLocaleString("ja-JP", { maximumFractionDigits: maxFrac });
       }
 
+      function renderAmountToggle() {
+        toggle.innerHTML = "";
+        currentAmounts().forEach(function (amt, i) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "home-fx-amount-btn" + (i === amountIndex ? " is-active" : "");
+          btn.dataset.index = i;
+          btn.textContent = reverse ? amt.toLocaleString("ja-JP") : "¥" + amt.toLocaleString("ja-JP");
+          toggle.appendChild(btn);
+        });
+      }
+
       function render() {
         if (!rates) return;
+        var amount = currentAmounts()[amountIndex];
         grid.innerHTML = "";
         CURRENCIES.forEach(function (cur) {
           var rate = rates[cur.code];
           if (!rate) return;
-          var converted = amount * rate;
           var row = document.createElement("div");
           row.className = "home-fx-row";
-          row.innerHTML =
-            '<span class="home-fx-flag">' + cur.flag + '</span>' +
-            '<span class="home-fx-name">' + cur.label + '<small>' + cur.code + '</small></span>' +
-            '<span class="home-fx-value">' + formatNumber(converted) + '<small>' + cur.code + '</small></span>';
+
+          var flagSpan = document.createElement("span");
+          flagSpan.className = "home-fx-flag";
+          flagSpan.appendChild(flagImg(cur.cc));
+
+          var nameSpan = document.createElement("span");
+          nameSpan.className = "home-fx-name";
+          var nameSmall = document.createElement("small");
+          nameSmall.textContent = cur.code;
+          nameSpan.appendChild(document.createTextNode(cur.label));
+          nameSpan.appendChild(nameSmall);
+
+          var valueSpan = document.createElement("span");
+          valueSpan.className = "home-fx-value";
+          var fromText, toText;
+          if (reverse) {
+            fromText = amount.toLocaleString("ja-JP") + " " + cur.code;
+            toText = "¥" + formatNumber(amount / rate);
+          } else {
+            fromText = "¥" + amount.toLocaleString("ja-JP");
+            toText = formatNumber(amount * rate) + " " + cur.code;
+          }
+          var valueSmall = document.createElement("small");
+          valueSmall.textContent = fromText + " より";
+          valueSpan.appendChild(document.createTextNode(toText));
+          valueSpan.appendChild(valueSmall);
+
+          row.appendChild(flagSpan);
+          row.appendChild(nameSpan);
+          row.appendChild(valueSpan);
           grid.appendChild(row);
         });
         foot.textContent = updatedAt
           ? "更新: " + updatedAt + "（参考値、送金・両替時のレートとは異なります）"
-          : " ";
+          : " ";
+      }
+
+      function updateSwapLabels() {
+        swapFrom.textContent = reverse ? "外貨" : "¥ 円";
+        swapTo.textContent = reverse ? "¥ 円" : "外貨";
+        swapBtn.classList.toggle("is-reversed", reverse);
       }
 
       toggle.addEventListener("click", function (e) {
         var btn = e.target.closest(".home-fx-amount-btn");
         if (!btn) return;
-        amount = Number(btn.dataset.amount);
-        toggle.querySelectorAll(".home-fx-amount-btn").forEach(function (b) {
-          b.classList.toggle("is-active", b === btn);
-        });
+        amountIndex = Number(btn.dataset.index);
+        renderAmountToggle();
+        render();
+      });
+
+      swapBtn.addEventListener("click", function () {
+        reverse = !reverse;
+        amountIndex = 1;
+        updateSwapLabels();
+        renderAmountToggle();
         render();
       });
 
@@ -185,6 +264,8 @@
       if (cached && cached.day === todayKey && cached.rates) {
         applyPayload(cached);
       }
+
+      renderAmountToggle();
 
       fetch("https://open.er-api.com/v6/latest/JPY")
         .then(function (res) { return res.json(); })
