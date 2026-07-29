@@ -1472,7 +1472,7 @@
     .masthead .site-tagline{display:block;}
     .masthead-right{display:none;}
     .site-footer{display:none;}
-    .home-category-section{display:none;}
+    .home-sitemap-section{display:none;}
 
     body{padding-bottom:calc(60px + env(safe-area-inset-bottom, 0px));}
 
