@@ -39,6 +39,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
   </head>
   <body>
     <div class="wrap">
+      <div class="site-header-sticky">
       <div class="masthead">
         <h1><a href={localePath(currentLocale.code)} class="site-title-link">Sotocom</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">国から日本へ。ともに生きるコミュニティ。</span></h1>
         <div class="masthead-right">
@@ -95,6 +96,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           </div>
         ))}
       </nav>
+      </div>
       <script is:inline>
         (() => {
           const dropdowns = Array.from(document.querySelectorAll("[data-nav-dropdown]"));
