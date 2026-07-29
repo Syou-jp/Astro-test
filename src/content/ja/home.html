@@ -659,6 +659,78 @@
     </div>
   </div>
 
+  <div class="card home-latest-section" style="margin-bottom:18px;">
+    <div class="section-title">最新の投稿をチェック<br class="home-pros-head-br">Latest Community Posts</div>
+    <div class="home-latest-cols">
+      <div class="home-latest-col">
+        <div class="home-latest-col-head">
+          <span class="home-latest-col-tag">LISTINGS</span>
+          <h3>入居募集の最新投稿</h3>
+          <a class="home-latest-more" href="/ja/listings/">すべて見る →</a>
+        </div>
+        <div class="home-latest-list">
+          <a class="home-latest-item" href="/ja/listings/">
+            <span class="home-latest-badge home-latest-badge--tenant">找租客</span>
+            <span class="home-latest-item-body">
+              <strong>足立区 千住 1LDK 房東直租</strong>
+              <small>月租 85,000円（不含管理費）</small>
+            </span>
+          </a>
+          <a class="home-latest-item" href="/ja/listings/">
+            <span class="home-latest-badge home-latest-badge--share">找合租</span>
+            <span class="home-latest-item-body">
+              <strong>找室友分租 葛飾区 2LDK 其中一間房</strong>
+              <small>月租 45,000円（含水電網路）</small>
+            </span>
+          </a>
+        </div>
+      </div>
+      <div class="home-latest-col">
+        <div class="home-latest-col-head">
+          <span class="home-latest-col-tag">MARKET</span>
+          <h3>中古市場の最新出品</h3>
+          <a class="home-latest-more" href="/ja/used-market/">すべて見る →</a>
+        </div>
+        <div class="home-latest-list">
+          <a class="home-latest-item home-latest-item--market" href="/ja/used-market/">
+            <span class="home-latest-thumb"><img src="https://images.unsplash.com/photo-1549497538-303791108f95?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy"></span>
+            <span class="home-latest-item-body">
+              <strong>木製ローテーブル</strong>
+              <small>¥1,800 ・ 中野駅から徒歩10分ほど</small>
+            </span>
+          </a>
+          <a class="home-latest-item home-latest-item--market" href="/ja/used-market/">
+            <span class="home-latest-thumb"><img src="https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy"></span>
+            <span class="home-latest-item-body">
+              <strong>電子レンジ（18L）</strong>
+              <small>¥3,500 ・ 池袋駅 西口エリア</small>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .home-latest-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:14px;}
+    .home-latest-col-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line,#ddd6c5);padding-bottom:8px;margin-bottom:10px;}
+    .home-latest-col-tag{font:700 10px "JetBrains Mono",monospace;letter-spacing:.1em;color:var(--accent);}
+    .home-latest-col-head h3{margin:0;font-size:14.5px;flex:1;}
+    .home-latest-more{font-size:11px;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap;}
+    .home-latest-list{display:flex;flex-direction:column;gap:8px;}
+    .home-latest-item{display:flex;align-items:center;gap:10px;border:1px solid var(--line,#ddd6c5);padding:9px 10px;text-decoration:none;color:inherit;background:#fff;}
+    .home-latest-item:hover{border-color:var(--accent);}
+    .home-latest-badge{flex:none;font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:999px;color:#fff;background:var(--accent);white-space:nowrap;}
+    .home-latest-badge--tenant{background:var(--accent);}
+    .home-latest-badge--share{background:#447c89;}
+    .home-latest-thumb{flex:none;width:44px;height:44px;overflow:hidden;background:var(--paper-2,#f4f1e8);}
+    .home-latest-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .home-latest-item-body{display:flex;flex-direction:column;gap:2px;min-width:0;}
+    .home-latest-item-body strong{font-size:12.5px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .home-latest-item-body small{font-size:11px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    @media(max-width:640px){.home-latest-cols{grid-template-columns:1fr;}}
+  </style>
+
   <script>
     (function () {
       var wraps = document.querySelectorAll(".home-slider-wrap");
