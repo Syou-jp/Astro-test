@@ -1680,7 +1680,7 @@
 .home-fx-loading{grid-column:1/-1;padding:18px 4px;text-align:center;font-size:11.5px;color:var(--ink-soft);}
 .home-fx-foot{font-size:9.5px;color:var(--ink-soft);opacity:.75;margin-top:10px;letter-spacing:.02em;}
 .home-fx-head-actions{display:flex;align-items:center;gap:8px;}
-.home-fx-calc-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid var(--line);background:var(--white);border-radius:999px;cursor:pointer;font-size:15px;line-height:1;transition:border-color .15s ease;}
+.home-fx-calc-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid var(--line);background:var(--white);border-radius:999px;cursor:pointer;font-size:22px;line-height:1;transition:border-color .15s ease;}
 .home-fx-calc-btn:hover{border-color:var(--accent);}
 .home-fx-custom{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:1px solid var(--line);background:var(--paper-2);border-radius:8px;padding:9px 11px;margin-top:10px;}
 .home-fx-custom-side{display:flex;align-items:center;gap:6px;min-width:0;flex:1 1 140px;}
@@ -1693,6 +1693,7 @@
 @media(max-width:520px){.home-fx-grid{grid-template-columns:1fr;}.home-fx-head{flex-direction:column;align-items:stretch;}.home-fx-head-actions{justify-content:space-between;}.home-fx-swap-btn{flex:1 1 auto;justify-content:center;}.home-fx-amount-toggle{justify-content:space-between;}.home-fx-custom-side--result{justify-content:flex-start;}}
 
 .home-calc-overlay{position:fixed;inset:0;background:rgba(20,18,14,.45);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px;}
+.home-calc-overlay[hidden]{display:none;}
 .home-calc-modal{width:100%;max-width:280px;background:var(--white);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.25);overflow:hidden;}
 .home-calc-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line-soft);font:700 12.5px "JetBrains Mono",monospace;color:var(--ink);}
 .home-calc-close{border:none;background:transparent;font-size:20px;line-height:1;cursor:pointer;color:var(--ink-soft);padding:2px 6px;}
