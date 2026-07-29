@@ -42,8 +42,32 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
       <div class="site-header-sticky">
       <div class="masthead">
         <h1><a href={localePath(currentLocale.code)} class="site-title-link">Sotocom</a> <span class="site-tagline" id="siteTagline" style="font-size:13px;color:var(--ink-soft);font-weight:400;">国から日本へ。ともに生きるコミュニティ。</span></h1>
+
+        <nav class="tab-bar" id="tabBar" aria-label="ページ一覧">
+          {navGroups.map((group, i) => (
+            <div class="nav-dropdown" data-nav-dropdown>
+              <button
+                type="button"
+                id={`navcat-${i}-btn`}
+                class:list={["tab-group-label", group.tabs.some((tab) => activeId === tab.id) && "has-active"]}
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls={`navcat-${i}-panel`}
+              >
+                {group.label}
+              </button>
+              <div class="tab-group-tabs" id={`navcat-${i}-panel`} role="menu" aria-labelledby={`navcat-${i}-btn`}>
+                {group.tabs.map((tab) => (
+                  <a class:list={["doc-tab", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)} role="menuitem">
+                    <span class="tab-text">{tab.text}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </nav>
+
         <div class="masthead-right">
-          <a class:list={["about-nav-btn", activeId === "page-about" && "active"]} id="aboutNavBtn" href={localePath(currentLocale.code, "about")} data-no-i18n><span id="aboutNavLabel">サイトについて</span></a>
           <div class="site-theme-control" style="display:none;">
             <label for="themeSwitcher">配色</label>
             <select id="themeSwitcher" aria-label="配色テーマ" data-no-i18n>
@@ -55,7 +79,6 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
             </select>
           </div>
           <div class="site-language-control">
-            <label for="localeSwitcher">言語</label>
             <select id="localeSwitcher" aria-label="表示言語" data-no-i18n data-current-slug={slug}>
               {LOCALES.map((option) => (
                 <option value={option.code} selected={option.code === currentLocale.code} disabled={!option.enabled}>{option.label}</option>
@@ -72,30 +95,6 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
           </div>
         </div>
       </div>
-
-      <nav class="tab-bar" id="tabBar" aria-label="ページ一覧">
-        {navGroups.map((group, i) => (
-          <div class="nav-dropdown" data-nav-dropdown>
-            <button
-              type="button"
-              id={`navcat-${i}-btn`}
-              class:list={["tab-group-label", group.tabs.some((tab) => activeId === tab.id) && "has-active"]}
-              aria-haspopup="true"
-              aria-expanded="false"
-              aria-controls={`navcat-${i}-panel`}
-            >
-              {group.label}
-            </button>
-            <div class="tab-group-tabs" id={`navcat-${i}-panel`} role="menu" aria-labelledby={`navcat-${i}-btn`}>
-              {group.tabs.map((tab) => (
-                <a class:list={["doc-tab", activeId === tab.id && "active"]} href={localePath(currentLocale.code, tab.slug)} role="menuitem">
-                  <span class="tab-text">{tab.text}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
-      </nav>
       </div>
       <script is:inline>
         (() => {
@@ -304,7 +303,7 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
       </main>
 
       <footer class="site-footer">
-        <a class:list={["about-nav-btn", "site-footer-about", activeId === "page-about" && "active"]} href={localePath(currentLocale.code, "about")} data-no-i18n>サイトについて</a>
+        <a class:list={["about-nav-btn", "site-footer-about", activeId === "page-about" && "active"]} id="aboutNavBtn" href={localePath(currentLocale.code, "about")} data-no-i18n><span id="aboutNavLabel">サイトについて</span></a>
       </footer>
 
       <button type="button" id="backToTop" class="back-to-top" aria-label="ページ上部へ戻る">↑</button>
