@@ -1615,13 +1615,19 @@
 .home-featured-card:hover .home-featured-body::before{width:22px;}
 .home-featured-body strong{display:block;font-size:11.5px;line-height:1.3;color:#fff;font-family:"Shippori Mincho",serif;font-weight:700;letter-spacing:.01em;text-shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.35);}
 .home-featured-card:hover .home-featured-body strong{text-decoration:underline;}
-.home-top-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;align-items:stretch;}
-.home-top-row .home-featured-card{grid-column:span 1;}
-.home-slider-group{display:contents;}
-.home-slider-wrap{display:contents;}
+.home-top-row{display:flex;gap:18px;align-items:flex-start;}
+.home-left-col{flex:1 1 50%;min-width:0;display:flex;flex-direction:column;gap:18px;}
+.home-slider-wrap{flex:1 1 50%;min-width:0;}
 .home-slider-nav{display:none;}
 .home-slider-dots{display:none;}
-.home-news-card{grid-column:span 3;grid-row:span 2;position:relative;display:block;height:100%;overflow:hidden;background:var(--paper-2);text-decoration:none;border:1px solid var(--line);}
+.home-slider-track{display:flex;flex-direction:column;gap:10px;}
+.home-slider-track .home-featured-card{width:100%;aspect-ratio:auto;height:78px;overflow:hidden;box-shadow:0 2px 8px rgba(20,15,10,.12);}
+.home-slider-track .home-featured-card:hover{transform:none;}
+.home-slider-track .home-featured-thumb{filter:saturate(1.05);}
+.home-slider-track .home-featured-body{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 20px;text-align:center;background:linear-gradient(0deg,rgba(8,10,14,.62) 0%,rgba(8,10,14,.5) 100%);}
+.home-slider-track .home-featured-body::before{display:none;}
+.home-slider-track .home-featured-body strong{font-size:15px;letter-spacing:.02em;}
+.home-news-card{position:relative;display:block;height:auto;aspect-ratio:16/9;overflow:hidden;background:var(--paper-2);text-decoration:none;border:1px solid var(--line);}
 .home-news-card:hover .home-news-thumb img{transform:scale(1.04);}
 .home-news-card:hover .home-news-body strong{text-decoration:underline;}
 .home-news-thumb{position:absolute;inset:0;display:block;}
@@ -1646,7 +1652,7 @@
 .home-link-list a{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:7px 0;text-decoration:none;color:var(--ink-soft);font-size:12.5px;}
 .home-link-list a:hover{color:var(--accent);}
 .home-link-list a small{font-size:9.5px;color:var(--ink-soft);opacity:.7;font-family:"JetBrains Mono",monospace;white-space:nowrap;}
-@media(max-width:860px){.home-hero{grid-template-columns:1fr;}.home-popular-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-top-row{grid-template-columns:1fr 1fr;}.home-news-card{grid-column:span 2;grid-row:span 1;height:auto;aspect-ratio:21/9;}}
+@media(max-width:860px){.home-hero{grid-template-columns:1fr;}.home-popular-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 
 .home-fx-card{background:linear-gradient(155deg,var(--white) 0%,var(--paper-2) 100%);}
 .home-fx-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line-soft);padding-bottom:10px;margin-bottom:12px;}
@@ -1674,7 +1680,7 @@
 .home-fx-foot{font-size:9.5px;color:var(--ink-soft);opacity:.75;margin-top:10px;letter-spacing:.02em;}
 @media(max-width:860px){.home-fx-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:520px){.home-fx-grid{grid-template-columns:1fr;}.home-fx-head{flex-direction:column;align-items:stretch;}.home-fx-swap-btn{justify-content:center;}.home-fx-amount-toggle{justify-content:space-between;}}
-@media(max-width:520px){.home-popular-grid{grid-template-columns:1fr;}.home-category-grid{grid-template-columns:1fr;}.home-hero h2{font-size:22px;}.home-news-card{aspect-ratio:16/9;}.home-news-body strong{max-width:100%;font-size:14px;}.home-top-row{grid-template-columns:1fr;}.home-news-card{grid-column:span 1;}}
+@media(max-width:520px){.home-popular-grid{grid-template-columns:1fr;}.home-category-grid{grid-template-columns:1fr;}.home-hero h2{font-size:22px;}.home-news-body strong{max-width:100%;font-size:14px;}}
 
 /* ---- Mobile readability pass ----
    Originally trialed on the 住まい・不動産 tabs only (.cat-realestate); the fixes target
@@ -1682,17 +1688,10 @@
    every page, so the rules are now applied site-wide instead of re-written per page. */
 @media(max-width:640px){
   .home-top-row{display:block;}
-  .home-top-row .home-news-card{margin-bottom:12px;}
+  .home-left-col{margin-bottom:12px;}
   .home-slider-wrap{display:block;position:static;padding-bottom:0;}
   .home-slider-nav,.home-slider-dots{display:none;}
-
-  /* Mobile home: swap the featured-links slider for a stack of pill buttons.
-     Each keeps its cover photo (dimmed) so the row reads as a real destination
-     card rather than a flat text/ad button, while staying compact and tidy. */
-  .home-slider-track{display:flex;flex-direction:column;gap:10px;overflow:visible;}
-  .home-slider-track .home-featured-card{flex:none;width:100%;aspect-ratio:auto;height:68px;border-radius:0;border:1px solid var(--line);overflow:hidden;box-shadow:0 2px 8px rgba(20,15,10,.12);}
-  .home-slider-track .home-featured-card:hover{transform:none;}
-  .home-slider-track .home-featured-thumb{filter:saturate(1.05);}
+  .home-slider-track .home-featured-card{height:68px;border-radius:0;border:1px solid var(--line);}
   .home-slider-track .home-featured-body{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 20px;text-align:center;background:linear-gradient(0deg,rgba(8,10,14,.62) 0%,rgba(8,10,14,.5) 100%);}
   .home-slider-track .home-featured-body::before{display:none;}
   .home-slider-track .home-featured-body strong{font-size:15px;letter-spacing:.02em;}

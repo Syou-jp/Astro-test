@@ -1,15 +1,36 @@
 <div id="page-home" class="page-view active theme-home">
   <div class="card" style="margin-bottom:18px;">
     <div class="home-top-row">
-      <a class="home-news-card" href="/ja/news/" id="homeNewsCard">
-        <span class="home-news-thumb" id="homeNewsThumb">
-          <span class="home-news-tag">ニュース日報</span>
-        </span>
-        <span class="home-news-body">
-          <span class="home-news-date" id="homeNewsDate">DAILY NEWS DIGEST</span>
-          <strong id="homeNewsTitle">今日の時事ニュースをまとめてチェック</strong>
-        </span>
-      </a>
+      <div class="home-left-col">
+        <a class="home-news-card" href="/ja/news/" id="homeNewsCard">
+          <span class="home-news-thumb" id="homeNewsThumb">
+            <span class="home-news-tag">ニュース日報</span>
+          </span>
+          <span class="home-news-body">
+            <span class="home-news-date" id="homeNewsDate">DAILY NEWS DIGEST</span>
+            <strong id="homeNewsTitle">今日の時事ニュースをまとめてチェック</strong>
+          </span>
+        </a>
+
+        <div class="home-fx-card">
+          <div class="home-fx-head">
+            <div class="home-fx-title">
+              <span class="home-fx-flag"><img class="home-fx-flag-img" src="https://flagcdn.com/w40/jp.png" alt="" loading="lazy" width="20" height="15" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'home-fx-flag-fallback',textContent:'JP'}))"></span>
+              <span>今日の為替レート<small>JPY EXCHANGE RATE</small></span>
+            </div>
+            <button type="button" class="home-fx-swap-btn" id="homeFxSwapBtn" aria-label="円と外貨を入れ替え">
+              <span class="home-fx-swap-from" id="homeFxSwapFrom">¥ 円</span>
+              <span class="home-fx-swap-icon">⇄</span>
+              <span class="home-fx-swap-to" id="homeFxSwapTo">外貨</span>
+            </button>
+          </div>
+          <div class="home-fx-amount-toggle" id="homeFxAmountToggle"></div>
+          <div class="home-fx-grid" id="homeFxGrid">
+            <div class="home-fx-loading">為替レートを取得中…</div>
+          </div>
+          <div class="home-fx-foot" id="homeFxFoot">&nbsp;</div>
+        </div>
+      </div>
       <div class="home-slider-wrap">
         <div class="home-slider-group home-slider-track">
           <a class="home-featured-card" href="/ja/jobs/">
@@ -92,25 +113,6 @@
       titleEl.textContent = latest.title;
     })();
   </script>
-
-  <div class="card home-fx-card" style="margin-bottom:18px;">
-    <div class="home-fx-head">
-      <div class="home-fx-title">
-        <span class="home-fx-flag"><img class="home-fx-flag-img" src="https://flagcdn.com/w40/jp.png" alt="" loading="lazy" width="20" height="15" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'home-fx-flag-fallback',textContent:'JP'}))"></span>
-        <span>今日の為替レート<small>JPY EXCHANGE RATE</small></span>
-      </div>
-      <button type="button" class="home-fx-swap-btn" id="homeFxSwapBtn" aria-label="円と外貨を入れ替え">
-        <span class="home-fx-swap-from" id="homeFxSwapFrom">¥ 円</span>
-        <span class="home-fx-swap-icon">⇄</span>
-        <span class="home-fx-swap-to" id="homeFxSwapTo">外貨</span>
-      </button>
-    </div>
-    <div class="home-fx-amount-toggle" id="homeFxAmountToggle"></div>
-    <div class="home-fx-grid" id="homeFxGrid">
-      <div class="home-fx-loading">為替レートを取得中…</div>
-    </div>
-    <div class="home-fx-foot" id="homeFxFoot">&nbsp;</div>
-  </div>
 
   <script>
     (function () {
