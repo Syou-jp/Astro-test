@@ -1,16 +1,17 @@
 <div id="page-restaurant-list" class="page-view active theme-route" data-no-i18n>
   <div class="restaurant-hero">
     <div>
-      <p class="restaurant-kicker">TOKYO · WORLD FOOD GUIDE</p>
+      <p class="restaurant-kicker">TOKYO · SHOP &amp; SERVICE GUIDE</p>
       <h2>お店リスト</h2>
-      <p>東京で各国・地域の料理を楽しめるお店を、料理のルーツごとにまとめるためのリストです。気になる国を選んで、Google Maps からすぐに場所を確認できます。カードをクリックすると、お店の詳細（席数、招牌菜、写真、公式リンクなど）を確認できます。</p>
+      <p>東京で暮らす外国人コミュニティにゆかりのあるお店をまとめるためのリストです。レストランのほか、美容・ネイルサロン、母国の食材や雑貨が買える物産店も掲載しています。気になる国を選んで、Google Maps からすぐに場所を確認できます。カードをクリックすると、お店の詳細（席数、招牌菜、写真、公式リンクなど）を確認できます。</p>
     </div>
     <div class="restaurant-hero-images" aria-hidden="true">
       <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&amp;fit=crop&amp;w=420&amp;q=75" alt="" loading="lazy" />
       <img src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&amp;fit=crop&amp;w=420&amp;q=75" alt="" loading="lazy" />
     </div>
   </div>
-  <div class="restaurant-note"><b>掲載について：</b>現在は掲載イメージとしての東京の店舗例です。「正宗」は店の出身地・専門料理・公式案内を確認しながら追加する運用をおすすめします。営業日・住所・メニューは変更されるため、来店前に Google Maps または公式情報でご確認ください。</div>
+  <div class="restaurant-note"><b>掲載について：</b>現在は掲載イメージとしての東京の店舗例です。「正宗」は店の出身地・専門料理／専門分野・公式案内を確認しながら追加する運用をおすすめします。営業日・住所・メニューは変更されるため、来店前に Google Maps または公式情報でご確認ください。</div>
+  <div class="restaurant-filters" aria-label="お店の種類で絞り込む" id="rlTypeFilters"></div>
   <div class="restaurant-filters" aria-label="国で絞り込む" id="rlCountryFilters"></div>
   <div class="restaurant-filters restaurant-filters-region" aria-label="地域で絞り込む" id="rlRegionFilters"></div>
   <div class="restaurant-result"><strong id="restaurantCount">0</strong> 件のお店を表示しています <span>東京・掲載例</span></div>
@@ -88,12 +89,13 @@
       function mapEmbedUrl(query) { return "https://www.google.com/maps?q=" + encodeURIComponent(query) + "&output=embed"; }
       function mapLinkUrl(query) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query); }
 
-      var countries = ["all"].concat(Array.from(new Set(restaurants.map(function (r) { return r.country; }))));
-      var regions = ["all"].concat(Array.from(new Set(restaurants.map(function (r) { return r.region; }))));
+      var types = ["all"].concat(Array.from(new Set(restaurants.map(function (r) { return r.type || "restaurant"; }))));
 
+      var typeLabels = { all: "すべて", restaurant: "レストラン", beauty: "美容・ネイル", grocery: "物産店" };
       var countryLabels = { all: "すべて" };
       var regionLabels = { all: "全地域" };
 
+      var typeFiltersEl = document.getElementById("rlTypeFilters");
       var countryFiltersEl = document.getElementById("rlCountryFilters");
       var regionFiltersEl = document.getElementById("rlRegionFilters");
       var listEl = document.getElementById("restaurantList");
@@ -101,13 +103,30 @@
       var backdrop = document.getElementById("rlBackdrop");
       var modalBody = document.getElementById("rlModalBody");
 
+      var currentType = "all";
       var currentCountry = "all";
       var currentRegion = "all";
 
+      function byType(list) {
+        return currentType === "all" ? list : list.filter(function (r) { return (r.type || "restaurant") === currentType; });
+      }
+
       function renderFilters() {
+        typeFiltersEl.innerHTML = types.map(function (t) {
+          var label = typeLabels[t] || t;
+          var count = t === "all" ? restaurants.length : restaurants.filter(function (r) { return (r.type || "restaurant") === t; }).length;
+          return '<button type="button" class="' + (t === currentType ? "active" : "") + '" data-type="' + escapeHtml(t) + '">' + escapeHtml(label) + " <small>" + count + "</small></button>";
+        }).join("");
+
+        var scoped = byType(restaurants);
+        var countries = ["all"].concat(Array.from(new Set(scoped.map(function (r) { return r.country; }))));
+        var regions = ["all"].concat(Array.from(new Set(scoped.map(function (r) { return r.region; }))));
+        if (countries.indexOf(currentCountry) === -1) currentCountry = "all";
+        if (regions.indexOf(currentRegion) === -1) currentRegion = "all";
+
         countryFiltersEl.innerHTML = countries.map(function (c) {
           var label = countryLabels[c] || c;
-          var count = c === "all" ? restaurants.length : restaurants.filter(function (r) { return r.country === c; }).length;
+          var count = c === "all" ? scoped.length : scoped.filter(function (r) { return r.country === c; }).length;
           return '<button type="button" class="' + (c === currentCountry ? "active" : "") + '" data-country="' + escapeHtml(c) + '">' + escapeHtml(label) + (c === "all" ? " <small>" + count + "</small>" : "") + "</button>";
         }).join("");
         regionFiltersEl.innerHTML = regions.map(function (r) {
@@ -115,6 +134,15 @@
           return '<button type="button" class="' + (r === currentRegion ? "active" : "") + '" data-region="' + escapeHtml(r) + '">' + escapeHtml(label) + "</button>";
         }).join("");
 
+        typeFiltersEl.querySelectorAll("button").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            currentType = btn.dataset.type;
+            currentCountry = "all";
+            currentRegion = "all";
+            renderFilters();
+            renderList();
+          });
+        });
         countryFiltersEl.querySelectorAll("button").forEach(function (btn) {
           btn.addEventListener("click", function () {
             currentCountry = btn.dataset.country;
@@ -132,7 +160,7 @@
       }
 
       function renderList() {
-        var visible = restaurants.filter(function (r) {
+        var visible = byType(restaurants).filter(function (r) {
           return (currentCountry === "all" || r.country === currentCountry) && (currentRegion === "all" || r.region === currentRegion);
         }).sort(function (a, b) {
           return (b.claimed ? 1 : 0) - (a.claimed ? 1 : 0);

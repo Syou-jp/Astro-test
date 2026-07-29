@@ -28,6 +28,7 @@ const restaurants = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/data/restaurants" }),
   schema: z.object({
     name: z.string(),
+    type: z.enum(["restaurant", "beauty", "grocery"]).default("restaurant"),
     country: z.string(),
     region: z.string(),
     area: z.string(),
