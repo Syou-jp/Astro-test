@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kojian</string>
+    <string name="title_activity_main">Kojian</string>
+    <string name="package_name">com.kojian.app</string>
+    <string name="custom_url_scheme">com.kojian.app</string>
+</resources>

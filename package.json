@@ -7,12 +7,18 @@
     "dev": "set ASTRO_TELEMETRY_DISABLED=1&& (if not defined PORT set PORT=4321) & astro dev --port %PORT%",
     "build": "set ASTRO_TELEMETRY_DISABLED=1&& astro build",
     "preview": "set ASTRO_TELEMETRY_DISABLED=1&& (if not defined PORT set PORT=4321) & astro preview --port %PORT%",
-    "migrate:source": "node tools/migrate-source.mjs"
+    "migrate:source": "node tools/migrate-source.mjs",
+    "app:sync": "npm run build && npx cap sync",
+    "app:open:android": "npx cap open android",
+    "app:open:ios": "npx cap open ios"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@capacitor/android": "^8.4.2",
+    "@capacitor/cli": "^8.4.2",
+    "@capacitor/core": "^8.4.2",
+    "@capacitor/ios": "^8.4.2",
     "astro": "^4.16.18",
     "typescript": "^5.6.3"
-  },
-  "devDependencies": {}
+  }
 }
