@@ -334,7 +334,7 @@
         var jpyAmount = amt / rateFrom;
         var result = jpyAmount * rateTo;
         var text = formatNumber(result) + " " + to;
-        customResult.textContent = "≈ " + text;
+        customResult.textContent = text;
         applyFitFontSize(customResult, text);
       }
 
@@ -416,11 +416,20 @@
       var previous = null;
       var pendingOp = null;
       var justEvaluated = false;
+      var OP_SYMBOLS = { add: "+", subtract: "−", multiply: "×", divide: "÷" };
 
       function updateDisplay() {
-        var digitCount = current.replace(/[^0-9]/g, "").length;
+        var text;
+        if (pendingOp && justEvaluated) {
+          text = previous + " " + OP_SYMBOLS[pendingOp];
+        } else if (pendingOp) {
+          text = previous + " " + OP_SYMBOLS[pendingOp] + " " + current;
+        } else {
+          text = current;
+        }
+        var digitCount = text.replace(/[^0-9]/g, "").length;
         display.style.fontSize = (digitCount > 12 ? 18 : digitCount > 8 ? 22 : 28) + "px";
-        display.textContent = current;
+        display.textContent = text;
       }
 
       function compute(a, op, b) {
