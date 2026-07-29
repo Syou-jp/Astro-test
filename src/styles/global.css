@@ -1671,15 +1671,41 @@
 .home-fx-amount-btn:hover{color:var(--ink);}
 .home-fx-amount-btn.is-active{background:var(--accent);color:#fff;}
 .home-fx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.home-fx-row{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--white);padding:9px 11px;}
+.home-fx-row{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--white);padding:9px 11px;min-width:0;}
 .home-fx-row .home-fx-flag-img,.home-fx-row .home-fx-flag-fallback{width:26px;height:19px;}
-.home-fx-name{font:700 14px "JetBrains Mono",monospace;letter-spacing:.03em;color:var(--ink);flex:1 1 auto;min-width:0;}
-.home-fx-value{display:flex;flex-direction:column;align-items:flex-end;font:700 14px "JetBrains Mono",monospace;color:var(--accent);text-align:right;flex:0 0 auto;}
-.home-fx-value small{font-size:9px;font-weight:600;letter-spacing:.04em;color:var(--ink-soft);opacity:.8;font-family:inherit;margin-top:1px;}
+.home-fx-name{font:700 14px "JetBrains Mono",monospace;letter-spacing:.03em;color:var(--ink);flex:0 0 auto;}
+.home-fx-value{display:flex;flex-direction:column;align-items:flex-end;text-align:right;flex:1 1 auto;min-width:0;}
+.home-fx-value small{font-size:9px;font-weight:600;letter-spacing:.04em;color:var(--ink-soft);opacity:.8;font-family:"JetBrains Mono",monospace;}
+.home-fx-value-main{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 15px "JetBrains Mono",monospace;color:var(--accent);margin-top:1px;}
 .home-fx-loading{grid-column:1/-1;padding:18px 4px;text-align:center;font-size:11.5px;color:var(--ink-soft);}
 .home-fx-foot{font-size:9.5px;color:var(--ink-soft);opacity:.75;margin-top:10px;letter-spacing:.02em;}
+.home-fx-head-actions{display:flex;align-items:center;gap:8px;}
+.home-fx-calc-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid var(--line);background:var(--white);border-radius:999px;cursor:pointer;font-size:15px;line-height:1;transition:border-color .15s ease;}
+.home-fx-calc-btn:hover{border-color:var(--accent);}
+.home-fx-custom{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:1px solid var(--line);background:var(--paper-2);border-radius:8px;padding:9px 11px;margin-top:10px;}
+.home-fx-custom-side{display:flex;align-items:center;gap:6px;min-width:0;flex:1 1 140px;}
+.home-fx-custom-side--result{justify-content:flex-end;}
+.home-fx-custom-input{width:0;flex:1 1 auto;min-width:70px;border:1px solid var(--line);background:var(--white);padding:6px 8px;font:700 13px "JetBrains Mono",monospace;color:var(--ink);border-radius:6px;}
+.home-fx-custom-select{border:1px solid var(--line);background:var(--white);padding:6px 6px;font:700 11px "JetBrains Mono",monospace;color:var(--ink);border-radius:6px;max-width:110px;}
+.home-fx-custom-eq{font:700 15px "JetBrains Mono",monospace;color:var(--ink-soft);flex:0 0 auto;}
+.home-fx-custom-result{font:700 15px "JetBrains Mono",monospace;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;}
 @media(max-width:860px){.home-fx-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:520px){.home-fx-grid{grid-template-columns:1fr;}.home-fx-head{flex-direction:column;align-items:stretch;}.home-fx-swap-btn{justify-content:center;}.home-fx-amount-toggle{justify-content:space-between;}}
+@media(max-width:520px){.home-fx-grid{grid-template-columns:1fr;}.home-fx-head{flex-direction:column;align-items:stretch;}.home-fx-head-actions{justify-content:space-between;}.home-fx-swap-btn{flex:1 1 auto;justify-content:center;}.home-fx-amount-toggle{justify-content:space-between;}.home-fx-custom-side--result{justify-content:flex-start;}}
+
+.home-calc-overlay{position:fixed;inset:0;background:rgba(20,18,14,.45);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px;}
+.home-calc-modal{width:100%;max-width:280px;background:var(--white);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.25);overflow:hidden;}
+.home-calc-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line-soft);font:700 12.5px "JetBrains Mono",monospace;color:var(--ink);}
+.home-calc-close{border:none;background:transparent;font-size:20px;line-height:1;cursor:pointer;color:var(--ink-soft);padding:2px 6px;}
+.home-calc-close:hover{color:var(--ink);}
+.home-calc-display{padding:18px 16px;text-align:right;font:700 28px "JetBrains Mono",monospace;color:var(--ink);background:var(--paper-2);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.home-calc-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-soft);}
+.home-calc-key{border:none;background:var(--white);padding:16px 0;font:700 16px "JetBrains Mono",monospace;color:var(--ink);cursor:pointer;transition:background .12s ease;}
+.home-calc-key:hover{background:var(--paper-2);}
+.home-calc-key--fn{color:var(--ink-soft);}
+.home-calc-key--op{color:var(--accent);}
+.home-calc-key--eq{background:var(--accent);color:#fff;}
+.home-calc-key--eq:hover{background:var(--accent);opacity:.9;}
+.home-calc-key--wide{grid-column:span 2;}
 @media(max-width:520px){.home-popular-grid{grid-template-columns:1fr;}.home-category-grid{grid-template-columns:1fr;}.home-hero h2{font-size:22px;}.home-news-body strong{max-width:100%;font-size:14px;}}
 
 /* ---- Mobile readability pass ----

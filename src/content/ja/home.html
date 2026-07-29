@@ -16,19 +16,64 @@
           <div class="home-fx-head">
             <div class="home-fx-title">
               <span class="home-fx-flag"><img class="home-fx-flag-img" src="https://flagcdn.com/w40/jp.png" alt="" loading="lazy" width="20" height="15" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'home-fx-flag-fallback',textContent:'JP'}))"></span>
-              <span>今日の為替レート<small>JPY EXCHANGE RATE</small></span>
+              <span>今日の為替レート</span>
             </div>
-            <button type="button" class="home-fx-swap-btn" id="homeFxSwapBtn" aria-label="円と外貨を入れ替え">
-              <span class="home-fx-swap-from" id="homeFxSwapFrom">¥ 円</span>
-              <span class="home-fx-swap-icon">⇄</span>
-              <span class="home-fx-swap-to" id="homeFxSwapTo">外貨</span>
-            </button>
+            <div class="home-fx-head-actions">
+              <button type="button" class="home-fx-swap-btn" id="homeFxSwapBtn" aria-label="円と外貨を入れ替え">
+                <span class="home-fx-swap-from" id="homeFxSwapFrom">¥ 円</span>
+                <span class="home-fx-swap-icon">⇄</span>
+                <span class="home-fx-swap-to" id="homeFxSwapTo">外貨</span>
+              </button>
+              <button type="button" class="home-fx-calc-btn" id="homeFxCalcBtn" aria-label="電卓を開く">🖩</button>
+            </div>
           </div>
           <div class="home-fx-amount-toggle" id="homeFxAmountToggle"></div>
           <div class="home-fx-grid" id="homeFxGrid">
             <div class="home-fx-loading">為替レートを取得中…</div>
           </div>
+          <div class="home-fx-custom" id="homeFxCustom">
+            <div class="home-fx-custom-side">
+              <input type="number" inputmode="decimal" class="home-fx-custom-input" id="homeFxCustomAmount" value="5000000" min="0" step="any" aria-label="金額">
+              <select class="home-fx-custom-select" id="homeFxCustomFrom" aria-label="変換元の通貨"></select>
+            </div>
+            <span class="home-fx-custom-eq">≈</span>
+            <div class="home-fx-custom-side home-fx-custom-side--result">
+              <span class="home-fx-custom-result" id="homeFxCustomResult">-</span>
+              <select class="home-fx-custom-select" id="homeFxCustomTo" aria-label="変換先の通貨"></select>
+            </div>
+          </div>
           <div class="home-fx-foot" id="homeFxFoot">&nbsp;</div>
+        </div>
+
+        <div class="home-calc-overlay" id="homeCalcOverlay" hidden>
+          <div class="home-calc-modal" role="dialog" aria-modal="true" aria-label="電卓">
+            <div class="home-calc-head">
+              <span>電卓</span>
+              <button type="button" class="home-calc-close" id="homeCalcClose" aria-label="閉じる">×</button>
+            </div>
+            <div class="home-calc-display" id="homeCalcDisplay">0</div>
+            <div class="home-calc-keys" id="homeCalcKeys">
+              <button type="button" class="home-calc-key home-calc-key--fn" data-key="clear">C</button>
+              <button type="button" class="home-calc-key home-calc-key--fn" data-key="sign">±</button>
+              <button type="button" class="home-calc-key home-calc-key--fn" data-key="percent">%</button>
+              <button type="button" class="home-calc-key home-calc-key--op" data-key="divide">÷</button>
+              <button type="button" class="home-calc-key" data-key="7">7</button>
+              <button type="button" class="home-calc-key" data-key="8">8</button>
+              <button type="button" class="home-calc-key" data-key="9">9</button>
+              <button type="button" class="home-calc-key home-calc-key--op" data-key="multiply">×</button>
+              <button type="button" class="home-calc-key" data-key="4">4</button>
+              <button type="button" class="home-calc-key" data-key="5">5</button>
+              <button type="button" class="home-calc-key" data-key="6">6</button>
+              <button type="button" class="home-calc-key home-calc-key--op" data-key="subtract">−</button>
+              <button type="button" class="home-calc-key" data-key="1">1</button>
+              <button type="button" class="home-calc-key" data-key="2">2</button>
+              <button type="button" class="home-calc-key" data-key="3">3</button>
+              <button type="button" class="home-calc-key home-calc-key--op" data-key="add">+</button>
+              <button type="button" class="home-calc-key home-calc-key--wide" data-key="0">0</button>
+              <button type="button" class="home-calc-key" data-key="decimal">.</button>
+              <button type="button" class="home-calc-key home-calc-key--eq" data-key="equals">=</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="home-slider-wrap">
@@ -118,15 +163,23 @@
     (function () {
       var CURRENCIES = [
         { code: "USD", cc: "us", label: "アメリカ" },
+        { code: "EUR", cc: "eu", label: "ユーロ圏" },
+        { code: "GBP", cc: "gb", label: "英国" },
+        { code: "AUD", cc: "au", label: "オーストラリア" },
+        { code: "CAD", cc: "ca", label: "カナダ" },
         { code: "CNY", cc: "cn", label: "中国" },
         { code: "KRW", cc: "kr", label: "韓国" },
         { code: "TWD", cc: "tw", label: "台湾" },
         { code: "HKD", cc: "hk", label: "香港" },
+        { code: "SGD", cc: "sg", label: "シンガポール" },
+        { code: "MYR", cc: "my", label: "マレーシア" },
         { code: "VND", cc: "vn", label: "ベトナム" },
         { code: "THB", cc: "th", label: "タイ" },
         { code: "IDR", cc: "id", label: "インドネシア" },
         { code: "PHP", cc: "ph", label: "フィリピン" }
       ];
+      var JPY_CURRENCY = { code: "JPY", cc: "jp", label: "日本" };
+      var ALL_CURRENCIES = [JPY_CURRENCY].concat(CURRENCIES);
       var FORWARD_AMOUNTS = [100, 1000, 10000];
       var REVERSE_AMOUNTS = [1, 10, 100];
       var STORAGE_KEY = "sotocom_fx_rates_v1";
@@ -137,7 +190,24 @@
       var swapBtn = document.getElementById("homeFxSwapBtn");
       var swapFrom = document.getElementById("homeFxSwapFrom");
       var swapTo = document.getElementById("homeFxSwapTo");
+      var customAmount = document.getElementById("homeFxCustomAmount");
+      var customFrom = document.getElementById("homeFxCustomFrom");
+      var customTo = document.getElementById("homeFxCustomTo");
+      var customResult = document.getElementById("homeFxCustomResult");
       if (!grid || !foot || !toggle || !swapBtn) return;
+
+      function fitFontSize(digitCount) {
+        if (digitCount <= 6) return 15;
+        if (digitCount <= 9) return 13;
+        if (digitCount <= 12) return 11;
+        if (digitCount <= 15) return 9.5;
+        return 8.5;
+      }
+
+      function applyFitFontSize(el, text) {
+        var digitCount = (text.match(/[0-9]/g) || []).length;
+        el.style.fontSize = fitFontSize(digitCount) + "px";
+      }
 
       function flagImg(cc) {
         var img = document.createElement("img");
@@ -211,9 +281,13 @@
             toText = formatNumber(amount * rate) + " " + cur.code;
           }
           var valueSmall = document.createElement("small");
-          valueSmall.textContent = fromText + " より";
-          valueSpan.appendChild(document.createTextNode(toText));
+          valueSmall.textContent = fromText;
+          var valueMain = document.createElement("span");
+          valueMain.className = "home-fx-value-main";
+          valueMain.textContent = "≈ " + toText;
+          applyFitFontSize(valueMain, toText);
           valueSpan.appendChild(valueSmall);
+          valueSpan.appendChild(valueMain);
 
           row.appendChild(flagSpan);
           row.appendChild(nameSpan);
@@ -224,6 +298,50 @@
           ? "更新: " + updatedAt + "（参考値、送金・両替時のレートとは異なります）"
           : " ";
       }
+
+      function populateCustomSelects() {
+        if (!customFrom || !customTo) return;
+        ALL_CURRENCIES.forEach(function (cur) {
+          var optFrom = document.createElement("option");
+          optFrom.value = cur.code;
+          optFrom.textContent = cur.code + " " + cur.label;
+          customFrom.appendChild(optFrom);
+
+          var optTo = document.createElement("option");
+          optTo.value = cur.code;
+          optTo.textContent = cur.code + " " + cur.label;
+          customTo.appendChild(optTo);
+        });
+        customFrom.value = "JPY";
+        customTo.value = "CNY";
+      }
+
+      function renderCustom() {
+        if (!customResult || !customFrom || !customTo) return;
+        if (!rates) {
+          customResult.textContent = "-";
+          return;
+        }
+        var amt = parseFloat(customAmount.value);
+        var from = customFrom.value;
+        var to = customTo.value;
+        var rateFrom = rates[from];
+        var rateTo = rates[to];
+        if (isNaN(amt) || !rateFrom || !rateTo) {
+          customResult.textContent = "-";
+          return;
+        }
+        var jpyAmount = amt / rateFrom;
+        var result = jpyAmount * rateTo;
+        var text = formatNumber(result) + " " + to;
+        customResult.textContent = "≈ " + text;
+        applyFitFontSize(customResult, text);
+      }
+
+      if (customAmount) customAmount.addEventListener("input", renderCustom);
+      if (customFrom) customFrom.addEventListener("change", renderCustom);
+      if (customTo) customTo.addEventListener("change", renderCustom);
+      populateCustomSelects();
 
       function updateSwapLabels() {
         swapFrom.textContent = reverse ? "外貨" : "¥ 円";
@@ -255,6 +373,7 @@
         rates = payload.rates;
         updatedAt = payload.date;
         render();
+        renderCustom();
       }
 
       var todayKey = new Date().toISOString().slice(0, 10);
@@ -281,6 +400,120 @@
         .catch(function () {
           if (!rates) showError();
         });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var calcBtn = document.getElementById("homeFxCalcBtn");
+      var overlay = document.getElementById("homeCalcOverlay");
+      var closeBtn = document.getElementById("homeCalcClose");
+      var display = document.getElementById("homeCalcDisplay");
+      var keys = document.getElementById("homeCalcKeys");
+      if (!calcBtn || !overlay || !closeBtn || !display || !keys) return;
+
+      var current = "0";
+      var previous = null;
+      var pendingOp = null;
+      var justEvaluated = false;
+
+      function updateDisplay() {
+        var digitCount = current.replace(/[^0-9]/g, "").length;
+        display.style.fontSize = (digitCount > 12 ? 18 : digitCount > 8 ? 22 : 28) + "px";
+        display.textContent = current;
+      }
+
+      function compute(a, op, b) {
+        switch (op) {
+          case "add": return a + b;
+          case "subtract": return a - b;
+          case "multiply": return a * b;
+          case "divide": return b === 0 ? NaN : a / b;
+          default: return b;
+        }
+      }
+
+      function inputDigit(d) {
+        if (current === "0" || justEvaluated) {
+          current = d;
+          justEvaluated = false;
+        } else {
+          current = current + d;
+        }
+      }
+
+      function inputDecimal() {
+        if (justEvaluated) {
+          current = "0.";
+          justEvaluated = false;
+          return;
+        }
+        if (current.indexOf(".") === -1) current = current + ".";
+      }
+
+      function setOp(op) {
+        if (pendingOp && previous !== null && !justEvaluated) {
+          previous = compute(previous, pendingOp, parseFloat(current));
+          current = String(previous);
+        } else {
+          previous = parseFloat(current);
+        }
+        pendingOp = op;
+        justEvaluated = true;
+      }
+
+      function equals() {
+        if (pendingOp === null || previous === null) return;
+        var result = compute(previous, pendingOp, parseFloat(current));
+        current = isNaN(result) ? "0" : String(result);
+        previous = null;
+        pendingOp = null;
+        justEvaluated = true;
+      }
+
+      keys.addEventListener("click", function (e) {
+        var btn = e.target.closest(".home-calc-key");
+        if (!btn) return;
+        var key = btn.dataset.key;
+        if (/^[0-9]$/.test(key)) {
+          inputDigit(key);
+        } else if (key === "decimal") {
+          inputDecimal();
+        } else if (key === "clear") {
+          current = "0";
+          previous = null;
+          pendingOp = null;
+          justEvaluated = false;
+        } else if (key === "sign") {
+          current = String(parseFloat(current) * -1);
+        } else if (key === "percent") {
+          current = String(parseFloat(current) / 100);
+        } else if (key === "equals") {
+          equals();
+        } else if (["add", "subtract", "multiply", "divide"].indexOf(key) !== -1) {
+          setOp(key);
+        }
+        updateDisplay();
+      });
+
+      function openCalc() {
+        overlay.hidden = false;
+        current = "0";
+        previous = null;
+        pendingOp = null;
+        justEvaluated = false;
+        updateDisplay();
+      }
+
+      function closeCalc() {
+        overlay.hidden = true;
+      }
+
+      calcBtn.addEventListener("click", openCalc);
+      closeBtn.addEventListener("click", closeCalc);
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) closeCalc();
+      });
     })();
   </script>
 
