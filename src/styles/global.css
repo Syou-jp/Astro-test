@@ -1502,7 +1502,7 @@
     .mobile-menu-bar-icon-globe{display:flex;align-items:center;justify-content:center;width:16px;height:16px;}
     .mobile-menu-bar-icon-globe svg{width:16px;height:16px;}
     .mobile-menu-bar-icon-burger{display:flex;flex-direction:column;justify-content:center;gap:3px;width:16px;height:16px;}
-    .mobile-menu-bar-icon-burger span{display:block;height:2px;background:currentColor;border-radius:0;transition:transform .2s ease,opacity .2s ease;}
+    .mobile-menu-bar-icon-burger span{display:block;width:16px;height:2px;background:currentColor;border-radius:0;transition:transform .2s ease,opacity .2s ease;}
     .mobile-menu-bar-btn[aria-expanded="true"] .mobile-menu-bar-icon-burger span:nth-child(1){transform:translateY(5px) rotate(45deg);}
     .mobile-menu-bar-btn[aria-expanded="true"] .mobile-menu-bar-icon-burger span:nth-child(2){opacity:0;}
     .mobile-menu-bar-btn[aria-expanded="true"] .mobile-menu-bar-icon-burger span:nth-child(3){transform:translateY(-5px) rotate(-45deg);}
