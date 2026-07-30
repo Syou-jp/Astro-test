@@ -762,6 +762,12 @@ document.getElementById("clientName").addEventListener("input", render);
 /* ---------- Copy to clipboard ---------- */
 document.getElementById("copyBtn").addEventListener("mousedown", (e) => e.preventDefault());
 document.getElementById("copyBtn").addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
+window.addEventListener("scroll", () => {
+  const active = document.activeElement;
+  if (active && (active.tagName === "INPUT" || active.tagName === "SELECT" || active.tagName === "TEXTAREA")) {
+    active.blur();
+  }
+}, { passive: true });
 document.getElementById("copyBtn").addEventListener("click", () => {
   const text = buildCopyText();
   const t = T[currentLang];
