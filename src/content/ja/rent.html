@@ -94,7 +94,7 @@
         </div>
         <div class="field-row">
           <label>管理費・共益費</label>
-          <input type="number" id="mgmt" value="5000" min="0" step="500">
+          <input type="number" id="mgmt" value="0" min="0" step="500">
         </div>
       </div>
       <div class="rent-note"><strong>家賃</strong>　※合計には含まれません。礼金・敷金・仲介手数料の計算基準としてのみ使用します</div>
@@ -133,11 +133,11 @@
 
       <div class="compact-pair">
         <div class="compact-pair-item">
-          <span class="compact-label">敷金</span>
+          <span class="compact-label">敷金（何ヶ月）</span>
           <input type="number" id="depositMonths" value="1" min="0" step="0.5">
         </div>
         <div class="compact-pair-item">
-          <span class="compact-label">礼金</span>
+          <span class="compact-label">礼金（何ヶ月）</span>
           <input type="number" id="keyMoneyMonths" value="1" min="0" step="0.5">
         </div>
       </div>
@@ -190,7 +190,7 @@
         <div class="field-block">
           <label>鍵交換費用<span class="hint">固定金額</span></label>
           <div class="input-tax-row">
-            <input type="number" id="keyExchange" value="20000" min="0" step="1000" style="text-align:right;">
+            <input type="number" id="keyExchange" value="0" min="0" step="1000" style="text-align:right;">
             <label class="tax-check mini"><input type="checkbox" id="keyExchangeTax">税込み</label>
           </div>
         </div>
