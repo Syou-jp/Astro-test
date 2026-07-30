@@ -257,12 +257,14 @@
         </div>
         <div class="actions">
           <button class="btn-copy" id="copyBtn" tabindex="-1">📋 テキストをコピーする</button>
+          <button class="btn-copy" id="screenshotBtn" tabindex="-1">📷 スクリーンショットを保存</button>
         </div>
         <div class="footnote" id="footnote"></div>
       </div>
     </div>
   </div>
   </div><!-- /page-rent -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 const T = {
   ja: {
@@ -274,6 +276,9 @@ const T = {
     seal: "見積",
     copy: "📋 送信用テキストをコピー",
     copied: "コピーしました ✓",
+    screenshot: "📷 スクリーンショットを保存",
+    screenshotSaved: "保存しました ✓",
+    screenshotFailed: "保存に失敗しました",
     dayLabel: n => `${n}日`,
     monthLabel: n => `${n}か月`,
     taxNote: "（税込）",
@@ -295,6 +300,9 @@ const T = {
     seal: "EST.",
     copy: "📋 Copy text to send",
     copied: "Copied ✓",
+    screenshot: "📷 Save as screenshot",
+    screenshotSaved: "Saved ✓",
+    screenshotFailed: "Save failed",
     dayLabel: n => `${n} day${n === 1 ? "" : "s"}`,
     monthLabel: n => `${n} month${n === 1 ? "" : "s"}`,
     taxNote: "(tax incl.)",
@@ -324,6 +332,9 @@ const T = {
     seal: "估算",
     copy: "📋 复制文字发送",
     copied: "已复制 ✓",
+    screenshot: "📷 保存截图",
+    screenshotSaved: "已保存 ✓",
+    screenshotFailed: "保存失败",
     dayLabel: n => `${n}天`,
     monthLabel: n => `${n}个月`,
     taxNote: "（含税）",
@@ -353,6 +364,9 @@ const T = {
     seal: "估算",
     copy: "📋 複製文字發送",
     copied: "已複製 ✓",
+    screenshot: "📷 儲存螢幕截圖",
+    screenshotSaved: "已儲存 ✓",
+    screenshotFailed: "儲存失敗",
     dayLabel: n => `${n}天`,
     monthLabel: n => `${n}個月`,
     taxNote: "（含稅）",
@@ -382,6 +396,9 @@ const T = {
     seal: "견적",
     copy: "📋 문자 복사하기",
     copied: "복사됨 ✓",
+    screenshot: "📷 스크린샷 저장",
+    screenshotSaved: "저장됨 ✓",
+    screenshotFailed: "저장 실패",
     dayLabel: n => `${n}일`,
     monthLabel: n => `${n}개월`,
     taxNote: "(세금 포함)",
@@ -411,6 +428,9 @@ const T = {
     seal: "DỰ TOÁN",
     copy: "📋 Sao chép nội dung để gửi",
     copied: "Đã sao chép ✓",
+    screenshot: "📷 Lưu ảnh chụp màn hình",
+    screenshotSaved: "Đã lưu ✓",
+    screenshotFailed: "Lưu thất bại",
     dayLabel: n => `${n} ngày`,
     monthLabel: n => `${n} tháng`,
     taxNote: "(đã gồm thuế)",
@@ -624,6 +644,7 @@ function render(){
   document.getElementById("totalValue").textContent = yen(vals.total);
   document.getElementById("footnote").textContent = t.footnote;
   document.getElementById("copyBtn").innerHTML = t.copy;
+  document.getElementById("screenshotBtn").innerHTML = t.screenshot;
 
   document.getElementById("clientLine").textContent = clientName ? (t.client + ": " + clientName) : "";
   document.getElementById("propertyLine").textContent = propertyName ? (t.property + ": " + propertyName) : "";
@@ -786,6 +807,28 @@ document.getElementById("copyBtn").addEventListener("click", () => {
   } else {
     fallbackCopy(text, flashCopied);
   }
+});
+
+/* ---------- Screenshot ---------- */
+document.getElementById("screenshotBtn").addEventListener("mousedown", (e) => e.preventDefault());
+document.getElementById("screenshotBtn").addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
+document.getElementById("screenshotBtn").addEventListener("click", async () => {
+  const t = T[currentLang];
+  const btn = document.getElementById("screenshotBtn");
+  const original = t.screenshot;
+  const scrollX = window.scrollX, scrollY = window.scrollY;
+  try {
+    const canvas = await html2canvas(document.querySelector(".receipt-card"), {scale: 2, backgroundColor: "#ffffff", useCORS: true, ignoreElements: el => el.classList?.contains("actions")});
+    const link = document.createElement("a");
+    link.download = "初期費用見積り_" + new Date().toISOString().slice(0,10) + ".png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+    btn.textContent = t.screenshotSaved;
+  } catch (e) {
+    btn.textContent = t.screenshotFailed;
+  }
+  window.scrollTo(scrollX, scrollY);
+  setTimeout(() => { btn.innerHTML = original; }, 1600);
 });
 
 function fallbackCopy(text, cb){
