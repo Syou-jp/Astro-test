@@ -9,10 +9,7 @@ description: 台湾出身ネイリストが手がけるジェルネイル専門�
 mapQuery: 台湾ネイル 新大久保
 claimed: true
 intro: 台北でサロン勤務を経たオーナーネイリストが、台湾式のハンドケアとジェルネイルを提供するお店です。日本語・中国語対応可能なスタッフが常駐しています。
-signatureDishes:
-  - ジェルネイル（フルカラー）
-  - 台湾式パラフィンハンドケア
-  - まつげエクステ
+signatureDishes: []
 photos:
   - /images/restaurants/taiwan-nail-shin-okubo/1.svg
   - /images/restaurants/taiwan-nail-shin-okubo/2.svg
