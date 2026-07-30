@@ -914,7 +914,7 @@
   .route-result-toolbar .route-result-filter{flex:1;min-width:170px;}
   .route-result-toolbar .route-pill-group[aria-label="時間範圍"]{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;}
   .route-result-toolbar .route-pill-group[aria-label="時間範圍"] .route-pill{text-align:center;padding:6px 4px;}
-  .route-scope-btn{padding:8px 9px;border:1px solid var(--line);background:var(--white);color:var(--accent);font-size:10.5px;font-weight:700;cursor:pointer;}
+  .route-scope-btn{padding:6px 8px;border:1px solid var(--line);background:var(--white);color:var(--accent);font-size:10px;font-weight:600;cursor:pointer;text-align:left;}
   .route-scope-btn.active{background:var(--accent);color:var(--white);border-color:var(--accent);}
   .route-place-summary{border-left:3px solid var(--accent);background:var(--paper-2);padding:10px 12px;margin-bottom:10px;font-size:11px;line-height:1.65;}
   .route-table-wrap{border:1px solid var(--line);max-height:480px;overflow:auto;background:var(--white);}
