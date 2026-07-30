@@ -1427,24 +1427,20 @@
   .ward-carry-box strong{display:block;font-size:13px;color:var(--accent);margin-bottom:8px;}
   .ward-carry-box ul{margin:0;padding-left:18px;font-size:11.5px;line-height:1.75;color:var(--ink-soft);}
   .ward-icon-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px;}
-  .ward-icon-grid a{display:grid;grid-template-columns:42px minmax(0,1fr);gap:9px;align-items:center;border:1px solid var(--line);background:var(--white);color:var(--ink);text-decoration:none;padding:12px;min-height:82px;}
+  .ward-icon-grid a{display:flex;flex-direction:column;justify-content:center;gap:5px;border:1px solid var(--line);background:var(--white);color:var(--ink);text-decoration:none;padding:12px;min-height:82px;}
   .ward-icon-grid a:hover{border-color:var(--accent);transform:translateY(-1px);}
-  .ward-icon-grid span,.ward-mark,.ward-inline-icon{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--accent);background:var(--accent);color:var(--white);font-family:"Shippori Mincho",serif;font-weight:700;line-height:1;}
-  .ward-icon-grid span{width:42px;height:42px;font-size:18px;grid-row:1 / span 2;}
   .ward-icon-grid b{font-size:12.5px;line-height:1.35;}
   .ward-icon-grid small{display:block;font-size:10px;line-height:1.45;color:var(--ink-soft);}
   .ward-section{margin-top:20px;}
   .ward-procedure-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
   .ward-procedure-card,.ward-note-card,.ward-tax-panel,.ward-form-card{border:1px solid var(--line);background:var(--white);padding:17px;min-width:0;}
-  .ward-card-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-  .ward-mark{width:32px;height:32px;font-size:15px;flex:0 0 auto;}
+  .ward-card-head{margin-bottom:10px;}
   .ward-card-head h3,.ward-note-card h3,.ward-tax-panel h3,.ward-form-card h3{margin:0;font-size:15px;color:var(--ink);line-height:1.45;}
   .ward-procedure-card p,.ward-note-card p,.ward-tax-panel p{font-size:11.5px;line-height:1.75;color:var(--ink-soft);margin:0 0 10px;}
   .ward-procedure-card dl{display:grid;grid-template-columns:72px minmax(0,1fr);gap:7px 9px;margin:12px 0 0;font-size:11px;line-height:1.6;}
   .ward-procedure-card dt{font-weight:700;color:var(--accent);}
   .ward-procedure-card dd{margin:0;color:var(--ink-soft);}
   .ward-source-link{display:inline-flex;margin-top:12px;font-size:10.5px;font-weight:700;color:var(--accent);text-decoration:none;border-bottom:1px solid currentColor;}
-  .ward-inline-icon{width:24px;height:24px;margin-right:7px;font-size:12px;vertical-align:middle;}
   .ward-warning{border-left:4px solid var(--seal);background:rgba(168,72,47,.07);padding:11px 13px;margin-top:12px;font-size:11.5px;line-height:1.7;color:var(--ink-soft);}
   .ward-form-guide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
   .ward-form-card .portal-table{margin-top:10px;}
