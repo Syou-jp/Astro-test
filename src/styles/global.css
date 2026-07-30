@@ -1157,9 +1157,10 @@
     .portal-table--compare{table-layout:fixed;}
     .portal-table--compare th,.portal-table--compare td{font-size:11px;padding:8px 6px;line-height:1.55;white-space:normal;overflow-wrap:break-word;}
     .portal-table--compare th{font-size:10px;white-space:normal;line-height:1.3;}
-    .portal-table--compare th:nth-child(1),.portal-table--compare td:nth-child(1){width:32%;}
-    .portal-table--compare th:nth-child(2),.portal-table--compare td:nth-child(2){width:26%;}
-    .portal-table--compare th:nth-child(3),.portal-table--compare td:nth-child(3){width:42%;}
+    .portal-table--compare th:nth-child(1),.portal-table--compare td:nth-child(1){width:28%;}
+    .portal-table--compare th:nth-child(2),.portal-table--compare td:nth-child(2){width:19%;}
+    .portal-table--compare th:nth-child(3),.portal-table--compare td:nth-child(3){width:27%;}
+    .portal-table--compare th:nth-child(4),.portal-table--compare td:nth-child(4){width:26%;}
     .portal-table--compare .money{white-space:normal;}
     .portal-table--compare .money .money-lo,.portal-table--compare .money .money-hi{display:block;text-align:right;}
     .portal-table--compare .money .money-sep{display:none;}
