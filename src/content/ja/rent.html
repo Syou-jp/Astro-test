@@ -89,29 +89,29 @@
 
       <div class="rent-two-col">
         <div class="field-row">
-          <label>家賃<span class="hint">月額賃料</span></label>
+          <label>家賃</label>
           <input type="number" id="rent" value="0" min="0" step="1000">
         </div>
         <div class="field-row">
-          <label>管理費・共益費<span class="hint">初回請求分（1ヶ月・非課税）</span></label>
+          <label>管理費・共益費</label>
           <input type="number" id="mgmt" value="5000" min="0" step="500">
         </div>
       </div>
       <div class="rent-note"><strong>家賃</strong>　※合計には含まれません。礼金・敷金・仲介手数料の計算基準としてのみ使用します</div>
 
       <div class="field-block">
-        <label>その他<span class="hint">駐輪場代・駐車場代など、項目名を自由に入力できます。初回保証利用料の基準（家賃+管理費+その他）にも加算されます（非課税）</span></label>
+        <label>その他<span class="hint">駐車場代など自由に入力できます。初回保証利用料の基準（家賃+管理費+その他）にも加算されます</span></label>
         <div id="guarantorOtherRows"></div>
-        <button type="button" class="add-btn mini" id="addGuarantorOtherBtn">＋ 項目を追加</button>
+        <button type="button" class="add-btn mini" id="addGuarantorOtherBtn">＋ 追加</button>
       </div>
 
       <div class="fire-key-row">
         <div class="field-row date-field-row">
-          <label>入居日<span class="hint">任意・日割り計算に使用</span></label>
+          <label>入居日（任意）<span class="hint">日割り計算に使用</span></label>
           <input type="date" id="moveInDate">
         </div>
         <div class="field-block">
-          <label>入居月家賃<span class="hint">概算（整月）または日割り計算</span></label>
+          <label>入居月家賃<span class="hint">概算（月）または日割り計算</span></label>
           <div class="mode-toggle" id="modeToggle">
             <div class="mode-btn active" data-mode="months">概算（整月）</div>
             <div class="mode-btn" data-mode="daily">日割り計算</div>
@@ -133,11 +133,11 @@
 
       <div class="compact-pair">
         <div class="compact-pair-item">
-          <span class="compact-label">敷金<span class="hint">家賃の何ヶ月分</span></span>
+          <span class="compact-label">敷金</span>
           <input type="number" id="depositMonths" value="1" min="0" step="0.5">
         </div>
         <div class="compact-pair-item">
-          <span class="compact-label">礼金<span class="hint">家賃の何ヶ月分</span></span>
+          <span class="compact-label">礼金</span>
           <input type="number" id="keyMoneyMonths" value="1" min="0" step="0.5">
         </div>
       </div>
@@ -212,7 +212,7 @@
         <div class="field-block">
           <label>その他<span class="hint">複数行を自由に追加できます</span></label>
           <div id="otherRows"></div>
-          <button type="button" class="add-btn" id="addOtherBtn">＋ 項目を追加</button>
+          <button type="button" class="add-btn" id="addOtherBtn">＋ 追加</button>
         </div>
       </div>
     </div>
@@ -237,7 +237,7 @@
           <option value="ko">한국어</option>
           <option value="vi">Tiếng Việt</option>
         </select>
-        <div class="rent-lang-hint">相手に送る言語を選択してください。下の明細がすぐに更新されます。</div>
+        <div class="rent-lang-hint">相手に送る言語を選択してください。</div>
       </div>
 
       <div class="receipt-card">
@@ -277,7 +277,7 @@ const T = {
     dayLabel: n => `${n}日`,
     monthLabel: n => `${n}か月`,
     taxNote: "（税込）",
-    rentNote: "（参考表示・合計に含まれません）",
+    rentNote: "（合計に含まれません）",
     perMonth: "月額",
     perYear: "年額",
     items: {
