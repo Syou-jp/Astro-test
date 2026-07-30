@@ -761,14 +761,17 @@ document.getElementById("clientName").addEventListener("input", render);
 
 /* ---------- Copy to clipboard ---------- */
 document.getElementById("copyBtn").addEventListener("mousedown", (e) => e.preventDefault());
+document.getElementById("copyBtn").addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
 document.getElementById("copyBtn").addEventListener("click", () => {
   const text = buildCopyText();
   const t = T[currentLang];
   const btn = document.getElementById("copyBtn");
+  const scrollX = window.scrollX, scrollY = window.scrollY;
 
   function flashCopied(){
     const original = t.copy;
     btn.textContent = t.copied;
+    window.scrollTo(scrollX, scrollY);
     setTimeout(() => { btn.innerHTML = original; }, 1600);
   }
 
@@ -780,15 +783,19 @@ document.getElementById("copyBtn").addEventListener("click", () => {
 });
 
 function fallbackCopy(text, cb){
+  const scrollX = window.scrollX, scrollY = window.scrollY;
   const ta = document.createElement("textarea");
   ta.value = text;
   ta.style.position = "fixed";
+  ta.style.top = "0";
+  ta.style.left = "0";
   ta.style.opacity = "0";
   document.body.appendChild(ta);
   ta.focus({ preventScroll: true });
   ta.select();
   try { document.execCommand("copy"); } catch(e) {}
   document.body.removeChild(ta);
+  window.scrollTo(scrollX, scrollY);
   cb();
 }
 
