@@ -60,6 +60,10 @@
             </div>
           </div>
           <div class="home-fx-foot" id="homeFxFoot">&nbsp;</div>
+          <button type="button" class="home-fx-collapse-btn" id="homeFxCollapseBtn" aria-label="レート一覧を閉じる">
+            <span>閉じる</span>
+            <span class="home-fx-collapse-icon" aria-hidden="true">▴</span>
+          </button>
         </div>
       </div>
     </div>
@@ -176,6 +180,7 @@
       var toggle = document.getElementById("homeFxAmountToggle");
       var body = document.getElementById("homeFxBody");
       var toggleBtn = document.getElementById("homeFxToggleBtn");
+      var collapseBtn = document.getElementById("homeFxCollapseBtn");
       var swapBtn = document.getElementById("homeFxSwapBtn");
       var swapFrom = document.getElementById("homeFxSwapFrom");
       var swapTo = document.getElementById("homeFxSwapTo");
@@ -283,9 +288,19 @@
           row.appendChild(valueSpan);
           grid.appendChild(row);
         });
-        foot.textContent = updatedAt
-          ? "更新: " + updatedAt + "（参考値、送金・両替時のレートとは異なります）"
-          : " ";
+        foot.innerHTML = "";
+        if (updatedAt) {
+          var updEl = document.createElement("span");
+          updEl.className = "home-fx-updated";
+          updEl.textContent = "更新: " + updatedAt;
+          var noteEl = document.createElement("span");
+          noteEl.className = "home-fx-disclaimer";
+          noteEl.textContent = "参考値、送金・両替時のレートとは異なります";
+          foot.appendChild(updEl);
+          foot.appendChild(noteEl);
+        } else {
+          foot.textContent = " ";
+        }
       }
 
       function populateCustomSelects() {
@@ -371,6 +386,12 @@
         toggleBtn.addEventListener("click", function () {
           setFxCollapsed(!body.hidden);
         });
+        if (collapseBtn) {
+          collapseBtn.addEventListener("click", function () {
+            setFxCollapsed(true);
+            toggleBtn.scrollIntoView({ block: "center", behavior: "smooth" });
+          });
+        }
       }
 
       function showError() {
@@ -546,7 +567,7 @@
           <small>杉並区 高円寺エリア ・ 謝礼あり（詳細は相談）</small>
         </span>
         <span class="home-latest-date">07/29 21:40</span>
-        <span class="home-latest-arrow" aria-hidden="true">→</span>
+        <span class="home-latest-arrow">詳細を見る →</span>
       </a>
       <a class="home-latest-item" href="/ja/listings/">
         <span class="home-latest-badge home-latest-badge--tenant">房東直租</span>
@@ -555,7 +576,7 @@
           <small>月租 85,000円（不含管理費）</small>
         </span>
         <span class="home-latest-date">07/28 18:05</span>
-        <span class="home-latest-arrow" aria-hidden="true">→</span>
+        <span class="home-latest-arrow">詳細を見る →</span>
       </a>
       <a class="home-latest-item home-latest-item--market" href="/ja/used-market/">
         <span class="home-latest-badge home-latest-badge--market">中古市場</span>
@@ -565,7 +586,7 @@
         </span>
         <span class="home-latest-thumb"><img src="https://images.unsplash.com/photo-1549497538-303791108f95?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy"></span>
         <span class="home-latest-date">07/27 09:15</span>
-        <span class="home-latest-arrow" aria-hidden="true">→</span>
+        <span class="home-latest-arrow">詳細を見る →</span>
       </a>
       <a class="home-latest-item" href="/ja/help-request/">
         <span class="home-latest-badge home-latest-badge--help">助け合い</span>
@@ -574,7 +595,7 @@
           <small>足立区 北千住エリア ・ 謝礼 3,000円＋飲み物</small>
         </span>
         <span class="home-latest-date">07/26 12:50</span>
-        <span class="home-latest-arrow" aria-hidden="true">→</span>
+        <span class="home-latest-arrow">詳細を見る →</span>
       </a>
       <a class="home-latest-item" href="/ja/events/">
         <span class="home-latest-badge home-latest-badge--event">イベント</span>
@@ -583,7 +604,7 @@
           <small>渋谷 カフェアリス ・ 毎週金曜日 19:00〜21:00</small>
         </span>
         <span class="home-latest-date">07/25 08:30</span>
-        <span class="home-latest-arrow" aria-hidden="true">→</span>
+        <span class="home-latest-arrow">詳細を見る →</span>
       </a>
       <a class="home-latest-item" href="/ja/listings/">
         <span class="home-latest-badge home-latest-badge--share">合租物件</span>
@@ -592,7 +613,7 @@
           <small>月租 45,000円（含水電網路）</small>
         </span>
         <span class="home-latest-date">07/24 16:20</span>
-        <span class="home-latest-arrow" aria-hidden="true">→</span>
+        <span class="home-latest-arrow">詳細を見る →</span>
       </a>
       <a class="home-latest-item home-latest-item--market" href="/ja/used-market/">
         <span class="home-latest-badge home-latest-badge--market">中古市場</span>
@@ -602,7 +623,7 @@
         </span>
         <span class="home-latest-thumb"><img src="https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy"></span>
         <span class="home-latest-date">07/23 11:00</span>
-        <span class="home-latest-arrow" aria-hidden="true">→</span>
+        <span class="home-latest-arrow">詳細を見る →</span>
       </a>
     </div>
   </div>
@@ -619,7 +640,9 @@
         var item = e.target.closest(".home-latest-item");
         if (!item) return;
         if (item.classList.contains("is-expanded")) {
-          if (!e.target.closest(".home-latest-arrow")) e.preventDefault();
+          if (e.target.closest(".home-latest-arrow")) return;
+          e.preventDefault();
+          item.classList.remove("is-expanded");
           return;
         }
         e.preventDefault();
@@ -798,10 +821,30 @@
     @media (max-width:640px){
       .home-latest-item:nth-child(n+6){display:none;}
       .home-latest-item{transition:transform .15s ease,box-shadow .15s ease,background .15s ease;}
-      .home-latest-item.is-expanded{transform:scale(1.03);box-shadow:0 4px 16px rgba(0,0,0,.14);background:var(--paper-2,#f4f1e8);position:relative;z-index:1;}
+      .home-latest-item.is-expanded{
+        display:grid;
+        grid-template-columns:1fr auto;
+        grid-template-areas:"badge date" "body body" "arrow arrow";
+        column-gap:10px;row-gap:8px;
+        align-items:start;
+        padding:12px 12px 11px;
+        transform:scale(1.02);box-shadow:0 4px 16px rgba(0,0,0,.14);background:var(--paper-2,#f4f1e8);position:relative;z-index:1;
+      }
+      .home-latest-item.is-expanded.home-latest-item--market{
+        grid-template-columns:44px 1fr auto;
+        grid-template-areas:"badge badge date" "thumb body body" "arrow arrow arrow";
+      }
+      .home-latest-item.is-expanded .home-latest-badge{grid-area:badge;justify-self:start;}
+      .home-latest-item.is-expanded .home-latest-date{grid-area:date;justify-self:end;}
+      .home-latest-item.is-expanded .home-latest-thumb{grid-area:thumb;width:100%;height:56px;}
+      .home-latest-item.is-expanded .home-latest-item-body{grid-area:body;}
       .home-latest-item.is-expanded .home-latest-item-body strong,
       .home-latest-item.is-expanded .home-latest-item-body small{white-space:normal;overflow:visible;text-overflow:clip;}
-      .home-latest-item.is-expanded .home-latest-arrow{display:flex;align-items:center;justify-content:center;flex:none;width:24px;height:24px;margin-left:2px;color:#fff;background:var(--accent);border-radius:50%;font-size:13px;font-weight:700;}
+      .home-latest-item.is-expanded .home-latest-arrow{
+        grid-area:arrow;display:flex;align-items:center;justify-content:center;gap:4px;
+        justify-self:end;width:auto;height:auto;padding:6px 14px;border-radius:var(--radius-pill);
+        color:#fff;background:var(--accent);font-size:11px;font-weight:700;white-space:nowrap;
+      }
     }
     .home-latest-badge{flex:none;font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:var(--radius-pill);color:#fff;background:var(--accent);white-space:nowrap;}
     .home-latest-badge--tenant{background:var(--accent);}
