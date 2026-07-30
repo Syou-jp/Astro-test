@@ -148,7 +148,7 @@
           <div class="value" id="txGrandTotal">¥0</div>
         </div>
         <div class="actions">
-          <button class="btn-copy" id="txCopyBtn">📋 複製文字發送</button>
+          <button class="btn-copy" id="txCopyBtn">📷 螢幕截圖保存</button>
         </div>
         <div class="footnote">本工具僅供概算參考，實際稅額以稅務機關核定及正式登記為準；稅率與減免特例均設有適用期限，請以最新法令為準。假設土地為200㎡以下小規模住宅用地，如實際面積較大請自行調整。所有計算僅於瀏覽器內完成。</div>
       </div>
@@ -190,6 +190,7 @@
     </div>
   </section><!-- /util-tax-hold -->
   </div><!-- /page-tax-realestate -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 /* ================= Purchase Tax Calculator ================= */
 const eraTable = [
@@ -236,6 +237,7 @@ if (document.querySelector("#taxFormCard")){
     document.getElementById("txLandValue").value = landValue;
     document.getElementById("txBuildingValue").value = buildingValue;
     txRender();
+    document.querySelector(".receipt-card")?.scrollIntoView({behavior: "smooth", block: "start"});
   });
 }
 
@@ -387,7 +389,7 @@ function txRender(){
 
   const proratedLine = document.getElementById("txProratedAmount");
   if (v.daysRemaining > 0){
-    proratedLine.textContent = `${txYen(v.prorated)}（${v.daysRemaining}／${v.daysInPeriod}天）`;
+    proratedLine.textContent = `${txYen(v.prorated)}（${v.daysRemaining}／${v.daysInPeriod}日）`;
   } else {
     proratedLine.textContent = "請選擇購入日期";
   }
@@ -395,44 +397,22 @@ function txRender(){
   document.getElementById("txGrandTotal").textContent = txYen(v.oneTimeTotal + v.prorated);
 }
 
-function txBuildCopyText(){
-  const v = txCompute();
-  const lines = txBuildLines(v);
-  let out = [];
-  out.push("日本不動產購屋稅金試算");
-  out.push(`評價額：土地 ${txYen(v.landValue)}／建物 ${txYen(v.buildingValue)}`);
-  out.push("------------------------------");
-  out.push("① 購入時一次性稅費");
-  lines.oneTime.forEach(l => out.push(`${l.label}：${txYen(l.amount)}`));
-  out.push(`一次性稅費合計：${txYen(v.oneTimeTotal)}`);
-  out.push("------------------------------");
-  out.push("② 固定資產稅・都市計畫稅");
-  lines.annual.forEach(l => out.push(`${l.label}：${txYen(l.amount)}`));
-  out.push(`全年持有稅金參考：${txYen(v.annualFull)}`);
-  if (v.daysRemaining > 0){
-    out.push(`當年度日割分攤（${v.daysRemaining}／${v.daysInPeriod}天）：${txYen(v.prorated)}`);
-  }
-  out.push("------------------------------");
-  out.push(`購入時稅費＋當年日割合計：${txYen(v.oneTimeTotal + v.prorated)}`);
-  out.push("");
-  out.push("本試算僅供概算參考，實際稅額以稅務機關核定為準。");
-  return out.join("\n");
-}
-
 if (document.querySelector("#taxFormCard")){
-  document.getElementById("txCopyBtn").addEventListener("click", () => {
-    const text = txBuildCopyText();
+  document.getElementById("txCopyBtn").addEventListener("click", async () => {
     const btn = document.getElementById("txCopyBtn");
-    function flash(){
-      const original = btn.innerHTML;
-      btn.textContent = "已複製 ✓";
-      setTimeout(() => { btn.innerHTML = original; }, 1600);
+    const target = document.querySelector(".receipt-card");
+    const original = btn.innerHTML;
+    try {
+      const canvas = await html2canvas(target, {scale: 2, backgroundColor: "#ffffff", useCORS: true, ignoreElements: el => el.classList?.contains("actions")});
+      const link = document.createElement("a");
+      link.download = "不動産購入税金試算_" + new Date().toISOString().slice(0,10) + ".png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      btn.textContent = "保存しました ✓";
+    } catch (e) {
+      btn.textContent = "保存に失敗しました";
     }
-    if (navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(flash).catch(() => fallbackCopy(text, flash));
-    } else {
-      fallbackCopy(text, flash);
-    }
+    setTimeout(() => { btn.innerHTML = original; }, 1600);
   });
 
   document.getElementById("taxFormCard").addEventListener("input", txRender);

@@ -802,6 +802,7 @@ function siteAdd(source,ja,en,ko,vi){ SITE_TEXT.set(source,{ja,en,ko,vi}); }
   ["選擇要複製給客人的語言，下方明細會即時更新。","お客様へ送る言語を選択してください。下の明細がすぐに更新されます。","Choose the language to send to the customer. The details below update immediately.","고객에게 보낼 언어를 선택하면 아래 명세가 즉시 갱신됩니다.","Chọn ngôn ngữ gửi cho khách hàng. Chi tiết bên dưới sẽ cập nhật ngay."],
   ["+ 新增項目 Add item","＋項目を追加","+ Add item","+ 항목 추가","+ Thêm mục"],
   ["📋 複製文字發送","📋 送信用テキストをコピー","📋 Copy text to send","📋 전송용 텍스트 복사","📋 Sao chép nội dung để gửi"],
+  ["📷 螢幕截圖保存","📷 スクリーンショットを保存","📷 Save as screenshot","📷 스크린샷으로 저장","📷 Lưu ảnh chụp màn hình"],
   ["📋 複製全部結果 Copy all","📋 すべての結果をコピー","📋 Copy all results","📋 모든 결과 복사","📋 Sao chép toàn bộ kết quả"],
   ["📄 生成 PDF Generate PDF","📄 PDFを生成","📄 Generate PDF","📄 PDF 생성","📄 Tạo PDF"],
   ["重設 Reset","リセット","Reset","초기화","Đặt lại"],
@@ -954,6 +955,21 @@ siteAdd("是否有貸款 Has loan","融資の有無","Has loan","대출 여부",
 siteAdd("用於固都稅日割分攤","固定資産税・都市計画税の日割計算に使用します","Used to prorate fixed asset and city planning taxes","고정자산세・도시계획세 일할 계산에 사용","Dùng để phân bổ thuế tài sản và quy hoạch đô thị");
 siteAdd("① 購入時一次性稅費 One-time (at closing)","① 購入時の一時税費用","① One-time taxes at closing","① 구입 시 일회성 세금","① Thuế phí một lần khi mua");
 siteAdd("② 固定資產稅・都市計畫稅 Annual Holding Tax","② 固定資産税・都市計画税","② Fixed asset & city planning tax","② 고정자산세・도시계획세","② Thuế tài sản・quy hoạch đô thị");
+siteAdd("評價額","評価額","Assessed value","평가액","Giá trị định giá");
+siteAdd("固定資產稅","固定資産税","Fixed asset tax","고정자산세","Thuế tài sản cố định");
+siteAdd("都市計畫稅","都市計画税","City planning tax","도시계획세","Thuế quy hoạch đô thị");
+siteAdd("登錄免許稅","登録免許税","Registration tax","등록면허세","Thuế đăng ký");
+siteAdd("都市計畫稅率 City planning tax rate","都市計画税率","City planning tax rate","도시계획세율","Thuế suất quy hoạch đô thị");
+siteAdd("自動計算屋齡","自動計算されます","Automatically calculated","자동 계산됩니다","Tự động tính toán");
+siteAdd("上限0.3%，依市區町村而定","上限0.3%、市区町村により異なります","Up to 0.3%, varies by municipality","상한 0.3%, 시구정촌에 따라 다름","Tối đa 0,3%, tùy theo địa phương");
+siteAdd("㎡（須50〜240㎡才適用控除）","㎡（控除には50〜240㎡が必要）","m² (deduction requires 50-240 m²)","㎡(공제는 50~240㎡ 필요)","m² (cần 50-240m² để được khấu trừ)");
+siteAdd("關東慣例1/1、關西慣例4/1","関東は1月1日、関西は4月1日が慣例","Kanto convention: Jan 1; Kansai convention: Apr 1","간토는 1월 1일, 간사이는 4월 1일 관례","Kanto theo lệ 1/1, Kansai theo lệ 1/4");
+siteAdd("關東（1月1日起算）","関東（1月1日起算）","Kanto (from Jan 1)","간토(1월 1일 기준)","Kanto (tính từ 1/1)");
+siteAdd("關西（4月1日起算）","関西（4月1日起算）","Kansai (from Apr 1)","간사이(4월 1일 기준)","Kansai (tính từ 1/4)");
+siteAdd("一般稅率（投資出租不適用自用減稅）","一般税率（投資用は自己居住用軽減の対象外）","Standard rate (rental/investment doesn't qualify for owner-occupied relief)","일반세율(임대・투자는 실거주 감면 대상 아님)","Thuế suất thông thường (cho thuê/đầu tư không được ưu đãi tự ở)");
+siteAdd("未滿50㎡，適用一般稅率0.4%","50㎡未満のため一般税率0.4%を適用","Under 50 m², standard rate 0.4% applies","50㎡ 미만으로 일반세율 0.4% 적용","Dưới 50㎡ nên áp dụng thuế suất thông thường 0,4%");
+siteAdd("移轉登記 0.3%（自用中古）","移転登記 0.3%（自己居住用の中古）","Transfer registration 0.3% (owner-occupied used property)","이전 등기 0.3%(실거주 중고)","Đăng ký chuyển nhượng 0,3% (nhà cũ tự ở)");
+siteAdd("未符合面積或耐震要件，適用一般稅率2%","面積または耐震要件を満たさないため一般税率2%を適用","Standard rate 2% applies (area or seismic requirement not met)","면적 또는 내진 요건 미충족으로 일반세율 2% 적용","Không đáp ứng diện tích hoặc tiêu chuẩn động đất nên áp dụng thuế suất 2%");
 siteAdd("私は、下記不動産を下記条件にて購入したく、ここに買付を申し込みます。","私は、下記不動産を下記条件にて購入したく、ここに買付を申し込みます。","I hereby offer to purchase the property below under the stated terms.","아래 부동산을 다음 조건으로 구입하고자 매수를 신청합니다.","Tôi xin đề nghị mua bất động sản dưới đây theo các điều kiện nêu sau.");
 siteAdd("本書は購入希望条件を提示し、売買契約締結に向けた協議を申し込むための書面です。本書のみで売買契約の成立を保証するものではなく、最終的な取引条件は重要事項説明および別途締結する不動産売買契約書によって確定します。","本書は購入希望条件を提示し、売買契約締結に向けた協議を申し込むための書面です。本書のみで売買契約の成立を保証するものではなく、最終条件は重要事項説明および売買契約書で確定します。","This document states the proposed purchase terms and requests negotiations toward a sale contract. It does not itself create a binding sale; final terms are set by the disclosure and separate purchase agreement.","본 문서는 구입 희망 조건을 제시하고 매매계약 협의를 신청하는 문서입니다. 이 문서만으로 계약이 성립하지 않으며 최종 조건은 중요사항 설명과 별도 매매계약서로 확정됩니다.","Văn bản này nêu điều kiện mua đề xuất và đề nghị thương lượng hợp đồng. Văn bản này không tự tạo thành hợp đồng mua bán; điều kiện cuối cùng được xác định bằng bản giải thích quan trọng và hợp đồng riêng.");
 siteAdd("一般的な実務項目をまとめた買付証明書です。物件・取引内容に応じて宅地建物取引士、司法書士または弁護士へ条件をご確認ください。","一般的な実務項目をまとめた買付証明書です。物件・取引内容に応じて宅地建物取引士、司法書士または弁護士へ条件をご確認ください。","This offer form contains common transaction items. Confirm terms with a licensed real-estate professional, judicial scrivener or lawyer as appropriate.","일반적인 실무 항목을 정리한 매수 의향서입니다. 거래 내용에 따라 공인 부동산 전문가, 사법서사 또는 변호사에게 조건을 확인하세요.","Đây là mẫu đề nghị mua gồm các mục giao dịch phổ biến. Hãy xác nhận điều kiện với chuyên viên bất động sản, tư pháp thư sĩ hoặc luật sư tùy giao dịch.");

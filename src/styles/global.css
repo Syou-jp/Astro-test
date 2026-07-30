@@ -279,13 +279,16 @@
   }
   .field-row select{
     width:100%;
-    padding:8px 9px;
+    padding:8px 22px 8px 9px;
     border:1px solid var(--line);
     border-radius:0;
     font-family:inherit;
     font-size:12.5px;
     background:var(--white);
     color:var(--ink);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
   }
   .field-row input[type=number], .field-row input[type=text], .field-row input[type=date]{
     width:100%;
