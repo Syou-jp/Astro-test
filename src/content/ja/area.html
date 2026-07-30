@@ -52,9 +52,6 @@
 
     <div class="section-title">各地區換算結果 Regional Results</div>
     <div class="area-regions" id="areaResults"></div>
-    <div class="apply-actions">
-      <button type="button" class="secondary-btn" id="areaResetBtn">重設 Reset</button>
-    </div>
     <div class="area-note">※ 所有結果均先換算為平方公尺再計算。日本「畳・帖」以 1畳＝1.62㎡概算，日本與台灣的坪採 1坪＝400/121㎡。正式契約與登記請以原始㎡數及官方資料為準。</div>
   </div><!-- /page-area -->
 <script>
@@ -151,11 +148,6 @@ function areaRender(){
 
 document.getElementById("areaSourceValue").addEventListener("input",areaRender);
 document.getElementById("areaSourceUnit").addEventListener("change",areaRender);
-document.getElementById("areaResetBtn").addEventListener("click",() => {
-  document.getElementById("areaSourceValue").value = "60";
-  document.getElementById("areaSourceUnit").value = "jp_sqm";
-  areaRender();
-});
 areaRender();
 
 </script>
