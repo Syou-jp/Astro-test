@@ -784,7 +784,7 @@ function fallbackCopy(text, cb){
   ta.style.position = "fixed";
   ta.style.opacity = "0";
   document.body.appendChild(ta);
-  ta.focus();
+  ta.focus({ preventScroll: true });
   ta.select();
   try { document.execCommand("copy"); } catch(e) {}
   document.body.removeChild(ta);
