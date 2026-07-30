@@ -1531,6 +1531,7 @@ siteSetLanguage(siteInitialLanguage,false);
           const btn = e.target.closest(".btn-copy");
           if (!btn) return;
           if (window.matchMedia("(max-width:860px)").matches === false) return;
+          if (btn.closest("#page-rent")) return;
           setTimeout(() => {
             const grid = btn.closest(".grid");
             if (!grid) return;
