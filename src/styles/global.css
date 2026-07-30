@@ -1637,7 +1637,7 @@
 .home-food-cta{display:block;width:100%;text-align:center;margin-top:16px;}
 @media(max-width:860px){.home-food-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
 @media(max-width:520px){.home-food-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-.home-news-card{position:relative;display:block;height:auto;aspect-ratio:16/9;overflow:hidden;background:var(--paper-2);text-decoration:none;border:1px solid var(--line);}
+.home-news-card{position:relative;display:block;height:auto;aspect-ratio:16/9;overflow:hidden;background:var(--paper-2);text-decoration:none;border:1px solid var(--line);border-radius:var(--radius-sm);}
 .home-news-card:hover .home-news-thumb img{transform:scale(1.04);}
 .home-news-card:hover .home-news-body strong{text-decoration:underline;}
 .home-news-thumb{position:absolute;inset:0;display:block;}
