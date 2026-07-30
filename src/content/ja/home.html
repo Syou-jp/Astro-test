@@ -11,11 +11,14 @@
         </span>
       </a>
 
-      <div class="home-fx-card">
+      <div class="home-fx-card" id="homeFxCard">
         <div class="home-fx-head">
           <div class="home-fx-title">
             <span class="home-fx-flag"><img class="home-fx-flag-img" src="https://flagcdn.com/w40/jp.png" alt="" loading="lazy" width="20" height="15" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'home-fx-flag-fallback',textContent:'JP'}))"></span>
-            <span>今日の為替レート</span>
+            <span class="home-fx-title-text">
+              <span>今日の為替レート</span>
+              <span class="home-fx-compact-rate" id="homeFxCompactRate" data-no-i18n></span>
+            </span>
           </div>
           <div class="home-fx-head-actions">
             <button type="button" class="home-fx-toggle-btn" id="homeFxToggleBtn" aria-label="レート一覧の表示切替" aria-expanded="true" aria-controls="homeFxBody">
@@ -118,7 +121,7 @@
         <span class="home-quick-nav-icon"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v4M16 3v4"/></svg></span>
         <span class="home-quick-nav-label">イベント・交流会<small>EVENTS</small></span>
       </a>
-      <a class="home-quick-nav-item" href="/ja/help-request/">
+      <a class="home-quick-nav-item home-quick-nav-item--bar" href="/ja/help-request/">
         <span class="home-quick-nav-icon"><svg viewBox="0 0 24 24"><path d="M3 11 7 7l4 3 4-3 4 4"/><path d="M3 11v3l4 4 3-2 2 2 3-2 4-4v-3"/></svg></span>
         <span class="home-quick-nav-label">助け合い掲示板<small>HELP BOARD</small></span>
       </a>
@@ -174,10 +177,13 @@
       var FORWARD_AMOUNTS = [100, 1000, 10000];
       var REVERSE_AMOUNTS = [1, 10, 100];
       var STORAGE_KEY = "sotocom_fx_rates_v1";
+      var FX_PREF_KEY = "sotocom_fx_pref_v1";
+      var FX_PREF_EVENT = "sotocom:fx-pref-change";
 
       var grid = document.getElementById("homeFxGrid");
       var foot = document.getElementById("homeFxFoot");
       var toggle = document.getElementById("homeFxAmountToggle");
+      var card = document.getElementById("homeFxCard");
       var body = document.getElementById("homeFxBody");
       var toggleBtn = document.getElementById("homeFxToggleBtn");
       var collapseBtn = document.getElementById("homeFxCollapseBtn");
@@ -188,7 +194,45 @@
       var customFrom = document.getElementById("homeFxCustomFrom");
       var customTo = document.getElementById("homeFxCustomTo");
       var customResult = document.getElementById("homeFxCustomResult");
+      var compactRate = document.getElementById("homeFxCompactRate");
       if (!grid || !foot || !toggle || !swapBtn) return;
+
+      function loadFxPref() {
+        var pref = { currency: "USD", base: "JPY", amount: 100 };
+        try {
+          var raw = JSON.parse(localStorage.getItem(FX_PREF_KEY));
+          if (raw && typeof raw === "object") {
+            if (raw.currency) pref.currency = raw.currency;
+            if (raw.base === "FX" || raw.base === "JPY") pref.base = raw.base;
+            if (FORWARD_AMOUNTS.indexOf(raw.amount) !== -1) pref.amount = raw.amount;
+          }
+        } catch (e) {}
+        return pref;
+      }
+
+      var fxPref = loadFxPref();
+
+      function renderCompactRate() {
+        if (!compactRate) return;
+        if (!rates || !rates[fxPref.currency]) {
+          compactRate.textContent = "";
+          return;
+        }
+        var rate = rates[fxPref.currency];
+        var amt = fxPref.amount;
+        var text;
+        if (fxPref.base === "FX") {
+          text = amt.toLocaleString("ja-JP") + " " + fxPref.currency + " ≈ ¥" + formatNumber(amt / rate);
+        } else {
+          text = "¥" + amt.toLocaleString("ja-JP") + " ≈ " + formatNumber(amt * rate) + " " + fxPref.currency;
+        }
+        compactRate.textContent = text;
+      }
+
+      window.addEventListener(FX_PREF_EVENT, function () {
+        fxPref = loadFxPref();
+        renderCompactRate();
+      });
 
       function fitFontSize(digitCount) {
         if (digitCount <= 6) return 15;
@@ -381,6 +425,7 @@
           body.hidden = collapsed;
           toggleBtn.classList.toggle("is-collapsed", collapsed);
           toggleBtn.setAttribute("aria-expanded", String(!collapsed));
+          if (card) card.classList.toggle("is-collapsed", collapsed);
         }
         setFxCollapsed(window.matchMedia("(max-width:640px)").matches);
         toggleBtn.addEventListener("click", function () {
@@ -403,6 +448,7 @@
         updatedAt = payload.date;
         render();
         renderCustom();
+        renderCompactRate();
       }
 
       var todayKey = new Date().toISOString().slice(0, 10);
@@ -578,13 +624,12 @@
         <span class="home-latest-date">07/28 18:05</span>
         <span class="home-latest-arrow">詳細を見る →</span>
       </a>
-      <a class="home-latest-item home-latest-item--market" href="/ja/used-market/">
+      <a class="home-latest-item" href="/ja/used-market/">
         <span class="home-latest-badge home-latest-badge--market">中古市場</span>
         <span class="home-latest-item-body">
           <strong>木製ローテーブル</strong>
           <small>¥1,800 ・ 中野駅から徒歩10分ほど</small>
         </span>
-        <span class="home-latest-thumb"><img src="https://images.unsplash.com/photo-1549497538-303791108f95?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy"></span>
         <span class="home-latest-date">07/27 09:15</span>
         <span class="home-latest-arrow">詳細を見る →</span>
       </a>
@@ -615,13 +660,12 @@
         <span class="home-latest-date">07/24 16:20</span>
         <span class="home-latest-arrow">詳細を見る →</span>
       </a>
-      <a class="home-latest-item home-latest-item--market" href="/ja/used-market/">
+      <a class="home-latest-item" href="/ja/used-market/">
         <span class="home-latest-badge home-latest-badge--market">中古市場</span>
         <span class="home-latest-item-body">
           <strong>電子レンジ（18L）</strong>
           <small>¥3,500 ・ 池袋駅 西口エリア</small>
         </span>
-        <span class="home-latest-thumb"><img src="https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy"></span>
         <span class="home-latest-date">07/23 11:00</span>
         <span class="home-latest-arrow">詳細を見る →</span>
       </a>
@@ -830,13 +874,8 @@
         padding:12px 12px 11px;
         transform:scale(1.02);box-shadow:0 4px 16px rgba(0,0,0,.14);background:var(--paper-2,#f4f1e8);position:relative;z-index:1;
       }
-      .home-latest-item.is-expanded.home-latest-item--market{
-        grid-template-columns:44px 1fr auto;
-        grid-template-areas:"badge badge date" "thumb body body" "arrow arrow arrow";
-      }
       .home-latest-item.is-expanded .home-latest-badge{grid-area:badge;justify-self:start;}
       .home-latest-item.is-expanded .home-latest-date{grid-area:date;justify-self:end;}
-      .home-latest-item.is-expanded .home-latest-thumb{grid-area:thumb;width:100%;height:56px;}
       .home-latest-item.is-expanded .home-latest-item-body{grid-area:body;}
       .home-latest-item.is-expanded .home-latest-item-body strong,
       .home-latest-item.is-expanded .home-latest-item-body small{white-space:normal;overflow:visible;text-overflow:clip;}
@@ -852,8 +891,6 @@
     .home-latest-badge--help{background:#7a5c3e;}
     .home-latest-badge--event{background:#5c4b8a;}
     .home-latest-badge--market{background:#5c7a4b;}
-    .home-latest-thumb{flex:none;width:44px;height:44px;overflow:hidden;background:var(--paper-2,#f4f1e8);}
-    .home-latest-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
     .home-latest-item-body{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;}
     .home-latest-item-body strong{font-size:12.5px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .home-latest-item-body small{font-size:11px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}

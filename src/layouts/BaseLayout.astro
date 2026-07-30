@@ -226,6 +226,28 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
             <button type="button" class="theme-swatch" data-theme-value="pink" style="background:#FFF4F7" aria-label="粉紅色" title="粉紅色"></button>
           </div>
         </div>
+        <div class="mobile-drawer-section">
+          <div class="mobile-drawer-label">ホームの為替表示</div>
+          <div class="fx-pref-field">
+            <span class="fx-pref-field-label">通貨</span>
+            <select class="fx-pref-select" id="fxPrefCurrencySelect" aria-label="表示する通貨"></select>
+          </div>
+          <div class="fx-pref-field">
+            <span class="fx-pref-field-label">基準</span>
+            <div class="fx-pref-toggle" id="fxPrefBaseToggle" role="radiogroup" aria-label="基準通貨">
+              <button type="button" class="fx-pref-toggle-btn" data-base="JPY">円 → 外貨</button>
+              <button type="button" class="fx-pref-toggle-btn" data-base="FX">外貨 → 円</button>
+            </div>
+          </div>
+          <div class="fx-pref-field">
+            <span class="fx-pref-field-label">金額</span>
+            <div class="fx-pref-toggle" id="fxPrefAmountToggle" role="radiogroup" aria-label="金額">
+              <button type="button" class="fx-pref-toggle-btn" data-amount="100">100</button>
+              <button type="button" class="fx-pref-toggle-btn" data-amount="1000">1,000</button>
+              <button type="button" class="fx-pref-toggle-btn" data-amount="10000">10,000</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="mobile-drawer mobile-sheet-compact" id="mobileLangSheet" aria-hidden="true">
@@ -378,6 +400,94 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
         select?.addEventListener("change", () => applyTheme(select.value, true));
         swatches.forEach((btn) => {
           btn.addEventListener("click", () => applyTheme(btn.dataset.themeValue, true));
+        });
+      })();
+    </script>
+    <script is:inline>
+      (() => {
+        const CURRENCIES = [
+          { code: "USD", label: "アメリカドル" },
+          { code: "EUR", label: "ユーロ" },
+          { code: "GBP", label: "英ポンド" },
+          { code: "AUD", label: "豪ドル" },
+          { code: "CAD", label: "カナダドル" },
+          { code: "CNY", label: "人民元" },
+          { code: "KRW", label: "韓国ウォン" },
+          { code: "TWD", label: "台湾ドル" },
+          { code: "HKD", label: "香港ドル" },
+          { code: "SGD", label: "シンガポールドル" },
+          { code: "MYR", label: "マレーシアリンギット" },
+          { code: "VND", label: "ベトナムドン" },
+          { code: "THB", label: "タイバーツ" },
+          { code: "IDR", label: "インドネシアルピア" },
+          { code: "PHP", label: "フィリピンペソ" },
+        ];
+        const PREF_KEY = "sotocom_fx_pref_v1";
+        const PREF_EVENT = "sotocom:fx-pref-change";
+        const DEFAULT_PREF = { currency: "USD", base: "JPY", amount: 100 };
+
+        const currencySelect = document.getElementById("fxPrefCurrencySelect");
+        const baseToggle = document.getElementById("fxPrefBaseToggle");
+        const amountToggle = document.getElementById("fxPrefAmountToggle");
+        if (!currencySelect || !baseToggle || !amountToggle) return;
+
+        function loadPref() {
+          const pref = { ...DEFAULT_PREF };
+          try {
+            const raw = JSON.parse(localStorage.getItem(PREF_KEY));
+            if (raw && typeof raw === "object") {
+              if (raw.currency) pref.currency = raw.currency;
+              if (raw.base === "FX" || raw.base === "JPY") pref.base = raw.base;
+              if ([100, 1000, 10000].includes(raw.amount)) pref.amount = raw.amount;
+            }
+          } catch (e) {}
+          return pref;
+        }
+
+        function savePref(pref) {
+          try {
+            localStorage.setItem(PREF_KEY, JSON.stringify(pref));
+          } catch (e) {}
+          window.dispatchEvent(new CustomEvent(PREF_EVENT));
+        }
+
+        CURRENCIES.forEach((cur) => {
+          const opt = document.createElement("option");
+          opt.value = cur.code;
+          opt.textContent = cur.code + " " + cur.label;
+          currencySelect.appendChild(opt);
+        });
+
+        function applyPrefToUI(pref) {
+          currencySelect.value = pref.currency;
+          baseToggle.querySelectorAll(".fx-pref-toggle-btn").forEach((btn) => {
+            btn.classList.toggle("is-active", btn.dataset.base === pref.base);
+          });
+          amountToggle.querySelectorAll(".fx-pref-toggle-btn").forEach((btn) => {
+            btn.classList.toggle("is-active", Number(btn.dataset.amount) === pref.amount);
+          });
+        }
+
+        let pref = loadPref();
+        applyPrefToUI(pref);
+
+        currencySelect.addEventListener("change", () => {
+          pref = { ...pref, currency: currencySelect.value };
+          savePref(pref);
+        });
+        baseToggle.addEventListener("click", (e) => {
+          const btn = e.target.closest(".fx-pref-toggle-btn");
+          if (!btn) return;
+          pref = { ...pref, base: btn.dataset.base };
+          applyPrefToUI(pref);
+          savePref(pref);
+        });
+        amountToggle.addEventListener("click", (e) => {
+          const btn = e.target.closest(".fx-pref-toggle-btn");
+          if (!btn) return;
+          pref = { ...pref, amount: Number(btn.dataset.amount) };
+          applyPrefToUI(pref);
+          savePref(pref);
         });
       })();
     </script>

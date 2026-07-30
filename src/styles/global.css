@@ -1560,6 +1560,14 @@
     .theme-swatch{width:32px;height:32px;border-radius:var(--radius-full);border:2px solid var(--line);cursor:pointer;padding:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);touch-action:manipulation;}
     .theme-swatch.is-active{border-color:var(--accent);box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--accent);}
 
+    .fx-pref-field{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+    .fx-pref-field:last-child{margin-bottom:0;}
+    .fx-pref-field-label{flex:0 0 auto;font-size:12px;font-weight:700;color:var(--ink-soft);}
+    .fx-pref-select{flex:0 0 auto;max-width:60%;border:1px solid var(--line);background:var(--white);color:var(--ink);padding:6px 8px;font:700 12px "JetBrains Mono",monospace;border-radius:var(--radius-xs);touch-action:manipulation;}
+    .fx-pref-toggle{display:flex;gap:6px;}
+    .fx-pref-toggle-btn{border:1px solid var(--line);background:var(--white);color:var(--ink-soft);padding:6px 10px;border-radius:var(--radius-pill);cursor:pointer;font:700 11px "JetBrains Mono",monospace;touch-action:manipulation;}
+    .fx-pref-toggle-btn.is-active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
     .mobile-lang-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
     .mobile-lang-option{
       padding:10px 8px;font:inherit;font-size:13px;font-weight:700;color:var(--ink);
@@ -1626,8 +1634,8 @@
 .home-quick-nav-icon svg{width:21px;height:21px;stroke:#fff;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 .home-quick-nav-label{font-size:11.5px;font-weight:700;color:var(--ink);text-align:center;line-height:1.35;}
 .home-quick-nav-label small{display:block;font-size:8.5px;font-weight:500;letter-spacing:.06em;color:var(--ink-soft);font-family:"JetBrains Mono",monospace;margin-top:2px;}
-@media(max-width:860px){.home-quick-nav-grid{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:14px;}}
-@media(max-width:520px){.home-quick-nav-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-quick-nav-icon{width:42px;height:42px;}.home-quick-nav-icon svg{width:18px;height:18px;}}
+@media(max-width:860px){.home-quick-nav-grid{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:14px;}.home-quick-nav-item--bar{grid-column:1/-1;flex-direction:row;justify-content:center;gap:14px;padding:12px 16px;}.home-quick-nav-item--bar .home-quick-nav-label{text-align:left;}}
+@media(max-width:520px){.home-quick-nav-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.home-quick-nav-icon{width:42px;height:42px;}.home-quick-nav-icon svg{width:18px;height:18px;}.home-quick-nav-item--bar .home-quick-nav-icon{width:42px;height:42px;}.home-quick-nav-item--bar .home-quick-nav-icon svg{width:18px;height:18px;}}
 .home-food-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:6px;}
 .home-food-photo{position:relative;display:block;aspect-ratio:1/1;overflow:hidden;border-radius:var(--radius-sm);border:1px solid var(--line);text-decoration:none;background:var(--paper-2);}
 .home-food-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
@@ -1685,6 +1693,9 @@
 .home-fx-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line-soft);padding-bottom:10px;margin-bottom:12px;}
 .home-fx-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink);}
 .home-fx-title small{display:block;font-size:9.5px;font-weight:500;letter-spacing:.08em;color:var(--ink-soft);font-family:"JetBrains Mono",monospace;margin-top:2px;}
+.home-fx-title-text{display:flex;flex-direction:column;gap:3px;}
+.home-fx-compact-rate{display:none;font:700 11px "JetBrains Mono",monospace;font-variant-numeric:tabular-nums;color:var(--accent);letter-spacing:.01em;}
+.home-fx-card.is-collapsed .home-fx-compact-rate{display:block;}
 .home-fx-flag{display:inline-flex;flex:0 0 auto;line-height:0;border-radius:var(--radius-xs);overflow:hidden;box-shadow:0 0 0 1px var(--line);}
 .home-fx-flag-img{display:block;width:20px;height:15px;object-fit:cover;}
 .home-fx-flag-fallback{display:flex;align-items:center;justify-content:center;width:20px;height:15px;background:var(--paper-2);color:var(--ink-soft);font:700 7.5px "JetBrains Mono",monospace;letter-spacing:.02em;}
