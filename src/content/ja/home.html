@@ -18,30 +18,49 @@
             <span>今日の為替レート</span>
           </div>
           <div class="home-fx-head-actions">
+            <button type="button" class="home-fx-toggle-btn" id="homeFxToggleBtn" aria-label="レート一覧の表示切替" aria-expanded="true" aria-controls="homeFxBody">
+              <span class="home-fx-toggle-label">レート一覧</span>
+              <span class="home-fx-toggle-icon" aria-hidden="true">▾</span>
+            </button>
             <button type="button" class="home-fx-swap-btn" id="homeFxSwapBtn" aria-label="円と外貨を入れ替え">
               <span class="home-fx-swap-from" id="homeFxSwapFrom">¥ 円</span>
               <span class="home-fx-swap-icon">⇄</span>
               <span class="home-fx-swap-to" id="homeFxSwapTo">外貨</span>
             </button>
-            <button type="button" class="home-fx-calc-btn" id="homeFxCalcBtn" aria-label="電卓を開く">🖩</button>
+            <button type="button" class="home-fx-calc-btn" id="homeFxCalcBtn" aria-label="電卓を開く">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4.5" y="2.5" width="15" height="19" rx="2.2"/>
+                <line x1="7.3" y1="6.4" x2="16.7" y2="6.4"/>
+                <circle cx="7.6" cy="11.3" r="0.9" fill="currentColor" stroke="none"/>
+                <circle cx="12" cy="11.3" r="0.9" fill="currentColor" stroke="none"/>
+                <circle cx="16.4" cy="11.3" r="0.9" fill="currentColor" stroke="none"/>
+                <circle cx="7.6" cy="15.2" r="0.9" fill="currentColor" stroke="none"/>
+                <circle cx="12" cy="15.2" r="0.9" fill="currentColor" stroke="none"/>
+                <circle cx="16.4" cy="15.2" r="0.9" fill="currentColor" stroke="none"/>
+                <circle cx="7.6" cy="19" r="0.9" fill="currentColor" stroke="none"/>
+                <circle cx="12" cy="19" r="0.9" fill="currentColor" stroke="none"/>
+              </svg>
+            </button>
           </div>
         </div>
-        <div class="home-fx-amount-toggle" id="homeFxAmountToggle"></div>
-        <div class="home-fx-grid" id="homeFxGrid">
-          <div class="home-fx-loading">為替レートを取得中…</div>
-        </div>
-        <div class="home-fx-custom" id="homeFxCustom">
-          <div class="home-fx-custom-side">
-            <input type="number" inputmode="decimal" class="home-fx-custom-input" id="homeFxCustomAmount" value="5000000" min="0" step="any" aria-label="金額">
-            <select class="home-fx-custom-select" id="homeFxCustomFrom" aria-label="変換元の通貨"></select>
+        <div class="home-fx-body" id="homeFxBody">
+          <div class="home-fx-amount-toggle" id="homeFxAmountToggle"></div>
+          <div class="home-fx-grid" id="homeFxGrid">
+            <div class="home-fx-loading">為替レートを取得中…</div>
           </div>
-          <span class="home-fx-custom-eq">≈</span>
-          <div class="home-fx-custom-side home-fx-custom-side--result">
-            <span class="home-fx-custom-result" id="homeFxCustomResult">-</span>
-            <select class="home-fx-custom-select" id="homeFxCustomTo" aria-label="変換先の通貨"></select>
+          <div class="home-fx-custom" id="homeFxCustom">
+            <div class="home-fx-custom-side">
+              <input type="number" inputmode="decimal" class="home-fx-custom-input" id="homeFxCustomAmount" value="5000000" min="0" step="any" aria-label="金額">
+              <select class="home-fx-custom-select" id="homeFxCustomFrom" aria-label="変換元の通貨"></select>
+            </div>
+            <span class="home-fx-custom-eq">≈</span>
+            <div class="home-fx-custom-side home-fx-custom-side--result">
+              <span class="home-fx-custom-result" id="homeFxCustomResult">-</span>
+              <select class="home-fx-custom-select" id="homeFxCustomTo" aria-label="変換先の通貨"></select>
+            </div>
           </div>
+          <div class="home-fx-foot" id="homeFxFoot">&nbsp;</div>
         </div>
-        <div class="home-fx-foot" id="homeFxFoot">&nbsp;</div>
       </div>
     </div>
 
@@ -155,6 +174,8 @@
       var grid = document.getElementById("homeFxGrid");
       var foot = document.getElementById("homeFxFoot");
       var toggle = document.getElementById("homeFxAmountToggle");
+      var body = document.getElementById("homeFxBody");
+      var toggleBtn = document.getElementById("homeFxToggleBtn");
       var swapBtn = document.getElementById("homeFxSwapBtn");
       var swapFrom = document.getElementById("homeFxSwapFrom");
       var swapTo = document.getElementById("homeFxSwapTo");
@@ -340,6 +361,18 @@
         render();
       });
 
+      if (body && toggleBtn) {
+        function setFxCollapsed(collapsed) {
+          body.hidden = collapsed;
+          toggleBtn.classList.toggle("is-collapsed", collapsed);
+          toggleBtn.setAttribute("aria-expanded", String(!collapsed));
+        }
+        setFxCollapsed(window.matchMedia("(max-width:640px)").matches);
+        toggleBtn.addEventListener("click", function () {
+          setFxCollapsed(!body.hidden);
+        });
+      }
+
       function showError() {
         grid.innerHTML = '<div class="home-fx-loading">為替レートを取得できませんでした</div>';
       }
@@ -504,9 +537,8 @@
   <div class="card home-latest-section" style="margin-bottom:18px;">
     <div class="home-latest-head">
       <div class="section-title" style="margin:0;">最新の投稿をチェック</div>
-      <a class="home-latest-more" href="/ja/listings/">すべて見る →</a>
     </div>
-    <div class="home-latest-list">
+    <div class="home-latest-list" id="homeLatestList">
       <a class="home-latest-item" href="/ja/help-request/">
         <span class="home-latest-badge home-latest-badge--help">助け合い</span>
         <span class="home-latest-item-body">
@@ -514,6 +546,7 @@
           <small>杉並区 高円寺エリア ・ 謝礼あり（詳細は相談）</small>
         </span>
         <span class="home-latest-date">07/29 21:40</span>
+        <span class="home-latest-arrow" aria-hidden="true">→</span>
       </a>
       <a class="home-latest-item" href="/ja/listings/">
         <span class="home-latest-badge home-latest-badge--tenant">房東直租</span>
@@ -522,6 +555,7 @@
           <small>月租 85,000円（不含管理費）</small>
         </span>
         <span class="home-latest-date">07/28 18:05</span>
+        <span class="home-latest-arrow" aria-hidden="true">→</span>
       </a>
       <a class="home-latest-item home-latest-item--market" href="/ja/used-market/">
         <span class="home-latest-badge home-latest-badge--market">中古市場</span>
@@ -531,6 +565,7 @@
         </span>
         <span class="home-latest-thumb"><img src="https://images.unsplash.com/photo-1549497538-303791108f95?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy"></span>
         <span class="home-latest-date">07/27 09:15</span>
+        <span class="home-latest-arrow" aria-hidden="true">→</span>
       </a>
       <a class="home-latest-item" href="/ja/help-request/">
         <span class="home-latest-badge home-latest-badge--help">助け合い</span>
@@ -539,6 +574,7 @@
           <small>足立区 北千住エリア ・ 謝礼 3,000円＋飲み物</small>
         </span>
         <span class="home-latest-date">07/26 12:50</span>
+        <span class="home-latest-arrow" aria-hidden="true">→</span>
       </a>
       <a class="home-latest-item" href="/ja/events/">
         <span class="home-latest-badge home-latest-badge--event">イベント</span>
@@ -547,6 +583,7 @@
           <small>渋谷 カフェアリス ・ 毎週金曜日 19:00〜21:00</small>
         </span>
         <span class="home-latest-date">07/25 08:30</span>
+        <span class="home-latest-arrow" aria-hidden="true">→</span>
       </a>
       <a class="home-latest-item" href="/ja/listings/">
         <span class="home-latest-badge home-latest-badge--share">合租物件</span>
@@ -555,6 +592,7 @@
           <small>月租 45,000円（含水電網路）</small>
         </span>
         <span class="home-latest-date">07/24 16:20</span>
+        <span class="home-latest-arrow" aria-hidden="true">→</span>
       </a>
       <a class="home-latest-item home-latest-item--market" href="/ja/used-market/">
         <span class="home-latest-badge home-latest-badge--market">中古市場</span>
@@ -564,9 +602,33 @@
         </span>
         <span class="home-latest-thumb"><img src="https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&amp;fit=crop&amp;w=300&amp;q=60" alt="" loading="lazy"></span>
         <span class="home-latest-date">07/23 11:00</span>
+        <span class="home-latest-arrow" aria-hidden="true">→</span>
       </a>
     </div>
   </div>
+
+  <script>
+    (function () {
+      var list = document.getElementById("homeLatestList");
+      if (!list) return;
+      function isMobile() {
+        return window.matchMedia("(max-width:640px)").matches;
+      }
+      list.addEventListener("click", function (e) {
+        if (!isMobile()) return;
+        var item = e.target.closest(".home-latest-item");
+        if (!item) return;
+        if (item.classList.contains("is-expanded")) {
+          if (!e.target.closest(".home-latest-arrow")) e.preventDefault();
+          return;
+        }
+        e.preventDefault();
+        var expanded = list.querySelectorAll(".home-latest-item.is-expanded");
+        for (var i = 0; i < expanded.length; i++) expanded[i].classList.remove("is-expanded");
+        item.classList.add("is-expanded");
+      });
+    })();
+  </script>
 
   <div class="card home-pros-section" style="margin-bottom:18px;">
     <div class="home-pros-head">
@@ -728,11 +790,19 @@
 
   <style>
     .home-latest-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;justify-content:space-between;margin-bottom:12px;}
-    .home-latest-more{font-size:11px;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap;}
     .home-latest-list{display:grid;grid-template-columns:1fr;gap:8px;}
     @media (min-width:640px){ .home-latest-list{grid-template-columns:1fr 1fr;} }
     .home-latest-item{display:flex;align-items:center;gap:10px;border:1px solid var(--line,#ddd6c5);padding:9px 10px;text-decoration:none;color:inherit;background:#fff;min-width:0;}
     .home-latest-item:hover{border-color:var(--accent);}
+    .home-latest-arrow{display:none;}
+    @media (max-width:640px){
+      .home-latest-item:nth-child(n+6){display:none;}
+      .home-latest-item{transition:transform .15s ease,box-shadow .15s ease,background .15s ease;}
+      .home-latest-item.is-expanded{transform:scale(1.03);box-shadow:0 4px 16px rgba(0,0,0,.14);background:var(--paper-2,#f4f1e8);position:relative;z-index:1;}
+      .home-latest-item.is-expanded .home-latest-item-body strong,
+      .home-latest-item.is-expanded .home-latest-item-body small{white-space:normal;overflow:visible;text-overflow:clip;}
+      .home-latest-item.is-expanded .home-latest-arrow{display:flex;align-items:center;justify-content:center;flex:none;width:24px;height:24px;margin-left:2px;color:#fff;background:var(--accent);border-radius:50%;font-size:13px;font-weight:700;}
+    }
     .home-latest-badge{flex:none;font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:var(--radius-pill);color:#fff;background:var(--accent);white-space:nowrap;}
     .home-latest-badge--tenant{background:var(--accent);}
     .home-latest-badge--share{background:#447c89;}
