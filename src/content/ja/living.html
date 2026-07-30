@@ -33,7 +33,7 @@
     <div class="portal-alert" id="livingAlert"><strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。</div>
     <div class="card" style="margin-bottom:16px;">
       <div class="section-title">保存した設定（比較用）</div>
-      <div id="livingConfigLoaded" style="display:none;font-size:11px;margin-bottom:8px;padding:4px 10px;border-radius:6px;background:var(--accent-soft,#eef4ff);"></div>
+      <div id="livingConfigLoaded" style="display:none;font-size:11px;margin-bottom:8px;padding:4px 10px;border-radius:var(--radius-sm);background:var(--accent-soft,#eef4ff);"></div>
       <div class="apply-fields" style="margin-bottom:10px;">
         <div class="apply-field full"><label>設定名</label><div class="input-wrap"><input type="text" id="livingConfigName" placeholder="例：新居プラン" maxlength="30"></div></div>
       </div>
@@ -368,7 +368,7 @@ function livingRenderConfigList(){
   const list=livingReadConfigs();const el=document.getElementById("livingConfigList");
   if(!list.length){el.innerHTML='<div style="font-size:12px;color:var(--muted,#888);">保存された設定はまだありません。</div>';livingUpdateLoadedBanner();return;}
   el.innerHTML=list.map((c,i)=>`
-    <div style="display:flex;flex-direction:column;gap:6px;padding:8px 10px;border:1px solid ${i===livingLoadedIndex?"var(--accent,#3b6fd6)":"var(--border,#e5e5e5)"};border-radius:8px;${i===livingLoadedIndex?"background:var(--accent-soft,#eef4ff);":""}">
+    <div style="display:flex;flex-direction:column;gap:6px;padding:8px 10px;border:1px solid ${i===livingLoadedIndex?"var(--accent,#3b6fd6)":"var(--border,#e5e5e5)"};border-radius:var(--radius-sm);${i===livingLoadedIndex?"background:var(--accent-soft,#eef4ff);":""}">
       <div style="min-width:0;">
         <div style="font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.name}</div>
         <div style="font-size:11px;color:var(--muted,#888);">残額: ${toolYen(livingConfigBalance(c))}</div>
