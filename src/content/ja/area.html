@@ -54,9 +54,7 @@
     <div class="area-regions" id="areaResults"></div>
     <div class="apply-actions">
       <button type="button" class="secondary-btn" id="areaResetBtn">重設 Reset</button>
-      <button type="button" class="btn-copy" id="areaCopyBtn">📋 複製全部結果 Copy all</button>
     </div>
-    <div class="area-copy-status" id="areaCopyStatus"></div>
     <div class="area-note">※ 所有結果均先換算為平方公尺再計算。日本「畳・帖」以 1畳＝1.62㎡概算，日本與台灣的坪採 1坪＝400/121㎡。正式契約與登記請以原始㎡數及官方資料為準。</div>
   </div><!-- /page-area -->
 <script>
@@ -151,40 +149,12 @@ function areaRender(){
     </section>`).join("");
 }
 
-function areaCopyText(){
-  const sqm = areaSquareMetres();
-  const source = AREA_UNIT_MAP[document.getElementById("areaSourceUnit").value];
-  const amount = Number(document.getElementById("areaSourceValue").value) || 0;
-  const sourceRegion = source ? `${source.region} / ${source.regionEnglish}` : "—";
-  const lines = ["面積單位換算結果 / International Area Conversion",`原始地區：${sourceRegion}`,`原始面積：${areaFormat(amount)} ${source ? source.symbol : ""}`,`基準面積：${areaFormat(sqm)} m²`,""];
-  AREA_REGIONS.forEach(group => {
-    lines.push(`【${group.region} / ${group.english}】`);
-    group.units.forEach(unit => lines.push(`${unit.name}：${areaFormat(sqm / unit.sqm)} ${unit.symbol}`));
-    lines.push("");
-  });
-  lines.push("※ 畳・帖為1畳＝1.62㎡的概算值；正式資料請以原始㎡數為準。");
-  return lines.join("\n");
-}
-
 document.getElementById("areaSourceValue").addEventListener("input",areaRender);
 document.getElementById("areaSourceUnit").addEventListener("change",areaRender);
 document.getElementById("areaResetBtn").addEventListener("click",() => {
   document.getElementById("areaSourceValue").value = "60";
   document.getElementById("areaSourceUnit").value = "jp_sqm";
-  document.getElementById("areaCopyStatus").textContent = "";
   areaRender();
-});
-document.getElementById("areaCopyBtn").addEventListener("click",() => {
-  const status = document.getElementById("areaCopyStatus");
-  const done = () => {
-    status.textContent = "已複製全部地區的換算結果 ✓";
-    setTimeout(() => { status.textContent = ""; },1800);
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(areaCopyText()).then(done).catch(() => fallbackCopy(areaCopyText(),done));
-  } else {
-    fallbackCopy(areaCopyText(),done);
-  }
 });
 areaRender();
 
