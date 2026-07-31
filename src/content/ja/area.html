@@ -1,15 +1,15 @@
 <div id="page-area" class="page-view active theme-area cat-realestate">
-    <div class="eyebrow">面積單位換算器</div>
+    <div class="eyebrow">面積単位換算ツール</div>
     <div class="card" style="margin-bottom:16px;">
-      <div class="section-title">輸入面積 Source Area</div>
+      <div class="section-title">面積を入力 Source Area</div>
       <div class="area-input-panel">
         <div class="area-input-fields">
           <div class="apply-field">
-            <label>面積數值 Area value</label>
+            <label>面積の数値 Area value</label>
             <input class="area-source-value" type="number" id="areaSourceValue" value="60" min="0" step="any" inputmode="decimal">
           </div>
           <div class="apply-field">
-            <label>原始單位 Source unit<span class="required-mark">*</span></label>
+            <label>元の単位 Source unit<span class="required-mark">*</span></label>
             <select id="areaSourceUnit">
               <optgroup label="日本 Japan">
                 <option value="jp_sqm">日本｜平方メートル（㎡）</option>
@@ -17,44 +17,44 @@
                 <option value="jp_jo">日本｜畳・帖（概算）</option>
               </optgroup>
               <optgroup label="香港 Hong Kong">
-                <option value="hk_sqft">香港｜平方呎（sq ft）</option>
-                <option value="hk_sqm">香港｜平方米（m²）</option>
+                <option value="hk_sqft">香港｜平方フィート・呎（sq ft）</option>
+                <option value="hk_sqm">香港｜平方メートル（m²）</option>
               </optgroup>
-              <optgroup label="中國 China">
-                <option value="cn_sqm">中國｜平方米（㎡）</option>
+              <optgroup label="中国 China">
+                <option value="cn_sqm">中国｜平方メートル（㎡）</option>
               </optgroup>
-              <optgroup label="台灣 Taiwan">
-                <option value="tw_sqm">台灣｜平方公尺（㎡）</option>
-                <option value="tw_ping">台灣｜坪</option>
+              <optgroup label="台湾 Taiwan">
+                <option value="tw_sqm">台湾｜平方メートル（㎡）</option>
+                <option value="tw_ping">台湾｜坪</option>
               </optgroup>
-              <optgroup label="歐美 US / UK / Europe">
-                <option value="intl_sqft">美國・英國｜Square foot（sq ft）</option>
-                <option value="intl_sqm">歐洲・國際｜Square metre（m²）</option>
+              <optgroup label="欧米 US / UK / Europe">
+                <option value="intl_sqft">アメリカ・イギリス｜Square foot（sq ft）</option>
+                <option value="intl_sqm">ヨーロッパ・国際｜Square metre（m²）</option>
               </optgroup>
-              <optgroup label="韓國 South Korea">
-                <option value="kr_sqm">韓國｜제곱미터（㎡）</option>
-                <option value="kr_pyeong">韓國｜평（坪）</option>
+              <optgroup label="韓国 South Korea">
+                <option value="kr_sqm">韓国｜제곱미터（㎡）</option>
+                <option value="kr_pyeong">韓国｜평（坪）</option>
               </optgroup>
-              <optgroup label="東南亞 Southeast Asia">
-                <option value="sea_sqft">新加坡・馬來西亞｜Square foot（sq ft）</option>
-                <option value="sea_sqm">新加坡・馬來西亞｜Square metre（m²）</option>
-                <option value="th_sqm">泰國｜ตารางเมตร（m²）</option>
-                <option value="th_sqw">泰國｜ตารางวา（Square wah）</option>
+              <optgroup label="東南アジア Southeast Asia">
+                <option value="sea_sqft">シンガポール・マレーシア｜Square foot（sq ft）</option>
+                <option value="sea_sqm">シンガポール・マレーシア｜Square metre（m²）</option>
+                <option value="th_sqm">タイ｜ตารางเมตร（m²）</option>
+                <option value="th_sqw">タイ｜ตารางวา（Square wah）</option>
                 <option value="vn_sqm">ベトナム｜Mét vuông（m²）</option>
               </optgroup>
             </select>
           </div>
         </div>
         <div class="area-base-summary">
-          <span class="label">國際基準面積 BASE AREA</span>
+          <span class="label">基準面積 BASE AREA</span>
           <span class="value" id="areaBaseSqm">60 m²</span>
         </div>
       </div>
     </div>
 
-    <div class="section-title">各地區換算結果 Regional Results</div>
+    <div class="section-title">地域別の換算結果 Regional Results</div>
     <div class="area-regions" id="areaResults"></div>
-    <div class="area-note">※ 所有結果均先換算為平方公尺再計算。日本「畳・帖」以 1畳＝1.62㎡概算，日本與台灣的坪採 1坪＝400/121㎡。正式契約與登記請以原始㎡數及官方資料為準。</div>
+    <div class="area-note">※ すべての結果は、いったん平方メートルへ換算してから計算しています。日本の「畳・帖」は 1畳＝1.62㎡ で概算し、日本と台湾の坪は 1坪＝400/121㎡ を使用しています。正式な契約や登記の際は、元の㎡数と公的な資料をご確認ください。</div>
   </div><!-- /page-area -->
 <script>
 /* ================= International Area Converter ================= */
@@ -68,43 +68,43 @@ const AREA_REGIONS = [
   },
   {
     region:"香港",english:"Hong Kong",units:[
-      {id:"hk_sqft",name:"平方呎",english:"Square foot",symbol:"sq ft",sqm:0.09290304},
-      {id:"hk_sqm",name:"平方米",english:"Square metre",symbol:"m²",sqm:1}
+      {id:"hk_sqft",name:"平方フィート（呎）",english:"Square foot",symbol:"sq ft",sqm:0.09290304},
+      {id:"hk_sqm",name:"平方メートル",english:"Square metre",symbol:"m²",sqm:1}
     ]
   },
   {
-    region:"中國",english:"China",units:[
-      {id:"cn_sqm",name:"平方米",english:"Square metre",symbol:"㎡",sqm:1}
+    region:"中国",english:"China",units:[
+      {id:"cn_sqm",name:"平方メートル",english:"Square metre",symbol:"㎡",sqm:1}
     ]
   },
   {
-    region:"台灣",english:"Taiwan",units:[
-      {id:"tw_sqm",name:"平方公尺",english:"Square metre",symbol:"㎡",sqm:1},
+    region:"台湾",english:"Taiwan",units:[
+      {id:"tw_sqm",name:"平方メートル",english:"Square metre",symbol:"㎡",sqm:1},
       {id:"tw_ping",name:"坪",english:"Ping",symbol:"坪",sqm:400/121}
     ]
   },
   {
-    region:"美國・英國",english:"United States / United Kingdom",units:[
-      {id:"intl_sqft",name:"Square foot",english:"平方英尺",symbol:"sq ft",sqm:0.09290304}
+    region:"アメリカ・イギリス",english:"United States / United Kingdom",units:[
+      {id:"intl_sqft",name:"平方フィート",english:"Square foot",symbol:"sq ft",sqm:0.09290304}
     ]
   },
   {
-    region:"歐洲・國際",english:"Europe / International",units:[
-      {id:"intl_sqm",name:"Square metre",english:"平方米",symbol:"m²",sqm:1}
+    region:"ヨーロッパ・国際",english:"Europe / International",units:[
+      {id:"intl_sqm",name:"平方メートル",english:"Square metre",symbol:"m²",sqm:1}
     ]
   },
   {
-    region:"韓國",english:"South Korea",units:[
+    region:"韓国",english:"South Korea",units:[
       {id:"kr_sqm",name:"제곱미터",english:"Square metre",symbol:"㎡",sqm:1},
       {id:"kr_pyeong",name:"평",english:"Pyeong",symbol:"평",sqm:400/121}
     ]
   },
   {
-    region:"東南亞",english:"Southeast Asia",units:[
-      {id:"sea_sqft",name:"新加坡・馬來西亞 Square foot",english:"平方英尺",symbol:"sq ft",sqm:0.09290304},
-      {id:"sea_sqm",name:"新加坡・馬來西亞 Square metre",english:"平方米",symbol:"m²",sqm:1},
-      {id:"th_sqm",name:"泰國 ตารางเมตร",english:"Square metre",symbol:"m²",sqm:1},
-      {id:"th_sqw",name:"泰國 ตารางวา",english:"Square wah",symbol:"ตร.ว.",sqm:4},
+    region:"東南アジア",english:"Southeast Asia",units:[
+      {id:"sea_sqft",name:"シンガポール・マレーシア 平方フィート",english:"Square foot",symbol:"sq ft",sqm:0.09290304},
+      {id:"sea_sqm",name:"シンガポール・マレーシア 平方メートル",english:"Square metre",symbol:"m²",sqm:1},
+      {id:"th_sqm",name:"タイ ตารางเมตร",english:"Square metre",symbol:"m²",sqm:1},
+      {id:"th_sqw",name:"タイ ตารางวา",english:"Square wah",symbol:"ตร.ว.",sqm:4},
       {id:"vn_sqm",name:"ベトナム Mét vuông",english:"Square metre",symbol:"m²",sqm:1}
     ]
   }
@@ -142,7 +142,7 @@ function areaRender(){
       <div class="area-region-head"><strong>${group.region}</strong><span>${group.english}</span></div>
       ${group.units.map(unit => `
         <div class="area-result-row">
-          <div class="area-result-name">${unit.name}<small>${group.region}｜${unit.english}</small></div>
+          <div class="area-result-name">${unit.name}<small data-no-i18n>${group.region}｜${unit.english}</small></div>
           <div class="area-result-value">${areaFormat(sqm / unit.sqm)} ${unit.symbol}</div>
         </div>`).join("")}
     </section>`).join("");
