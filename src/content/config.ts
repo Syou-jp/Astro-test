@@ -49,6 +49,7 @@ const restaurants = defineCollection({
     reservation: z.string().optional(),
     priceRange: z.string().optional(),
     dietary: z.string().optional(),
+    languages: z.string().optional(),
     payment: z.array(z.string()).default([]),
     website: z.string().optional(),
     instagram: z.string().optional(),

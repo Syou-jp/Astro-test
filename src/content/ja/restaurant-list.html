@@ -208,7 +208,8 @@
           r.phone ? ["電話番号", r.phone] : null,
           r.priceRange ? ["価格帯", r.priceRange] : null,
           r.dietary ? ["食事制限への対応", r.dietary] : null,
-          r.payment && r.payment.length ? ["支払い方法", r.payment.join("、")] : null
+          r.payment && r.payment.length ? ["支払い方法", r.payment.join("、")] : null,
+          r.languages ? ["対応言語", r.languages] : null
         ].filter(Boolean);
         var infoSection = infoRows.length
           ? '<div class="rl-m-section"><h4>基本情報</h4><dl class="rl-m-info">' +

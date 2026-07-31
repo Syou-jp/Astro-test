@@ -18,6 +18,7 @@ photos:
   - /images/restaurants/amatru-hair-omotesando/2.jpg
   - /images/restaurants/amatru-hair-omotesando/3.jpg
 priceRange: カット・カラーなど詳細はLINEにてお問い合わせください
+languages: 日本語、中国語
 payment:
   - 現金
   - クレジットカード
