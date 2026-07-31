@@ -18,11 +18,7 @@ photos:
 priceRange: カット・カラーなど詳細はLINEにてお問い合わせください
 payment:
   - 現金
-  - Visa
-  - Mastercard
-  - JCB
-  - Diners Club
-  - American Express
+  - クレジットカード
 instagram: 'https://www.instagram.com/amatru414/'
 line: 'https://page.line.me/769xndfe'
 ---
