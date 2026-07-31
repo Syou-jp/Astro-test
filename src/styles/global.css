@@ -1575,17 +1575,31 @@
   .ward-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:18px;align-items:stretch;margin-bottom:18px;}
   .ward-hero h2{font-family:"Shippori Mincho",serif;font-size:25px;line-height:1.35;margin:8px 0 9px;letter-spacing:.03em;}
   .ward-hero p{font-size:12.5px;line-height:1.85;color:var(--ink-soft);margin:0;}
-  .ward-carry-box{border:1px solid var(--line);background:var(--paper-2);padding:17px 18px;}
+  .ward-carry-box{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--paper-2);padding:17px 18px;}
   .ward-carry-box strong{display:block;font-size:13px;color:var(--accent);margin-bottom:8px;}
   .ward-carry-box ul{margin:0;padding-left:18px;font-size:11.5px;line-height:1.75;color:var(--ink-soft);}
+  .ward-region-picker{margin:0 0 18px;border:1px solid var(--line);border-radius:var(--radius-md);background:var(--white);padding:18px;box-shadow:var(--shadow-xs);}
+  .ward-region-picker-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,.32fr);gap:18px;align-items:end;}
+  .ward-region-picker h3{margin:8px 0 6px;font-size:16px;color:var(--ink);}
+  .ward-region-picker-head p{margin:0;font-size:11.5px;line-height:1.7;color:var(--ink-soft);}
+  .ward-region-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .ward-region-select-wrap{display:grid;gap:6px;font-size:10.5px;font-weight:700;color:var(--accent);}
+  .ward-region-select-wrap select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--paper);color:var(--ink);padding:9px 11px;font:inherit;font-size:13px;cursor:pointer;}
+  .ward-region-result{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-top:15px;padding:14px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--paper-2);}
+  .ward-region-result small{display:block;font-size:9.5px;color:var(--ink-soft);letter-spacing:.08em;}
+  .ward-region-result strong{display:block;margin-top:3px;font-size:15px;color:var(--accent);}
+  .ward-region-result p{margin:4px 0 0;font-size:11px;line-height:1.65;color:var(--ink-soft);}
+  .ward-region-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .ward-region-actions a{display:flex;width:100%;min-width:0;align-items:center;justify-content:center;text-decoration:none;white-space:nowrap;}
+  .ward-region-note{margin:10px 0 0!important;font-size:10px!important;line-height:1.65!important;color:var(--ink-soft)!important;}
   .ward-icon-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px;}
-  .ward-icon-grid a{display:flex;flex-direction:column;justify-content:center;gap:5px;border:1px solid var(--line);background:var(--white);color:var(--ink);text-decoration:none;padding:12px;min-height:82px;}
+  .ward-icon-grid a{display:flex;flex-direction:column;justify-content:center;gap:5px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);color:var(--ink);text-decoration:none;padding:12px;min-height:82px;}
   .ward-icon-grid a:hover{border-color:var(--accent);transform:translateY(-1px);}
   .ward-icon-grid b{font-size:12.5px;line-height:1.35;}
   .ward-icon-grid small{display:block;font-size:10px;line-height:1.45;color:var(--ink-soft);}
   .ward-section{margin-top:20px;}
   .ward-procedure-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-  .ward-procedure-card,.ward-note-card,.ward-tax-panel,.ward-form-card{border:1px solid var(--line);background:var(--white);padding:17px;min-width:0;}
+  .ward-procedure-card,.ward-note-card,.ward-tax-panel,.ward-form-card{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);padding:17px;min-width:0;}
   .ward-card-head{margin-bottom:10px;}
   .ward-card-head h3,.ward-note-card h3,.ward-tax-panel h3,.ward-form-card h3{margin:0;font-size:15px;color:var(--ink);line-height:1.45;}
   .ward-procedure-card p,.ward-note-card p,.ward-tax-panel p{font-size:11.5px;line-height:1.75;color:var(--ink-soft);margin:0 0 10px;}
@@ -1593,13 +1607,14 @@
   .ward-procedure-card dt{font-weight:700;color:var(--accent);}
   .ward-procedure-card dd{margin:0;color:var(--ink-soft);}
   .ward-source-link{display:inline-flex;margin-top:12px;font-size:10.5px;font-weight:700;color:var(--accent);text-decoration:none;border-bottom:1px solid currentColor;}
-  .ward-warning{border-left:4px solid var(--seal);background:rgba(168,72,47,.07);padding:11px 13px;margin-top:12px;font-size:11.5px;line-height:1.7;color:var(--ink-soft);}
+  .ward-warning{border-left:4px solid var(--seal);border-radius:var(--radius-sm);background:rgba(168,72,47,.07);padding:11px 13px;margin-top:12px;font-size:11.5px;line-height:1.7;color:var(--ink-soft);}
   .ward-form-guide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
   .ward-form-card .portal-table{margin-top:10px;}
+  #page-ward-office .portal-table{border:1px solid var(--line);border-radius:var(--radius-sm);border-collapse:separate;border-spacing:0;overflow:hidden;}
   .ward-form-card .portal-table th{width:104px;}
   .ward-mini-note{font-size:11px;line-height:1.7;color:var(--seal);margin:12px 0 0;}
   .ward-phrase-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
-  .ward-phrase-grid div{border:1px solid var(--line);background:var(--white);padding:12px 14px;}
+  .ward-phrase-grid div{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);padding:12px 14px;}
   .ward-phrase-grid b{display:block;font-size:12px;}
   .ward-phrase-grid small{display:block;font-size:10.5px;color:var(--ink-soft);line-height:1.5;margin-top:3px;}
   .internet-hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:18px;align-items:stretch;margin-bottom:18px;}
@@ -1621,8 +1636,42 @@
   .internet-check-grid{display:grid;gap:8px;}
   .internet-check-grid label{display:flex;align-items:flex-start;gap:8px;border:1px solid var(--line);background:var(--white);padding:10px 12px;font-size:11.5px;line-height:1.55;cursor:pointer;}
   .internet-check-grid input{width:16px;height:16px;accent-color:var(--accent);flex:0 0 auto;margin-top:2px;}
+  #page-bank .portal-table,
+  #page-sim .portal-table,
+  #page-internet .portal-table,
+  #page-waste .portal-table,
+  #page-utilities .electric-breakdown{border:1px solid var(--line);border-radius:var(--radius-sm);border-collapse:separate;border-spacing:0;overflow:hidden;}
+  #page-internet .internet-summary,
+  #page-internet .internet-flow li,
+  #page-internet .internet-check-grid label,
+  #page-waste .waste-office,
+  #page-utilities .portal-card{border-radius:var(--radius-sm);}
+  #page-utilities .portal-card{border:1px solid var(--line);background:var(--white);padding:13px;}
+  #page-utilities .portal-alert,
+  #page-utilities .card,
+  #page-utilities .market-note,
+  #page-utilities .electric-stat,
+  #page-utilities .electric-company,
+  #page-utilities .electric-breakdown,
+  #page-utilities .btn-copy,
+  #page-utilities .util-doc-switch{border-radius:var(--radius-sm);}
+  #page-utilities .apply-field select{border-radius:var(--radius-sm);}
+  #page-utilities .apply-field .input-wrap{border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;background:var(--white);}
+  #page-utilities .apply-field .input-wrap input{border:0;border-radius:0;}
+  #page-utilities .apply-field .input-wrap > span,
+  #page-utilities .apply-field .input-wrap > span.unit-kwh{width:82px;min-width:82px;border:0;border-left:1px solid var(--line);border-radius:0;box-sizing:border-box;}
+  @media(min-width:861px){#page-bank .grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  #page-bank .bank-eligibility-table td:nth-child(3){text-align:justify;text-justify:inter-character;letter-spacing:.02em;}
+  @media(min-width:861px){
+    #page-bank .grid .portal-table{font-size:11.5px;}
+    #page-bank .bank-documents-table{table-layout:fixed;}
+    #page-bank .bank-documents-table th:first-child,
+    #page-bank .bank-documents-table td:first-child{width:38%;white-space:nowrap;}
+    #page-bank .bank-documents-table th:nth-child(2),
+    #page-bank .bank-documents-table td:nth-child(2){width:62%;white-space:normal;overflow-wrap:break-word;}
+  }
   @media(max-width:860px){.business-workspace{grid-template-columns:1fr}.business-preview{min-height:0;padding:22px}.calc-kpi-grid{grid-template-columns:1fr}.expense-groups{grid-template-columns:1fr}}
-  @media(max-width:860px){.ward-hero,.ward-procedure-grid,.ward-form-guide,.ward-phrase-grid{grid-template-columns:1fr}.ward-icon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:860px){.ward-hero,.ward-procedure-grid,.ward-form-guide,.ward-phrase-grid,.ward-region-picker-head,.ward-region-result{grid-template-columns:1fr}.ward-icon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:860px){.visa-hero,.visa-callout-grid,.visa-doc-grid,.visa-warning-grid{grid-template-columns:1fr}.visa-hero h2{font-size:23px}}
   @media(max-width:860px){.internet-hero{grid-template-columns:1fr}.internet-hero h2{font-size:23px}.internet-provider-table{font-size:11px;}}
   @media(max-width:860px){.japanese-hero,.japanese-resource-grid,.japanese-choice-grid{grid-template-columns:1fr}.japanese-hero h2{font-size:23px}.japanese-check-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
