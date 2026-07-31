@@ -2168,7 +2168,10 @@
   .expert-cta-avatars .expert-cta-avatar{width:62px;height:62px;}
   .expert-cta-avatars .expert-cta-avatar + .expert-cta-avatar{margin-left:-18px;}
   .expert-cta-avatars{order:1;}
-  .expert-cta-body{order:2;flex:1 1 240px;}
+  /* The avatar stack is treated as its own row at these widths, rather than
+     squeezing copy alongside it. This keeps a clear visual separation even
+     when browser zoom or a narrow content column reduces the available space. */
+  .expert-cta-body{order:3;flex:0 0 100%;width:100%;}
   .expert-cta-label{font-size:12px;}
   .expert-cta-title{font-size:21px;}
   .expert-cta-name{font-size:12px;}
@@ -2180,7 +2183,7 @@
   .expert-cta-stat-num{font-size:27px;}
   .expert-cta-stat-num small{font-size:15px;}
   .expert-cta-stat-label{font-size:13px;}
-  .expert-cta-arrow{order:3;font-size:26px;}
+  .expert-cta-arrow{order:2;margin-left:auto;padding-left:0;font-size:26px;}
 }
 @media(max-width:860px){
   .expert-cta{
