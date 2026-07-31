@@ -94,6 +94,7 @@
       function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value == null ? "" : value; return el.innerHTML; }
       function mapEmbedUrl(query) { return "https://www.google.com/maps?q=" + encodeURIComponent(query) + "&output=embed"; }
       function mapLinkUrl(query) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query); }
+      function resolvedMapLink(r) { return r.mapUrl || mapLinkUrl(r.mapQuery); }
 
       var types = ["all"].concat(Array.from(new Set(restaurants.map(function (r) { return r.type || "restaurant"; }))));
 
@@ -186,7 +187,7 @@
               '<div class="restaurant-card-text"><h3>' + escapeHtml(r.name) + (r.flag ? ' <span class="rl-flag">' + escapeHtml(r.flag) + '</span>' : '') + '</h3><p>' + escapeHtml(r.description) + '</p></div>' +
               thumb +
             '</div>' +
-            '<div class="restaurant-card-bottom"><span>' + escapeHtml(r.area) + '</span><a href="' + mapLinkUrl(r.mapQuery) + '" target="_blank" rel="noopener noreferrer" data-maplink>Google Maps ↗</a></div>' +
+            '<div class="restaurant-card-bottom"><span>' + escapeHtml(r.area) + '</span><a href="' + resolvedMapLink(r) + '" target="_blank" rel="noopener noreferrer" data-maplink>Google Maps ↗</a></div>' +
             "</article>";
         }).join("");
 
@@ -241,12 +242,12 @@
           (links.length ? "" : '<p class="rl-m-empty">公式サイトやSNSのリンクは準備中です。</p>') +
           '<div class="rl-m-links">' +
           links.map(function (l) { return '<a href="' + escapeHtml(l[1]) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(l[0]) + "</a>"; }).join("") +
-          '<a href="' + mapLinkUrl(r.mapQuery) + '" target="_blank" rel="noopener noreferrer">Google Maps ↗</a>' +
+          '<a href="' + resolvedMapLink(r) + '" target="_blank" rel="noopener noreferrer">Google Maps ↗</a>' +
           "</div></div>";
 
         var logoHtml = r.logo ? '<img class="rl-m-logo" src="' + escapeHtml(r.logo) + '" alt="" loading="lazy" onerror="this.remove()">' : "";
         var flagHtml = r.flag ? ' <span class="rl-flag">' + escapeHtml(r.flag) + '</span>' : "";
-        var officialNameHtml = r.officialName ? '<p class="rl-m-official">正式名称：' + escapeHtml(r.officialName) + '</p>' : "";
+        var officialNameHtml = r.officialName ? '<p class="rl-m-official">' + escapeHtml(r.officialName) + '</p>' : "";
 
         modalBody.innerHTML =
           '<div class="rl-m-tags"><span>' + escapeHtml(r.country) + "</span><span>" + escapeHtml(r.category) + "</span></div>" +

@@ -35,6 +35,7 @@ const restaurants = defineCollection({
     category: z.string(),
     description: z.string(),
     mapQuery: z.string(),
+    mapUrl: z.string().optional(),
     claimed: z.boolean().default(false),
     logo: z.string().optional(),
     flag: z.string().optional(),
