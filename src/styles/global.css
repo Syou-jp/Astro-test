@@ -2160,66 +2160,24 @@
   margin-left:auto;
   padding-left:8px;
 }
-/* An iPad Pro in landscape can report up to 1366 CSS pixels. Keep this layout
-   through 1500px because the CTA itself is narrower than the viewport once
-   the page gutters are applied. */
+/* Keep the banner on one line on tablets and desktops. Every part scales with
+   the available CTA width, so it never needs to push the copy below the avatars. */
 @media(min-width:521px) and (max-width:1500px){
-  /* Keep the copy clear of the overlapping avatar/logo group at tablet widths.
-     The stats move to their own row before the remaining horizontal space gets
-     too tight for the title. */
-  .expert-cta{flex-wrap:wrap;gap:18px;min-height:112px;padding:18px 20px;}
-  .expert-cta-avatars .expert-cta-avatar{width:62px;height:62px;}
-  .expert-cta-avatars .expert-cta-avatar + .expert-cta-avatar{margin-left:-18px;}
-  .expert-cta-avatars{order:1;}
-  /* The avatar stack is treated as its own row at these widths, rather than
-     squeezing copy alongside it. This keeps a clear visual separation even
-     when browser zoom or a narrow content column reduces the available space. */
-  .expert-cta-body{order:3;flex:0 0 100%;width:100%;}
-  .expert-cta-label{font-size:12px;}
-  .expert-cta-title{font-size:21px;}
-  .expert-cta-name{font-size:12px;}
-  .expert-cta-stats{order:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;flex:0 0 100%;margin-top:2px;padding-top:13px;border-top:1px solid rgba(255,255,255,.2);gap:0;}
-  .expert-cta-stat{gap:8px;padding-left:18px;}
-  .expert-cta-stat{justify-content:center;padding:0 8px;border-left:1px solid rgba(255,255,255,.2);}
-  .expert-cta-stat:first-child{border-left:0;}
-  .expert-cta-stat svg{width:34px;height:34px;}
-  .expert-cta-stat-num{font-size:27px;}
-  .expert-cta-stat-num small{font-size:15px;}
-  .expert-cta-stat-label{font-size:13px;}
-  .expert-cta-arrow{order:2;margin-left:auto;padding-left:0;font-size:26px;}
-}
-@media(max-width:860px){
-  .expert-cta{
-    flex-wrap:wrap;
-    gap:18px;
-    padding:16px 18px;
-  }
-  .expert-cta-avatars{order:1;}
-  .expert-cta-body{order:3;flex:0 0 100%;width:100%;}
-  .expert-cta-arrow{order:2;margin-left:auto;padding-left:0;}
-  .expert-cta-stats{
-    order:4;
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    width:100%;
-    flex:0 0 100%;
-    margin-top:2px;
-    padding-top:13px;
-    border-top:1px solid rgba(255,255,255,.2);
-    gap:0;
-  }
-  .expert-cta-stat{
-    justify-content:center;
-    gap:7px;
-    padding:0 8px;
-    border-left:1px solid rgba(255,255,255,.2);
-  }
-  .expert-cta-stat:first-child{border-left:0;}
-  .expert-cta-stat svg{width:23px;height:23px;}
-  .expert-cta-stat-num{font-size:20px;}
-  .expert-cta-stat-num small{font-size:11px;}
-  .expert-cta-stat-label{font-size:10px;}
-  .expert-cta-title,.expert-cta-name{white-space:normal;}
+  .expert-cta{display:grid;grid-template-columns:minmax(100px,.9fr) minmax(140px,1.35fr) minmax(180px,1.8fr) auto;align-items:center;gap:clamp(8px,1.35vw,20px);min-height:clamp(94px,10vw,132px);padding:clamp(14px,1.7vw,22px) clamp(16px,2.2vw,30px);}
+  .expert-cta-avatars{min-width:0;}
+  .expert-cta-avatars .expert-cta-avatar{width:clamp(42px,5.1vw,76px);height:clamp(42px,5.1vw,76px);}
+  .expert-cta-avatars .expert-cta-avatar + .expert-cta-avatar{margin-left:clamp(-22px,-1.45vw,-12px);}
+  .expert-cta-body{min-width:0;width:auto;}
+  .expert-cta-label{font-size:clamp(10px,1vw,14px);}
+  .expert-cta-title{font-size:clamp(15px,1.8vw,25px);white-space:nowrap;}
+  .expert-cta-name{font-size:clamp(10px,.95vw,14px);white-space:nowrap;}
+  .expert-cta-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));min-width:0;gap:0;}
+  .expert-cta-stat{min-width:0;justify-content:center;gap:clamp(4px,.7vw,12px);padding:0 clamp(4px,1.2vw,20px);}
+  .expert-cta-stat svg{width:clamp(18px,3.5vw,60px);height:clamp(18px,3.5vw,60px);}
+  .expert-cta-stat-num{font-size:clamp(18px,2.1vw,36px);}
+  .expert-cta-stat-num small{font-size:clamp(10px,1.2vw,20px);}
+  .expert-cta-stat-label{font-size:clamp(9px,1vw,17px);}
+  .expert-cta-arrow{margin-left:0;padding-left:0;font-size:clamp(20px,2vw,30px);}
 }
 @media(max-width:520px){
   .expert-cta{
