@@ -54,6 +54,7 @@ const restaurants = defineCollection({
     payment: z.array(z.string()).default([]),
     website: z.string().optional(),
     instagram: z.string().optional(),
+    threads: z.string().optional(),
     line: z.string().optional(),
     x: z.string().optional(),
     facebook: z.string().optional(),
