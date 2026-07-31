@@ -12,7 +12,10 @@ flag: 🇹🇼
 officialName: DaVin Hair Salon
 intro: 中目黒にあるDaVinは、中国語・韓国語のカウンセリングに対応するヘアサロンです。顔型や骨格、ライフスタイルに合わせたヘアスタイルを提案し、日系・欧米系・韓国系のスタイルやカット、カラー、パーマ、ヘアケアを取り扱っています。来店前に公式サイトまたはSNSで最新の予約状況をご確認ください。
 signatureDishes: []
-photos: []
+photos:
+  - /images/restaurants/davin-hair-nakameguro/1.png
+  - /images/restaurants/davin-hair-nakameguro/2.png
+  - /images/restaurants/davin-hair-nakameguro/3.png
 priceRange: カット ¥6,050〜、カラー ¥7,700〜、パーマ ¥16,500〜
 hours: 平日 10:30〜21:00／土日祝 9:30〜19:30
 closedDays: 火曜日（スタイリストにより予約可能日あり）
