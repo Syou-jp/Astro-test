@@ -2161,18 +2161,26 @@
   padding-left:8px;
 }
 @media(min-width:521px) and (max-width:1100px){
-  .expert-cta{gap:20px;min-height:112px;padding:18px 20px;}
+  /* Keep the copy clear of the overlapping avatar/logo group at tablet widths.
+     The stats move to their own row before the remaining horizontal space gets
+     too tight for the title. */
+  .expert-cta{flex-wrap:wrap;gap:18px;min-height:112px;padding:18px 20px;}
   .expert-cta-avatars .expert-cta-avatar{width:62px;height:62px;}
   .expert-cta-avatars .expert-cta-avatar + .expert-cta-avatar{margin-left:-18px;}
+  .expert-cta-avatars{order:1;}
+  .expert-cta-body{order:2;flex:1 1 240px;}
   .expert-cta-label{font-size:12px;}
   .expert-cta-title{font-size:21px;}
   .expert-cta-name{font-size:12px;}
+  .expert-cta-stats{order:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;flex:0 0 100%;margin-top:2px;padding-top:13px;border-top:1px solid rgba(255,255,255,.2);gap:0;}
   .expert-cta-stat{gap:8px;padding-left:18px;}
+  .expert-cta-stat{justify-content:center;padding:0 8px;border-left:1px solid rgba(255,255,255,.2);}
+  .expert-cta-stat:first-child{border-left:0;}
   .expert-cta-stat svg{width:34px;height:34px;}
   .expert-cta-stat-num{font-size:27px;}
   .expert-cta-stat-num small{font-size:15px;}
   .expert-cta-stat-label{font-size:13px;}
-  .expert-cta-arrow{font-size:26px;}
+  .expert-cta-arrow{order:3;font-size:26px;}
 }
 @media(max-width:860px){
   .expert-cta{
