@@ -2160,7 +2160,10 @@
   margin-left:auto;
   padding-left:8px;
 }
-@media(min-width:521px) and (max-width:1100px){
+/* An iPad Pro in landscape can report up to 1366 CSS pixels. Keep this layout
+   through 1500px because the CTA itself is narrower than the viewport once
+   the page gutters are applied. */
+@media(min-width:521px) and (max-width:1500px){
   /* Keep the copy clear of the overlapping avatar/logo group at tablet widths.
      The stats move to their own row before the remaining horizontal space gets
      too tight for the title. */
@@ -2192,8 +2195,8 @@
     padding:16px 18px;
   }
   .expert-cta-avatars{order:1;}
-  .expert-cta-body{order:2;flex:1 1 0;}
-  .expert-cta-arrow{order:3;}
+  .expert-cta-body{order:3;flex:0 0 100%;width:100%;}
+  .expert-cta-arrow{order:2;margin-left:auto;padding-left:0;}
   .expert-cta-stats{
     order:4;
     display:grid;
