@@ -109,7 +109,7 @@
       document.getElementById('taxiCalcBtn').addEventListener('click', function () { calculate(); scrollToResult(); });
       document.querySelectorAll('[data-taxi-distance]').forEach(function (button) { button.addEventListener('click', function () { distanceEl.value = button.dataset.taxiDistance; calculate(); }); }); calculate();
 
-      /* ---- 出発地/到着地から距離を概算（駅・学校・住所など、國土地理院の住所検索とサイト内の車站・学校データを利用） ---- */
+      /* ---- 出発地/到着地から距離を概算（駅・学校・住所など、国土地理院の住所検索とサイト内の駅・学校データを利用） ---- */
       var taxiState = { origin: null, destination: null };
       function catalog(type) { return (typeof routeCatalog === 'function') ? routeCatalog(type) : []; }
       function displayName(item, type) { return (typeof routeDisplayName === 'function') ? routeDisplayName(item, type) : (item && item.n) || ''; }

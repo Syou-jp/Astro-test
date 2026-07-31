@@ -66,13 +66,13 @@
               <input type="text" id="visitRoomNumber" style="text-align:left;">
             </div>
             <div class="field-row">
-              <label>地址 Address</label>
+              <label>住所 Address</label>
               <input type="text" id="visitAddress" style="text-align:left;">
             </div>
 
             <div class="section-title" style="margin-top:8px;">希望日時 Preferred Date &amp; Time</div>
             <div class="field-row">
-              <label>日期 Date</label>
+              <label>日付 Date</label>
               <input type="date" id="visitDateInput">
             </div>
             <div class="field-row">
@@ -80,13 +80,13 @@
               <select id="visitStartTime"></select>
             </div>
             <div class="field-row">
-              <label>結束時間 End time<span class="hint">30分単位</span></label>
+              <label>終了時間 End time<span class="hint">30分単位</span></label>
               <select id="visitEndTime"></select>
             </div>
 
-            <div class="section-title" style="margin-top:8px;">對方公司資訊 Counterpart Company</div>
+            <div class="section-title" style="margin-top:8px;">相手先会社情報 Counterpart Company</div>
             <div class="field-row">
-              <label>公司名稱 Company name</label>
+              <label>会社名 Company name</label>
               <input type="text" id="visitCompanyName" style="text-align:left;">
             </div>
             <div class="field-row">
@@ -94,13 +94,13 @@
               <input type="text" id="visitCompanyPhone" style="text-align:left;">
             </div>
             <div class="field-row">
-              <label>FAX號碼 FAX number</label>
+              <label>FAX番号 FAX number</label>
               <input type="text" id="visitCompanyFax" style="text-align:left;">
             </div>
 
-            <div class="section-title" style="margin-top:8px;">名片照片 Business Card Photo</div>
+            <div class="section-title" style="margin-top:8px;">名刺の写真 Business Card Photo</div>
             <div class="field-row" style="grid-template-columns:1fr;">
-              <label>上傳圖片 Upload image<span class="hint">選填，會附加在申込書下方</span></label>
+              <label>画像をアップロード Upload image<span class="hint">任意。申込書の下に添付されます</span></label>
               <input type="file" accept="image/*" id="visitCardFile" style="text-align:left;padding:6px 0;border:none;">
             </div>
           </div>
@@ -117,13 +117,13 @@
                 <div style="text-align:center;font-size:10.5px;color:var(--ink-soft);margin-bottom:16px;">PROPERTY VIEWING REQUEST</div>
                 <div class="receipt-line"><span>物件名</span><span class="amt" id="vOutPropertyName">—</span></div>
                 <div class="receipt-line"><span>号室</span><span class="amt" id="vOutRoomNumber">—</span></div>
-                <div class="receipt-line"><span>地址</span><span class="amt" id="vOutAddress">—</span></div>
+                <div class="receipt-line"><span>住所</span><span class="amt" id="vOutAddress">—</span></div>
                 <div class="receipt-line"><span>希望日時</span><span class="amt" id="vOutDateTime">—</span></div>
-                <div class="receipt-line"><span>對方公司</span><span class="amt" id="vOutCompanyName">—</span></div>
+                <div class="receipt-line"><span>相手先会社</span><span class="amt" id="vOutCompanyName">—</span></div>
                 <div class="receipt-line"><span>電話</span><span class="amt" id="vOutCompanyPhone">—</span></div>
                 <div class="receipt-line"><span>FAX</span><span class="amt" id="vOutCompanyFax">—</span></div>
                 <div id="vCardImageWrap" style="margin-top:16px;display:none;">
-                  <div style="font-size:11px;color:var(--ink-soft);margin-bottom:6px;">名片 Business Card</div>
+                  <div style="font-size:11px;color:var(--ink-soft);margin-bottom:6px;">名刺 Business Card</div>
                   <img id="vCardImagePreview" style="max-width:100%;border:1px solid var(--line);border-radius:0;display:block;">
                 </div>
               </div>
@@ -134,7 +134,7 @@
               <button type="button" class="secondary-btn export-excel">📊 Excel</button>
               <button type="button" class="secondary-btn export-shot">📷 Screenshot</button>
             </div>
-            <div class="footnote">按下按鈕會將左方申込書內容轉成一份 PDF 檔案並下載，可直接傳真或email給對方公司。</div>
+            <div class="footnote">ボタンを押すと、左側の申込書の内容をPDFファイルに変換してダウンロードします。そのままFAXまたはメールで相手先の会社へ送付できます。</div>
           </div>
         </div>
         </section><!-- /broker-visit -->
@@ -143,7 +143,7 @@
           <div class="eyebrow">入居申込書</div>
           <div class="apply-intro">
             日本在住の外国籍のお客様向け入居申込フォームです。審査に必要な項目をできるだけ漏れなく入力してください。<br>
-            這是針對在日本居住之外國人的租屋申請表。證件請先勾選種類，再上傳檔案；未勾選的上傳欄位不會顯示。
+            日本在住の外国籍の方向けの入居申込フォームです。書類はまず種類にチェックを入れてから、ファイルをアップロードしてください。チェックしていないアップロード欄は表示されません。
           </div>
 
           <form id="applicationForm" autocomplete="on">
@@ -257,7 +257,7 @@
 
               <section class="apply-section full">
                 <div class="section-title">審査用添付書類 Supporting Documents</div>
-                <p style="font-size:12px;color:var(--ink-soft);margin:-4px 0 12px;">必要な書類だけを勾選してください。勾選後、該当する上傳欄位が自動で表示されます（画像またはPDF）。</p>
+                <p style="font-size:12px;color:var(--ink-soft);margin:-4px 0 12px;">必要な書類だけにチェックを入れてください。チェックすると、該当するアップロード欄が自動で表示されます（画像またはPDF）。</p>
                 <div class="documents-grid" id="applicationDocuments">
                   <div class="doc-item" data-doc="passport"><label class="doc-check"><input type="checkbox"><span>パスポート</span><span class="hint-inline">Passport</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf"><div class="doc-status">ファイル未選択</div></div></div>
                   <div class="doc-item" data-doc="visa"><label class="doc-check"><input type="checkbox"><span>VISA・査証</span><span class="hint-inline">Visa</span></label><div class="doc-upload" hidden><input type="file" accept="image/*,.pdf,application/pdf"><div class="doc-status">ファイル未選択</div></div></div>
@@ -473,7 +473,7 @@ document.getElementById("visitPdfBtn").addEventListener("click", async () => {
     const name = document.getElementById("visitPropertyName").value.trim() || "内見申込書";
     pdf.save(`${name}_内見申込書.pdf`);
   } catch (err){
-    alert("PDF 生成失敗，請確認網路連線正常（需要載入外部PDF程式庫）。");
+    alert("PDFの生成に失敗しました。ネットワーク接続をご確認ください（外部PDFライブラリの読み込みが必要です）。");
   } finally {
     btn.innerHTML = original;
   }
@@ -725,7 +725,7 @@ document.querySelectorAll(".export-actions").forEach(group=>{
   group.querySelector(".export-excel")?.addEventListener("click",()=>exportDownload(new Blob(["\ufeff",exportDocumentHtml(target(),name())],{type:"application/vnd.ms-excel"}),`${name()}.xls`));
   group.querySelector(".export-shot")?.addEventListener("click",async()=>{
     try{const canvas=await html2canvas(target(),{scale:2,backgroundColor:"#fff",useCORS:true});const link=document.createElement("a");link.download=`${name()}.png`;link.href=canvas.toDataURL("image/png");link.click();}
-    catch(error){alert("Screenshot 生成失敗。請確認外部程式庫已載入。");}
+    catch(error){alert("スクリーンショットの生成に失敗しました。外部ライブラリが読み込まれているかご確認ください。");}
   });
 });
 
