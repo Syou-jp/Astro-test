@@ -1124,7 +1124,7 @@
   .doc-tab.active{transform:none;border:none;box-shadow:none;background:var(--white);color:var(--accent);font-weight:700;}
   .doc-tab .tab-text{min-width:0;height:auto;justify-content:center;white-space:nowrap;font-size:13px;line-height:1.3;overflow:visible;font-weight:inherit;}
   .doc-tab .tab-text small{display:inline;height:auto;line-height:1;margin:0 0 0 4px;white-space:nowrap;overflow:visible;text-overflow:clip;font-size:9px;opacity:.6;}
-  .tab-panel{border-radius:0;margin-top:20px;}
+  .tab-panel{margin-top:20px;}
   .back-to-top{display:flex;position:fixed;right:16px;bottom:16px;width:46px;height:46px;border-radius:var(--radius-full);border:1px solid var(--line);background:var(--accent);color:var(--white);font-family:"Shippori Mincho",serif;font-size:16px;font-weight:700;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:60;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .2s ease,transform .2s ease;}
   .back-to-top.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}
   .portal-alert{padding:14px 18px;border-left:3px solid var(--accent);border-radius:0;background:var(--paper-2);font-size:12.5px;line-height:2;text-align:justify;text-justify:inter-character;letter-spacing:.02em;margin-bottom:20px;}
