@@ -1640,6 +1640,7 @@
     .mobile-menu-bar-btn[aria-expanded="true"]{color:var(--accent);}
     .mobile-menu-bar-icon{display:flex;align-items:center;justify-content:center;width:16px;height:16px;font-size:16px;line-height:1;}
     .mobile-menu-bar-icon svg{width:16px;height:16px;}
+    .mobile-menu-bar-icon-settings > svg:not(.mobile-settings-gear-alt){display:none;}
     .mobile-menu-bar-icon-globe{display:flex;align-items:center;justify-content:center;width:16px;height:16px;}
     .mobile-menu-bar-icon-globe svg{width:16px;height:16px;}
     .mobile-menu-bar-icon-burger{display:flex;flex-direction:column;justify-content:center;gap:3px;width:16px;height:16px;}
