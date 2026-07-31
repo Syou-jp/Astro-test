@@ -2136,10 +2136,14 @@
   border-left:1px solid rgba(255,210,73,.72);
 }
 .expert-cta-stat svg{
-  width:48px;
-  height:48px;
+  width:52px;
+  height:52px;
   flex:0 0 auto;
   stroke:var(--gold);
+  stroke-width:1.35;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  shape-rendering:geometricPrecision;
 }
 .expert-cta-stat-text{display:flex;flex-direction:column;line-height:1.25;}
 .expert-cta-stat-num{font-size:36px;font-weight:800;color:#fff;white-space:nowrap;}
