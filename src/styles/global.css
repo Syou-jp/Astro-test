@@ -2133,18 +2133,20 @@
   gap:14px;
   flex:0 0 auto;
   padding-left:32px;
-  border-left:1px solid rgba(255,210,73,.72);
+  border-left:1px solid rgba(246,196,83,.78);
 }
+.expert-cta-stat:first-child{padding-left:0;border-left:0;}
 .expert-cta-stat svg{
-  width:52px;
-  height:52px;
+  width:60px;
+  height:60px;
   flex:0 0 auto;
-  stroke:var(--gold);
-  stroke-width:1.35;
-  stroke-linecap:round;
-  stroke-linejoin:round;
+  background:center/contain no-repeat;
   shape-rendering:geometricPrecision;
 }
+.expert-cta-stat svg > *{display:none;}
+.expert-cta-stat:nth-child(1) svg{background-image:url("/icons/expert-people.svg");}
+.expert-cta-stat:nth-child(2) svg{background-image:url("/icons/expert-globe.svg");}
+.expert-cta-stat:nth-child(3) svg{background-image:url("/icons/expert-calendar.svg");}
 .expert-cta-stat-text{display:flex;flex-direction:column;line-height:1.25;}
 .expert-cta-stat-num{font-size:36px;font-weight:800;color:#fff;white-space:nowrap;}
 .expert-cta-stat-num small{font-size:20px;font-weight:700;margin-left:3px;}
