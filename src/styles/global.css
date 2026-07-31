@@ -205,7 +205,7 @@
   .tab-panel{
     background:var(--white);
     border:1px solid var(--line);
-    border-radius:0 var(--radius-sm) var(--radius-sm) var(--radius-sm);
+    border-radius:var(--radius-sm);
     padding:24px 22px 22px;
     margin-bottom:22px;
   }
