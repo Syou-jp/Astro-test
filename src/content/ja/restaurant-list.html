@@ -58,7 +58,8 @@
     .restaurant-card-main{display:flex;gap:14px;align-items:flex-start}
     .restaurant-card-text{flex:1;min-width:0}
     .restaurant-card-thumbs{display:flex;flex-direction:row;gap:8px;flex:0 0 auto;margin-top:8px}
-    .restaurant-card-thumbs img{width:56px;height:56px;object-fit:cover;display:block;border:1px solid var(--line,#e2d9cf)}
+    .restaurant-card-thumbs img{width:56px;height:56px;object-fit:cover;display:block;border-radius:10px;box-shadow:0 3px 10px rgba(40,34,30,.16);transition:transform .15s ease}
+    .restaurant-card.is-claimed:hover .restaurant-card-thumbs img{transform:translateY(-2px)}
     @media(min-width:641px){
       .restaurant-card-thumbs{margin-top:12px;gap:10px}
       .restaurant-card-thumbs img{width:64px;height:64px}
