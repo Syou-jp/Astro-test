@@ -2058,8 +2058,8 @@
   padding:18px 26px;
   border:none;
   border-radius:var(--radius-sm);
-  background:#1B2A4E;
-  box-shadow:none;
+  background:linear-gradient(108deg,#182746 0%,#223663 100%);
+  box-shadow:0 10px 24px rgba(27,42,78,.14),inset 0 1px 0 rgba(255,255,255,.08);
   text-decoration:none;
   text-align:left;
   font:inherit;
@@ -2069,6 +2069,8 @@
 }
 .expert-cta:hover{
   filter:brightness(1.08);
+  transform:translateY(-1px);
+  box-shadow:0 14px 28px rgba(27,42,78,.2),inset 0 1px 0 rgba(255,255,255,.1);
 }
 .expert-cta-avatar{
   width:56px;
@@ -2151,16 +2153,57 @@
   padding-left:8px;
 }
 @media(max-width:860px){
-  .expert-cta-stats{display:none;}
+  .expert-cta{
+    flex-wrap:wrap;
+    gap:18px;
+    padding:16px 18px;
+  }
+  .expert-cta-avatars{order:1;}
+  .expert-cta-body{order:2;flex:1 1 0;}
+  .expert-cta-arrow{order:3;}
+  .expert-cta-stats{
+    order:4;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    width:100%;
+    flex:0 0 100%;
+    margin-top:2px;
+    padding-top:13px;
+    border-top:1px solid rgba(255,255,255,.2);
+    gap:0;
+  }
+  .expert-cta-stat{
+    justify-content:center;
+    gap:7px;
+    padding:0 8px;
+    border-left:1px solid rgba(255,255,255,.2);
+  }
+  .expert-cta-stat:first-child{border-left:0;}
+  .expert-cta-stat svg{width:23px;height:23px;}
+  .expert-cta-stat-num{font-size:20px;}
+  .expert-cta-stat-num small{font-size:11px;}
+  .expert-cta-stat-label{font-size:10px;}
+  .expert-cta-title,.expert-cta-name{white-space:normal;}
 }
 @media(max-width:520px){
-  .expert-cta{flex-wrap:wrap;row-gap:12px;padding:15px;gap:10px;}
+  .expert-cta{
+    flex-wrap:wrap;
+    row-gap:11px;
+    padding:15px 14px 13px;
+    gap:10px;
+    border-radius:14px;
+  }
   .expert-cta-avatar{width:46px;height:46px;}
   .expert-cta-avatars{order:1;}
   .expert-cta-avatars .expert-cta-avatar{width:40px;height:40px;}
   .expert-cta-avatars .expert-cta-avatar + .expert-cta-avatar{margin-left:-13px;}
-  .expert-cta-arrow{order:2;margin-left:auto;padding-left:0;}
+  .expert-cta-arrow{order:2;margin-left:auto;padding-left:0;font-size:25px;}
   .expert-cta-body{order:3;flex:0 0 100%;width:100%;}
+  .expert-cta-stats{order:4;}
+  .expert-cta-stat{padding:0 3px;gap:5px;}
+  .expert-cta-stat svg{width:20px;height:20px;}
+  .expert-cta-stat-num{font-size:18px;}
+  .expert-cta-stat-label{font-size:9px;}
   .expert-cta-label{font-size:11px;}
   .expert-cta-title{font-size:16px;white-space:normal;}
   .expert-cta-name{font-size:12px;white-space:normal;}
