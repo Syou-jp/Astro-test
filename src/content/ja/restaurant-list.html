@@ -18,6 +18,10 @@
     </div>
   </div>
 
+  <div class="rl-lightbox" id="rlLightbox" hidden>
+    <img id="rlLightboxImg" src="" alt="">
+  </div>
+
   <style>
     .rl-modal-backdrop{position:fixed;inset:0;background:rgba(26,20,16,.55);display:flex;align-items:center;justify-content:center;padding:24px;z-index:200}
     .rl-modal-backdrop[hidden]{display:none}
@@ -27,6 +31,9 @@
     .rl-modal-body{padding:6px 20px 20px}
     .rl-m-tags{display:flex;gap:8px;align-items:center;font:700 9.5px "JetBrains Mono",monospace;letter-spacing:.04em;color:var(--accent,#b23b2e);margin-bottom:6px}
     .rl-m-tags span:last-child{color:var(--ink-soft,#6b5f56);font-weight:600}
+    .rl-m-head{display:flex;align-items:flex-start;gap:12px}
+    .rl-m-head-text{flex:1;min-width:0}
+    .rl-m-logo{width:52px;height:52px;border-radius:50%;object-fit:cover;display:block;border:1px solid var(--line,#e2d9cf);flex:0 0 auto}
     .rl-modal-body h3{font-family:"Shippori Mincho",serif;font-size:19px;line-height:1.35;margin:0 0 3px}
     .rl-m-area{font-size:11px;color:var(--ink-soft,#6b5f56);margin:0 0 12px}
     .rl-m-section{margin:0 0 14px}
@@ -38,8 +45,11 @@
     .rl-m-dish-list{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
     .rl-m-dish-list li{border:1px solid var(--line,#e2d9cf);background:var(--paper-2,#f7f1e8);padding:5px 9px;font-size:11px;color:var(--ink,#2b241f)}
     .rl-m-photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:6px}
-    .rl-m-photos img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border:1px solid var(--line,#e2d9cf)}
+    .rl-m-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border:1px solid var(--line,#e2d9cf);cursor:zoom-in}
     .rl-m-map iframe{width:100%;height:150px;border:1px solid var(--line,#e2d9cf);display:block}
+    .rl-lightbox{position:fixed;inset:0;background:rgba(15,10,6,.85);display:flex;align-items:center;justify-content:center;padding:24px;z-index:300;cursor:zoom-out}
+    .rl-lightbox[hidden]{display:none}
+    .rl-lightbox img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 18px 48px rgba(0,0,0,.4)}
     .rl-m-links{display:flex;flex-wrap:wrap;gap:6px}
     .rl-m-links a{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line,#e2d9cf);padding:6px 11px;font-size:11px;font-weight:600;color:var(--ink,#2b241f);text-decoration:none}
     .rl-m-links a:hover{border-color:var(--accent,#b23b2e);color:var(--accent,#b23b2e)}
@@ -67,7 +77,7 @@
       .rl-m-info dt{font-size:9.5px}
       .rl-m-info dd{font-size:11px}
       .rl-m-dish-list li{padding:4px 8px;font-size:10.5px}
-      .rl-m-photos img{aspect-ratio:3/2}
+      .rl-m-logo{width:40px;height:40px}
       .rl-m-map{margin-bottom:0}
       .rl-m-map iframe{height:80px}
       .rl-m-links a{padding:5px 9px;font-size:10.5px}
@@ -96,6 +106,8 @@
       var countEl = document.getElementById("restaurantCount");
       var backdrop = document.getElementById("rlBackdrop");
       var modalBody = document.getElementById("rlModalBody");
+      var lightbox = document.getElementById("rlLightbox");
+      var lightboxImg = document.getElementById("rlLightboxImg");
 
       var currentType = "all";
       var currentCountry = "all";
@@ -229,16 +241,38 @@
           '<a href="' + mapLinkUrl(r.mapQuery) + '" target="_blank" rel="noopener noreferrer">Google Maps ↗</a>' +
           "</div></div>";
 
+        var logoHtml = r.logo ? '<img class="rl-m-logo" src="' + escapeHtml(r.logo) + '" alt="" loading="lazy" onerror="this.remove()">' : "";
+
         modalBody.innerHTML =
-          '<div class="rl-m-tags"><span>' + escapeHtml(r.country) + "</span><span>" + escapeHtml(r.category) + "</span></div>" +
-          "<h3 id=\"rlModalTitle\">" + escapeHtml(r.name) + "</h3>" +
-          '<p class="rl-m-area">' + escapeHtml(r.area) + " · " + escapeHtml(r.region) + "</p>" +
+          '<div class="rl-m-head">' +
+            '<div class="rl-m-head-text">' +
+              '<div class="rl-m-tags"><span>' + escapeHtml(r.country) + "</span><span>" + escapeHtml(r.category) + "</span></div>" +
+              "<h3 id=\"rlModalTitle\">" + escapeHtml(r.name) + "</h3>" +
+              '<p class="rl-m-area">' + escapeHtml(r.area) + " · " + escapeHtml(r.region) + "</p>" +
+            "</div>" +
+            logoHtml +
+          "</div>" +
           '<div class="rl-m-section"><h4>お店紹介</h4><p>' + escapeHtml(r.intro || r.description) + "</p></div>" +
           infoSection + tablesSection + dishesSection + linksSection + photosSection +
           '<div class="rl-m-section rl-m-map"><h4>地図</h4><iframe src="' + mapEmbedUrl(r.mapQuery) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>';
 
+        modalBody.querySelectorAll(".rl-m-photos img").forEach(function (img) {
+          img.addEventListener("click", function () { openLightbox(img.src, img.alt); });
+        });
+
         backdrop.hidden = false;
         document.body.style.overflow = "hidden";
+      }
+
+      function openLightbox(src, alt) {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt;
+        lightbox.hidden = false;
+      }
+
+      function closeLightbox() {
+        lightbox.hidden = true;
+        lightboxImg.src = "";
       }
 
       function closeModal() {
@@ -248,7 +282,12 @@
 
       document.getElementById("rlModalClose").addEventListener("click", closeModal);
       backdrop.addEventListener("click", function (event) { if (event.target === backdrop) closeModal(); });
-      document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !backdrop.hidden) closeModal(); });
+      lightbox.addEventListener("click", closeLightbox);
+      document.addEventListener("keydown", function (event) {
+        if (event.key !== "Escape") return;
+        if (!lightbox.hidden) { closeLightbox(); return; }
+        if (!backdrop.hidden) closeModal();
+      });
 
       renderFilters();
       renderList();
