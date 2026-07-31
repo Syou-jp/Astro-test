@@ -257,8 +257,8 @@
           <div class="value" id="totalValue">¥0</div>
         </div>
         <div class="actions">
-          <button class="btn-copy" id="copyBtn" tabindex="-1">📋 テキストをコピーする</button>
-          <button class="btn-copy" id="screenshotBtn" tabindex="-1">📷 スクリーンショットを保存</button>
+          <button class="btn-copy" id="copyBtn">📋 テキストをコピーする</button>
+          <button class="btn-copy" id="screenshotBtn">📷 スクリーンショットを保存</button>
         </div>
         <div class="footnote" id="footnote"></div>
       </div>
@@ -782,8 +782,6 @@ document.getElementById("propertyName").addEventListener("input", render);
 document.getElementById("clientName").addEventListener("input", render);
 
 /* ---------- Copy to clipboard ---------- */
-document.getElementById("copyBtn").addEventListener("mousedown", (e) => e.preventDefault());
-document.getElementById("copyBtn").addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
 window.addEventListener("scroll", () => {
   const active = document.activeElement;
   if (active && (active.tagName === "INPUT" || active.tagName === "SELECT" || active.tagName === "TEXTAREA")) {
@@ -811,8 +809,6 @@ document.getElementById("copyBtn").addEventListener("click", () => {
 });
 
 /* ---------- Screenshot ---------- */
-document.getElementById("screenshotBtn").addEventListener("mousedown", (e) => e.preventDefault());
-document.getElementById("screenshotBtn").addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
 document.getElementById("screenshotBtn").addEventListener("click", async () => {
   const t = T[currentLang];
   const btn = document.getElementById("screenshotBtn");
