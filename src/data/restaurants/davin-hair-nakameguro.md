@@ -8,6 +8,7 @@ category: 美容室
 description: 台湾人オーナーの中目黒ヘアサロン。中国語・韓国語で相談でき、日本語に不安がある方も通いやすいサロンです。
 mapQuery: 東京都目黒区青葉台1-25-10 バウ青葉台3F
 claimed: true
+logo: /images/restaurants/davin-hair-nakameguro/icon.svg
 flag: 🇹🇼
 officialName: DaVin Hair Salon
 intro: 中目黒にあるDaVinは、中国語・韓国語のカウンセリングに対応するヘアサロンです。顔型や骨格、ライフスタイルに合わせたヘアスタイルを提案し、日系・欧米系・韓国系のスタイルやカット、カラー、パーマ、ヘアケアを取り扱っています。来店前に公式サイトまたはSNSで最新の予約状況をご確認ください。
