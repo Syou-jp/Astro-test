@@ -110,7 +110,10 @@
   </div>
 
   <div class="rl-lightbox" id="rlLightbox" hidden>
+    <button type="button" class="rl-lightbox-nav rl-lightbox-prev" id="rlLightboxPrev" aria-label="前の写真">‹</button>
     <img id="rlLightboxImg" src="" alt="">
+    <button type="button" class="rl-lightbox-nav rl-lightbox-next" id="rlLightboxNext" aria-label="次の写真">›</button>
+    <div class="rl-lightbox-count" id="rlLightboxCount"></div>
   </div>
 
   <style>
@@ -139,9 +142,20 @@
     .rl-m-photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:6px}
     .rl-m-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border-radius:8px;box-shadow:0 4px 12px rgba(40,34,30,.18);cursor:zoom-in}
     .rl-m-map iframe{width:100%;height:150px;border:1px solid var(--line,#e2d9cf);border-radius:var(--radius-sm,8px);display:block}
-    .rl-lightbox{position:fixed;inset:0;background:rgba(15,10,6,.85);display:flex;align-items:center;justify-content:center;padding:24px;z-index:300;cursor:zoom-out}
+    .rl-lightbox{position:fixed;inset:0;background:rgba(15,10,6,.85);display:flex;align-items:center;justify-content:center;padding:24px;z-index:300;cursor:zoom-out;touch-action:pan-y}
     .rl-lightbox[hidden]{display:none}
-    .rl-lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--radius-md,12px);box-shadow:0 18px 48px rgba(0,0,0,.4)}
+    .rl-lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--radius-md,12px);box-shadow:0 18px 48px rgba(0,0,0,.4);user-select:none;-webkit-user-drag:none}
+    .rl-lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:none;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:26px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s ease;z-index:1}
+    .rl-lightbox-nav:hover{background:rgba(255,255,255,.24)}
+    .rl-lightbox-nav[hidden]{display:none}
+    .rl-lightbox-prev{left:10px}
+    .rl-lightbox-next{right:10px}
+    .rl-lightbox-count{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);color:#fff;font:600 11px "JetBrains Mono",monospace;background:rgba(0,0,0,.35);padding:4px 10px;border-radius:var(--radius-pill,999px)}
+    @media(max-width:640px){
+      .rl-lightbox-nav{width:38px;height:38px;font-size:22px}
+      .rl-lightbox-prev{left:4px}
+      .rl-lightbox-next{right:4px}
+    }
     .rl-m-links{display:flex;flex-wrap:wrap;gap:6px}
     .rl-m-links a{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line,#e2d9cf);border-radius:var(--radius-pill,999px);padding:6px 13px;font-size:11px;font-weight:600;color:var(--ink,#2b241f);text-decoration:none}
     .rl-m-links a:hover{border-color:var(--accent,#b23b2e);color:var(--accent,#b23b2e)}
@@ -202,6 +216,11 @@
       var modalBody = document.getElementById("rlModalBody");
       var lightbox = document.getElementById("rlLightbox");
       var lightboxImg = document.getElementById("rlLightboxImg");
+      var lightboxPrev = document.getElementById("rlLightboxPrev");
+      var lightboxNext = document.getElementById("rlLightboxNext");
+      var lightboxCount = document.getElementById("rlLightboxCount");
+      var lightboxPhotos = [];
+      var lightboxIndex = 0;
 
       var currentType = "all";
       var currentCountry = "all";
@@ -352,23 +371,48 @@
           infoSection + tablesSection + dishesSection + linksSection + photosSection +
           '<div class="rl-m-section rl-m-map"><h4>地図</h4><iframe src="' + mapEmbedUrl(r.mapQuery) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>';
 
-        modalBody.querySelectorAll(".rl-m-photos img").forEach(function (img) {
-          img.addEventListener("click", function () { openLightbox(img.src, img.alt); });
+        var photoEls = modalBody.querySelectorAll(".rl-m-photos img");
+        photoEls.forEach(function (img, index) {
+          img.addEventListener("click", function () { openLightbox(r.photos, r.name, index); });
         });
 
         backdrop.hidden = false;
         document.body.style.overflow = "hidden";
       }
 
-      function openLightbox(src, alt) {
-        lightboxImg.src = src;
-        lightboxImg.alt = alt;
+      function openLightbox(photos, alt, index) {
+        lightboxPhotos = photos || [];
+        lightboxIndex = index || 0;
+        renderLightbox(alt);
         lightbox.hidden = false;
+      }
+
+      function renderLightbox(alt) {
+        lightboxImg.src = lightboxPhotos[lightboxIndex];
+        lightboxImg.alt = alt || "";
+        var multi = lightboxPhotos.length > 1;
+        lightboxPrev.hidden = !multi;
+        lightboxNext.hidden = !multi;
+        lightboxCount.hidden = !multi;
+        if (multi) lightboxCount.textContent = (lightboxIndex + 1) + " / " + lightboxPhotos.length;
+      }
+
+      function showPrevPhoto() {
+        if (!lightboxPhotos.length) return;
+        lightboxIndex = (lightboxIndex - 1 + lightboxPhotos.length) % lightboxPhotos.length;
+        renderLightbox(lightboxImg.alt);
+      }
+
+      function showNextPhoto() {
+        if (!lightboxPhotos.length) return;
+        lightboxIndex = (lightboxIndex + 1) % lightboxPhotos.length;
+        renderLightbox(lightboxImg.alt);
       }
 
       function closeLightbox() {
         lightbox.hidden = true;
         lightboxImg.src = "";
+        lightboxPhotos = [];
       }
 
       function closeModal() {
@@ -378,11 +422,37 @@
 
       document.getElementById("rlModalClose").addEventListener("click", closeModal);
       backdrop.addEventListener("click", function (event) { if (event.target === backdrop) closeModal(); });
-      lightbox.addEventListener("click", closeLightbox);
+      lightbox.addEventListener("click", function (event) {
+        if (event.target === lightbox || event.target === lightboxImg) closeLightbox();
+      });
+      lightboxPrev.addEventListener("click", function (event) { event.stopPropagation(); showPrevPhoto(); });
+      lightboxNext.addEventListener("click", function (event) { event.stopPropagation(); showNextPhoto(); });
       document.addEventListener("keydown", function (event) {
-        if (event.key !== "Escape") return;
-        if (!lightbox.hidden) { closeLightbox(); return; }
-        if (!backdrop.hidden) closeModal();
+        if (!lightbox.hidden) {
+          if (event.key === "Escape") { closeLightbox(); return; }
+          if (event.key === "ArrowLeft") { showPrevPhoto(); return; }
+          if (event.key === "ArrowRight") { showNextPhoto(); return; }
+          return;
+        }
+        if (event.key === "Escape" && !backdrop.hidden) closeModal();
+      });
+
+      var touchStartX = null;
+      var touchStartY = null;
+      lightbox.addEventListener("touchstart", function (event) {
+        if (event.touches.length !== 1) return;
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+      }, { passive: true });
+      lightbox.addEventListener("touchend", function (event) {
+        if (touchStartX === null) return;
+        var touch = event.changedTouches[0];
+        var dx = touch.clientX - touchStartX;
+        var dy = touch.clientY - touchStartY;
+        touchStartX = null;
+        touchStartY = null;
+        if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+        if (dx < 0) showNextPhoto(); else showPrevPhoto();
       });
 
       renderFilters();
