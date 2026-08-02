@@ -153,13 +153,6 @@
         "small": "ETC TOLL CALCULATOR"
       },
       {
-        "id": "page-taxi-fare",
-        "slug": "taxi-fare",
-        "glyph": "🚕",
-        "text": "タクシー料金",
-        "small": "TAXI FARE ESTIMATE"
-      },
-      {
         "id": "page-airport",
         "slug": "airport",
         "glyph": "空",

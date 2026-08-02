@@ -1562,5 +1562,67 @@ siteSetLanguage(siteInitialLanguage,false);
         });
       })();
     </script>
+    <script is:inline>
+      (() => {
+        let html2canvasPromise;
+        const loadHtml2Canvas = () => {
+          if (typeof window.html2canvas === "function") return Promise.resolve(window.html2canvas);
+          if (html2canvasPromise) return html2canvasPromise;
+          html2canvasPromise = new Promise((resolve, reject) => {
+            const sources = [
+              "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js",
+              "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
+            ];
+            const load = (index) => {
+              if (index >= sources.length) return reject(new Error("html2canvas load failed"));
+              const script = document.createElement("script");
+              script.src = sources[index];
+              const timeout = window.setTimeout(() => { script.remove(); load(index + 1); }, 5000);
+              script.onload = () => { window.clearTimeout(timeout); typeof window.html2canvas === "function" ? resolve(window.html2canvas) : load(index + 1); };
+              script.onerror = () => { window.clearTimeout(timeout); load(index + 1); };
+              document.head.appendChild(script);
+            };
+            load(0);
+          });
+          return html2canvasPromise;
+        };
+        document.addEventListener("click", async (event) => {
+          const button = event.target.closest("#carScreenshotBtn, #page-car-all .export-shot");
+          if (!button || button.dataset.screenshotBusy === "true") return;
+          event.preventDefault();
+          button.dataset.screenshotBusy = "true";
+          const originalText = button.textContent;
+          const printWindow = window.open("", "_blank", "noopener,noreferrer,width=900,height=900");
+          button.textContent = "作成中…";
+          try {
+            const render = await loadHtml2Canvas();
+            const target = button.id === "carScreenshotBtn" ? document.getElementById("carCalculationResults") : document.getElementById("carTransferMemo");
+            if (!target) throw new Error("screenshot target not found");
+            const canvas = await render(target, { scale: 2, backgroundColor: "#fff", useCORS: true, ignoreElements: el => el.classList?.contains("car-screenshot-actions") });
+            const link = document.createElement("a");
+            link.download = button.id === "carScreenshotBtn" ? "中古車費用計算.png" : "中古車名義変更_記入メモ.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+            if (printWindow) printWindow.close();
+            button.textContent = "保存しました ✓";
+            setTimeout(() => { button.textContent = originalText; }, 1600);
+          } catch (error) {
+            const target = button.id === "carScreenshotBtn" ? document.getElementById("carCalculationResults") : document.getElementById("carTransferMemo");
+            if (printWindow && target) {
+              printWindow.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>スクリーンショット</title><style>body{margin:24px;font-family:Arial,sans-serif;color:#172033}button,.actions,.portal-actions{display:none!important}table{border-collapse:collapse;width:100%}th,td{border:1px solid #999;padding:8px;text-align:left}</style></head><body>${target.outerHTML}</body></html>`);
+              printWindow.document.close();
+              printWindow.focus();
+              printWindow.print();
+            } else {
+              window.print();
+            }
+            button.textContent = originalText;
+            alert("截圖工具無法載入，已改用列印／另存 PDF 視窗。");
+          } finally {
+            button.dataset.screenshotBusy = "false";
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

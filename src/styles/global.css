@@ -941,6 +941,7 @@
     background:var(--white);
     padding:14px;
     margin-bottom:10px;
+    border-radius:var(--radius-sm);
   }
   .route-endpoint-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px;}
   .route-endpoint-head strong{font-size:13px;color:var(--accent);}
@@ -957,20 +958,20 @@
   .route-navitime-btn:hover{background:#e5f7ef;}
   .route-status{font-size:11.5px;color:var(--ink-soft);line-height:1.55;margin-top:8px;min-height:18px;}
   .route-result-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px;}
-  .route-mode-card{border:1px solid var(--line);background:var(--white);padding:12px;min-height:112px;cursor:pointer;transition:.15s ease;}
+  .route-mode-card{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);padding:12px;min-height:112px;cursor:pointer;transition:.15s ease;}
   .route-mode-card:hover,.route-mode-card.active{border-color:var(--accent);box-shadow:0 2px 10px rgba(0,0,0,.06);}
   .route-mode-card.active{background:rgba(52,79,61,.045);}
   .route-mode-head{display:flex;justify-content:space-between;gap:6px;font-size:12px;font-weight:700;color:var(--accent);}
   .route-mode-time{font-family:"JetBrains Mono",monospace;font-size:22px;font-weight:700;margin:9px 0 4px;}
   .route-mode-meta{font-size:10.5px;color:var(--ink-soft);line-height:1.5;}
   .route-mode-error{font-size:11px;color:var(--ink-soft);line-height:1.5;margin-top:10px;}
-  .route-details{border:1px solid var(--line);background:var(--white);margin-top:12px;}
+  .route-details{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);margin-top:12px;overflow:hidden;}
   .route-details-head{padding:10px 12px;background:var(--paper-2);font-size:12px;font-weight:700;color:var(--accent);}
   .route-step{display:grid;grid-template-columns:72px 1fr;gap:10px;padding:9px 12px;border-bottom:1px dotted var(--line-soft);font-size:11px;line-height:1.5;}
   .route-step:last-child{border-bottom:none;}
   .route-step-time{font-family:"JetBrains Mono",monospace;color:var(--accent);font-weight:700;}
   .route-step-main strong{display:block;font-size:11.5px;}
-  .route-map{height:340px;border:1px solid var(--line);background:var(--paper-2);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-soft);font-size:12px;padding:20px;}
+  .route-map{height:340px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--paper-2);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-soft);font-size:12px;padding:20px;}
   .route-external{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
   .route-external a{display:inline-block;padding:7px 9px;border:1px solid var(--line);background:var(--white);color:var(--accent);text-decoration:none;font-size:10.5px;border-radius:var(--radius-sm);font-weight:700;}
   .route-attribution{font-size:9.5px;color:var(--ink-soft);line-height:1.5;margin-top:10px;}
@@ -1024,16 +1025,16 @@
   .route-line-map-panel{min-width:0;}
   @media (max-width:760px){.route-line-browser-grid{grid-template-columns:1fr;}.route-line-picker{max-height:220px;}}
   .route-db-stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:0 0 16px;}
-  .route-db-stat{border:1px solid var(--line);background:var(--white);padding:6px 5px;text-align:center;}
+  .route-db-stat{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);padding:6px 5px;text-align:center;}
   .route-db-stat strong{display:block;color:var(--accent);font:700 14px "JetBrains Mono",monospace;}
   .route-db-stat span{font-size:8.5px;color:var(--ink-soft);}
   .route-main-layout{grid-template-columns:1fr;gap:20px;}
   .route-main-layout #routeFormCard{padding:24px 26px;box-shadow:0 8px 24px rgba(52,79,61,.07);}
   .route-pair{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr);gap:16px;align-items:start;}
   .route-place-row{display:grid;grid-template-columns:190px minmax(260px,1fr);gap:10px;}
-  .route-place-row select,.route-place-row input,.route-result-filter,.route-filter-select{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--line);background:var(--white);font:inherit;font-size:12px;}
+  .route-place-row select,.route-place-row input,.route-result-filter,.route-filter-select{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);font:inherit;font-size:12px;}
   .route-input-wrap{position:relative;}
-  .route-suggestions{position:absolute;left:0;right:0;top:calc(100% + 3px);z-index:30;background:var(--white);border:1px solid var(--line);box-shadow:0 8px 22px rgba(0,0,0,.12);max-height:280px;overflow:auto;display:none;}
+  .route-suggestions{position:absolute;left:0;right:0;top:calc(100% + 3px);z-index:30;background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:0 8px 22px rgba(0,0,0,.12);max-height:280px;overflow:auto;display:none;}
   .route-suggestions.open{display:block;}
   .route-suggestion,.taxi-suggestion{display:block;width:100%;border:0;border-bottom:1px solid var(--line-soft);background:var(--white);padding:9px 10px;text-align:left;cursor:pointer;font:inherit;}
   .route-suggestion:hover,.route-suggestion:focus,.taxi-suggestion:hover,.taxi-suggestion:focus{background:var(--paper-2);outline:none;}
@@ -1349,6 +1350,12 @@
   .visa-summary dd{margin:3px 0 0;font-size:13px;font-weight:700;color:var(--ink);line-height:1.55;}
   .visa-section{margin-top:20px;}
   .visa-section .portal-table{border:1px solid var(--line);border-radius:var(--radius-sm);border-collapse:separate;border-spacing:0;overflow:hidden;}
+  #util-car-license .portal-table{border:1px solid var(--line);border-radius:var(--radius-sm);border-collapse:separate;border-spacing:0;overflow:hidden;}
+  #util-car-license .license-intro-grid{align-items:stretch;}
+  #util-car-license .license-intro-grid > .card > .card-body{display:block;}
+  #util-car-license .license-intro-grid > .card > .card-body > .section-title{margin-bottom:10px;}
+  #util-car-license .license-intro-grid > .card > .card-body > p{margin-top:0;}
+  #util-car-license .license-intro-grid .market-note{margin:8px 0 10px;padding:8px 12px;}
   .visa-callout-grid,.visa-doc-grid,.visa-warning-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
   .visa-callout,.visa-doc-card,.visa-warning-grid article{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);padding:17px;min-width:0;}
   .visa-callout{border-left:4px solid var(--accent);}
@@ -1517,6 +1524,11 @@
   .expense-bar{height:8px;background:var(--paper-deep);border-radius:var(--radius-pill);overflow:hidden;margin-top:5px;}
   .expense-bar i{display:block;height:100%;background:var(--accent);}
   .car-transfer-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px;}
+  .car-transfer-checklist-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .car-transfer-workspace-grid{position:relative;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;margin-bottom:106px;}
+  .car-transfer-workspace-grid > *{min-width:0;}
+  .car-transfer-workspace-grid > div:last-child{position:relative;}
+  .car-transfer-workspace-grid > div:last-child .export-actions{position:absolute;z-index:2;top:calc(100% + 12px);left:0;right:0;margin-top:0;}
   .car-transfer-flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0 18px;}
   .car-transfer-step{position:relative;padding:14px 10px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);min-height:105px;}
   .car-transfer-step b{display:block;color:var(--accent);font-size:11px;margin-bottom:7px;}
@@ -1526,6 +1538,8 @@
   .car-transfer-check input{width:18px;height:18px;margin-top:2px;accent-color:var(--accent);}
   .car-transfer-check b{display:block;font-size:12px;margin-bottom:3px;}
   .car-transfer-check small{display:block;color:var(--ink-soft);line-height:1.55;}
+  .car-check-links{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;}
+  .car-check-link{display:inline-flex;color:var(--accent);font-size:10.5px;line-height:1.4;text-decoration:underline;text-underline-offset:2px;}
   .car-form-downloads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
   .car-form-link{display:flex;flex-direction:column;gap:6px;padding:13px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);text-decoration:none;color:var(--ink);min-height:120px;}
   .car-form-link:hover{border-color:var(--accent);transform:translateY(-1px);}
@@ -1679,6 +1693,7 @@
   @media(max-width:520px){.internet-hero h2{font-size:21px}.internet-doc-table th{width:auto}.internet-provider-table th,.internet-provider-table td{word-break:break-word;}}
   @media(max-width:520px){.japanese-check-grid{grid-template-columns:1fr}.japanese-hero h2{font-size:21px}.japanese-card-head{display:block}.japanese-target{display:block;text-align:left;margin-top:5px}}
   @media(max-width:860px){.car-transfer-controls,.car-form-downloads{grid-template-columns:1fr 1fr}.car-transfer-flow{grid-template-columns:1fr 1fr}.car-transfer-guide{grid-template-columns:1fr}}
+  @media(max-width:860px){.car-transfer-checklist-grid{grid-template-columns:1fr;}.car-transfer-workspace-grid{grid-template-columns:1fr;margin-bottom:0;}.car-transfer-workspace-grid::before{display:none;}.car-transfer-workspace-grid > div:last-child .export-actions{position:static;margin-top:12px;}}
   @media(max-width:860px){.jobs-filter-grid,.job-form-grid{grid-template-columns:1fr 1fr}.job-list,.job-builder,.job-legal-grid{grid-template-columns:1fr}.job-preview{position:static;min-height:0}}
   @media(max-width:860px){.friend-offer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:860px){.restaurant-hero{grid-template-columns:1fr}.restaurant-hero-images{max-width:430px}.restaurant-list{grid-template-columns:1fr}}
@@ -2318,6 +2333,44 @@
 .expert-modal-note{font-size:10.5px;color:var(--ink-soft);margin-top:16px;}
 .expert-back-btn{border:1px solid var(--line);background:var(--white);color:var(--ink-soft);font:inherit;font-size:11.5px;font-weight:700;padding:7px 12px;cursor:pointer;margin-bottom:14px;}
 .expert-back-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Transportation pages use the same rounded control language as the rest of
+   the portal. Keep this scoped so document previews and unrelated pages stay
+   unchanged. */
+.theme-route input,.theme-route select,.theme-route textarea,
+.theme-route button,.theme-route a,
+#page-car-all input,#page-car-all select,#page-car-all textarea,
+#page-car-all button,#page-car-all a{border-radius:var(--radius-sm);}
+.theme-route input[type=checkbox],#page-car-all input[type=checkbox]{border-radius:var(--radius-xs);}
+.theme-route .route-swap-small{border-radius:var(--radius-full);}
+.theme-route .route-line-dialog{border-radius:var(--radius-md);overflow:hidden;}
+.theme-route .route-line-map-wrap,.theme-route .route-table-wrap,
+.theme-route .route-single-result,.theme-route .route-place-summary,
+.theme-route .route-choice,.theme-route .portal-result,
+.theme-route .portal-result,#page-car-all .portal-result,#page-car-all .car-transfer-memo{border-radius:var(--radius-sm);}
+
+/* Transportation labels stay Japanese-only and remain easy to scan. */
+#page-etc .calc-kpi span,
+#page-airport .apply-field label.transport-label-emphasis,
+#page-car-all .apply-field label.transport-label-emphasis{font-size:14px !important;}
+#page-car-all .car-mobile-calc{display:none;}
+#page-car-all .car-screenshot-row{display:flex;}
+#page-car-all .car-screenshot-row > *{width:100%;min-height:48px;box-sizing:border-box;text-align:center;}
+#page-car-all .car-reference-links > *{min-height:48px;box-sizing:border-box;}
+#page-car-all .car-reference-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+#page-car-all .car-reference-links > *{width:100%;text-align:center;white-space:nowrap;font-size:12.5px;padding:12px 8px;}
+#page-car-all .car-total-result{border-color:var(--accent);background:var(--paper-2);}
+#page-car-all .car-total-result strong{font-size:25px;color:var(--accent);}
+@media(max-width:640px){
+  #page-car-all .car-mobile-calc{display:block;}
+  #page-car-all .car-reference-links{grid-template-columns:1fr;}
+  #page-car-all #carCalculationResults{scroll-margin-top:12px;}
+}
+
+/* Keep the two external route buttons equal-sized and side by side. */
+#page-airport .portal-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+#page-airport .portal-actions .secondary-btn{width:100%;min-height:48px;padding:12px 10px;}
+@media(max-width:520px){#page-airport .portal-actions .secondary-btn{font-size:12px;padding:10px 6px;}}
 @media(max-width:640px){
   .expert-modal-backdrop{padding:6px;}
   .expert-modal{max-height:97vh;}

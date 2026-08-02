@@ -39,7 +39,7 @@
                 </optgroup>
               </select>
               <div class="route-input-wrap">
-                <input id="routeOrigin" placeholder="例：上野駅" autocomplete="off">
+                <input id="routeOrigin" placeholder="例：東京都千代田区丸の内1-1-1" autocomplete="off">
                 <div class="route-suggestions" id="routeOriginSuggestions"></div>
               </div>
             </div>
@@ -67,7 +67,7 @@
                 </optgroup>
               </select>
               <div class="route-input-wrap">
-                <input id="routeDestination" placeholder="例：池袋駅" autocomplete="off">
+                <input id="routeDestination" placeholder="例：東京都千代田区丸の内1-1-1" autocomplete="off">
                 <div class="route-suggestions" id="routeDestinationSuggestions"></div>
               </div>
             </div>
@@ -447,7 +447,7 @@ function routeBindEndpoint(endpoint){
   const key = endpoint.toLowerCase();
   const input = document.getElementById(`route${endpoint}`);
   const type = document.getElementById(`route${endpoint}Type`);
-  const placeholders = {station:"例：上野駅",campus:"例：東京大学 本郷",school:"例：赤門会",vocational:"例：文化服装学院",primarySecondary:"例：新宿区立西新宿小学校",ur:"例：豊島五丁目",address:"例：東京都葛飾区高砂3-1-1"};
+  const placeholders = {station:"例：上野駅",campus:"例：東京大学 本郷",school:"例：赤門会",vocational:"例：文化服装学院",primarySecondary:"例：新宿区立西新宿小学校",ur:"例：豊島五丁目",address:"例：東京都千代田区丸の内1-1-1"};
   input.addEventListener("input",() => { routeState[key] = null; routeRenderSelected(endpoint); routeShowSuggestions(endpoint); });
   input.addEventListener("focus",() => routeShowSuggestions(endpoint));
   type.addEventListener("change",() => {

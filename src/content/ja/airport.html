@@ -1,6 +1,6 @@
 <div id="page-airport" class="page-view active theme-route">
     <div class="eyebrow">空港から自宅まで</div>
-    <div class="portal-alert"><strong>主要駅と住所を分けて検索：</strong>「主要駅」は駅までの鉄道・バスを内蔵データで比較します。「住所」は入力した住所を外部地図へそのまま渡し、内蔵結果は選択した最寄り主要駅までの概算として表示します。</div>
+    <div class="portal-alert"><strong>主要駅と住所を分けて検索：</strong>「主要駅」は駅までの鉄道・バスを内蔵データで比較します。「住所」は入力した地域名から最寄り主要駅を推定し、内蔵データで送迎料金を概算します。正確な住所のルートは外部地図で確認してください。</div>
     <div class="grid">
       <div class="card">
         <div class="section-title">到着空港</div>
@@ -11,15 +11,8 @@
         <div class="section-title" style="margin-top:18px;">目的地の指定方法</div>
         <div class="apply-fields">
           <div class="apply-field full"><label>目的地タイプ Destination type</label><select id="airportDestinationMode"><option value="station">主要駅から選ぶ</option><option value="address">住所を入力する</option></select></div>
-          <div class="apply-field full" id="airportStationWrap"><label>目的駅 Destination station</label><select id="airportStation"><option value="tokyo">東京駅</option><option value="shinagawa">品川駅</option><option value="shibuya">渋谷駅</option><option value="shinjuku">新宿駅</option><option value="ikebukuro">池袋駅</option><option value="ueno">上野駅・京成上野駅</option><option value="nippori">日暮里駅</option><option value="asakusa">浅草駅</option><option value="oshiage">押上駅</option><option value="yokohama">横浜駅</option><option value="omiya">大宮駅</option><option value="chiba">千葉駅</option></select></div>
-          <div class="apply-field full" id="airportAddressWrap" style="display:none;"><label>自宅・ホテルの住所 Exact address</label><input id="airportAddress" placeholder="例：東京都新宿区西新宿2-8-1"></div>
-          <div class="apply-field full" id="airportAddressAnchorWrap" style="display:none;"><label>住所の最寄り主要駅（概算の基準）</label><select id="airportAddressAnchor"><option value="tokyo">東京駅</option><option value="shinagawa">品川駅</option><option value="shibuya">渋谷駅</option><option value="shinjuku" selected>新宿駅</option><option value="ikebukuro">池袋駅</option><option value="ueno">上野駅・京成上野駅</option><option value="nippori">日暮里駅</option><option value="asakusa">浅草駅</option><option value="oshiage">押上駅</option><option value="yokohama">横浜駅</option><option value="omiya">大宮駅</option><option value="chiba">千葉駅</option></select></div>
-        </div>
-        <div class="section-title" style="margin-top:18px;">到着・出発時刻</div>
-        <div class="apply-fields">
-          <div class="apply-field"><label>飛行機の到着予定 Flight arrival</label><input type="datetime-local" id="airportArrival"></div>
-          <div class="apply-field"><label>入国・荷物の所要時間 Buffer</label><select id="airportArrivalBuffer"><option value="30">国内線：30分</option><option value="60">国際線・身軽：60分</option><option value="90" selected>国際線・標準：90分</option><option value="120">混雑・荷物多め：120分</option></select></div>
-          <div class="apply-field full"><label>空港を出発する予定時刻 Airport departure</label><div style="display:flex;gap:8px;flex-wrap:wrap;"><input type="datetime-local" id="airportDeparture" style="flex:1;min-width:150px;"><button type="button" class="secondary-btn" id="airportSyncDeparture" style="flex:0 0 auto;">到着＋手続時間で設定</button></div></div>
+          <div class="apply-field full" id="airportStationWrap"><label>目的駅 Destination station</label><select id="airportStation"><option value="tokyo">東京駅</option><option value="shinagawa">品川駅</option><option value="shibuya">渋谷駅</option><option value="shinjuku">新宿駅</option><option value="ikebukuro">池袋駅</option><option value="ueno">上野駅・京成上野駅</option><option value="nippori">日暮里駅</option><option value="asakusa">浅草駅</option><option value="oshiage">押上駅</option><option value="yokohama">横浜駅</option><option value="omiya">大宮駅</option><option value="saitama">さいたま新都心駅</option><option value="urawa">浦和駅</option><option value="wakoshi">和光市駅</option><option value="tokorozawa">所沢駅</option><option value="kawagoe">川越駅</option><option value="sakado">坂戸駅</option><option value="kumagaya">熊谷駅</option><option value="shinkoshigaya">新越谷駅</option><option value="chiba">千葉駅</option><option value="chibachuo">千葉中央駅</option><option value="funabashi">船橋駅</option><option value="goi">五井駅</option><option value="soga">蘇我駅</option><option value="kisarazu">木更津駅</option><option value="sodegaura">袖ヶ浦バスターミナル</option><option value="kaneda">木更津金田バスターミナル</option><option value="mitsui">三井アウトレットパーク木更津</option><option value="kimitsu">君津駅</option><option value="tateyama">館山駅</option><option value="mobara">茂原駅</option><option value="shinyokohama">新横浜駅</option><option value="centerminami">センター南駅</option><option value="tamaplaza">たまプラーザ駅</option><option value="futamatagawa">二俣川駅</option><option value="minatomirai">みなとみらい</option><option value="shinyurigaoka">新百合ヶ丘駅</option><option value="honatsugi">本厚木駅</option><option value="sagamiono">相模大野駅</option><option value="kawasaki">川崎駅</option><option value="machida">町田駅</option></select></div>
+          <div class="apply-field full" id="airportAddressWrap" style="display:none;"><label>自宅・ホテルの住所 Exact address</label><input id="airportAddress" placeholder="例：東京都千代田区丸の内1-1-1"></div>
         </div>
         <div class="section-title" style="margin-top:18px;">貸切送迎の条件</div>
         <div class="apply-fields">
@@ -31,13 +24,11 @@
       </div>
       <div>
         <div class="section-title">おすすめ経路 Route choices</div>
-        <div class="market-note" id="airportTimeSummary" style="margin-bottom:12px;"></div>
         <div id="airportRoutes"></div>
         <div class="portal-grid" style="margin-top:12px;">
           <div class="portal-result"><span>貸切送迎の概算</span><strong id="airportCharter">—</strong><small id="airportCharterNote">高速代・駐車代・待機料は事業者により別途。</small></div>
           <div class="portal-result"><span>道路距離・所要時間</span><strong id="airportRoad">—</strong><small id="airportRoadNote">選択した主要駅までの通常時概算。</small></div>
         </div>
-        <div class="market-note" id="airportLateWarning" style="display:none;margin-top:12px;"></div>
         <div class="portal-actions"><a class="secondary-btn" id="airportGoogle" target="_blank" rel="noopener">Google Mapsで即時確認</a><a class="secondary-btn route-navitime-btn" id="airportNavitime" target="_blank" rel="noopener">NAVITIMEで詳細確認</a></div>
         <div class="portal-source">所要時間は待ち時間・乗換を含む幅で表示し、実際の便により変わります。公式情報：<a href="https://www.keikyu.co.jp/visit/haneda-airport/access/train.html" target="_blank" rel="noopener">京急 羽田主要駅</a>／<a href="https://www.tokyo-monorail.co.jp/english/guidance/train_info.html" target="_blank" rel="noopener">東京モノレール運賃</a>／<a href="https://www.keisei.co.jp/keisei/tetudou/skyliner/us/traffic/skyliner_fares.php" target="_blank" rel="noopener">京成スカイライナー</a>／<a href="https://www.jreast.co.jp/en/multi/nex/tickets/" target="_blank" rel="noopener">JR成田エクスプレス</a>／<a href="https://www.tokyo-haneda.com/access/bus/index.html" target="_blank" rel="noopener">羽田空港バス</a></div>
       </div>
@@ -64,7 +55,18 @@ const AIRPORT_ROUTES = {
   oshiage:{road:[40,70,30],charter:[13000,21000],routes:[["京急・都営浅草線","羽田空港 → 押上（直通系統）",41,56,"約¥590〜¥650","公式目安最速41分・列車により直通"],["空港バス等","羽田空港 → 東京スカイツリー方面",55,90,"便別料金","運行日・停留所を要確認"]]},
   yokohama:{road:[30,55,25],charter:[12000,19000],routes:[["京急線・直通系統","羽田空港 → 横浜",24,32,"¥370（IC ¥363）前後","公式目安28分・列車により乗換なし"],["空港バス","羽田空港 → 横浜駅 YCAT",30,55,"約¥650〜¥800","ターミナル・道路状況で変動"]]},
   omiya:{road:[70,110,58],charter:[23000,35000],routes:[["京急＋JR","羽田空港 → 品川／東京 → 大宮",65,85,"約¥1,100〜¥1,500","1回程度乗換"],["空港バス","羽田空港 → 大宮・さいたま新都心",80,125,"約¥1,700〜¥2,000","予約・運行日を要確認"]]},
-  chiba:{road:[65,105,49],charter:[21000,32000],routes:[["空港バス","羽田空港 → 千葉駅方面",65,100,"約¥1,400〜¥1,700","通常は荷物が多い時に便利"],["鉄道","羽田空港 → 都内乗換 → 千葉",75,105,"約¥1,100〜¥1,500","1〜2回乗換"]]}
+  chiba:{road:[65,105,49],charter:[21000,32000],routes:[["空港バス","羽田空港 → 千葉駅方面",65,100,"約¥1,400〜¥1,700","通常は荷物が多い時に便利"],["鉄道","羽田空港 → 都内乗換 → 千葉",75,105,"約¥1,100〜¥1,500","1〜2回乗換"]]},
+  chibachuo:{road:[70,115,55],charter:[22000,34000],routes:[["空港バス（直通）","羽田空港 → 千葉中央駅方面",70,90,"大人¥1,600","2026年2月改定・羽田空港公式掲載"],["鉄道","羽田空港 → 都内乗換 → 千葉中央",80,110,"約¥1,200〜¥1,700","乗換・時間帯により変動"]]},
+  funabashi:{road:[55,95,45],charter:[19000,29000],routes:[["空港バス（直通）","羽田空港 → 西船橋駅・船橋駅",55,70,"大人¥1,400","2026年2月改定・羽田空港公式掲載"],["鉄道","羽田空港 → 品川／東京 → 船橋",70,100,"約¥1,000〜¥1,500","乗換・時間帯により変動"]]},
+  goi:{road:[70,115,55],charter:[22000,34000],routes:[["空港バス（直通）","羽田空港 → 五井駅",45,60,"約¥1,600〜¥1,800","運行会社・便により変動"],["鉄道","羽田空港 → 品川／千葉 → 五井",80,120,"約¥1,300〜¥2,000","乗換・時間帯により変動"]]},
+  soga:{road:[75,120,60],charter:[23000,35000],routes:[["空港バス（直通）","羽田空港 → 蘇我駅",65,85,"約¥1,600〜¥1,900","運行会社・便により変動"],["鉄道","羽田空港 → 品川／千葉 → 蘇我",85,125,"約¥1,400〜¥2,100","乗換・時間帯により変動"]]},
+  kisarazu:{road:[50,85,42],charter:[18000,28000],routes:[["空港バス（直通）","羽田空港 → 木更津金田BT・袖ヶ浦BT → 木更津駅東口",35,50,"大人¥1,400","京急・小湊・日東／予約不可"],["自動車","羽田空港 → 木更津",45,70,"高速代別","道路状況により変動"]]},
+  sodegaura:{road:[45,75,35],charter:[16000,25000],routes:[["空港バス（直通）","羽田空港 → 袖ヶ浦バスターミナル",25,40,"大人¥1,200","京急・小湊・日東／予約不可"],["自動車","羽田空港 → 袖ヶ浦",35,60,"高速代別","道路状況により変動"]]},
+  kaneda:{road:[40,70,30],charter:[15000,23000],routes:[["空港バス（直通）","羽田空港 → 木更津金田バスターミナル",25,35,"大人¥1,200","京急・小湊・日東／予約不可"],["自動車","羽田空港 → 木更津金田",30,50,"高速代別","道路状況により変動"]]},
+  mitsui:{road:[40,70,30],charter:[15000,23000],routes:[["空港バス（直通）","羽田空港 → 三井アウトレットパーク木更津",25,35,"約¥1,200〜¥1,400","運行会社・便により変動"],["自動車","羽田空港 → 三井アウトレットパーク木更津",30,50,"高速代別","道路状況により変動"]]},
+  kimitsu:{road:[65,105,55],charter:[20000,31000],routes:[["空港バス（直通）","羽田空港 → 君津駅",50,70,"約¥1,500〜¥1,800","運行会社・便により変動"],["自動車","羽田空港 → 君津",55,85,"高速代別","道路状況により変動"]]},
+  tateyama:{road:[100,155,85],charter:[28000,42000],routes:[["空港バス（直通）","羽田空港 → 館山駅",85,110,"約¥2,300〜¥2,800","運行会社・便により変動"],["自動車","羽田空港 → 館山",90,130,"高速代別","道路状況により変動"]]},
+  mobara:{road:[95,145,80],charter:[27000,40000],routes:[["空港バス（直通）","羽田空港 → 茂原駅",65,85,"約¥1,800〜¥2,200","小湊鐵道・便により変動"],["自動車","羽田空港 → 茂原",75,115,"高速代別","道路状況により変動"]]}
  },
  NRT:{
   tokyo:{road:[70,110,68],charter:[24000,36000],routes:[["JR成田エクスプレス","成田空港 → 東京",53,65,"¥3,140","公式最速53分・指定席"],["スカイライナー＋JR","成田空港 → 日暮里 → 東京",55,72,"約¥2,630〜¥2,740","日暮里で1回乗換"]]},
@@ -78,30 +80,102 @@ const AIRPORT_ROUTES = {
   oshiage:{road:[65,100,61],charter:[22000,34000],routes:[["アクセス特急","成田空港 → 押上",50,68,"¥1,170前後","列車により乗換なし"],["スカイライナー＋京成線","成田空港 → 青砥 → 押上",55,75,"約¥2,000〜¥2,600","停車列車を要確認"]]},
   yokohama:{road:[110,160,100],charter:[33000,50000],routes:[["JR成田エクスプレス","成田空港 → 横浜",85,105,"¥4,480","乗換なし・指定席"],["空港バス","成田空港 → 横浜駅 YCAT",100,155,"約¥3,700〜¥4,000","道路状況・便により変動"]]},
   omiya:{road:[105,155,100],charter:[32000,48000],routes:[["スカイライナー＋JR","成田空港 → 京成上野／日暮里 → 大宮",75,98,"約¥2,940〜¥3,100","公式運賃案内：上野・日暮里乗換"],["空港バス","成田空港 → 大宮方面",110,165,"約¥3,000〜¥4,000","予約・運行日を要確認"]]},
-  chiba:{road:[45,75,40],charter:[15000,24000],routes:[["JR成田線","成田空港 → 千葉",45,62,"約¥700〜¥1,000","普通・快速の便により変動"],["空港バス","成田空港 → 千葉駅方面",45,80,"約¥1,200〜¥1,600","道路状況・便により変動"]]}
+  chiba:{road:[45,75,40],charter:[15000,24000],routes:[["JR成田線","成田空港 → 千葉",45,62,"約¥700〜¥1,000","普通・快速の便により変動"],["空港バス","成田空港 → 千葉駅方面",45,80,"約¥1,200〜¥1,600","道路状況・便により変動"]]},
+  mitsui:{road:[85,135,80],charter:[26000,40000],routes:[["空港バス（直通）","成田空港 → 三井アウトレットパーク木更津方面",90,130,"約¥2,000〜¥2,500","成田空港公式掲載・便により変動"],["鉄道＋バス","成田空港 → 千葉方面 → 木更津",120,180,"約¥2,000〜¥3,000","乗換・運行日を要確認"]]},
+  mobara:{road:[90,145,90],charter:[27000,41000],routes:[["空港バス（直通）","成田空港 → 茂原駅方面",90,130,"約¥2,000〜¥2,500","成田空港公式掲載・便により変動"],["鉄道","成田空港 → 千葉方面 → 茂原",100,160,"約¥1,500〜¥2,500","乗換・時間帯により変動"]]}
  }
 };
-function airportLocalValue(date){const d=new Date(date);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);}
-function airportFormatTime(date){return date&&isFinite(date)?`${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`:"—";}
-function airportSyncDeparture(){if(!document.querySelector("#airportFrom"))return;const arrival=new Date(document.getElementById("airportArrival").value);if(!isFinite(arrival))return;arrival.setMinutes(arrival.getMinutes()+portalNum("airportArrivalBuffer"));document.getElementById("airportDeparture").value=airportLocalValue(arrival);airportRender();}
+/* Additional direct airport-bus destinations from the official Haneda/Narita access lists. */
+const AIRPORT_BUS_EXTRAS={
+ HND:{
+  saitama:{road:[75,125,55],charter:[23000,35000],routes:[["空港バス（直通）","羽田空港 → さいたま新都心駅・大宮駅",75,100,"約¥1,700〜¥2,000","東京空港交通・西武バス等／便により変動"]]},
+  urawa:{road:[75,125,55],charter:[23000,35000],routes:[["空港バス（直通）","羽田空港 → 浦和駅",85,110,"約¥1,700〜¥2,000","東京空港交通・国際興業バス等／便により変動"]]},
+  wakoshi:{road:[65,110,45],charter:[21000,32000],routes:[["空港バス（直通）","羽田空港 → 和光市駅",70,95,"約¥1,800〜¥2,000","東京空港交通・西武バス／便により変動"]]},
+  tokorozawa:{road:[85,140,65],charter:[25000,38000],routes:[["空港バス（直通）","羽田空港 → 東所沢駅・所沢駅",85,115,"約¥2,000","東京空港交通・西武バス／便により変動"]]},
+  kawagoe:{road:[90,145,70],charter:[26000,40000],routes:[["空港バス（直通）","羽田空港 → 川越駅・本川越駅",90,125,"約¥2,000","東京空港交通・西武バス等／一部運休あり"]]},
+  sakado:{road:[100,165,80],charter:[28000,42000],routes:[["空港バス（直通）","羽田空港 → 坂戸駅・森林公園駅",105,145,"約¥2,000〜¥2,300","東京空港交通等／便により変動"]]},
+  kumagaya:{road:[125,200,105],charter:[33000,50000],routes:[["空港バス（直通）","羽田空港 → 熊谷駅・籠原駅",140,190,"約¥2,300〜¥2,800","東京空港交通等／便により変動"]]},
+  shinkoshigaya:{road:[70,120,50],charter:[22000,34000],routes:[["空港バス（直通）","羽田空港 → 新越谷駅・草加駅方面",75,110,"約¥1,500","京急・東武バス等／便により変動"]]},
+  shinyokohama:{road:[35,65,25],charter:[14000,22000],routes:[["空港バス（直通）","羽田空港 → 新横浜駅",40,60,"大人¥1,000","京急バス／IC利用可"]]},
+  centerminami:{road:[45,80,35],charter:[16000,25000],routes:[["空港バス（直通）","羽田空港 → センター南・センター北駅",70,95,"大人¥1,200","京急・東急バス／IC利用可"]]},
+  tamaplaza:{road:[45,85,35],charter:[16000,25000],routes:[["空港バス（直通）","羽田空港 → たまプラーザ駅・市が尾駅",50,75,"約¥1,200〜¥1,300","京急・東急バス／便により変動"]]},
+  futamatagawa:{road:[55,95,40],charter:[18000,28000],routes:[["空港バス（直通）","羽田空港 → 二俣川駅",50,75,"大人¥1,200","京急・相鉄バス／IC利用可"]]},
+  minatomirai:{road:[35,65,30],charter:[14000,22000],routes:[["空港バス（直通）","羽田空港 → 横浜駅・みなとみらい",30,50,"大人¥800〜¥1,000","京急バス／2026年2月改定"]]},
+  shinyurigaoka:{road:[65,110,50],charter:[21000,32000],routes:[["空港バス（直通）","羽田空港 → 新百合ヶ丘駅",70,100,"大人¥1,800","京急・小田急バス／2025年7月改定"]]},
+  honatsugi:{road:[75,125,55],charter:[23000,35000],routes:[["空港バス（直通）","羽田空港 → 本厚木駅",60,90,"大人¥1,600","京急・神奈中バス／便により変動"]]},
+  sagamiono:{road:[75,130,60],charter:[24000,36000],routes:[["空港バス（直通）","羽田空港 → 相模大野駅",70,105,"約¥1,600〜¥1,800","京急・神奈中バス／便により変動"]]},
+  kawasaki:{road:[25,50,20],charter:[10000,16000],routes:[["空港バス（直通）","羽田空港 → 川崎駅",35,55,"大人¥310","京急バス路線バス"]]},
+  machida:{road:[70,120,55],charter:[22000,34000],routes:[["空港バス（直通）","羽田空港 → 町田バスセンター",80,110,"約¥1,800〜¥2,000","京急・神奈中バス／便により変動"]]}
+ },
+ NRT:{
+  saitama:{road:[100,160,85],charter:[30000,45000],routes:[["空港バス・乗換","成田空港 → 東京・大宮方面",110,170,"約¥2,500〜¥3,500","運行日・乗換を要確認"]]},
+  urawa:{road:[100,160,85],charter:[30000,45000],routes:[["空港バス・乗換","成田空港 → 東京・浦和方面",115,175,"約¥2,500〜¥3,500","運行日・乗換を要確認"]]},
+  wakoshi:{road:[95,150,80],charter:[29000,43000],routes:[["空港バス（直通）","成田空港 → 和光市駅方面",100,150,"約¥2,000〜¥3,000","成田空港公式掲載・便により変動"]]},
+  tokorozawa:{road:[110,175,90],charter:[32000,48000],routes:[["空港バス（直通）","成田空港 → 東所沢駅・所沢駅方面",120,180,"約¥2,500〜¥3,500","成田空港公式掲載・便により変動"]]},
+  kawagoe:{road:[115,180,95],charter:[33000,50000],routes:[["空港バス（直通）","成田空港 → 坂戸駅・川越駅方面",120,180,"約¥2,500〜¥3,500","成田空港公式掲載・便により変動"]]},
+  shinyokohama:{road:[100,160,90],charter:[32000,48000],routes:[["空港バス（直通）","成田空港 → 新横浜駅・横浜方面",100,160,"約¥3,000〜¥4,000","成田空港公式掲載・便により変動"]]},
+  minatomirai:{road:[105,165,95],charter:[33000,50000],routes:[["空港バス（直通）","成田空港 → Y-CAT・みなとみらい",100,155,"約¥3,600〜¥4,000","成田空港公式掲載・便により変動"]]},
+  machida:{road:[115,180,100],charter:[35000,52000],routes:[["空港バス（直通）","成田空港 → 町田駅方面",120,180,"約¥3,000〜¥4,000","成田空港公式掲載・便により変動"]]}
+ }
+};
+Object.entries(AIRPORT_BUS_EXTRAS).forEach(([airport,routes])=>Object.assign(AIRPORT_ROUTES[airport],routes));
+const AIRPORT_ADDRESS_STATION_RULES=[
+ [["千代田区","中央区","江東区","港区"],"tokyo"],
+ [["品川区","大田区"],"shinagawa"],
+ [["渋谷区","目黒区","世田谷区"],"shibuya"],
+ [["新宿区","中野区","杉並区"],"shinjuku"],
+ [["豊島区","練馬区"],"ikebukuro"],
+ [["台東区"],"ueno"],
+ [["荒川区","北区","足立区"],"nippori"],
+ [["墨田区","葛飾区","江戸川区"],"oshiage"],
+ [["木更津市","木更津"],"kisarazu"],
+ [["袖ヶ浦市","袖ヶ浦"],"sodegaura"],
+ [["君津市","君津"],"kimitsu"],
+ [["館山市","館山"],"tateyama"],
+ [["茂原市","茂原"],"mobara"],
+ [["さいたま市","さいたま新都心","大宮"],"saitama"],
+ [["浦和区","浦和"],"urawa"],
+ [["和光市","和光"],"wakoshi"],
+ [["所沢市","所沢"],"tokorozawa"],
+ [["川越市","川越"],"kawagoe"],
+ [["坂戸市","坂戸"],"sakado"],
+ [["熊谷市","熊谷"],"kumagaya"],
+ [["越谷市","新越谷"],"shinkoshigaya"],
+ [["横浜市港北区","新横浜"],"shinyokohama"],
+ [["横浜市都筑区","センター南","センター北"],"centerminami"],
+ [["横浜市青葉区","たまプラーザ","市が尾"],"tamaplaza"],
+ [["横浜市旭区","二俣川"],"futamatagawa"],
+ [["横浜市西区","みなとみらい"],"minatomirai"],
+ [["川崎市麻生区","新百合ヶ丘"],"shinyurigaoka"],
+ [["厚木市","本厚木"],"honatsugi"],
+ [["相模原市南区","相模大野"],"sagamiono"],
+ [["川崎市","川崎"],"kawasaki"],
+ [["町田市","町田"],"machida"],
+ [["横浜市","横浜"],"yokohama"],
+ [["さいたま市","大宮"],"omiya"],
+ [["千葉市","千葉"],"chiba"]
+];
+function airportAddressStationKey(address){
+ const value=String(address||"");
+ for(const [areas,key] of AIRPORT_ADDRESS_STATION_RULES){if(areas.some(area=>value.includes(area)))return key;}
+ return "shinjuku";
+}
 function airportRender(){
  if(!document.querySelector("#airportFrom"))return;
- const airport=document.getElementById("airportFrom").value,mode=document.getElementById("airportDestinationMode").value,key=mode==="station"?document.getElementById("airportStation").value:document.getElementById("airportAddressAnchor").value,data=AIRPORT_ROUTES[airport][key];
- document.getElementById("airportStationWrap").style.display=mode==="station"?"block":"none";document.getElementById("airportAddressWrap").style.display=mode==="address"?"block":"none";document.getElementById("airportAddressAnchorWrap").style.display=mode==="address"?"block":"none";
+ const airport=document.getElementById("airportFrom").value,mode=document.getElementById("airportDestinationMode").value,address=document.getElementById("airportAddress").value.trim(),key=mode==="station"?document.getElementById("airportStation").value:airportAddressStationKey(address),data=AIRPORT_ROUTES[airport][key]||AIRPORT_ROUTES[airport].shinjuku;
+ document.getElementById("airportStationWrap").style.display=mode==="station"?"block":"none";document.getElementById("airportAddressWrap").style.display=mode==="address"?"block":"none";
  document.getElementById("airportRoutes").innerHTML=data.routes.map((r,i)=>`<div class="route-choice"><h4>${i===0?"おすすめ ":"別案 "}${r[0]}</h4><div class="route-meta">${r[2]}〜${r[3]}分 ／ ${r[4]}</div><div>${r[1]}</div><div style="font-size:10.5px;color:var(--ink-soft);margin-top:5px;">${r[5]}</div></div>`).join("");
- const departure=new Date(document.getElementById("airportDeparture").value),validDeparture=isFinite(departure),best=data.routes[0],arrivalLow=validDeparture?new Date(departure.getTime()+best[2]*60000):null,arrivalHigh=validDeparture?new Date(departure.getTime()+best[3]*60000):null,stationSelect=mode==="station"?document.getElementById("airportStation"):document.getElementById("airportAddressAnchor"),stationName=stationSelect.selectedOptions[0].textContent;
- document.getElementById("airportTimeSummary").innerHTML=validDeparture?`<strong>時刻の流れ：</strong> 空港到着 ${airportFormatTime(new Date(document.getElementById("airportArrival").value))} → 空港出発 ${airportFormatTime(departure)} → ${stationName} 到着見込 ${airportFormatTime(arrivalLow)}〜${airportFormatTime(arrivalHigh)}`:"空港を出発する予定時刻を入力すると、目的駅への到着見込を表示します。";
- let [low,high]=data.charter,vehicle=document.getElementById("airportVehicle").value,multiplier=vehicle==="van"?1.3:vehicle==="bus"?2.2:1;const hour=validDeparture?departure.getHours():12,night=hour>=22||hour<5;if(night)multiplier*=1.2;if(portalNum("airportPassengers")>4||portalNum("airportLuggage")>3)low*=1.2,high*=1.2;
- document.getElementById("airportCharter").textContent=portalRange(low*multiplier,high*multiplier);document.getElementById("airportCharterNote").textContent=`${night?"深夜・早朝割増を反映。":"通常時間帯の概算。"} 高速代・駐車代・待機料は別途の場合あり。`;
+ const stationName=mode==="station"?document.getElementById("airportStation").selectedOptions[0].textContent:(key==="tokyo"?"東京駅":key==="shinagawa"?"品川駅":key==="shibuya"?"渋谷駅":key==="ikebukuro"?"池袋駅":key==="ueno"?"上野駅":key==="nippori"?"日暮里駅":key==="oshiage"?"押上駅":key==="yokohama"?"横浜駅":key==="omiya"?"大宮駅":key==="saitama"?"さいたま新都心駅":key==="urawa"?"浦和駅":key==="wakoshi"?"和光市駅":key==="tokorozawa"?"所沢駅":key==="kawagoe"?"川越駅":key==="sakado"?"坂戸駅":key==="kumagaya"?"熊谷駅":key==="shinkoshigaya"?"新越谷駅":key==="chiba"?"千葉駅":key==="chibachuo"?"千葉中央駅":key==="funabashi"?"船橋駅":key==="goi"?"五井駅":key==="soga"?"蘇我駅":key==="kisarazu"?"木更津駅":key==="sodegaura"?"袖ヶ浦バスターミナル":key==="kaneda"?"木更津金田バスターミナル":key==="mitsui"?"三井アウトレットパーク木更津":key==="kimitsu"?"君津駅":key==="tateyama"?"館山駅":key==="mobara"?"茂原駅":key==="shinyokohama"?"新横浜駅":key==="centerminami"?"センター南駅":key==="tamaplaza"?"たまプラーザ駅":key==="futamatagawa"?"二俣川駅":key==="minatomirai"?"みなとみらい":key==="shinyurigaoka"?"新百合ヶ丘駅":key==="honatsugi"?"本厚木駅":key==="sagamiono"?"相模大野駅":key==="kawasaki"?"川崎駅":key==="machida"?"町田駅":"新宿駅");
+ let [low,high]=data.charter,vehicle=document.getElementById("airportVehicle").value,multiplier=vehicle==="van"?1.3:vehicle==="bus"?2.2:1;if(portalNum("airportPassengers")>4||portalNum("airportLuggage")>3)low*=1.2,high*=1.2;
+ document.getElementById("airportCharter").textContent=portalRange(low*multiplier,high*multiplier);document.getElementById("airportCharterNote").textContent="通常時間帯の概算。高速代・駐車代・待機料は別途の場合あり。";
  document.getElementById("airportRoad").textContent=`約${data.road[2]}km・${data.road[0]}〜${data.road[1]}分`;document.getElementById("airportRoadNote").textContent=mode==="address"?`${stationName}までの概算。入力住所までの正確な距離は外部地図で確認。`:"選択した主要駅までの通常時概算。";
- const warning=document.getElementById("airportLateWarning");warning.style.display=night?"block":"none";warning.innerHTML=night?`<strong>深夜・早朝：</strong>${airport==="HND"?"羽田は一部深夜バスがありますが、": "成田は列車・バスの本数が少なくなります。"}実際の運行便、最終列車、予約可否を公式サイトで確認してください。`:"";
- const terminal=document.getElementById("airportTerminal").value,origin=airport==="HND"?`羽田空港第${terminal}ターミナル`:`成田空港第${terminal}ターミナル`,address=document.getElementById("airportAddress").value.trim(),destination=mode==="address"&&address?address:stationName;
+ const terminal=document.getElementById("airportTerminal").value,origin=airport==="HND"?`羽田空港第${terminal}ターミナル`:`成田空港第${terminal}ターミナル`,destination=mode==="address"&&address?address:stationName;
  document.getElementById("airportGoogle").href=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&travelmode=transit`;
  document.getElementById("airportNavitime").href=`https://www.navitime.co.jp/transfer/searchlist?orvStationName=${encodeURIComponent(origin)}&dnvStationName=${encodeURIComponent(stationName)}`;
  document.getElementById("airportNavitime").textContent=mode==="address"?"NAVITIMEで最寄り主要駅まで確認":"NAVITIMEで詳細確認";
 }
 if(document.querySelector("#airportFrom")){
-["airportFrom","airportTerminal","airportDestinationMode","airportStation","airportAddressAnchor","airportVehicle","airportPassengers","airportLuggage","airportDeparture"].forEach(id=>document.getElementById(id).addEventListener("change",airportRender));document.getElementById("airportAddress").addEventListener("input",airportRender);document.getElementById("airportCalcBtn").addEventListener("click",airportRender);document.getElementById("airportSyncDeparture").addEventListener("click",airportSyncDeparture);document.getElementById("airportArrival").addEventListener("change",airportSyncDeparture);document.getElementById("airportArrivalBuffer").addEventListener("change",airportSyncDeparture);
-(function airportDate(){const d=new Date(Date.now()+86400000);d.setHours(17,0,0,0);document.getElementById("airportArrival").value=airportLocalValue(d);airportSyncDeparture();})();
+ ["airportFrom","airportTerminal","airportDestinationMode","airportStation","airportVehicle","airportPassengers","airportLuggage"].forEach(id=>document.getElementById(id).addEventListener("change",airportRender));document.getElementById("airportAddress").addEventListener("input",airportRender);document.getElementById("airportCalcBtn").addEventListener("click",airportRender);
+ airportRender();
 }
 </script>
