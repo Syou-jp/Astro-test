@@ -1,22 +1,82 @@
 <div id="page-etc" class="page-view active theme-route">
+  <style>
+    #page-etc .grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;}
+    #page-etc #etcOpenMap{display:none!important;}
+    #page-etc #etcCalcBtn{display:none!important;}
+    #page-etc #etcIcModalTitle{display:none!important;}
+    #page-etc .calc-kpi-grid{margin-top:0;}
+    #page-etc #etcPerKm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    #page-etc > .etc-info-panel{line-height:1.75;padding:14px 18px;margin:0 0 12px;}
+    #page-etc .etc-info-panel #etcIntro{display:inline;padding:0;margin:0;background:transparent;border:0;line-height:inherit;}
+    #page-etc .etc-info-panel #etcIntro strong{display:inline;margin-right:4px;}
+    #page-etc .etc-info-panel > .portal-source{display:inline;margin:0;padding:0;line-height:inherit;background:transparent;border:0;}
+    #page-etc .etc-info-panel > .portal-source > span:first-child{margin-left:8px;}
+    #page-etc #etcIcModal > [role="dialog"]{display:flex!important;flex-direction:column;}
+    #page-etc #etcModalMap{order:1;}
+    #page-etc #etcIcModal > [role="dialog"] > div:has(.etc-modal-target){order:2;}
+    #page-etc #etcIcModal > [role="dialog"] > div:has(.etc-modal-target){gap:14px!important;}
+    #page-etc #etcIcModal > [role="dialog"] > div:has(.etc-modal-target){margin-bottom:0!important;}
+    #page-etc #etcIcSearchLabel{order:3;margin-top:4px!important;}
+    #page-etc #etcIcSearch{order:4;}
+    #page-etc #etcIcResults{order:5;}
+    #page-etc #etcIcModal{display:block!important;position:static!important;inset:auto!important;z-index:auto!important;background:transparent!important;padding:0!important;overflow:visible!important;grid-column:1;grid-row:1 / span 2;}
+    #page-etc #etcIcModal > [role="dialog"]{width:100%!important;max-height:none!important;margin:0!important;padding:20px!important;box-sizing:border-box;overflow:visible!important;}
+    #page-etc #etcIcModal .etc-map-mode{display:none!important;}
+    #page-etc #etcCloseMap{display:none!important;}
+    #page-etc #etcMapPicker{display:none!important;}
+    #page-etc .grid > .card{grid-column:2;grid-row:1;}
+    #page-etc .grid > .card + div{grid-column:2;grid-row:2;}
+    #page-etc #etcModalMap{max-height:none!important;overflow:visible!important;}
+    #page-etc #etcModalMap > div > div > div:last-child > div:first-child{display:none!important;}
+    #page-etc #etcIcResults{max-height:320px!important;min-height:320px!important;align-content:start;box-sizing:border-box;}
+    @media(min-width:861px){
+      #page-etc .apply-fields > .apply-field:has(#etcRegion){grid-column:1;grid-row:1;}
+      #page-etc .apply-fields > .apply-field:has(#etcVehicle){grid-column:2;grid-row:1;}
+      #page-etc .apply-fields > .apply-field:has(#etcFrom){grid-column:1;grid-row:2;}
+      #page-etc .apply-fields > .apply-field:has(#etcTo){grid-column:2;grid-row:2;}
+      #page-etc .apply-fields > .apply-field:has(#etcDiscount){grid-column:1;grid-row:3;}
+    }
+    @media(max-width:860px){
+      #page-etc .grid{grid-template-columns:1fr;}
+      #page-etc #etcIcModal{grid-column:1;grid-row:auto;}
+      #page-etc .grid > .card,#page-etc .grid > .card + div{grid-column:1;grid-row:auto;}
+      #page-etc .apply-fields > .apply-field{grid-column:auto!important;grid-row:auto!important;}
+    }
+  </style>
     <div class="eyebrow">ETC料金概算</div>
-    <div class="portal-alert" id="etcIntro" data-no-i18n></div>
+    <div class="portal-alert etc-info-panel">
+      <div id="etcIntro" data-no-i18n></div>
+      <div class="portal-source"><span>参考：</span><a href="https://www.driveplaza.com/" target="_blank" rel="noopener">NEXCO ドラぷら 料金・ルート検索</a><span aria-hidden="true">／</span><a href="https://www.mlit.go.jp/road/road_fr10_000024.html" target="_blank" rel="noopener">国土交通省 高速道路料金</a><span aria-hidden="true">／</span><a href="https://www.go-etc.jp/" target="_blank" rel="noopener">ETC総合情報ポータル</a></div>
+    </div>
     <div class="grid">
+      <button type="button" id="etcOpenMap" class="btn-copy" style="grid-column:1/-1;width:280px;justify-self:start;background:#247a10;color:#fff;border-color:#247a10;border-radius:0 28px 28px 0;">⌖ 地図からIC名を調べて入力</button>
+      <div id="etcIcModal" style="position:static;">
+        <div role="dialog" aria-modal="false" aria-labelledby="etcIcModalTitle" style="width:min(760px,100%);margin:4vh auto;background:#fff;border-radius:16px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.25);">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;"><h2 id="etcIcModalTitle" style="margin:0;font-size:1.2rem;">地図からICを選択</h2><button type="button" id="etcCloseMap" aria-label="閉じる" style="border:0;background:transparent;font-size:1.6rem;cursor:pointer;">×</button></div>
+          <div style="display:flex;gap:8px;margin:14px 0;"><button type="button" class="etc-modal-target" data-target="from" style="flex:1;padding:10px;border:1px solid #1d4ed8;border-radius:8px;background:#eff6ff;cursor:pointer;">出発ICを選択</button><button type="button" class="etc-modal-target" data-target="to" style="flex:1;padding:10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;cursor:pointer;">到着ICを選択</button></div>
+          <div id="etcModalMap"></div>
+          <label id="etcIcSearchLabel" for="etcIcSearch" style="display:block;margin-top:14px;font-weight:700;">IC名を検索</label><input id="etcIcSearch" type="search" placeholder="例：東京、成田、名古屋" style="width:100%;margin-top:6px;padding:11px;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box;">
+          <div id="etcIcResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:12px;max-height:300px;overflow:auto;"></div>
+        </div>
+      </div>
+      <div id="etcMapPicker" class="etc-map-picker" aria-label="地域を地図から選択" style="grid-column:1/-1;margin-bottom:0;padding:14px;border:1px solid #dbe3ee;border-radius:14px;background:#f8fafc;">
+        <div style="font-weight:700;color:#183b7a;margin-bottom:8px;">地図から地域を選択</div>
+        <svg viewBox="0 0 520 270" role="img" aria-label="日本の地域選択図" style="display:block;width:100%;max-width:560px;height:auto;">
+          <g class="etc-map-region" data-region="北海道" tabindex="0" role="button" aria-label="北海道"><path d="M360 18l48-10 43 17 12 30-28 18-43-5-35-22z" fill="#dbeafe" stroke="#2d5aa8" stroke-width="2"/><text x="398" y="40" text-anchor="middle">北海道</text></g>
+          <g class="etc-map-region" data-region="東北" tabindex="0" role="button" aria-label="東北"><path d="M357 80l31-17 25 12-4 35-18 31-26 12-20-27z" fill="#e0f2fe" stroke="#2d5aa8" stroke-width="2"/><text x="374" y="105" text-anchor="middle">東北</text></g>
+          <g class="etc-map-region" data-region="関東" tabindex="0" role="button" aria-label="関東"><path d="M345 142l27-12 26 17-4 28-22 20-31-12-11-22z" fill="#dcfce7" stroke="#2d5aa8" stroke-width="2"/><text x="365" y="165" text-anchor="middle">関東</text></g>
+          <g class="etc-map-region" data-region="中部" tabindex="0" role="button" aria-label="中部"><path d="M282 125l43-10 24 27-15 34-31 15-30-23z" fill="#fef3c7" stroke="#2d5aa8" stroke-width="2"/><text x="311" y="151" text-anchor="middle">中部</text></g>
+          <g class="etc-map-region" data-region="近畿" tabindex="0" role="button" aria-label="近畿"><path d="M231 133l34-12 22 27-17 30-35 3-17-24z" fill="#ffedd5" stroke="#2d5aa8" stroke-width="2"/><text x="253" y="157" text-anchor="middle">近畿</text></g>
+          <g class="etc-map-region" data-region="中国・四国" tabindex="0" role="button" aria-label="中国・四国"><path d="M137 137l75-12 28 18-18 24-72 3-35-17z" fill="#fce7f3" stroke="#2d5aa8" stroke-width="2"/><text x="177" y="153" text-anchor="middle">中国・四国</text></g>
+          <g class="etc-map-region" data-region="九州・沖縄" tabindex="0" role="button" aria-label="九州・沖縄"><path d="M67 158l37-10 23 22-17 38-29 18-21-22z" fill="#ede9fe" stroke="#2d5aa8" stroke-width="2"/><circle cx="35" cy="232" r="6" fill="#ede9fe" stroke="#2d5aa8" stroke-width="2"/><text x="92" y="184" text-anchor="middle">九州・沖縄</text></g>
+        </svg>
+      </div>
       <div class="card">
         <div class="section-title">走行区間・車種</div>
         <div class="apply-fields">
-          <div class="apply-field full"><label>走行距離 Distance</label><div class="input-wrap"><input type="number" id="etcDistance" value="100" min="1" step="1"><span>km</span></div></div>
-          <div class="apply-field full">
-            <label>よくある区間の目安 Common routes</label>
-            <div class="portal-actions">
-              <button type="button" class="secondary-btn" data-etc-preset="30">東京→横浜 約30km</button>
-              <button type="button" class="secondary-btn" data-etc-preset="180">東京→静岡 約180km</button>
-              <button type="button" class="secondary-btn" data-etc-preset="335">東京→新潟 約335km</button>
-              <button type="button" class="secondary-btn" data-etc-preset="350">東京→仙台 約350km</button>
-              <button type="button" class="secondary-btn" data-etc-preset="366">東京→名古屋 約366km</button>
-              <button type="button" class="secondary-btn" data-etc-preset="515">東京→大阪 約515km</button>
-            </div>
-          </div>
+          <div class="apply-field"><label for="etcRegion">地域</label><select id="etcRegion" data-no-i18n><option value="all">全国（全IC）</option></select></div>
+          <div class="apply-field"><label for="etcFrom">出発IC・料金所</label><select id="etcFrom" data-no-i18n></select></div>
+          <div class="apply-field"><label for="etcTo">到着IC・料金所</label><select id="etcTo" data-no-i18n disabled></select></div>
           <div class="apply-field"><label>車種 Vehicle class</label>
             <select id="etcVehicle">
               <option value="kei">軽自動車等 Kei/motorcycle</option>
@@ -34,18 +94,18 @@
             </select>
           </div>
         </div>
-        <button type="button" class="btn-copy" id="etcCalcBtn" style="margin-top:14px;width:100%;">ETC料金を概算</button>
+        <div class="market-note" id="etcRouteStatus" data-no-i18n style="margin-top:14px;">起点と終点を選択してください。</div>
+        <button type="button" class="btn-copy" id="etcCalcBtn" style="margin-top:14px;width:100%;">ETC料金を表示</button>
       </div>
       <div>
         <div class="calc-kpi-grid">
-          <div class="calc-kpi"><span>ETC概算料金 Estimated toll</span><strong id="etcTotal">—</strong></div>
+          <div class="calc-kpi"><span>ETC概算料金</span><strong id="etcTotal">—</strong></div>
           <div class="calc-kpi"><span>割引適用前 Before discount</span><strong id="etcBefore">—</strong></div>
           <div class="calc-kpi"><span>適用単価 Rate applied</span><strong id="etcPerKm">—</strong></div>
         </div>
         <div class="card" style="margin-top:14px;padding:14px;"><table class="portal-table"><tbody id="etcBreakdown"></tbody></table></div>
         <div class="market-note" id="etcNote" data-no-i18n style="margin-top:14px;"></div>
         <div class="market-note" id="etcMileageNote" data-no-i18n style="margin-top:8px;"></div>
-        <div class="portal-source">参考：<a href="https://www.driveplaza.com/" target="_blank" rel="noopener">NEXCO ドラぷら 料金・ルート検索</a>／<a href="https://www.mlit.go.jp/road/road_fr10_000024.html" target="_blank" rel="noopener">国土交通省 高速道路料金</a>／<a href="https://www.go-etc.jp/" target="_blank" rel="noopener">ETC総合情報ポータル</a></div>
       </div>
     </div>
   </div><!-- /page-etc -->
@@ -58,12 +118,197 @@ const portalRows = (target,rows) => {
 };
 /* ETC toll calculator: NEXCO-style distance-based (対キロ料金制) estimate. Metropolitan expressways (首都高/阪神高速) use a different fare system and are out of scope. */
 const ETC_VEHICLE = {
- kei:{label:"軽自動車等",perKm:20.9},
- normal:{label:"普通車",perKm:24.6},
- medium:{label:"中型車",perKm:26.8},
- large:{label:"大型車",perKm:34.9},
- extra:{label:"特大車",perKm:62.5}
+ kei:{label:"軽自動車等",factor:0.82},
+ normal:{label:"普通車",factor:1},
+ medium:{label:"中型車",factor:1.13},
+ large:{label:"大型車",factor:1.58},
+ extra:{label:"特大車",factor:2.85}
 };
+const ETC_ALL_IC = [{"name":"東京IC","lat":35.627883,"lng":139.623328},{"name":"東名川崎IC","lat":35.587481,"lng":139.569769},{"name":"横浜青葉IC","lat":35.546283,"lng":139.537478},{"name":"横浜町田IC","lat":35.507986,"lng":139.482114},{"name":"綾瀬スマートIC","lat":35.447497,"lng":139.417894},{"name":"厚木IC","lat":35.421306,"lng":139.362492},{"name":"秦野中井IC","lat":35.353758,"lng":139.235136},{"name":"大井松田IC","lat":35.343306,"lng":139.151756},{"name":"足柄スマートIC","lat":35.314269,"lng":138.965889},{"name":"御殿場IC","lat":35.295181,"lng":138.945889},{"name":"駒門スマートIC","lat":35.246575,"lng":138.909567},{"name":"裾野IC","lat":35.219958,"lng":138.906942},{"name":"沼津IC","lat":35.144681,"lng":138.8649},{"name":"愛鷹スマートIC","lat":35.142844,"lng":138.836567},{"name":"富士IC","lat":35.177606,"lng":138.676153},{"name":"富士川スマートIC","lat":35.159383,"lng":138.618481},{"name":"清水IC","lat":35.039608,"lng":138.476539},{"name":"日本平久能山スマートIC","lat":34.961717,"lng":138.422078},{"name":"静岡IC","lat":34.947933,"lng":138.390981},{"name":"焼津IC","lat":34.88135,"lng":138.301528},{"name":"大井川焼津藤枝スマートIC","lat":34.819347,"lng":138.266817},{"name":"吉田IC","lat":34.791203,"lng":138.237067},{"name":"相良牧之原IC","lat":34.760453,"lng":138.139903},{"name":"菊川IC","lat":34.747206,"lng":138.087067},{"name":"掛川IC","lat":34.763122,"lng":138.024308},{"name":"袋井IC","lat":34.759208,"lng":137.903567},{"name":"磐田IC","lat":34.748256,"lng":137.859436},{"name":"遠州豊田スマートIC","lat":34.748208,"lng":137.839553},{"name":"浜松IC","lat":34.74535,"lng":137.788542},{"name":"三方原スマートIC","lat":34.757911,"lng":137.736756},{"name":"浜松西IC","lat":34.763211,"lng":137.680897},{"name":"舘山寺スマートIC","lat":34.774275,"lng":137.637847},{"name":"三ヶ日IC","lat":34.797822,"lng":137.582836},{"name":"豊川IC","lat":34.837025,"lng":137.412739},{"name":"音羽蒲郡IC","lat":34.867383,"lng":137.298256},{"name":"岡崎IC","lat":34.944325,"lng":137.195406},{"name":"豊田上郷スマートIC","lat":35.032222,"lng":137.134614},{"name":"豊田IC","lat":35.071375,"lng":137.11735},{"name":"東名三好IC","lat":35.112444,"lng":137.092306},{"name":"名古屋IC","lat":35.172258,"lng":137.022106},{"name":"守山スマートIC","lat":35.241528,"lng":137.010525},{"name":"春日井IC","lat":35.27,"lng":136.995806},{"name":"小牧IC","lat":35.301425,"lng":136.907636},{"name":"一宮IC","lat":35.272128,"lng":136.829128},{"name":"岐阜羽島IC","lat":35.305933,"lng":136.692578},{"name":"安八スマートIC","lat":35.311628,"lng":136.652958},{"name":"大垣IC","lat":35.316539,"lng":136.617364},{"name":"養老ＳＡスマートIC","lat":35.321722,"lng":136.542486},{"name":"関ヶ原IC","lat":35.35595,"lng":136.472142},{"name":"彦根IC","lat":35.260169,"lng":136.273478},{"name":"多賀スマートIC","lat":35.21845,"lng":136.283739},{"name":"湖東三山スマートIC","lat":35.163442,"lng":136.274669},{"name":"八日市IC","lat":35.095117,"lng":136.225367},{"name":"蒲生スマートIC","lat":35.072,"lng":136.158964},{"name":"竜王IC","lat":35.055447,"lng":136.101656},{"name":"栗東湖南IC","lat":35.019792,"lng":136.019333},{"name":"栗東IC","lat":35.021283,"lng":136.003317},{"name":"瀬田東IC","lat":34.970394,"lng":135.929889},{"name":"瀬田西IC","lat":34.968925,"lng":135.910225},{"name":"大津IC","lat":34.995864,"lng":135.868361},{"name":"京都東IC","lat":34.988817,"lng":135.833},{"name":"京都南IC","lat":34.953531,"lng":135.746725},{"name":"大山崎IC","lat":34.904486,"lng":135.693547},{"name":"茨木IC","lat":34.829694,"lng":135.559803},{"name":"吹田（名神高速）IC","lat":34.804075,"lng":135.541417},{"name":"豊中IC","lat":34.752119,"lng":135.464264},{"name":"尼崎IC","lat":34.7424,"lng":135.414806},{"name":"西宮IC","lat":34.726525,"lng":135.354417},{"name":"草津田上IC","lat":34.979778,"lng":135.959306},{"name":"神戸北IC","lat":34.841839,"lng":135.196725},{"name":"三木東IC","lat":34.796658,"lng":135.049917},{"name":"三木小野IC","lat":34.811267,"lng":134.958172},{"name":"加古川北IC","lat":34.847086,"lng":134.8311},{"name":"山陽姫路東IC","lat":34.852542,"lng":134.738311},{"name":"山陽姫路西IC","lat":34.867636,"lng":134.615169},{"name":"龍野IC","lat":34.852333,"lng":134.545464},{"name":"龍野西IC","lat":34.831572,"lng":134.503664},{"name":"赤穂IC","lat":34.771319,"lng":134.372589},{"name":"備前IC","lat":34.783783,"lng":134.258522},{"name":"和気IC","lat":34.786822,"lng":134.163942},{"name":"山陽IC","lat":34.743689,"lng":134.026444},{"name":"岡山IC","lat":34.700217,"lng":133.888778},{"name":"吉備スマートIC","lat":34.693817,"lng":133.872072},{"name":"倉敷IC","lat":34.627017,"lng":133.772722},{"name":"玉島IC","lat":34.582058,"lng":133.685753},{"name":"鴨方IC","lat":34.550336,"lng":133.588917},{"name":"笠岡IC","lat":34.536278,"lng":133.508678},{"name":"福山東IC","lat":34.511361,"lng":133.394947},{"name":"福山ＳＡスマートIC","lat":34.490817,"lng":133.314339},{"name":"尾道ＪＣＴIC","lat":34.466278,"lng":133.189889},{"name":"福山西IC","lat":34.459106,"lng":133.236803},{"name":"尾道IC","lat":34.4586,"lng":133.177461},{"name":"三原久井IC","lat":34.464947,"lng":133.055586},{"name":"本郷IC","lat":34.429022,"lng":132.954494},{"name":"河内IC","lat":34.431142,"lng":132.874953},{"name":"高屋IC","lat":34.430797,"lng":132.803639},{"name":"西条IC","lat":34.442128,"lng":132.756364},{"name":"志和IC","lat":34.460194,"lng":132.646594},{"name":"広島東IC","lat":34.450533,"lng":132.541261},{"name":"広島IC","lat":34.463594,"lng":132.478558},{"name":"沼田ＰＡスマートIC","lat":34.463794,"lng":132.421889},{"name":"五日市IC","lat":34.431003,"lng":132.395183},{"name":"宮島スマートIC","lat":34.366581,"lng":132.316436},{"name":"岩国IC","lat":34.175442,"lng":132.163581},{"name":"玖珂IC","lat":34.083806,"lng":132.081031},{"name":"熊毛IC","lat":34.039928,"lng":131.973247},{"name":"徳山東IC","lat":34.040458,"lng":131.845981},{"name":"徳山西IC","lat":34.069333,"lng":131.687642},{"name":"防府東IC","lat":34.072467,"lng":131.562042},{"name":"防府西IC","lat":34.057569,"lng":131.539028},{"name":"山口南IC","lat":34.081247,"lng":131.453569},{"name":"宇部IC","lat":33.990436,"lng":131.280958},{"name":"小野田IC","lat":34.021489,"lng":131.184861},{"name":"埴生IC","lat":34.044781,"lng":131.101844},{"name":"早島IC","lat":34.602653,"lng":133.812992},{"name":"神戸西IC","lat":34.72825,"lng":135.085142},{"name":"門司IC","lat":33.924881,"lng":130.979925},{"name":"新門司IC","lat":33.885708,"lng":130.968492},{"name":"小倉東IC","lat":33.834194,"lng":130.911556},{"name":"小倉南IC","lat":33.805636,"lng":130.854194},{"name":"八幡IC","lat":33.782861,"lng":130.743392},{"name":"鞍手IC","lat":33.775178,"lng":130.689572},{"name":"宮田スマートIC","lat":33.751481,"lng":130.640086},{"name":"若宮IC","lat":33.74555,"lng":130.608778},{"name":"古賀IC","lat":33.720267,"lng":130.488594},{"name":"福岡IC","lat":33.630139,"lng":130.485819},{"name":"須恵スマートIC","lat":33.587647,"lng":130.499519},{"name":"太宰府IC","lat":33.5315,"lng":130.4937},{"name":"筑紫野IC","lat":33.475325,"lng":130.516194},{"name":"小郡鳥栖南スマートIC","lat":33.36885,"lng":130.540253},{"name":"久留米IC","lat":33.317497,"lng":130.553817},{"name":"広川IC","lat":33.252378,"lng":130.537681},{"name":"八女IC","lat":33.210522,"lng":130.519822},{"name":"みやま柳川IC","lat":33.147961,"lng":130.507194},{"name":"南関IC","lat":33.070275,"lng":130.542144},{"name":"菊水IC","lat":32.988258,"lng":130.605744},{"name":"植木IC","lat":32.930533,"lng":130.695461},{"name":"北熊本スマートIC","lat":32.894331,"lng":130.718025},{"name":"熊本IC","lat":32.833472,"lng":130.776875},{"name":"益城熊本空港IC","lat":32.791481,"lng":130.786628},{"name":"御船IC","lat":32.731575,"lng":130.776261},{"name":"城南スマートIC","lat":32.693336,"lng":130.739664},{"name":"松橋IC","lat":32.649119,"lng":130.709222},{"name":"宇城氷川スマートIC","lat":32.576872,"lng":130.709339},{"name":"八代IC","lat":32.511569,"lng":130.648742},{"name":"人吉IC","lat":32.229933,"lng":130.767478},{"name":"人吉球磨スマートIC","lat":32.203164,"lng":130.772419},{"name":"えびのIC","lat":32.051036,"lng":130.802697},{"name":"栗野IC","lat":31.945803,"lng":130.71875},{"name":"横川IC","lat":31.899961,"lng":130.702106},{"name":"溝辺鹿児島空港IC","lat":31.791092,"lng":130.718783},{"name":"加治木IC","lat":31.745867,"lng":130.666942},{"name":"桜島スマートIC","lat":31.726761,"lng":130.614322},{"name":"姶良IC","lat":31.727661,"lng":130.587653},{"name":"薩摩吉田IC","lat":31.671047,"lng":130.563667},{"name":"鹿児島北IC","lat":31.621547,"lng":130.523214},{"name":"鹿児島IC","lat":31.586825,"lng":130.514417},{"name":"浦和（東京方面）IC","lat":35.890364,"lng":139.722158},{"name":"浦和（仙台方面）IC","lat":35.890364,"lng":139.722158},{"name":"岩槻IC","lat":35.938033,"lng":139.687417},{"name":"蓮田スマートIC","lat":35.97755,"lng":139.664789},{"name":"久喜IC","lat":36.061506,"lng":139.655933},{"name":"加須IC","lat":36.127444,"lng":139.6305},{"name":"羽生IC","lat":36.168842,"lng":139.585953},{"name":"館林IC","lat":36.226589,"lng":139.573469},{"name":"佐野藤岡IC","lat":36.293828,"lng":139.616494}];
+const ETC_ROUTE_DATA = [
+ {from:"東京IC",to:"厚木IC",km:49.9,normal:1370},
+ {from:"東京IC",to:"御殿場IC",km:83.7,normal:2170},
+ {from:"東京IC",to:"沼津IC",km:118.2,normal:2620},
+ {from:"東京IC",to:"静岡IC",km:161.8,normal:3320},
+ {from:"東京IC",to:"名古屋IC",km:314.6,normal:5400},
+ {from:"東京IC",to:"八王子IC",km:31.3,normal:630},
+ {from:"東京IC",to:"河口湖IC",km:120.6,normal:3240},
+ {from:"東京IC",to:"練馬IC",km:15.4,normal:0},
+ {from:"東京IC",to:"川越IC",km:36.6,normal:850},
+ {from:"東京IC",to:"高崎IC",km:102.4,normal:2300},
+ {from:"東京IC",to:"新潟西IC",km:313,normal:5160},
+ {from:"東京IC",to:"千葉北IC",km:80.1,normal:2750},
+ {from:"東京IC",to:"潮来IC",km:135.8,normal:4100},
+ {from:"厚木IC",to:"東京IC",km:42.5,normal:1530},
+ {from:"厚木IC",to:"御殿場IC",km:48.7,normal:1040},
+ {from:"厚木IC",to:"沼津IC",km:68.3,normal:1410},
+ {from:"厚木IC",to:"静岡IC",km:126.8,normal:2390},
+ {from:"厚木IC",to:"名古屋IC",km:279.6,normal:4550},
+ {from:"厚木IC",to:"八王子IC",km:42,normal:660},
+ {from:"厚木IC",to:"河口湖IC",km:77.2,normal:1800},
+ {from:"厚木IC",to:"練馬IC",km:57.7,normal:1530},
+ {from:"厚木IC",to:"川越IC",km:76.6,normal:2600},
+ {from:"厚木IC",to:"高崎IC",km:129.2,normal:3670},
+ {from:"厚木IC",to:"新潟西IC",km:339.8,normal:6740},
+ {from:"厚木IC",to:"千葉北IC",km:95.2,normal:3590},
+ {from:"厚木IC",to:"潮来IC",km:150.9,normal:4940},
+ {from:"御殿場IC",to:"東京IC",km:91.2,normal:2400},
+ {from:"御殿場IC",to:"厚木IC",km:48.7,normal:1040},
+ {from:"御殿場IC",to:"沼津IC",km:19.6,normal:490},
+ {from:"御殿場IC",to:"静岡IC",km:78.1,normal:1600},
+ {from:"御殿場IC",to:"名古屋IC",km:230.9,normal:3910},
+ {from:"御殿場IC",to:"八王子IC",km:97.6,normal:2170},
+ {from:"御殿場IC",to:"河口湖IC",km:28.5,normal:760},
+ {from:"御殿場IC",to:"練馬IC",km:106.4,normal:2400},
+ {from:"御殿場IC",to:"川越IC",km:134.1,normal:3490},
+ {from:"御殿場IC",to:"高崎IC",km:186.7,normal:4460},
+ {from:"御殿場IC",to:"新潟西IC",km:445.7,normal:7060},
+ {from:"御殿場IC",to:"千葉北IC",km:143.9,normal:4460},
+ {from:"御殿場IC",to:"潮来IC",km:199.6,normal:5810},
+ {from:"沼津IC",to:"東京IC",km:110.8,normal:2770},
+ {from:"沼津IC",to:"厚木IC",km:68.3,normal:1410},
+ {from:"沼津IC",to:"御殿場IC",km:19.6,normal:490},
+ {from:"沼津IC",to:"静岡IC",km:58.5,normal:1230},
+ {from:"沼津IC",to:"名古屋IC",km:213.6,normal:3860},
+ {from:"沼津IC",to:"八王子IC",km:115,normal:2700},
+ {from:"沼津IC",to:"河口湖IC",km:45.9,normal:1290},
+ {from:"沼津IC",to:"練馬IC",km:126,normal:2770},
+ {from:"沼津IC",to:"川越IC",km:151.5,normal:4020},
+ {from:"沼津IC",to:"高崎IC",km:204.1,normal:4990},
+ {from:"沼津IC",to:"新潟西IC",km:463.1,normal:7590},
+ {from:"沼津IC",to:"千葉北IC",km:163.5,normal:4830},
+ {from:"沼津IC",to:"潮来IC",km:219.2,normal:6180},
+ {from:"静岡IC",to:"東京IC",km:169.3,normal:3630},
+ {from:"静岡IC",to:"厚木IC",km:126.8,normal:2390},
+ {from:"静岡IC",to:"御殿場IC",km:78.1,normal:1600},
+ {from:"静岡IC",to:"沼津IC",km:58.5,normal:1230},
+ {from:"静岡IC",to:"名古屋IC",km:163.7,normal:2990},
+ {from:"静岡IC",to:"八王子IC",km:173.5,normal:3820},
+ {from:"静岡IC",to:"河口湖IC",km:108.1,normal:2410},
+ {from:"静岡IC",to:"練馬IC",km:184.5,normal:3630},
+ {from:"静岡IC",to:"川越IC",km:210,normal:5140},
+ {from:"静岡IC",to:"高崎IC",km:262.6,normal:6110},
+ {from:"静岡IC",to:"新潟西IC",km:439.4,normal:6570},
+ {from:"静岡IC",to:"千葉北IC",km:222,normal:5690},
+ {from:"静岡IC",to:"潮来IC",km:277.7,normal:7040},
+ {from:"名古屋IC",to:"東京IC",km:314.6,normal:5400},
+ {from:"名古屋IC",to:"厚木IC",km:279.6,normal:4550},
+ {from:"名古屋IC",to:"御殿場IC",km:230.9,normal:3910},
+ {from:"名古屋IC",to:"沼津IC",km:213.6,normal:3860},
+ {from:"名古屋IC",to:"静岡IC",km:163.7,normal:2990},
+ {from:"名古屋IC",to:"八王子IC",km:326.3,normal:6110},
+ {from:"名古屋IC",to:"河口湖IC",km:257.2,normal:4700},
+ {from:"名古屋IC",to:"練馬IC",km:330,normal:5400},
+ {from:"名古屋IC",to:"川越IC",km:362.8,normal:7430},
+ {from:"名古屋IC",to:"高崎IC",km:379.6,normal:5920},
+ {from:"名古屋IC",to:"新潟西IC",km:459.5,normal:6980},
+ {from:"名古屋IC",to:"千葉北IC",km:371.7,normal:7590},
+ {from:"名古屋IC",to:"潮来IC",km:427.4,normal:8940},
+ {from:"八王子IC",to:"東京IC",km:31.8,normal:630},
+ {from:"八王子IC",to:"厚木IC",km:40.1,normal:1280},
+ {from:"八王子IC",to:"御殿場IC",km:88.8,normal:2200},
+ {from:"八王子IC",to:"沼津IC",km:108.4,normal:2570},
+ {from:"八王子IC",to:"静岡IC",km:166.9,normal:3490},
+ {from:"八王子IC",to:"名古屋IC",km:319.7,normal:5300},
+ {from:"八王子IC",to:"河口湖IC",km:68.1,normal:1410},
+ {from:"八王子IC",to:"練馬IC",km:35.4,normal:630},
+ {from:"八王子IC",to:"川越IC",km:56.9,normal:1820},
+ {from:"八王子IC",to:"高崎IC",km:109.5,normal:2890},
+ {from:"八王子IC",to:"新潟西IC",km:320.1,normal:5920},
+ {from:"八王子IC",to:"千葉北IC",km:86.6,normal:3200},
+ {from:"八王子IC",to:"潮来IC",km:142.3,normal:4550},
+ {from:"河口湖IC",to:"東京IC",km:99.9,normal:2040},
+ {from:"河口湖IC",to:"厚木IC",km:77.2,normal:1800},
+ {from:"河口湖IC",to:"御殿場IC",km:28.5,normal:760},
+ {from:"河口湖IC",to:"沼津IC",km:45.9,normal:1290},
+ {from:"河口湖IC",to:"静岡IC",km:108.1,normal:2410},
+ {from:"河口湖IC",to:"名古屋IC",km:257.2,normal:4700},
+ {from:"河口湖IC",to:"八王子IC",km:68.1,normal:1410},
+ {from:"河口湖IC",to:"練馬IC",km:103.5,normal:2040},
+ {from:"河口湖IC",to:"川越IC",km:104.6,normal:2730},
+ {from:"河口湖IC",to:"高崎IC",km:157.2,normal:3700},
+ {from:"河口湖IC",to:"新潟西IC",km:416.2,normal:6300},
+ {from:"河口湖IC",to:"千葉北IC",km:154.7,normal:4440},
+ {from:"河口湖IC",to:"潮来IC",km:210.4,normal:5790},
+ {from:"練馬IC",to:"東京IC",km:15.4,normal:0},
+ {from:"練馬IC",to:"厚木IC",km:65.1,normal:1370},
+ {from:"練馬IC",to:"御殿場IC",km:113.8,normal:2240},
+ {from:"練馬IC",to:"沼津IC",km:133.4,normal:2620},
+ {from:"練馬IC",to:"静岡IC",km:191.9,normal:3510},
+ {from:"練馬IC",to:"名古屋IC",km:344.7,normal:5630},
+ {from:"練馬IC",to:"八王子IC",km:36.1,normal:630},
+ {from:"練馬IC",to:"河口湖IC",km:125.8,normal:3410},
+ {from:"練馬IC",to:"川越IC",km:21.2,normal:850},
+ {from:"練馬IC",to:"高崎IC",km:87,normal:2300},
+ {from:"練馬IC",to:"新潟西IC",km:297.6,normal:5160},
+ {from:"練馬IC",to:"千葉北IC",km:70.3,normal:2180},
+ {from:"練馬IC",to:"潮来IC",km:126,normal:3530},
+ {from:"川越IC",to:"東京IC",km:36.6,normal:850},
+ {from:"川越IC",to:"厚木IC",km:76.6,normal:2600},
+ {from:"川越IC",to:"御殿場IC",km:125.3,normal:3530},
+ {from:"川越IC",to:"沼津IC",km:144.9,normal:3900},
+ {from:"川越IC",to:"静岡IC",km:203.4,normal:4830},
+ {from:"川越IC",to:"名古屋IC",km:356.2,normal:6620},
+ {from:"川越IC",to:"八王子IC",km:56.9,normal:1820},
+ {from:"川越IC",to:"河口湖IC",km:104.6,normal:2730},
+ {from:"川越IC",to:"練馬IC",km:21.2,normal:850},
+ {from:"川越IC",to:"高崎IC",km:65.8,normal:1610},
+ {from:"川越IC",to:"新潟西IC",km:276.4,normal:4650},
+ {from:"川越IC",to:"千葉北IC",km:88.2,normal:2670},
+ {from:"川越IC",to:"潮来IC",km:143.9,normal:3710},
+ {from:"高崎IC",to:"東京IC",km:102.4,normal:2300},
+ {from:"高崎IC",to:"厚木IC",km:129.2,normal:3670},
+ {from:"高崎IC",to:"御殿場IC",km:177.9,normal:4540},
+ {from:"高崎IC",to:"沼津IC",km:197.5,normal:4810},
+ {from:"高崎IC",to:"静岡IC",km:256,normal:5630},
+ {from:"高崎IC",to:"名古屋IC",km:379.6,normal:5920},
+ {from:"高崎IC",to:"八王子IC",km:109.5,normal:2890},
+ {from:"高崎IC",to:"河口湖IC",km:157.2,normal:3700},
+ {from:"高崎IC",to:"練馬IC",km:87,normal:2300},
+ {from:"高崎IC",to:"川越IC",km:65.8,normal:1610},
+ {from:"高崎IC",to:"新潟西IC",km:210.6,normal:3570},
+ {from:"高崎IC",to:"千葉北IC",km:154,normal:4120},
+ {from:"高崎IC",to:"潮来IC",km:209.7,normal:4330},
+ {from:"新潟西IC",to:"東京IC",km:313,normal:5160},
+ {from:"新潟西IC",to:"厚木IC",km:339.8,normal:6740},
+ {from:"新潟西IC",to:"御殿場IC",km:388.5,normal:7380},
+ {from:"新潟西IC",to:"沼津IC",km:408.1,normal:7640},
+ {from:"新潟西IC",to:"静岡IC",km:439.4,normal:6570},
+ {from:"新潟西IC",to:"名古屋IC",km:459.5,normal:6980},
+ {from:"新潟西IC",to:"八王子IC",km:320.1,normal:5920},
+ {from:"新潟西IC",to:"河口湖IC",km:416.2,normal:6300},
+ {from:"新潟西IC",to:"練馬IC",km:297.6,normal:5160},
+ {from:"新潟西IC",to:"川越IC",km:276.4,normal:4650},
+ {from:"新潟西IC",to:"高崎IC",km:210.6,normal:3570},
+ {from:"新潟西IC",to:"千葉北IC",km:362,normal:6810},
+ {from:"新潟西IC",to:"潮来IC",km:417.7,normal:8170},
+ {from:"千葉北IC",to:"東京IC",km:63.4,normal:2180},
+ {from:"千葉北IC",to:"厚木IC",km:96.4,normal:3450},
+ {from:"千葉北IC",to:"御殿場IC",km:145.1,normal:4320},
+ {from:"千葉北IC",to:"沼津IC",km:164.7,normal:4700},
+ {from:"千葉北IC",to:"静岡IC",km:223.2,normal:5590},
+ {from:"千葉北IC",to:"名古屋IC",km:376,normal:7710},
+ {from:"千葉北IC",to:"八王子IC",km:107.8,normal:2790},
+ {from:"千葉北IC",to:"河口湖IC",km:199.9,normal:4440},
+ {from:"千葉北IC",to:"練馬IC",km:67,normal:2180},
+ {from:"千葉北IC",to:"川越IC",km:88.2,normal:2670},
+ {from:"千葉北IC",to:"高崎IC",km:168.9,normal:4120},
+ {from:"千葉北IC",to:"新潟西IC",km:379.5,normal:6980},
+ {from:"千葉北IC",to:"潮来IC",km:55.7,normal:1520},
+ {from:"潮来IC",to:"東京IC",km:119.1,normal:3530},
+ {from:"潮来IC",to:"厚木IC",km:158.6,normal:4740},
+ {from:"潮来IC",to:"御殿場IC",km:207.3,normal:5610},
+ {from:"潮来IC",to:"沼津IC",km:226.9,normal:5990},
+ {from:"潮来IC",to:"静岡IC",km:285.4,normal:6880},
+ {from:"潮来IC",to:"名古屋IC",km:438.2,normal:9000},
+ {from:"潮来IC",to:"八王子IC",km:139,normal:4550},
+ {from:"潮来IC",to:"河口湖IC",km:241.7,normal:5790},
+ {from:"潮来IC",to:"練馬IC",km:122.7,normal:3530},
+ {from:"潮来IC",to:"川越IC",km:150.3,normal:3710},
+ {from:"潮来IC",to:"高崎IC",km:210.7,normal:4330},
+ {from:"潮来IC",to:"新潟西IC",km:421.3,normal:6660},
+ {from:"潮来IC",to:"千葉北IC",km:55.7,normal:1520}
+];
 const ETC_NOTE_TEXT = {
  ja:{none:"深夜・休日割引を適用しない通常料金の概算です。",
    night:"深夜割引（0:00〜4:00の走行、30%引き）を全区間に適用したと仮定した概算です。実際は深夜帯にかかる走行区間・時間の割合により計算されます。",
@@ -85,19 +330,326 @@ const ETC_NOTE_TEXT = {
    holiday:"Ước tính đã áp dụng giảm giá ngày lễ (thứ 7/CN/ngày lễ, chỉ các đoạn ngoài đô thị, giảm 20% tối đa 100km). Không áp dụng cho đường cao tốc đô thị (Shuto/Hanshin), đoạn không đủ điều kiện, hoặc ngày thường."}
 };
 function etcRoundTen(value){ return Math.round(value/10)*10; }
+function etcFindStation(name){ return ETC_ALL_IC.find(station => station.name === name); }
+function etcEstimateDistance(from,to){
+ const a = etcFindStation(from), b = etcFindStation(to);
+ if (!a || !b) return 0;
+ const rad = Math.PI / 180;
+ const lat1 = a.lat * rad, lat2 = b.lat * rad;
+ const dLat = (b.lat - a.lat) * rad, dLng = (b.lng - a.lng) * rad;
+ const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+ return Math.max(1, Math.round(6371 * 2 * Math.atan2(Math.sqrt(h),Math.sqrt(1 - h)) * 1.28 * 10) / 10);
+}
+function etcUpdateSelectedIcButtons(){
+ const from = document.getElementById("etcFrom");
+ const to = document.getElementById("etcTo");
+ const fromButton = document.querySelector('.etc-modal-target[data-target="from"]');
+ const toButton = document.querySelector('.etc-modal-target[data-target="to"]');
+ if (fromButton) fromButton.textContent = from?.value ? `出発IC：${from.value}` : "出発ICを選択";
+ if (toButton) toButton.textContent = to?.value ? `到着IC：${to.value}` : "到着ICを選択";
+}
+function etcInitRouteSelects(){
+ const from = document.getElementById("etcFrom");
+ const to = document.getElementById("etcTo");
+ if (!from || !to) return;
+ const routes = ETC_ROUTE_DATA;
+ const stations = ETC_ALL_IC.slice().sort((a,b) => a.name.localeCompare(b.name,"ja"));
+ const stationOption = station => `<option value="${station.name}">${station.name}</option>`;
+ from.innerHTML = '<option value="">出発地を選択</option>' + stations.map(stationOption).join("");
+ from.addEventListener("change",() => {
+  const destinations = stations.filter(station => station.name !== from.value);
+  to.disabled = !from.value;
+  to.innerHTML = (from.value ? '<option value="">到着地を選択</option>' : '<option value="">先に出発地を選択</option>')
+   + destinations.map(station => {
+    const route = routes.find(item => item.from === from.value && item.to === station.name);
+    return `<option value="${station.name}">${station.name}${route ? `（${route.km}km）` : "（概算）"}</option>`;
+   }).join("");
+  document.getElementById("etcRouteStatus").textContent = "到着地を選択してください。登録済み区間は公式データ、それ以外は概算で表示します。";
+  etcUpdateSelectedIcButtons();
+ });
+ to.addEventListener("change",() => {
+  etcRender();
+  etcUpdateSelectedIcButtons();
+ });
+}
+function etcInitRouteSelectsV2(){
+ const from = document.getElementById("etcFrom");
+ const to = document.getElementById("etcTo");
+ const region = document.getElementById("etcRegion");
+ if (!from || !to || !region) return;
+ const routes = ETC_ROUTE_DATA;
+ const stations = ETC_ALL_IC.slice().sort((a,b) => a.name.localeCompare(b.name,"ja"));
+ const regions = [...new Set(stations.map(station => station.region).filter(Boolean))].sort((a,b) => a.localeCompare(b,"ja"));
+ region.innerHTML = '<option value="all">全国（全IC）</option>' + regions.map(item => `<option value="${item}">${item}</option>`).join("");
+ const filteredStations = () => stations.filter(station => region.value === "all" || station.region === region.value);
+ const stationOption = station => `<option value="${station.name}">${station.name}</option>`;
+ const renderFrom = () => {
+  const available = filteredStations();
+  from.innerHTML = '<option value="">出発地を選択</option>' + available.map(stationOption).join("");
+  to.disabled = true;
+  to.innerHTML = '<option value="">先に出発地を選択</option>';
+ };
+ from.onchange = () => {
+  const destinations = stations.filter(station => station.name !== from.value);
+  to.disabled = !from.value;
+  to.innerHTML = (from.value ? '<option value="">到着地を選択</option>' : '<option value="">出発地を選択</option>')
+   + destinations.map(station => {
+    const route = routes.find(item => item.from === from.value && item.to === station.name);
+    return `<option value="${station.name}">${station.name}${route ? `（${route.km}km）` : "（概算）"}</option>`;
+   }).join("");
+  document.getElementById("etcRouteStatus").textContent = "到着地を選択してください。登録済み区間は公式データ、それ以外は概算で表示します。";
+  etcUpdateSelectedIcButtons();
+ };
+ to.onchange = () => {
+  if (to.value && to.value === from.value) {
+   to.value = "";
+   etcRender();
+   etcUpdateSelectedIcButtons();
+   document.getElementById("etcRouteStatus").textContent = "出発ICと到着ICは同じICを選択できません。";
+   return;
+  }
+  etcRender();
+  etcUpdateSelectedIcButtons();
+ };
+ region.onchange = () => {
+  renderFrom();
+  document.querySelectorAll("#etcMapPicker .etc-map-region").forEach(item => { item.style.opacity = region.value === "all" || item.dataset.region === region.value ? "1" : "0.55"; });
+  etcRender();
+ };
+ document.querySelectorAll("#etcMapPicker .etc-map-region").forEach(mapRegion => {
+  mapRegion.style.cursor = "pointer";
+  const chooseRegion = () => { region.value = mapRegion.dataset.region; region.dispatchEvent(new Event("change")); };
+  mapRegion.addEventListener("click", chooseRegion);
+  mapRegion.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); chooseRegion(); } });
+ });
+ renderFrom();
+}
+function etcInitMapModal(){
+ const modal = document.getElementById("etcIcModal");
+ const open = document.getElementById("etcOpenMap");
+ const close = document.getElementById("etcCloseMap");
+ const map = document.getElementById("etcModalMap");
+ const search = document.getElementById("etcIcSearch");
+ const results = document.getElementById("etcIcResults");
+ if (!modal || !open || !close || !map || !search || !results) return;
+  open.style.display = "none";
+  modal.hidden = false;
+  const dialog = modal.querySelector('[role="dialog"]');
+  if (dialog) {
+   dialog.style.width = "100%";
+   dialog.style.maxHeight = "none";
+   dialog.style.margin = "0";
+   dialog.style.overflow = "visible";
+   dialog.style.boxSizing = "border-box";
+  }
+  map.style.maxHeight = "none";
+  map.style.overflow = "visible";
+  results.style.maxHeight = "320px";
+  results.style.minHeight = "320px";
+ document.getElementById("etcMapPicker").style.display = "none";
+ if (modal.dataset.ready === "true") { if (typeof modal._renderResults === "function") modal._renderResults(); return; }
+ modal.dataset.ready = "true";
+ modal.querySelector(".etc-map-mode")?.parentElement.remove();
+ let target = "from", selectedRegion = "all";
+ map.innerHTML = `<svg viewBox="0 0 900 360" role="img" aria-label="日本の地域選択図" style="display:block;width:100%;height:auto;border-radius:14px;background:linear-gradient(145deg,#eff8ff,#dceeff);">
+  <path d="M650 28l91 18 45 53-26 49-91 15-75-40 12-65z" fill="#cfe5fb" stroke="#fff" stroke-width="5"/>
+  <path d="M579 132l61-18 31 48-11 74-39 52-48-24-20-68z" fill="#cde9fa" stroke="#fff" stroke-width="5"/>
+  <path d="M535 230l55-18 42 30-12 60-49 32-59-26-15-46z" fill="#d4f1df" stroke="#fff" stroke-width="5"/>
+  <path d="M405 205l91-28 42 45-29 75-65 32-65-55z" fill="#fff0bc" stroke="#fff" stroke-width="5"/>
+  <path d="M306 224l68-26 44 43-27 65-61 10-38-52z" fill="#ffe0bd" stroke="#fff" stroke-width="5"/>
+  <path d="M154 218l111-20 58 42-43 49-110 5-55-39z" fill="#f9d9e9" stroke="#fff" stroke-width="5"/>
+  <path d="M244 294l76-11 39 20-45 26-75-10z" fill="#f9d9e9" stroke="#fff" stroke-width="5"/>
+  <path d="M73 250l54-25 47 33-18 62-52 25-43-48z" fill="#e5dcfb" stroke="#fff" stroke-width="5"/>
+  <circle cx="33" cy="337" r="7" fill="#e5dcfb" stroke="#fff" stroke-width="4"/>
+  <g fill="#183b7a" font-size="22" font-weight="700" text-anchor="middle" pointer-events="none"><text x="734" y="96">北海道</text><text x="600" y="183">東北</text><text x="568" y="271">関東</text><text x="461" y="245">中部</text><text x="350" y="262">近畿</text><text x="210" y="240">中国</text><text x="280" y="313">四国</text><text x="108" y="278">九州</text><text x="25" y="355" font-size="11">沖縄</text></g>
+  <g class="etc-map-region" data-region="北海道" tabindex="0" role="button" aria-label="北海道"><path d="M650 28l91 18 45 53-26 49-91 15-75-40 12-65z" fill="transparent" stroke="#2d5aa8" stroke-width="2"/></g>
+  <g class="etc-map-region" data-region="東北" tabindex="0" role="button" aria-label="東北"><path d="M579 132l61-18 31 48-11 74-39 52-48-24-20-68z" fill="transparent" stroke="#2d5aa8" stroke-width="2"/></g>
+  <g class="etc-map-region" data-region="関東" tabindex="0" role="button" aria-label="関東"><path d="M535 230l55-18 42 30-12 60-49 32-59-26-15-46z" fill="transparent" stroke="#2d5aa8" stroke-width="2"/></g>
+  <g class="etc-map-region" data-region="中部" tabindex="0" role="button" aria-label="中部"><path d="M405 205l91-28 42 45-29 75-65 32-65-55z" fill="transparent" stroke="#2d5aa8" stroke-width="2"/></g>
+  <g class="etc-map-region" data-region="近畿" tabindex="0" role="button" aria-label="近畿"><path d="M306 224l68-26 44 43-27 65-61 10-38-52z" fill="transparent" stroke="#2d5aa8" stroke-width="2"/></g>
+  <g class="etc-map-region" data-region="中国・四国" tabindex="0" role="button" aria-label="中国・四国"><path d="M154 218l111-20 58 42-43 49-110 5-55-39zM244 294l76-11 39 20-45 26-75-10z" fill="transparent" stroke="#2d5aa8" stroke-width="2"/></g>
+  <g class="etc-map-region" data-region="九州・沖縄" tabindex="0" role="button" aria-label="九州・沖縄"><path d="M73 250l54-25 47 33-18 62-52 25-43-48zM26 330a7 7 0 1 0 14 0a7 7 0 1 0-14 0z" fill="transparent" stroke="#2d5aa8" stroke-width="2"/></g>
+ </svg>`;
+ map.innerHTML = `<div style="border:1px solid #c9c9c9;background:#fff;overflow:hidden;">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 16px;background:#514093;color:#fff;font-size:1.15rem;font-weight:700;"><span>地図から探す　›</span><span style="padding:5px 10px;background:#e8bddf;color:#231b32;border:1px solid #231b32;border-radius:4px;font-size:.9rem;">ICを選択</span></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 170px;min-height:235px;">
+<div style="position:relative;min-height:235px;background:#fff;overflow:hidden;">
+    <div style="position:absolute;left:8%;top:15%;width:78%;height:66%;background:#e5e5e5;clip-path:polygon(8% 8%,25% 0,40% 12%,58% 10%,76% 25%,93% 36%,84% 54%,69% 57%,77% 75%,59% 86%,40% 72%,22% 84%,8% 64%,0 42%);opacity:.92;"></div>
+    <button type="button" class="etc-map-region" data-region="北海道" style="position:absolute;right:10%;top:10%;">北海道</button>
+    <button type="button" class="etc-map-region" data-region="東北" style="position:absolute;right:16%;top:32%;">東北</button>
+    <button type="button" class="etc-map-region" data-region="関東" style="position:absolute;right:19%;top:56%;">関東</button>
+    <button type="button" class="etc-map-region" data-region="中部" style="position:absolute;right:34%;top:42%;">中部</button>
+    <button type="button" class="etc-map-region" data-region="近畿" style="position:absolute;left:36%;top:68%;">近畿</button>
+    <button type="button" class="etc-map-region" data-region="中国・四国" style="position:absolute;left:17%;top:50%;">中国・四国</button>
+    <button type="button" class="etc-map-region" data-region="九州・沖縄" style="position:absolute;left:5%;top:66%;">九州・沖縄</button>
+   </div>
+<div style="border-left:1px solid #e5e7eb;padding:10px 14px;color:#075db7;"><div style="font-size:1.05rem;color:#1f2937;margin-bottom:8px;">主要都市</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;">${["札幌","青森","仙台","新潟","東京","名古屋","金沢","大阪","岡山","広島","高松","福岡","長崎","鹿児島","那覇"].map(city => `<button type="button" class="etc-city" data-query="${city}" style="border:0;background:transparent;color:#075db7;text-align:left;padding:0;font-size:.95rem;cursor:pointer;">${city}</button>`).join("")}</div></div>
+  </div>
+ </div>`;
+  map.firstElementChild?.firstElementChild?.remove();
+  const updateResultStates = () => {
+   const fromName = document.getElementById("etcFrom")?.value || "";
+   const toName = document.getElementById("etcTo")?.value || "";
+   results.querySelectorAll(".etc-ic-result").forEach(button => {
+    const name = button.dataset.icName || "";
+    const stateText = name === fromName && name === toName ? "出発・到着ICに選択済み" : name === fromName ? "出発ICに選択済み" : name === toName ? "到着ICに選択済み" : "";
+    const selected = Boolean(stateText);
+    let state = button.querySelector(".etc-ic-result-state");
+    const regionLabel = button.querySelector("small");
+    let meta = button.querySelector(".etc-ic-result-meta");
+    if (!meta && regionLabel) {
+     meta = document.createElement("span");
+     meta.className = "etc-ic-result-meta";
+     meta.style.cssText = "display:block;margin-top:3px;line-height:1.2;";
+     regionLabel.replaceWith(meta);
+     meta.append(regionLabel);
+    }
+    if (regionLabel) {
+     regionLabel.style.display = "inline-block";
+     regionLabel.style.marginRight = "5px";
+    }
+    if (!state) {
+     state = document.createElement("span");
+     state.className = "etc-ic-result-state";
+     state.style.cssText = "display:none;color:#0369a1;font-size:.72rem;font-weight:700;white-space:nowrap;";
+     (meta || button).append(state);
+    }
+    if (meta && state.parentElement !== meta) meta.append(state);
+    button.style.background = selected ? "#e0f2fe" : "#fff";
+    button.style.borderColor = selected ? "#0284c7" : "#dbe3ee";
+    button.style.boxShadow = selected ? "0 0 0 2px #bae6fd" : "none";
+    button.setAttribute("aria-pressed", selected ? "true" : "false");
+    if (state) {
+     state.textContent = stateText;
+     state.style.display = selected ? "inline-block" : "none";
+    }
+   });
+  };
+  const renderResults = () => {
+  const fastQuery = search.value.trim().toLocaleLowerCase("ja");
+  const fastMatches = ETC_ALL_IC.filter(station => (selectedRegion === "all" || station.region === selectedRegion) && (!fastQuery || station.name.toLocaleLowerCase("ja").includes(fastQuery))).slice(0, 80);
+  results.innerHTML = fastMatches.map(station => `<button type="button" class="etc-ic-result" data-ic-name="${station.name}" style="padding:10px;text-align:left;border:1px solid #dbe3ee;border-radius:8px;background:#fff;cursor:pointer;">${station.name}<small style="display:block;color:#64748b;margin-top:3px;">${station.region}</small></button>`).join("") || '<div style="color:#64748b;grid-column:1/-1;">該当する IC がありません。</div>';
+  updateResultStates();
+  return;
+  const query = search.value.trim().toLocaleLowerCase("ja");
+  const matches = ETC_ALL_IC.filter(station => (selectedRegion === "all" || station.region === selectedRegion) && (!query || station.name.toLocaleLowerCase("ja").includes(query))).slice(0, 260);
+  results.innerHTML = matches.map(station => `<button type="button" class="etc-ic-result" data-ic-name="${station.name}" style="padding:10px;text-align:left;border:1px solid #dbe3ee;border-radius:8px;background:#fff;cursor:pointer;">${station.name}<small style="display:block;color:#64748b;margin-top:3px;">${station.region}</small></button>`).join("") || '<div style="color:#64748b;grid-column:1/-1;">該当する IC がありません。</div>';
+  results.querySelectorAll(".etc-ic-result").forEach(button => button.addEventListener("click", () => {
+   const name = button.dataset.icName, from = document.getElementById("etcFrom"), to = document.getElementById("etcTo"), region = document.getElementById("etcRegion");
+   region.value = "all";
+   from.onchange();
+   if (target === "from") { from.value = name; from.onchange(); }
+   else { to.value = name; to.disabled = false; to.onchange(); }
+  }));
+ };
+ results.onclick = event => {
+  const button = event.target.closest(".etc-ic-result");
+  if (!button) return;
+  const name = button.dataset.icName, from = document.getElementById("etcFrom"), to = document.getElementById("etcTo"), region = document.getElementById("etcRegion");
+  if ((target === "from" && name === to.value) || (target === "to" && name === from.value)) {
+   document.getElementById("etcRouteStatus").textContent = "出発ICと到着ICは同じICを選択できません。";
+   return;
+  }
+  region.value = "all";
+  if (target === "from") {
+   from.value = name;
+   to.value = "";
+   to.disabled = true;
+   setTarget("to");
+  } else {
+  if (![...to.options].some(option => option.value === name)) {
+   to.add(new Option(name, name));
+  }
+   to.value = name;
+   to.disabled = false;
+   document.getElementById("etcRouteStatus")?.scrollIntoView({block:"center",behavior:"smooth"});
+ }
+  etcRender();
+  etcUpdateSelectedIcButtons();
+  updateResultStates();
+  search.value = "";
+  renderResults();
+ };
+ modal._renderResults = renderResults;
+ const chooseModalRegion = value => { selectedRegion = value; renderResults(); };
+ map.querySelectorAll(".etc-map-region").forEach(mapRegion => {
+  mapRegion.style.cursor = "pointer";
+  mapRegion.style.padding = "7px 12px";
+  mapRegion.style.background = "#fff";
+  mapRegion.style.border = "2px solid #159bd3";
+  mapRegion.style.borderRadius = "4px";
+  mapRegion.style.color = "#1f2937";
+  mapRegion.style.fontWeight = "700";
+  mapRegion.addEventListener("click", () => chooseModalRegion(mapRegion.dataset.region));
+  mapRegion.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); chooseModalRegion(mapRegion.dataset.region); } });
+ });
+ map.querySelectorAll(".etc-city").forEach(city => city.addEventListener("click", () => { selectedRegion = "all"; search.value = city.dataset.query; renderResults(); }));
+  const setTarget = value => {
+   target = value;
+   document.getElementById("etcIcModalTitle").textContent = target === "from" ? "地図から出発ICを選択" : "地図から到着ICを選択";
+   document.querySelectorAll(".etc-modal-target").forEach(item => {
+   const active = item.dataset.target === target;
+   item.style.background = active ? "#eff6ff" : "#fff";
+    item.style.borderColor = active ? "#1d4ed8" : "#cbd5e1";
+    item.style.boxShadow = active ? "0 0 0 2px #dbeafe" : "none";
+   });
+  };
+  document.querySelectorAll(".etc-modal-target").forEach(button => button.addEventListener("click", () => setTarget(button.dataset.target)));
+ const setMode = mode => {
+  map.style.display = mode === "map" ? "block" : "none";
+  document.querySelectorAll(".etc-map-mode").forEach(button => { const active = button.dataset.mode === mode; button.style.borderBottomColor = active ? "#1d4ed8" : "transparent"; button.style.color = active ? "#183b7a" : "#64748b"; });
+ };
+ document.querySelectorAll(".etc-map-mode").forEach(button => button.addEventListener("click", () => setMode(button.dataset.mode)));
+ search.addEventListener("input", renderResults);
+ open.addEventListener("click", () => { modal.hidden = false; renderResults(); search.focus(); });
+ close.addEventListener("click", () => { modal.hidden = true; });
+ modal.addEventListener("click", event => { if (event.target === modal) modal.hidden = true; });
+ setMode("map");
+ renderResults();
+}
+async function etcLoadAllIC(){
+ try {
+  const response = await fetch(new URL("/data/etc-icdata.json", document.baseURI));
+  if (!response.ok) throw new Error(`IC data ${response.status}`);
+  const stations = await response.json();
+  if (!Array.isArray(stations) || stations.length < 1000) throw new Error("IC data is incomplete");
+  ETC_ALL_IC.length = 0;
+  ETC_ALL_IC.push(...stations);
+  etcInitRouteSelectsV2();
+  etcInitMapModal();
+  etcRender();
+ } catch (error) {
+  console.warn("全国ICデータを読み込めませんでした。", error);
+ }
+}
 function etcRender(){
- if (!document.querySelector("#etcDistance")) return;
- const distance = Math.max(0,portalNum("etcDistance"));
- const vehicle = ETC_VEHICLE[document.getElementById("etcVehicle").value] || ETC_VEHICLE.normal;
+ if (!document.querySelector("#etcFrom")) return;
+ const fromName = document.getElementById("etcFrom").value;
+ const toName = document.getElementById("etcTo").value;
+ const officialRoute = ETC_ROUTE_DATA.find(item => item.from === fromName && item.to === toName && item.normal > 0);
+ const vehicleKey = document.getElementById("etcVehicle").value;
+ const vehicle = ETC_VEHICLE[vehicleKey] || ETC_VEHICLE.normal;
+ const distance = officialRoute?.km || etcEstimateDistance(fromName,toName);
+ if (!fromName || !toName || !distance){
+  ["etcTotal","etcBefore","etcPerKm"].forEach(id => document.getElementById(id).textContent = "—");
+  document.getElementById("etcRouteStatus").textContent = fromName && !toName
+   ? `出発IC：${fromName}（到着ICを選択してください）`
+   : !fromName && toName
+    ? `到着IC：${toName}（先に出発ICを選択してください）`
+    : "起点と終点を選択してください。";
+  document.getElementById("etcBreakdown").innerHTML = "";
+  return;
+ }
  const discount = document.getElementById("etcDiscount").value;
- const baseToll = etcRoundTen(150 + vehicle.perKm * distance);
+ const normalToll = officialRoute?.normal || etcRoundTen(150 + 24.6 * distance);
+ const baseToll = vehicleKey === "normal" ? normalToll : etcRoundTen(normalToll * vehicle.factor);
  let finalToll = baseToll, discountAmount = 0;
  if (discount === "night"){
   finalToll = etcRoundTen(baseToll * 0.7);
   discountAmount = baseToll - finalToll;
  } else if (discount === "holiday"){
   const cappedKm = Math.min(distance,100);
-  const cappedToll = etcRoundTen(150 + vehicle.perKm * cappedKm);
+  const cappedToll = etcRoundTen(baseToll * cappedKm / distance);
   const cappedDiscounted = etcRoundTen(cappedToll * 0.8);
   const remainderToll = distance > 100 ? etcRoundTen(vehicle.perKm * (distance - 100)) : 0;
   finalToll = cappedDiscounted + remainderToll;
@@ -105,22 +657,23 @@ function etcRender(){
  }
  document.getElementById("etcTotal").textContent = portalYen(finalToll);
  document.getElementById("etcBefore").textContent = portalYen(baseToll);
- document.getElementById("etcPerKm").textContent = `${vehicle.label}・${vehicle.perKm}円/km`;
+ document.getElementById("etcPerKm").textContent = `${vehicle.label}・${distance}km`;
+ document.getElementById("etcRouteStatus").textContent = officialRoute ? `${fromName} → ${toName}・公式データ距離 ${distance}km` : `${fromName} → ${toName}・距離と料金の概算`;
  const noteCopy = ETC_NOTE_TEXT[typeof siteCurrentLanguage !== "undefined" ? siteCurrentLanguage : "ja"] || ETC_NOTE_TEXT.ja;
  document.getElementById("etcNote").textContent = noteCopy[discount] || noteCopy.none;
+ document.getElementById("etcMileageNote").textContent = "出典：NEXCO公式IC資料をもとにした全国IC選択。登録済み区間はNEXCO ドラぷらの普通車ETC料金・距離、それ以外はIC間距離からの概算です。";
  portalRows("etcBreakdown",[
   ["通常料金（概算）",portalYen(baseToll)],
   ["適用した割引額",discount==="none" ? "—" : `-${portalYen(discountAmount)}`],
   ["割引後の概算料金",portalYen(finalToll)]
  ]);
 }
-if (document.querySelector("#etcDistance")){
- ["etcDistance","etcVehicle","etcDiscount"].forEach(id=>document.getElementById(id).addEventListener("input",etcRender));
+if (document.querySelector("#etcFrom")){
+ ["etcVehicle","etcDiscount"].forEach(id=>document.getElementById(id).addEventListener("input",etcRender));
  document.getElementById("etcCalcBtn").addEventListener("click",etcRender);
- document.querySelectorAll("[data-etc-preset]").forEach(btn=>btn.addEventListener("click",() => {
-  document.getElementById("etcDistance").value = btn.dataset.etcPreset;
-  etcRender();
- }));
+ etcInitRouteSelectsV2();
+ etcInitMapModal();
  etcRender();
+ etcLoadAllIC();
 }
 </script>
