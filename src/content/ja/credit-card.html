@@ -36,12 +36,15 @@
     </div>
     <div class="card">
       <div class="section-title">自分に合うカードの選び方</div>
-      <div class="internet-check-grid">
-        <label><input type="checkbox" disabled> 年会費をかけず、日常の買い物でポイントを貯めたい</label>
-        <label><input type="checkbox" disabled> コンビニや対象飲食店でのタッチ決済をよく使う</label>
-        <label><input type="checkbox" disabled> PayPay・楽天・イオンなど、普段使う経済圏がある</label>
-        <label><input type="checkbox" disabled> 海外旅行、ホテル、コンシェルジュなどの特典を重視する</label>
+      <p class="cc-quiz-lead">重視することを選ぶと、下の比較表から候補を3枚まで表示します（複数選択可）。</p>
+      <div class="internet-check-grid cc-quiz-options" role="group" aria-label="カード選びの条件">
+        <label><input type="checkbox" data-cc-preference="free"> 年会費をかけず、日常の買い物でポイントを貯めたい</label>
+        <label><input type="checkbox" data-cc-preference="touch"> コンビニや対象飲食店でのタッチ決済をよく使う</label>
+        <label><input type="checkbox" data-cc-preference="ecosystem"> PayPay・楽天・イオンなど、普段使う経済圏がある</label>
+        <label><input type="checkbox" data-cc-preference="travel"> 海外旅行、ホテル、コンシェルジュなどの特典を重視する</label>
       </div>
+      <button type="button" class="cc-quiz-button" id="ccQuizButton">選択結果を見る</button>
+      <div class="cc-quiz-result" id="ccQuizResult" aria-live="polite" hidden></div>
       <div class="ward-warning">還元率は、支払い方法・利用先・キャンペーン・ポイントの交換方法によって変わります。「最大○％」だけでなく、通常還元と適用条件を確認して選びましょう。</div>
     </div>
   </section>
@@ -76,6 +79,21 @@
         .cc-compare-table td[data-label="年会費（税込）"]{display:flex;align-items:center;gap:8px;}
         .cc-compare-table td[data-label="年会費（税込）"]::before{margin-bottom:0;}
       }
+      .cc-quiz-lead{margin:0 0 10px;font-size:12px;line-height:1.7;color:var(--ink-soft);}
+      .cc-quiz-options label{transition:border-color .15s ease,background .15s ease;}
+      .cc-quiz-options label:has(input:checked){border-color:var(--accent);background:rgba(31,61,115,.05);}
+      .cc-quiz-options input{cursor:pointer;}
+      .cc-quiz-button{margin-top:12px;border:0;border-radius:4px;background:var(--accent);color:#fff;padding:10px 16px;font:700 12px inherit;cursor:pointer;}
+      .cc-quiz-button:hover{filter:brightness(.94);}
+      .cc-quiz-result{margin-top:14px;border:1px solid var(--line);background:var(--paper-2);padding:12px;}
+      .cc-quiz-result[hidden]{display:none;}
+      .cc-quiz-result-title{margin:0 0 8px;font-size:14px;}
+      .cc-quiz-result-note{margin:0 0 10px;font-size:11px;line-height:1.6;color:var(--ink-soft);}
+      .cc-quiz-cards{display:grid;gap:8px;}
+      .cc-quiz-card{border-left:3px solid var(--accent);background:var(--white);padding:9px 10px;}
+      .cc-quiz-card strong{display:block;font-size:12.5px;}
+      .cc-quiz-card span{display:block;margin-top:3px;font-size:11px;line-height:1.55;color:var(--ink-soft);}
+      .cc-quiz-empty{margin:0;font-size:12px;line-height:1.7;color:var(--ink-soft);}
     </style>
   </section>
 
@@ -113,3 +131,41 @@
 
   <div class="portal-source" style="margin-top:16px;">公式情報：<a href="https://www.rakuten-card.co.jp/card/rakuten-card/" target="_blank" rel="noopener noreferrer">楽天カード</a> ／ <a href="https://www.smbc-card.com/camp/numberless/index.jsp" target="_blank" rel="noopener noreferrer">三井住友カード（NL）</a> ／ <a href="https://www.eposcard.co.jp/" target="_blank" rel="noopener noreferrer">エポスカード</a> ／ <a href="https://www.americanexpress.com/ja-jp/benefits/platinum-card/" target="_blank" rel="noopener noreferrer">アメリカン・エキスプレス プラチナ・カード</a></div>
 </div><!-- /page-credit-card -->
+
+<script>
+  (() => {
+    const button = document.getElementById("ccQuizButton");
+    const result = document.getElementById("ccQuizResult");
+    if (!button || !result || button.dataset.ready) return;
+    button.dataset.ready = "true";
+
+    const cards = [
+      {id:"rakuten", name:"楽天カード", scores:{free:3, ecosystem:4}, reason:"年会費無料で、日常の買い物や楽天サービスにまとめて使いたい人向けです。"},
+      {id:"smbc", name:"三井住友カード（NL）", scores:{free:2, touch:5}, reason:"年会費無料で、対象のコンビニ・飲食店のタッチ決済を重視する人向けです。"},
+      {id:"epos", name:"エポスカードVisa", scores:{free:3}, reason:"年会費無料で、店頭受取も含めてシンプルな1枚を検討したい人向けです。"},
+      {id:"paypay", name:"PayPayカード", scores:{free:2, ecosystem:4}, reason:"PayPayを普段の支払いに使い、関連サービスとの相性を確認したい人向けです。"},
+      {id:"aeon", name:"イオンカード", scores:{free:2, ecosystem:4}, reason:"イオンやマックスバリュなど、イオングループをよく利用する人向けです。"},
+      {id:"amex", name:"プラチナ・カード®（アメリカン・エキスプレス）", scores:{travel:6}, reason:"旅行・ホテル・ダイニング・コンシェルジュなどの特典を重視する人向けです。"}
+    ];
+
+    const render = () => {
+      const selected = [...document.querySelectorAll("[data-cc-preference]:checked")].map(input => input.dataset.ccPreference);
+      result.hidden = false;
+      if (!selected.length) {
+        result.innerHTML = '<p class="cc-quiz-empty">まず重視する条件を1つ以上選んでください。複数選ぶと、あなたの使い方に近い候補を表示します。</p>';
+        return;
+      }
+
+      const ranked = cards.map(card => ({
+        ...card,
+        score: selected.reduce((total, key) => total + (card.scores[key] || 0), 0)
+      })).sort((a, b) => b.score - a.score);
+      const topScore = ranked[0].score;
+      const recommended = ranked.filter(card => card.score > 0).slice(0, 3);
+      const cardsHtml = recommended.map((card, index) => `<div class="cc-quiz-card"><strong>${index + 1}. ${card.name}</strong><span>${card.reason}</span></div>`).join("");
+      result.innerHTML = `<h3 class="cc-quiz-result-title">あなたに合いそうな候補</h3><p class="cc-quiz-result-note">選択した条件との一致度をもとにした目安です。最も高い候補の一致度：${topScore}点</p><div class="cc-quiz-cards">${cardsHtml}</div><p class="cc-quiz-result-note" style="margin:10px 0 0;">発行・審査通過を保証するものではありません。年会費・特典・適用条件は各社の公式サイトで確認してください。</p>`;
+    };
+
+    button.addEventListener("click", render);
+  })();
+</script>

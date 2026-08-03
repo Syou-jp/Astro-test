@@ -9,6 +9,7 @@
     }
     .kaden-hero-main {
       border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
       background: linear-gradient(135deg, #ffffff 0%, #f6f1e8 100%);
       padding: 24px;
     }
@@ -20,13 +21,14 @@
       letter-spacing: 0.04em;
     }
     .kaden-hero-main p {
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.9;
       color: var(--ink-soft);
       margin: 0;
     }
     .kaden-summary {
       border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
       background: #fff;
       padding: 18px;
       display: grid;
@@ -35,36 +37,23 @@
     }
     .kaden-summary-row {
       display: grid;
-      grid-template-columns: 42px minmax(0, 1fr);
-      gap: 10px;
+      grid-template-columns: 1fr;
+      gap: 0;
       align-items: center;
       padding: 10px;
       border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
       background: var(--paper);
-    }
-    .kaden-mark {
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--accent);
-      background: var(--accent);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
     }
     .kaden-summary-row b {
       display: block;
-      font-size: 12.5px;
+      font-size: 14px;
       color: var(--ink);
       line-height: 1.35;
     }
     .kaden-summary-row small {
       display: block;
-      font-size: 10.5px;
+      font-size: 12px;
       color: var(--ink-soft);
       line-height: 1.5;
       margin-top: 2px;
@@ -77,17 +66,18 @@
     }
     .kaden-card {
       border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
       background: #fff;
       padding: 16px;
     }
     .kaden-card h3 {
-      font-size: 14px;
+      font-size: 16px;
       margin: 0 0 8px;
       color: var(--ink);
     }
     .kaden-card p {
-      font-size: 11.5px;
-      line-height: 1.8;
+      font-size: 13px;
+      line-height: 1.75;
       color: var(--ink-soft);
       margin: 0;
     }
@@ -108,25 +98,26 @@
       grid-template-columns: 112px minmax(0, 1fr);
       gap: 12px;
       border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
       background: #fff;
       padding: 13px;
     }
     .kaden-step time {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--accent);
       line-height: 1.55;
     }
     .kaden-step b {
       display: block;
-      font-size: 13px;
+      font-size: 14px;
       color: var(--ink);
       margin-bottom: 4px;
     }
     .kaden-step span {
       display: block;
-      font-size: 11.5px;
-      line-height: 1.75;
+      font-size: 13px;
+      line-height: 1.7;
       color: var(--ink-soft);
     }
     .kaden-two-col {
@@ -137,12 +128,13 @@
     }
     .kaden-check {
       border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
       background: #fff;
       padding: 16px;
     }
     .kaden-check h3 {
       margin: 0 0 10px;
-      font-size: 14px;
+      font-size: 16px;
       color: var(--accent);
     }
     .kaden-check ul {
@@ -152,15 +144,19 @@
       gap: 7px;
     }
     .kaden-check li {
-      font-size: 11.5px;
-      line-height: 1.75;
+      font-size: 13px;
+      line-height: 1.7;
       color: var(--ink-soft);
     }
     .kaden-table {
       width: 100%;
-      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
       background: #fff;
-      font-size: 11.5px;
+      font-size: 13px;
       margin-top: 8px;
     }
     .kaden-table th,
@@ -177,18 +173,20 @@
     }
     .kaden-note {
       border-left: 3px solid var(--gold);
+      border-radius: var(--radius-sm);
       background: rgba(156, 122, 60, 0.08);
       padding: 11px 13px;
-      font-size: 11.5px;
-      line-height: 1.8;
+      font-size: 13px;
+      line-height: 1.75;
       color: var(--ink-soft);
       margin-top: 14px;
     }
     .kaden-warning {
       border-left: 4px solid var(--seal);
+      border-radius: var(--radius-sm);
       background: rgba(168, 72, 47, 0.07);
       padding: 11px 13px;
-      font-size: 11.5px;
+      font-size: 13px;
       line-height: 1.75;
       color: var(--ink-soft);
       margin-top: 12px;
@@ -204,11 +202,12 @@
     .kaden-source-list a {
       display: block;
       border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
       background: #fff;
       color: var(--ink);
       text-decoration: none;
       padding: 12px 13px;
-      font-size: 11.5px;
+      font-size: 13px;
       line-height: 1.55;
     }
     .kaden-source-list a:hover {
@@ -260,21 +259,18 @@
     </div>
     <div class="kaden-summary" aria-label="概要">
       <div class="kaden-summary-row">
-        <div class="kaden-mark">4</div>
         <div>
           <b>対象は4品目だけ</b>
           <small>エアコン・テレビ・冷蔵庫/冷凍庫・洗濯機/衣類乾燥機です。</small>
         </div>
       </div>
       <div class="kaden-summary-row">
-        <div class="kaden-mark">24H</div>
         <div>
           <b>東京23区はWeb申込が便利</b>
           <small>受付センターのインターネット申込は24時間利用できます。</small>
         </div>
       </div>
       <div class="kaden-summary-row">
-        <div class="kaden-mark">NG</div>
         <div>
           <b>無許可回収業者は使わない</b>
           <small>高額請求や不法投棄のトラブルを防ぐため、正規ルートを使います。</small>
@@ -287,22 +283,18 @@
     <div class="section-title"><span>対象となる家電4品目</span></div>
     <div class="kaden-grid">
       <article class="kaden-card">
-        <strong>1</strong>
         <h3>エアコン</h3>
         <p>壁掛けタイプなどの家庭用エアコンは対象です。取り外し作業は回収料金に含まれないことが多いので、必要なら別手配にします。</p>
       </article>
       <article class="kaden-card">
-        <strong>2</strong>
         <h3>テレビ</h3>
         <p>ブラウン管式、液晶式、有機EL式、プラズマ式などが対象です。サイズによってリサイクル料金が変わります。</p>
       </article>
       <article class="kaden-card">
-        <strong>3</strong>
         <h3>冷蔵庫・冷凍庫</h3>
         <p>内容積で料金区分が分かれることがあります。処分前にメーカー名と容量を確認しておくとスムーズです。</p>
       </article>
       <article class="kaden-card">
-        <strong>4</strong>
         <h3>洗濯機・衣類乾燥機</h3>
         <p>ドラム式を含む洗濯機、衣類乾燥機が対象です。中身を空にして、搬出しやすい状態で準備します。</p>
       </article>

@@ -5,7 +5,7 @@
     <div>
       <span class="portal-badge new">外国人向け</span>
       <h2>区役所で最初に整える生活の土台</h2>
-      <p>日本で生活する外国人の方にとって、区役所・市役所は住所、身分証明、保険、年金、税金の記録を整える最も重要な場所です。ここでは葛飾区の手続きを中心に、一般的な日本の自治体でもよく使う手続きを4つのカテゴリーで整理します。</p>
+      <p>日本で生活する外国人の方にとって、区役所・市役所は住所、身分証明、保険、年金、税金の記録を整える最も重要な場所です。ここでは<span data-ward-name>葛飾区</span>の手続きを中心に、一般的な日本の自治体でもよく使う手続きを4つのカテゴリーで整理します。</p>
     </div>
     <div class="ward-carry-box">
       <strong>行く前に持つもの</strong>
@@ -16,6 +16,43 @@
         <li>前住所地の転出証明書（他自治体から転入する場合）</li>
       </ul>
     </div>
+  </section>
+
+  <section class="ward-region-picker" aria-labelledby="wardRegionTitle">
+    <div class="ward-region-picker-head">
+      <div>
+        <span class="portal-badge new">一都三県</span>
+        <h3 id="wardRegionTitle">お住まいの都県を選ぶ</h3>
+        <p>手続きの窓口や必要書類は自治体によって異なります。都県を選び、お住まいの市区町村の公式案内を確認してください。</p>
+      </div>
+      <div class="ward-region-controls">
+        <label class="ward-region-select-wrap" for="wardRegionSelect">
+          <span>都県</span>
+          <select id="wardRegionSelect">
+            <option value="tokyo" selected>東京都</option>
+            <option value="kanagawa">神奈川県</option>
+            <option value="saitama">埼玉県</option>
+            <option value="chiba">千葉県</option>
+          </select>
+        </label>
+        <label class="ward-region-select-wrap" for="wardMunicipalitySelect">
+          <span id="wardMunicipalityLabel">東京23区</span>
+          <select id="wardMunicipalitySelect" aria-labelledby="wardMunicipalityLabel"></select>
+        </label>
+      </div>
+    </div>
+    <div class="ward-region-result" aria-live="polite">
+      <div>
+        <small>選択中の地域</small>
+        <strong id="wardRegionName">東京都</strong>
+        <p id="wardRegionDescription">葛飾区を含む23区・多摩地域・島しょ地域の区市町村から、住所地の役所を確認できます。</p>
+      </div>
+      <div class="ward-region-actions">
+        <a id="wardMunicipalityLink" class="secondary-btn" href="https://www.gikai.metro.tokyo.lg.jp/link/ward_municipality.html" target="_blank" rel="noopener">区市町村の公式サイト一覧</a>
+        <a id="wardForeignSupportLink" class="secondary-btn" href="https://www.seikatubunka.metro.tokyo.lg.jp/chiiki_tabunka/tabunka/tabunkasuishin/0000000945" target="_blank" rel="noopener">外国人向け生活情報</a>
+      </div>
+    </div>
+    <p class="ward-region-note" id="wardRegionNote">東京都では23区を選ぶと、本文の区名と公式確認リンクが選択区に切り替わります。実際の提出先・予約方法・手数料は各区公式サイトで最終確認してください。</p>
   </section>
 
   <div class="ward-icon-grid" aria-label="手続きカテゴリー">
@@ -34,21 +71,21 @@
     <div class="ward-procedure-grid">
       <article class="ward-procedure-card">
         <div class="ward-card-head"><h3>転入届</h3></div>
-        <p>海外から日本に入国したとき、または他の市区町村から葛飾区へ引っ越してきたときに、新しい住所を登録する手続きです。</p>
+        <p>海外から日本に入国したとき、または他の市区町村から<span data-ward-name>葛飾区</span>へ引っ越してきたときに、新しい住所を登録する手続きです。</p>
         <dl>
           <dt>期限</dt><dd>新しい住所に住み始めてから14日以内</dd>
           <dt>必要なもの</dt><dd>在留カード、パスポート、マイナンバーカード、転出証明書または転入届の特例</dd>
           <dt>注意</dt><dd>在留カード裏面に新住所が記載されます。未来の日付での転入はできません。</dd>
         </dl>
-        <a class="ward-source-link" href="https://www2.city.katsushika.lg.jp/kurashi/1000046/1001401/1001438.html" target="_blank" rel="noopener">葛飾区：住民異動届</a>
+        <a class="ward-source-link" data-ward-link="move" href="https://www2.city.katsushika.lg.jp/kurashi/1000046/1001401/1001438.html" target="_blank" rel="noopener">葛飾区：住民異動届</a>
       </article>
 
       <article class="ward-procedure-card">
         <div class="ward-card-head"><h3>転出届・転居届</h3></div>
-        <p>葛飾区から他の自治体または海外へ出るときは転出届、葛飾区内で住所を変えるときは転居届を出します。</p>
+        <p><span data-ward-name>葛飾区</span>から他の自治体または海外へ出るときは転出届、<span data-ward-name>葛飾区</span>内で住所を変えるときは転居届を出します。</p>
         <dl>
           <dt>転出届</dt><dd>引っ越す前から手続き可能。日本から帰国・出国する場合も必要です。</dd>
-          <dt>転居届</dt><dd>葛飾区内で引っ越した場合、新住所に住み始めてから14日以内。</dd>
+          <dt>転居届</dt><dd><span data-ward-name>葛飾区</span>内で引っ越した場合、新住所に住み始めてから14日以内。</dd>
           <dt>注意</dt><dd>マイナンバーカードがある場合は、転出証明書なしで転入届の特例を使えることがあります。</dd>
         </dl>
       </article>
@@ -61,7 +98,7 @@
           <dt>マイナンバー</dt><dd>会社などから明確に求められた場合を除き、通常は省略します。</dd>
           <dt>取得</dt><dd>窓口またはマイナンバーカードによるコンビニ交付を利用できます。</dd>
         </dl>
-        <a class="ward-source-link" href="https://www2.city.katsushika.lg.jp/kurashi/1000046/1001401/1001430.html" target="_blank" rel="noopener">葛飾区：住民票の写し</a>
+        <a class="ward-source-link" data-ward-link="resident" href="https://www2.city.katsushika.lg.jp/kurashi/1000046/1001401/1001430.html" target="_blank" rel="noopener">葛飾区：住民票の写し</a>
       </article>
 
       <article class="ward-procedure-card">
@@ -72,7 +109,7 @@
           <dt>使えない印鑑</dt><dd>ゴム印、シャチハタ、変形しやすい印鑑などは不可。</dd>
           <dt>外国人の氏名</dt><dd>住民票に記録されている氏名、通称、またはカタカナ表記に合わせます。</dd>
         </dl>
-        <a class="ward-source-link" href="https://www.city.katsushika.lg.jp/kurashi/1000046/1001404/1001453.html" target="_blank" rel="noopener">葛飾区：外国人の印鑑登録</a>
+        <a class="ward-source-link" data-ward-link="seal" href="https://www.city.katsushika.lg.jp/kurashi/1000046/1001404/1001453.html" target="_blank" rel="noopener">葛飾区：外国人の印鑑登録</a>
       </article>
     </div>
   </section>
@@ -84,13 +121,13 @@
         <h3>国民健康保険の加入・喪失・減免</h3>
         <p>会社の健康保険に入っていない留学生、自営業、アルバイト、会社を辞めた人などは、国民健康保険の手続きが必要です。加入すると、病院での自己負担は原則3割になります。</p>
         <p><strong>重要：</strong>日本に来たばかり、前年収入が少ない、収入がない場合は、所得申告や保険料の軽減・減免について窓口で相談してください。申告しないと高い保険料で計算されることがあります。</p>
-        <a class="ward-source-link" href="https://www2.city.katsushika.lg.jp/kurashi/1000049/1001690/1001699.html" target="_blank" rel="noopener">葛飾区：国民健康保険の届出</a>
+        <a class="ward-source-link" data-ward-link="insurance" href="https://www2.city.katsushika.lg.jp/kurashi/1000049/1001690/1001699.html" target="_blank" rel="noopener">葛飾区：国民健康保険の届出</a>
       </div>
       <div class="ward-note-card">
         <h3>国民年金の学生納付特例・免除</h3>
         <p>日本に住む20歳から59歳の人は、原則として国民年金の対象です。留学生は学生納付特例、収入が少ない人は免除・納付猶予を申請できる場合があります。</p>
         <p><strong>重要：</strong>払えないときに何もしないで未納にすると、将来の在留審査や永住申請で不利になる可能性があります。払えない場合ほど、必ず免除・猶予の手続きをしてください。</p>
-        <a class="ward-source-link" href="https://www.city.katsushika.lg.jp/faq/1030270/1007656/1008047/1008195.html" target="_blank" rel="noopener">葛飾区：年金保険料の免除制度</a>
+        <a class="ward-source-link" data-ward-link="pension" href="https://www.city.katsushika.lg.jp/faq/1030270/1007656/1008047/1008195.html" target="_blank" rel="noopener">葛飾区：年金保険料の免除制度</a>
       </div>
     </div>
   </section>
@@ -110,9 +147,9 @@
         </tbody>
       </table>
       <div class="ward-warning">
-        <strong>取得場所に注意：</strong>税証明は原則として、証明が必要な年度の1月1日に住民登録があった自治体で発行されます。今は葛飾区に住んでいても、1月1日に新宿区に住んでいた年度の証明は新宿区で確認します。
+        <strong>取得場所に注意：</strong>税証明は原則として、証明が必要な年度の1月1日に住民登録があった自治体で発行されます。今は<span data-ward-name>葛飾区</span>に住んでいても、1月1日に別の自治体に住んでいた年度の証明は、その自治体で確認します。
       </div>
-      <a class="ward-source-link" href="https://www2.city.katsushika.lg.jp/kurashi/1000047/1001463/1026917/1001492.html" target="_blank" rel="noopener">葛飾区：住民税証明書の発行手続き</a>
+      <a class="ward-source-link" data-ward-link="tax" href="https://www2.city.katsushika.lg.jp/kurashi/1000047/1001463/1026917/1001492.html" target="_blank" rel="noopener">葛飾区：住民税証明書の発行手続き</a>
     </div>
   </section>
 
@@ -128,7 +165,7 @@
         <h3>マイナンバーカードの住所変更</h3>
         <p>引っ越しのときは、転入届・転居届とあわせてカード表面とICチップの住所情報を変更します。手続きには4桁の暗証番号が必要です。</p>
         <p>転入後に放置するとカードが失効することがあります。引っ越し手続きの日に、在留カードと一緒にマイナンバーカードも必ず持って行きましょう。</p>
-        <a class="ward-source-link" href="https://www.city.katsushika.lg.jp/kurashi/1000046/1001401/1001432.html" target="_blank" rel="noopener">葛飾区：コンビニ交付・マイナンバーカード</a>
+        <a class="ward-source-link" data-ward-link="mynumber" href="https://www.city.katsushika.lg.jp/kurashi/1000046/1001401/1001432.html" target="_blank" rel="noopener">葛飾区：コンビニ交付・マイナンバーカード</a>
       </div>
     </div>
   </section>
@@ -175,7 +212,233 @@
       <div><b>保険料の減免・所得申告について相談したいです。</b><small>I want to ask about premium reduction and income declaration.</small></div>
     </div>
     <div class="portal-source">
-      参考：葛飾区公式サイトの住民異動届、住民票、印鑑登録、国民健康保険、国民年金、住民税証明書ページ。掲載内容は2026年7月23日時点で確認した情報をもとに、外国人向けに要点整理したものです。実際の提出前には各窓口で最新情報を確認してください。
+      参考：<span data-ward-name>葛飾区</span>公式サイトの住民異動届、住民票、印鑑登録、国民健康保険、国民年金、住民税証明書ページ。掲載内容は外国人向けに一般的な要点を整理したものです。実際の提出前には選択した区の各窓口で最新情報を確認してください。
     </div>
   </section>
+
+  <script>
+    const WARD_REGION_LINKS = {
+      tokyo: {
+        name: "東京都",
+        description: "葛飾区を含む23区・多摩地域・島しょ地域の区市町村から、住所地の役所を確認できます。",
+        municipalityLabel: "区市町村の公式サイト一覧",
+        municipalityUrl: "https://www.gikai.metro.tokyo.lg.jp/link/ward_municipality.html",
+        supportLabel: "外国人向け生活情報",
+        supportUrl: "https://www.seikatubunka.metro.tokyo.lg.jp/chiiki_tabunka/tabunka/tabunkasuishin/0000000945"
+      },
+      kanagawa: {
+        name: "神奈川県",
+        description: "横浜市・川崎市・相模原市を含む県内市町村から、住所地の市役所・区役所・町村役場を確認できます。",
+        municipalityLabel: "神奈川県内の市町村一覧",
+        municipalityUrl: "https://www.pref.kanagawa.jp/docs/ie2/cnt/f530001/p780102",
+        supportLabel: "外国籍県民向け情報",
+        supportUrl: "https://www.pref.kanagawa.jp/docs/k2w/2ndlayerpage/gaikokusekikenmin_top.html"
+      },
+      saitama: {
+        name: "埼玉県",
+        description: "さいたま市・川口市・川越市など、県内市町村の役所所在地・電話・公式サイトを確認できます。",
+        municipalityLabel: "埼玉県の市町村データ",
+        municipalityUrl: "https://www.pref.saitama.lg.jp/a0107/jyuuminnokatahe/sityousondate.html",
+        supportLabel: "外国人の生活ガイド・役所一覧",
+        supportUrl: "https://www.pref.saitama.lg.jp/a0306/seikatsuguide-text1314.html"
+      },
+      chiba: {
+        name: "千葉県",
+        description: "千葉市・船橋市・松戸市など、県内市町村の所在地・代表電話・公式案内を確認できます。",
+        municipalityLabel: "千葉県内の市町村一覧",
+        municipalityUrl: "https://www.pref.chiba.lg.jp/kouhou/ichiran.html",
+        supportLabel: "市町村の外国人相談窓口",
+        supportUrl: "https://www.pref.chiba.lg.jp/kokusai/soudan/gaikokujin/shichosonmadoguchi.html"
+      }
+    };
+    const WARD_TOKYO_WARDS = {
+      chiyoda: { name: "千代田区", url: "https://www.city.chiyoda.lg.jp/" },
+      chuo: { name: "中央区", url: "https://www.city.chuo.lg.jp/" },
+      minato: { name: "港区", url: "https://www.city.minato.tokyo.jp/" },
+      shinjuku: { name: "新宿区", url: "https://www.city.shinjuku.lg.jp/" },
+      bunkyo: { name: "文京区", url: "https://www.city.bunkyo.lg.jp/" },
+      taito: { name: "台東区", url: "https://www.city.taito.lg.jp/" },
+      sumida: { name: "墨田区", url: "https://www.city.sumida.lg.jp/" },
+      koto: { name: "江東区", url: "https://www.city.koto.lg.jp/" },
+      shinagawa: { name: "品川区", url: "https://www.city.shinagawa.tokyo.jp/" },
+      meguro: { name: "目黒区", url: "https://www.city.meguro.tokyo.jp/" },
+      ota: { name: "大田区", url: "https://www.city.ota.tokyo.jp/" },
+      setagaya: { name: "世田谷区", url: "https://www.city.setagaya.lg.jp/" },
+      shibuya: { name: "渋谷区", url: "https://www.city.shibuya.tokyo.jp/" },
+      nakano: { name: "中野区", url: "https://www.city.tokyo-nakano.lg.jp/" },
+      suginami: { name: "杉並区", url: "https://www.city.suginami.tokyo.jp/" },
+      toshima: { name: "豊島区", url: "https://www.city.toshima.lg.jp/" },
+      kita: { name: "北区", url: "https://www.city.kita.lg.jp/" },
+      arakawa: { name: "荒川区", url: "https://www.city.arakawa.tokyo.jp/" },
+      itabashi: { name: "板橋区", url: "https://www.city.itabashi.tokyo.jp/" },
+      nerima: { name: "練馬区", url: "https://www.city.nerima.tokyo.jp/" },
+      adachi: { name: "足立区", url: "https://www.city.adachi.tokyo.jp/" },
+      katsushika: {
+        name: "葛飾区",
+        url: "https://www.city.katsushika.lg.jp/",
+        links: {
+          move: "https://www2.city.katsushika.lg.jp/kurashi/1000046/1001401/1001438.html",
+          resident: "https://www2.city.katsushika.lg.jp/kurashi/1000046/1001401/1001430.html",
+          seal: "https://www.city.katsushika.lg.jp/kurashi/1000046/1001404/1001453.html",
+          insurance: "https://www2.city.katsushika.lg.jp/kurashi/1000049/1001690/1001699.html",
+          pension: "https://www.city.katsushika.lg.jp/faq/1030270/1007656/1008047/1008195.html",
+          tax: "https://www2.city.katsushika.lg.jp/kurashi/1000047/1001463/1026917/1001492.html",
+          mynumber: "https://www.city.katsushika.lg.jp/kurashi/1000046/1001401/1001432.html"
+        }
+      },
+      edogawa: { name: "江戸川区", url: "https://www.city.edogawa.tokyo.jp/" }
+    };
+    const WARD_MUNICIPALITIES = {
+      tokyo: Object.entries(WARD_TOKYO_WARDS).map(([id, item]) => ({ id, ...item })),
+      kanagawa: [
+        "横浜市", "川崎市", "相模原市", "横須賀市", "平塚市",
+        "鎌倉市", "藤沢市", "小田原市", "茅ヶ崎市", "逗子市",
+        "三浦市", "秦野市", "厚木市", "大和市", "伊勢原市",
+        "海老名市", "座間市", "南足柄市", "綾瀬市", "葉山町",
+        "寒川町", "大磯町", "二宮町", "中井町", "大井町",
+        "松田町", "山北町", "開成町", "箱根町", "真鶴町",
+        "湯河原町", "愛川町", "清川村"
+      ],
+      saitama: [
+        "さいたま市", "川越市", "熊谷市", "川口市", "行田市",
+        "秩父市", "所沢市", "飯能市", "加須市", "本庄市",
+        "東松山市", "春日部市", "狭山市", "羽生市", "鴻巣市",
+        "深谷市", "上尾市", "草加市", "越谷市", "蕨市",
+        "戸田市", "入間市", "朝霞市", "志木市", "和光市",
+        "新座市", "桶川市", "久喜市", "北本市", "八潮市",
+        "富士見市", "三郷市", "蓮田市", "坂戸市", "幸手市",
+        "鶴ヶ島市", "日高市", "吉川市", "ふじみ野市", "白岡市",
+        "伊奈町", "三芳町", "毛呂山町", "越生町", "滑川町",
+        "嵐山町", "小川町", "川島町", "吉見町", "鳩山町",
+        "ときがわ町", "横瀬町", "皆野町", "長瀞町", "小鹿野町",
+        "東秩父村", "美里町", "神川町", "上里町", "寄居町",
+        "宮代町", "杉戸町", "松伏町"
+      ],
+      chiba: [
+        "千葉市", "銚子市", "市川市", "船橋市", "館山市",
+        "木更津市", "松戸市", "野田市", "茂原市", "成田市",
+        "佐倉市", "東金市", "旭市", "習志野市", "柏市",
+        "勝浦市", "市原市", "流山市", "八千代市", "我孫子市",
+        "鴨川市", "鎌ケ谷市", "君津市", "富津市", "浦安市",
+        "四街道市", "袖ケ浦市", "八街市", "印西市", "白井市",
+        "富里市", "南房総市", "匝瑳市", "香取市", "山武市",
+        "いすみ市", "大網白里市", "酒々井町", "栄町", "神崎町",
+        "多古町", "東庄町", "九十九里町", "芝山町", "横芝光町",
+        "一宮町", "睦沢町", "長生村", "白子町", "長柄町",
+        "長南町", "大多喜町", "御宿町", "鋸南町"
+      ]
+    };
+    const WARD_MUNICIPALITY_URLS = {
+      "横浜市": "https://www.city.yokohama.lg.jp/",
+      "川崎市": "https://www.city.kawasaki.jp/",
+      "相模原市": "https://www.city.sagamihara.kanagawa.jp/",
+      "さいたま市": "https://www.city.saitama.lg.jp/",
+      "川口市": "https://www.city.kawaguchi.lg.jp/",
+      "千葉市": "https://www.city.chiba.jp/",
+      "成田市": "https://www.city.narita.chiba.jp/",
+      "八千代市": "https://www.city.yachiyo.lg.jp/"
+    };
+    const WARD_LINK_LABELS = {
+      move: "住民異動届",
+      resident: "住民票の写し",
+      seal: "外国人の印鑑登録",
+      insurance: "国民健康保険の届出",
+      pension: "年金保険料の免除制度",
+      tax: "住民税証明書の発行手続き",
+      mynumber: "マイナンバーカードの住所変更"
+    };
+    const wardRegionSelect = document.getElementById("wardRegionSelect");
+    const wardMunicipalityLabel = document.getElementById("wardMunicipalityLabel");
+    const wardMunicipalitySelect = document.getElementById("wardMunicipalitySelect");
+    const wardRegionName = document.getElementById("wardRegionName");
+    const wardRegionDescription = document.getElementById("wardRegionDescription");
+    const wardMunicipalityLink = document.getElementById("wardMunicipalityLink");
+    const wardForeignSupportLink = document.getElementById("wardForeignSupportLink");
+    const wardRegionNote = document.getElementById("wardRegionNote");
+    const selectedMunicipalityByRegion = { tokyo: "chiyoda" };
+    function getMunicipalityItems(regionKey) {
+      return (WARD_MUNICIPALITIES[regionKey] || []).map((item) =>
+        typeof item === "string"
+          ? { id: item, name: item, url: WARD_MUNICIPALITY_URLS[item] }
+          : item
+      );
+    }
+    function populateMunicipalitySelect(regionKey) {
+      if (!wardMunicipalitySelect) return null;
+      const previousRegion = wardMunicipalitySelect.dataset.region;
+      if (previousRegion) selectedMunicipalityByRegion[previousRegion] = wardMunicipalitySelect.value;
+      const items = getMunicipalityItems(regionKey);
+      wardMunicipalitySelect.replaceChildren();
+      items.forEach((item) => {
+        const option = document.createElement("option");
+        option.value = item.id;
+        option.textContent = item.name;
+        wardMunicipalitySelect.append(option);
+      });
+      const selectedId = selectedMunicipalityByRegion[regionKey] || items[0]?.id || "";
+      wardMunicipalitySelect.value = selectedId;
+      wardMunicipalitySelect.dataset.region = regionKey;
+      selectedMunicipalityByRegion[regionKey] = wardMunicipalitySelect.value;
+      return items.find((item) => item.id === wardMunicipalitySelect.value) || items[0] || null;
+    }
+    function renderTokyoWard(ward) {
+      document.querySelectorAll("#page-ward-office [data-ward-name]").forEach((node) => {
+        node.textContent = ward.name;
+      });
+      document.querySelectorAll("#page-ward-office [data-ward-link]").forEach((link) => {
+        const type = link.dataset.wardLink;
+        const directUrl = ward.links?.[type];
+        link.href = directUrl || ward.url;
+        link.textContent = directUrl
+          ? `${ward.name}：${WARD_LINK_LABELS[type]}`
+          : `${ward.name}公式サイト：${WARD_LINK_LABELS[type]}を確認`;
+      });
+      return ward;
+    }
+    function renderMunicipalityLinks(municipality, region) {
+      if (!municipality) return;
+      const officialUrl = municipality.url || region.municipalityUrl;
+      document.querySelectorAll("#page-ward-office [data-ward-link]").forEach((link) => {
+        const type = link.dataset.wardLink;
+        const directUrl = municipality.links?.[type];
+        link.href = directUrl || officialUrl;
+        link.textContent = directUrl
+          ? municipality.name + "：" + WARD_LINK_LABELS[type]
+          : municipality.name + "公式サイト：" + WARD_LINK_LABELS[type] + "を確認";
+      });
+    }
+    function renderWardRegion() {
+      const regionKey = wardRegionSelect?.value || "tokyo";
+      const region = WARD_REGION_LINKS[regionKey] || WARD_REGION_LINKS.tokyo;
+      const isTokyo = regionKey === "tokyo";
+      const municipality = populateMunicipalitySelect(regionKey);
+      if (!wardRegionName || !wardRegionDescription || !wardMunicipalityLink || !wardForeignSupportLink) return;
+      if (wardMunicipalityLabel) wardMunicipalityLabel.textContent = isTokyo ? "東京23区" : "市区町村";
+      if (isTokyo) {
+        const ward = renderTokyoWard(municipality || WARD_TOKYO_WARDS.katsushika);
+        wardRegionName.textContent = "東京都｜" + ward.name;
+        wardRegionDescription.textContent = ward.name + "の公式サイトと、下記の各手続き確認リンクへ切り替えました。";
+        wardMunicipalityLink.textContent = ward.name + "公式サイト";
+        wardMunicipalityLink.href = ward.url;
+        if (wardRegionNote) wardRegionNote.textContent = "東京都では23区を選ぶと、本文の区名と7個の公式確認リンクが選択区に切り替わります。手数料・予約方法・受付窓口は各区公式サイトで最終確認してください。";
+      } else {
+        const municipalityName = municipality?.name || "";
+        renderMunicipalityLinks(municipality, region);
+        wardRegionName.textContent = region.name + "｜" + municipalityName;
+        wardRegionDescription.textContent = municipalityName + "を選択中です。県の公式一覧から市役所・町村役場の最新案内を確認できます。";
+        wardMunicipalityLink.textContent = municipality?.url ? municipalityName + "公式サイト" : municipalityName + "の公式案内を探す";
+        wardMunicipalityLink.href = municipality?.url || region.municipalityUrl;
+        if (wardRegionNote) wardRegionNote.textContent = "以下の詳細本文は東京23区の例です。" + region.name + "では選択した市町村の公式窓口で、提出先・必要書類・受付方法を確認してください。";
+      }
+      wardForeignSupportLink.textContent = region.supportLabel;
+      wardForeignSupportLink.href = region.supportUrl;
+    }
+    wardRegionSelect?.addEventListener("change", renderWardRegion);
+    wardMunicipalitySelect?.addEventListener("change", () => {
+      const regionKey = wardRegionSelect?.value || "tokyo";
+      selectedMunicipalityByRegion[regionKey] = wardMunicipalitySelect.value;
+      renderWardRegion();
+    });
+    renderWardRegion();
+  </script>
 </div><!-- /page-ward-office -->

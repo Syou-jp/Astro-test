@@ -5,22 +5,22 @@
       <div class="card">
         <div class="section-title">品目と数量</div>
         <div class="apply-fields">
-          <div class="apply-field full"><label>粗大ごみ品目 Item</label><select id="wasteItem"></select></div>
-          <div class="apply-field"><label>数量 Quantity</label><input type="number" id="wasteQty" value="1" min="1" max="50"></div>
-          <div class="apply-field"><label>自治体 Municipality</label><select id="wasteArea"></select></div>
+          <div class="apply-field"><label>粗大ごみ品目</label><select id="wasteItem"></select></div>
+          <div class="apply-field"><label>数量</label><input type="number" id="wasteQty" value="1" min="1" max="50"></div>
+          <div class="apply-field"><label>都県</label><select id="wastePrefecture"></select></div>
+          <div class="apply-field"><label>自治体</label><select id="wasteArea"></select></div>
           <div class="apply-field full" id="wasteFacilityField" style="display:none;"><label>自己搬入施設 Drop-off facility</label><select id="wasteFacility"></select><small style="display:block;margin-top:5px;color:var(--ink-soft);">施設ごとに受付品目・時間・予約条件が異なります。</small></div>
           <div class="apply-field"><label>運び出し</label><select id="wasteCarry"><option value="self">自分で収集場所へ</option><option value="staff">室内から搬出希望</option></select></div>
           <div class="apply-field"><label>急ぎ Urgency</label><select id="wasteUrgency"><option value="normal">急がない</option><option value="week">1週間以内</option><option value="today">当日・翌日</option></select></div>
         </div>
-        <button type="button" class="btn-copy" id="wasteCalcBtn" style="margin-top:14px;width:100%;">処分方法を比較</button>
-        <div id="wasteSpecial" class="market-note" style="display:none;margin-top:14px;"></div>
-      </div>
-      <div>
-        <div class="portal-grid">
+        <div class="portal-grid" style="margin-top:14px;">
           <div class="portal-result"><span>自治体回収</span><strong id="wasteGovCost">—</strong><small id="wasteGovDays">申込後の指定日</small></div>
           <div class="portal-result"><span>民間業者の相場</span><strong id="wastePrivateCost">—</strong><small id="wastePrivateDays">最短当日〜</small></div>
         </div>
-        <div class="card" style="margin-top:14px;padding:14px;"><table class="portal-table"><tbody id="wasteBreakdown"></tbody></table></div>
+        <div id="wasteSpecial" class="market-note" style="display:none;margin-top:14px;"></div>
+      </div>
+      <div>
+        <table class="portal-table"><tbody id="wasteBreakdown"></tbody></table>
         <div class="waste-office" id="wasteOffice"></div>
         <div class="portal-actions"><a class="secondary-btn" id="wasteOfficialLink" href="#" target="_blank" rel="noopener">公式申込・案内を開く</a><a class="secondary-btn" id="wasteFacilityMapLink" href="#" target="_blank" rel="noopener" style="display:none;">選択施設を地図で開く</a></div>
         <div class="portal-source">目安日数：自治体は空き枠次第で数日〜2週間程度、引越繁忙期はそれ以上の場合があります。民間の「無料回収」や無許可業者には高額請求・不法投棄のリスクがあるため、一般廃棄物収集運搬の許可や自治体案内を確認してください。</div>
@@ -45,9 +45,51 @@ const WASTE_CITY_GROUPS=[
  {group:"埼玉県｜さいたま市",wards:["西区","北区","大宮区","見沼区","中央区","桜区","浦和区","南区","緑区","岩槻区"],office:"さいたま市 粗大ごみ受付センター（全区共通）",address:"電話・オンライン受付（受付センター所在地は非公表）",phone:"048-878-0053",url:"https://www.city.saitama.lg.jp/001/006/010/003/p072165.html"},
  {group:"千葉県｜千葉市",wards:["中央区","花見川区","稲毛区","若葉区","緑区","美浜区"],office:"千葉市 粗大ごみ受付センター（全区共通）",address:"担当課：千葉市中央区千葉港1-1 市役所高層棟7階",phone:"043-302-5374",url:"https://www.city.chiba.jp/kankyo/junkan/shushugyomu/sodaigomi.html"}
 ];
+const WASTE_SAITAMA_CITIES=[
+ ["川越市","https://www.city.kawagoe.saitama.jp/"],["熊谷市","https://www.city.kumagaya.lg.jp/"],["川口市","https://www.city.kawaguchi.lg.jp/"],["行田市","https://www.city.gyoda.lg.jp/"],["秩父市","https://www.city.chichibu.lg.jp/"],["所沢市","https://www.city.tokorozawa.saitama.jp/"],["飯能市","https://www.city.hanno.lg.jp/"],["加須市","https://www.city.kazo.lg.jp/"],["本庄市","https://www.city.honjo.lg.jp/"],["東松山市","https://www.city.higashimatsuyama.lg.jp/"],["春日部市","https://www.city.kasukabe.lg.jp/"],["狭山市","https://www.city.sayama.saitama.jp/"],["羽生市","https://www.city.hanyu.lg.jp/"],["鴻巣市","https://www.city.kounosu.saitama.jp/"],["深谷市","https://www.city.fukaya.saitama.jp/"],["上尾市","https://www.city.ageo.lg.jp/"],["草加市","https://www.city.soka.saitama.jp/"],["越谷市","https://www.city.koshigaya.saitama.jp/"],["蕨市","https://www.city.warabi.saitama.jp/"],["戸田市","https://www.city.toda.saitama.jp/"],["入間市","https://www.city.iruma.saitama.jp/"],["朝霞市","https://www.city.asaka.lg.jp/"],["志木市","https://www.city.shiki.lg.jp/"],["和光市","https://www.city.wako.lg.jp/"],["新座市","https://www.city.niiza.lg.jp/"],["桶川市","https://www.city.okegawa.lg.jp/"],["久喜市","https://www.city.kuki.lg.jp/"],["北本市","https://www.city.kitamoto.lg.jp/"],["八潮市","https://www.city.yashio.lg.jp/"],["富士見市","https://www.city.fujimi.saitama.jp/"],["三郷市","https://www.city.misato.lg.jp/"],["蓮田市","https://www.city.hasuda.saitama.jp/"],["坂戸市","https://www.city.sakado.lg.jp/"],["幸手市","https://www.city.satte.lg.jp/"],["鶴ヶ島市","https://www.city.tsurugashima.lg.jp/"],["日高市","https://www.city.hidaka.lg.jp/"],["吉川市","https://www.city.yoshikawa.saitama.jp/"],["ふじみ野市","https://www.city.fujimino.saitama.jp/"],["白岡市","https://www.city.shiraoka.lg.jp/"]
+];
+const WASTE_SAITAMA_DROPOFFS={
+ "川越市":"川越市資源化センター：埼玉県川越市大字鯨井782-3","川口市":"戸塚環境センター：埼玉県川口市大字藤兵衛新田290","行田市":"行田市粗大ごみ処理場：埼玉県行田市大字小針800","秩父市":"秩父クリーンセンター：埼玉県秩父市栃谷1477","所沢市":"東部クリーンセンター：埼玉県所沢市大字日比田895-1","飯能市":"飯能市クリーンセンター：埼玉県飯能市大字下畑768-1","加須市":"加須クリーンセンター：埼玉県加須市馬内1790","春日部市":"春日部市クリーンセンター：埼玉県春日部市豊野町3-9-1","狭山市":"奥富環境センター：埼玉県狭山市大字上奥富897-1","羽生市":"羽生市粗大ごみ処理施設：埼玉県羽生市大字三田ケ谷1863","上尾市":"西貝塚環境センター：埼玉県上尾市大字西貝塚35-1","草加市":"草加市リサイクルセンター：埼玉県草加市稲荷1-8-2","越谷市":"越谷市リサイクルプラザ：埼玉県越谷市砂原355","入間市":"入間市総合クリーンセンター：埼玉県入間市大字新久127-1","朝霞市":"朝霞市クリーンセンター：埼玉県朝霞市大字浜崎390-45","和光市":"和光市清掃センター：埼玉県和光市下新倉6-17-1","桶川市":"桶川市粗大ごみ処理施設：埼玉県桶川市大字小針領家1160","久喜市":"久喜宮代清掃センター：埼玉県南埼玉郡宮代町大字和戸1276-1","蓮田市":"蓮田白岡環境センター：埼玉県白岡市篠津1279-5","白岡市":"蓮田白岡環境センター：埼玉県白岡市篠津1279-5"
+};
+WASTE_SAITAMA_CITIES.forEach(([name,url])=>WASTE_CITY_GROUPS.push({
+ group:"埼玉県｜"+name,
+ wards:[name],
+ office:name+" 粗大ごみ受付窓口",
+ address:"受付場所・搬入条件は公式案内で確認",
+ dropoffAddress:WASTE_SAITAMA_DROPOFFS[name]||"持ち込み先住所は公式案内で確認",
+ phone:"電話番号は公式案内で確認",
+ reference:"https://www.pref.saitama.lg.jp/documents/26092/05r4_gomigenryoka_honpen3.pdf",
+ url
+}));
+const WASTE_CHIBA_MUNICIPALITIES=[
+ ["銚子市","https://www.city.choshi.chiba.jp/"],["市川市","https://www.city.ichikawa.lg.jp/"],["船橋市","https://www.city.funabashi.lg.jp/"],["館山市","https://www.city.tateyama.chiba.jp/"],["木更津市","https://www.city.kisarazu.lg.jp/"],
+ ["松戸市","https://www.city.matsudo.chiba.jp/"],["野田市","https://www.city.noda.chiba.jp/"],["茂原市","https://www.city.mobara.chiba.jp/"],["成田市","https://www.city.narita.chiba.jp/"],["佐倉市","https://www.city.sakura.lg.jp/"],
+ ["東金市","https://www.city.togane.chiba.jp/"],["旭市","https://www.city.asahi.lg.jp/"],["習志野市","https://www.city.narashino.lg.jp/"],["柏市","https://www.city.kashiwa.lg.jp/"],["勝浦市","https://www.city.katsuura.lg.jp/"],
+ ["市原市","https://www.city.ichihara.chiba.jp/"],["流山市","https://www.city.nagareyama.chiba.jp/"],["八千代市","https://www.city.yachiyo.lg.jp/"],["我孫子市","https://www.city.abiko.chiba.jp/"],["鴨川市","https://www.city.kamogawa.lg.jp/"],
+ ["鎌ケ谷市","https://www.city.kamagaya.chiba.jp/"],["君津市","https://www.city.kimitsu.lg.jp/"],["富津市","https://www.city.futtsu.lg.jp/"],["浦安市","https://www.city.urayasu.lg.jp/"],["四街道市","https://www.city.yotsukaido.lg.jp/"],
+ ["袖ケ浦市","https://www.city.sodegaura.lg.jp/"],["八街市","https://www.city.yachimata.lg.jp/"],["印西市","https://www.city.inzai.lg.jp/"],["白井市","https://www.city.shiroi.chiba.jp/"],["富里市","https://www.city.tomisato.lg.jp/"],
+ ["南房総市","https://www.city.minamiboso.chiba.jp/"],["匝瑳市","https://www.city.sosa.lg.jp/"],["香取市","https://www.city.katori.lg.jp/"],["山武市","https://www.city.sammu.lg.jp/"],["いすみ市","https://www.city.isumi.lg.jp/"],
+ ["大網白里市","https://www.city.oamishirasato.lg.jp/"],["酒々井町","https://www.town.shisui.chiba.jp/"],["栄町","https://www.town.sakae.chiba.jp/"],["神崎町","https://www.town.kozaki.chiba.jp/"],["多古町","https://www.town.tako.chiba.jp/"],
+ ["東庄町","https://www.town.tohnosho.chiba.jp/"],["九十九里町","https://www.town.kujukuri.chiba.jp/"],["芝山町","https://www.town.shibayama.lg.jp/"],["横芝光町","https://www.town.yokoshibahikari.chiba.jp/"],["一宮町","https://www.town.ichinomiya.chiba.jp/"],
+ ["睦沢町","https://www.town.mutsuzawa.chiba.jp/"],["長生村","https://www.vill.chosei.chiba.jp/"],["白子町","https://www.town.shirako.lg.jp/"],["長柄町","https://www.town.nagara.chiba.jp/"],["長南町","https://www.town.chonan.chiba.jp/"],
+ ["大多喜町","https://www.town.otaki.chiba.jp/"],["御宿町","https://www.town.onjuku.chiba.jp/"],["鋸南町","https://www.town.kyonan.chiba.jp/"]
+];
+const WASTE_CHIBA_DROPOFFS={
+ "銚子市":"東総地区クリーンセンター：千葉県銚子市野尻町1678-1","旭市":"東総地区クリーンセンター：千葉県銚子市野尻町1678-1","匝瑳市":"東総地区クリーンセンター：千葉県銚子市野尻町1678-1","市川市":"市川市クリーンセンター：千葉県市川市田尻1003","船橋市":"北部清掃工場：千葉県船橋市大神保町1360-1／西浦資源リサイクル施設：千葉県船橋市西浦1-4-2","木更津市":"木更津市クリーンセンター：千葉県木更津市潮浜3-1","松戸市":"松戸市リサイクルセンター：千葉県松戸市七右衛門新田316-4","柏市":"柏市清掃工場：千葉県柏市船戸山高野538","市原市":"福増クリーンセンター：千葉県市原市福増124-2","流山市":"流山市クリーンセンター：千葉県流山市下花輪191","八千代市":"八千代市清掃センター：千葉県八千代市上高野1384-7","我孫子市":"我孫子市粗大ごみ処理施設：千葉県我孫子市中峠2274","君津市":"君津市粗大ごみ処理施設：千葉県君津市三直1552-35","浦安市":"浦安市クリーンセンター：千葉県浦安市千鳥15-2","四街道市":"四街道市クリーンセンター：千葉県四街道市山梨2002","袖ケ浦市":"袖ケ浦クリーンセンター：千葉県袖ケ浦市長浦580-249","富里市":"富里市クリーンセンター：千葉県富里市七栄654","茂原市":"長生郡市広域市町村圏組合 環境衛生センター：千葉県長生郡長生村藪塚1115-1","一宮町":"長生郡市広域市町村圏組合 環境衛生センター：千葉県長生郡長生村藪塚1115-1","睦沢町":"長生郡市広域市町村圏組合 環境衛生センター：千葉県長生郡長生村藪塚1115-1","長生村":"長生郡市広域市町村圏組合 環境衛生センター：千葉県長生郡長生村藪塚1115-1","白子町":"長生郡市広域市町村圏組合 環境衛生センター：千葉県長生郡長生村藪塚1115-1","長柄町":"長生郡市広域市町村圏組合 環境衛生センター：千葉県長生郡長生村藪塚1115-1","長南町":"長生郡市広域市町村圏組合 環境衛生センター：千葉県長生郡長生村藪塚1115-1","佐倉市":"酒々井リサイクル文化センター：千葉県印旛郡酒々井町墨1506","酒々井町":"酒々井リサイクル文化センター：千葉県印旛郡酒々井町墨1506","東金市":"東金市外三市町環境クリーンセンター：千葉県東金市三ヶ尻340","大網白里市":"東金市外三市町環境クリーンセンター：千葉県東金市三ヶ尻340","九十九里町":"東金市外三市町環境クリーンセンター：千葉県東金市三ヶ尻340","印西市":"印西クリーンセンター：千葉県印西市大塚1-1-1","白井市":"印西クリーンセンター：千葉県印西市大塚1-1-1","栄町":"印西クリーンセンター：千葉県印西市大塚1-1-1","香取市":"香取広域市町村圏事務組合 粗大ごみ処理施設：千葉県香取市伊地山835-2","神崎町":"香取広域市町村圏事務組合 粗大ごみ処理施設：千葉県香取市伊地山835-2","多古町":"香取広域市町村圏事務組合 粗大ごみ処理施設：千葉県香取市伊地山835-2","東庄町":"香取広域市町村圏事務組合 粗大ごみ処理施設：千葉県香取市伊地山835-2","館山市":"安房郡市広域市町村圏事務組合 粗大ごみ処理施設：千葉県館山市出野尾540","南房総市":"安房郡市広域市町村圏事務組合 粗大ごみ処理施設：千葉県館山市出野尾540","鋸南町":"安房郡市広域市町村圏事務組合 粗大ごみ処理施設：千葉県館山市出野尾540"
+};
+WASTE_CHIBA_MUNICIPALITIES.forEach(([name,url])=>WASTE_CITY_GROUPS.push({
+ group:"千葉県｜"+name,
+ wards:[name],
+ office:name+" 粗大ごみ受付窓口",
+ address:"受付場所・搬入条件は公式案内で確認",
+ dropoffAddress:WASTE_CHIBA_DROPOFFS[name]||"持ち込み先住所は公式案内で確認",
+ phone:"電話番号は公式案内で確認",
+ reference:"https://www.pref.chiba.lg.jp/shigen/ippan/chousa/documents/r05-chibakenchosa.pdf",
+ url
+}));
 const WASTE_AREAS={};
 Object.entries(WASTE_TOKYO).forEach(([ward,row])=>WASTE_AREAS[`tokyo-${ward}`]={label:`東京都｜${ward}`,office:row[0],address:row[1],phone:row[2],url:ward==="新宿区"?"https://www.city.shinjuku.lg.jp/seikatsu/file09_01_00016.html":"https://www.union.tokyo23-seisou.lg.jp/joho/index.html"});
-WASTE_CITY_GROUPS.forEach(city=>city.wards.forEach(ward=>WASTE_AREAS[`${city.group}-${ward}`]={label:`${city.group.split("｜")[1]}｜${ward}`,office:city.office,address:city.address,phone:city.phone,url:city.url}));
+WASTE_CITY_GROUPS.forEach(city=>city.wards.forEach(ward=>{const [prefecture,cityName]=city.group.split("｜");WASTE_AREAS[`${city.group}-${ward}`]={label:`${prefecture}｜${cityName===ward?ward:cityName+"｜"+ward}`,office:city.office,address:city.address,dropoffAddress:city.dropoffAddress,phone:city.phone,reference:city.reference,url:city.url};}));
 const WASTE_MULTI_FACILITIES={
  adachi:[
   {name:"白井運輸（鹿浜）",address:"東京都足立区鹿浜3-28-7",phone:"03-6747-5100",hours:"9:00～16:00（年末年始除く）",note:"事前予約必須。足立区民のみ、自己搬入は無料。",url:"https://www.city.adachi.tokyo.jp/seso/kurashi/kankyo/gomi-wakekata/sodai.html"},
@@ -98,22 +140,30 @@ const WASTE_ITEMS=[
  ["いす・スツール",400,3000,6000],["布団（1枚）",400,3000,5000],["衣装ケース・小型箱物家具",400,3000,6000],["扇風機",400,3000,6000],["掃除機",400,3000,6000],["プリンター",400,3000,7000],["電子レンジ",900,4000,8000],["テーブル・座卓（小）",400,3000,7000],["テーブル・座卓（大）",900,5000,10000],["自転車（16インチ以上）",900,4000,8000],["カーペット・敷物（1畳超）",900,4000,8000],["ベビーカー",400,3000,6000],["スーツケース",400,3000,6000],["本棚・食器棚（小）",400,4000,8000],["本棚・食器棚（大）",1300,6000,12000],["机（片袖・学習机）",1300,6000,12000],["机（両袖）",3200,9000,18000],["シングルベッド枠",1300,6000,12000],["シングルマットレス",1300,6000,12000],["ダブルベッド枠",2300,8000,16000],["ダブルマットレス",2300,8000,18000],["ソファー（1人用）",900,5000,10000],["ソファー（2人以上・大）",2300,8000,18000],["たんす・チェスト（小）",900,5000,10000],["たんす・チェスト（大）",2300,8000,18000],["物干し台・物干し竿",400,3000,7000],["ストーブ・ファンヒーター",400,3000,7000],["オーディオ機器",400,3000,7000],["鏡・姿見",400,3000,7000],["ゴルフバッグ",400,3000,7000],["テレビ（家電リサイクル）",0,5000,12000,"recycle"],["冷蔵庫（家電リサイクル）",0,8000,18000,"recycle"],["洗濯機（家電リサイクル）",0,7000,15000,"recycle"],["エアコン（家電リサイクル）",0,8000,20000,"recycle"],["パソコン（メーカー回収）",0,3000,8000,"pc"],["タイヤ・バッテリー",0,3000,10000,"special"],["ピアノ・耐火金庫",0,15000,50000,"special"]
 ];
 const wastePage = document.querySelector("#page-waste");
-const wasteSelect=document.getElementById("wasteItem"),wasteArea=document.getElementById("wasteArea"),wasteFacility=document.getElementById("wasteFacility");
+const wasteSelect=document.getElementById("wasteItem"),wastePrefecture=document.getElementById("wastePrefecture"),wasteArea=document.getElementById("wasteArea"),wasteFacility=document.getElementById("wasteFacility");
 if (wastePage){
  wasteSelect.innerHTML=WASTE_ITEMS.map((w,i)=>`<option value="${i}">${w[0]}</option>`).join("");
- wasteArea.innerHTML=`<optgroup label="東京都｜東京23区">${Object.keys(WASTE_TOKYO).map(ward=>`<option value="tokyo-${ward}" ${ward==="新宿区"?"selected":""}>${ward}</option>`).join("")}</optgroup>`+WASTE_CITY_GROUPS.map(city=>`<optgroup label="${city.group}">${city.wards.map(ward=>`<option value="${city.group}-${ward}">${ward}</option>`).join("")}</optgroup>`).join("");
+ const wasteCityOption=(city,ward)=>{const cityName=city.group.split("｜")[1];const label=cityName===ward?cityName:cityName+"｜"+ward;return `<option value="${city.group}-${ward}">${label}</option>`;};
+ const wastePrefectureEntries={"東京都":Object.keys(WASTE_TOKYO).map(ward=>({value:`tokyo-${ward}`,label:ward})),"神奈川県":[],"埼玉県":[],"千葉県":[]};
+ WASTE_CITY_GROUPS.forEach(city=>{const prefecture=city.group.split("｜")[0];if(!wastePrefectureEntries[prefecture])wastePrefectureEntries[prefecture]=[];city.wards.forEach(ward=>wastePrefectureEntries[prefecture].push({value:`${city.group}-${ward}`,label:city.group.split("｜")[1]===ward?ward:city.group.split("｜")[1]+"｜"+ward}));});
+ wastePrefecture.innerHTML=Object.keys(wastePrefectureEntries).map(prefecture=>`<option value="${prefecture}">${prefecture}</option>`).join("");
+ const wastePopulateAreas=(prefecture,preferred)=>{const entries=wastePrefectureEntries[prefecture]||[];wasteArea.innerHTML=entries.map(entry=>`<option value="${entry.value}">${entry.label}</option>`).join("");wasteArea.value=entries.some(entry=>entry.value===preferred)?preferred:(entries[0]?.value||"");};
+ wastePrefecture.value="東京都";
+ wastePopulateAreas("東京都","tokyo-千代田区");
+ wastePrefecture.addEventListener("input",()=>{wastePopulateAreas(wastePrefecture.value);wastePopulateFacilities();wasteRender();});
 }
-function wastePopulateFacilities(){const area=WASTE_AREAS[wasteArea.value],field=document.getElementById("wasteFacilityField"),list=area.facilities||[];field.style.display=list.length?"block":"none";wasteFacility.innerHTML=list.map((facility,index)=>`<option value="${index}">${facility.name}</option>`).join("");}
+ function wastePopulateFacilities(){const area=WASTE_AREAS[wasteArea.value],field=document.getElementById("wasteFacilityField"),list=area.facilities||[];field.style.display=list.length?"block":"none";wasteFacility.innerHTML=list.map((facility,index)=>`<option value="${index}">${facility.name}</option>`).join("");}
+function wastePhoneDisplay(phone){return /\d/.test(phone)?`<a href="tel:${phone.split("／")[0].replace(/[^0-9]/g,"")}">${phone}</a>`:phone;}
 function wasteRender(){const w=WASTE_ITEMS[wasteSelect.value],area=WASTE_AREAS[wasteArea.value],facilities=area.facilities||[],facility=facilities[Number(wasteFacility.value)||0],qty=portalNum("wasteQty"),carry=document.getElementById("wasteCarry").value,urgent=document.getElementById("wasteUrgency").value,special=w[4];let gov=w[1]*qty,low=w[2]*qty,high=w[3]*qty;if(carry==="staff"){low+=5000;high+=15000;}if(urgent==="today"){low*=1.25;high*=1.5;}
  document.getElementById("wasteGovCost").textContent=special?"自治体収集対象外":portalYen(gov);document.getElementById("wastePrivateCost").textContent=portalRange(low,high);document.getElementById("wasteGovDays").textContent=special?"販売店・メーカー等へ":"空き枠：数日〜2週間以上";document.getElementById("wastePrivateDays").textContent=urgent==="today"?"最短当日〜翌日（要確認）":"通常1〜7日程度";
  const box=document.getElementById("wasteSpecial");box.style.display=special?"block":"none";box.innerHTML=special==="recycle"?"テレビ・冷蔵庫・洗濯機・エアコンは家電リサイクル法の対象です。粗大ごみ券では出せません。販売店または自治体指定方法で、リサイクル料金＋収集運搬料金を確認してください。":special==="pc"?"家庭用パソコンはメーカーのPCリサイクルまたは小型家電回収を確認してください。":"区では収集できない品目です。販売店または許可を持つ専門業者へ相談してください。";
- document.getElementById("wasteOffice").innerHTML=`<strong>${area.label}</strong><br>申込・主管窗口：${area.office}<br>窗口地址：${area.address}<br>電話：<a href="tel:${area.phone.split("／")[0].replace(/[^0-9]/g,"")}">${area.phone}</a>${facility?`<hr style="border:0;border-top:1px solid var(--line);margin:9px 0;"><strong>選択した自己搬入施設：${facility.name}</strong><br>施設地址：${facility.address}<br>施設電話：<a href="tel:${facility.phone.split("／")[0].replace(/[^0-9]/g,"")}">${facility.phone}</a><br>受付時間：${facility.hours}<br><small>※ ${facility.note}</small>`:`<br><small>※ 現在この自治体では、当ページに複数の自己搬入施設を登録していません。持込可否と指定場所は公式受付で確認してください。</small>`}`;
+ const referenceInfo=area.reference?`<br>料金参考資料：<a href="${area.reference}" target="_blank" rel="noopener">都県の自治体別資料</a>`:"";
+ document.getElementById("wasteOffice").innerHTML=`<strong>${area.label}</strong><br>申込・主管窗口：${area.office}<br>窗口地址：${area.address}<br>持ち込み先住所：${facility?facility.address:(area.dropoffAddress||"公式案内で確認") }<br>電話：${wastePhoneDisplay(area.phone)}${referenceInfo}${facility?`<hr style="border:0;border-top:1px solid var(--line);margin:9px 0;"><strong>選択した自己搬入施設：${facility.name}</strong><br>施設地址：${facility.address}<br>施設電話：${wastePhoneDisplay(facility.phone)}<br>受付時間：${facility.hours}<br><small>※ ${facility.note}</small>`:`<br><small>※ 現在この自治体では、当ページに複数の自己搬入施設を登録していません。持込可否と指定場所は公式受付で確認してください。</small>`}`;
  document.getElementById("wasteOfficialLink").href=facility?.url||area.url;const mapLink=document.getElementById("wasteFacilityMapLink");mapLink.style.display=facility?"inline-flex":"none";mapLink.href=facility?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.name+" "+facility.address)}`:"#";
  portalRows("wasteBreakdown",[["選択自治体",area.label],["自己搬入施設",facility?facility.name:"公式受付で指定先を確認"],["選択品目",`${w[0]} × ${qty}`],["自治体処理券の目安",special?"対象外":portalYen(gov)],["民間回収の基本相場",portalRange(w[2]*qty,w[3]*qty)],["室内搬出・階段等",carry==="staff"?"追加料金を反映":"自分で搬出"],["急ぎ対応",urgent==="today"?"割増を反映":urgent==="week"?"空き枠確認":"通常"]]);}
 if (wastePage){
  ["wasteItem","wasteQty","wasteCarry","wasteUrgency","wasteFacility"].forEach(id=>document.getElementById(id).addEventListener("input",wasteRender));
  wasteArea.addEventListener("input",()=>{wastePopulateFacilities();wasteRender();});
- document.getElementById("wasteCalcBtn").addEventListener("click",wasteRender);
  wastePopulateFacilities();
  wasteRender();
 }
