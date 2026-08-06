@@ -4,30 +4,67 @@
     <div class="portal-alert" style="border-color:var(--seal,#b2402f);background:rgba(178,64,47,.07);">
       <strong>掲載ルール（必ずお読みください）：</strong><br>
       このページは「大家さん本人」が直接貸し出す物件のみを掲載しています。<strong>不動産会社・仲介業者による広告掲載やあらゆる形での顧客勧誘は禁止です</strong>。
-      違反が確認された場合は、予告なく<strong>IPをブロック</strong>します。
     </div>
 
     <div class="card" style="margin-top:15px;">
-      <div class="section-title">カテゴリを選ぶ</div>
-      <div class="util-doc-switch" style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button type="button" class="util-doc-tab active" id="rlTabAll" data-rl-filter="all">すべて</button>
-        <button type="button" class="util-doc-tab" id="rlTabShare" data-rl-filter="share">🏠 ルームシェア募集（同居人・空き部屋を探す）</button>
-        <button type="button" class="util-doc-tab" id="rlTabTenant" data-rl-filter="tenant">🔑 入居者募集（大家さんの募集）</button>
+      <div class="util-doc-switch rl-filter-switch">
+        <button type="button" class="util-doc-tab" id="rlTabTenant" data-rl-filter="tenant">オーナー直貸し</button>
+        <button type="button" class="util-doc-tab" id="rlTabShare" data-rl-filter="share">ルームシェア</button>
+      </div>
+      <div class="rl-feature-filters" aria-label="条件で絞り込む">
+        <select class="rl-feature-filter rl-feature-select" id="rlContractFilter" aria-label="希望契約期間">
+          <option value="">契約期間：限定なし</option>
+          <option value="1">契約期間：1か月</option>
+          <option value="3">契約期間：3か月</option>
+          <option value="6">契約期間：半年</option>
+          <option value="12">契約期間：1年以上</option>
+        </select>
+        <button type="button" class="rl-feature-filter" data-rl-feature="pet">ペット 相談可</button>
+        <button type="button" class="rl-feature-filter" data-rl-feature="nationality">国籍 限定なし</button>
+        <button type="button" class="rl-feature-filter" data-rl-feature="furnished">家具・家電付き</button>
+      </div>
+      <div class="rl-list-controls" aria-label="物件一覧の設定">
+        <label class="rl-list-control">表示順<select id="rlSortFilter"><option value="newest">新しい順</option><option value="oldest">古い順</option></select></label>
+        <label class="rl-list-control">地域<select id="rlRegionFilter"><option value="all">すべて</option><option value="東京都">東京都</option><option value="神奈川県">神奈川県</option><option value="千葉県">千葉県</option><option value="埼玉県">埼玉県</option><option value="その他">その他</option></select></label>
       </div>
       <div class="jobs-result-head" style="margin-top:10px;"><strong id="rlResultCount"></strong></div>
       <div class="rl-grid" id="rlGrid"></div>
+      <div class="rl-pagination" id="rlPagination" aria-label="ページ切り替え"></div>
     </div>
 
     <div class="market-note" style="margin-top:15px;">
-      このページの情報は大家さん・投稿者ご本人が提供したものです。内容の正確さは必ずご自身で相手方にご確認ください。契約前には必ず内見し、本人確認書類や不動産登記の内容を照合したうえで、正式な賃貸借契約を結んでください。
+      このページの情報は大家さん・投稿者ご本人が提供したものです。内容の正確さは必ずご自身で相手方にご確認ください。契約前には必ず内見し、本人確認書類や不動産登記の内容を照合したうえで、正式な賃貸借契約を結んでください。<br>
       当サイトは当事者間の取引には関与せず、物件情報の真偽について責任を負いません。
+    </div>
+
+    <div class="rl-modal" id="rlModal" hidden aria-hidden="true">
+      <div class="rl-modal-backdrop" data-rl-close></div>
+      <div class="rl-modal-panel" role="dialog" aria-modal="true" aria-labelledby="rlModalTitle">
+        <button type="button" class="rl-modal-close" data-rl-close aria-label="閉じる">×</button>
+        <div class="rl-modal-media">
+          <div class="rl-modal-gallery">
+            <button type="button" class="rl-gallery-arrow prev" data-rl-prev aria-label="前の写真">‹</button>
+            <img id="rlModalImage" src="" alt="">
+            <button type="button" class="rl-gallery-arrow next" data-rl-next aria-label="次の写真">›</button>
+            <div class="rl-gallery-count" id="rlGalleryCount"></div>
+          </div>
+          <div class="rl-thumbs" id="rlModalThumbs"></div>
+        </div>
+        <div class="rl-modal-content">
+          <div class="eyebrow" id="rlModalBadge">入居募集</div>
+          <h2 id="rlModalTitle"></h2>
+          <div class="rl-detail-grid" id="rlModalDetails"></div>
+        </div>
+      </div>
     </div>
 
     <style>
       .rl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:14px;}
-      .rl-card{border:1px solid var(--line,#ddd6c5);border-radius:0;overflow:hidden;background:#fff;display:flex;flex-direction:column;}
+      .rl-card{border:1px solid var(--line,#ddd6c5);border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column;}
+      .rl-card-link{cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;}.rl-card-link:hover,.rl-card-link:focus-visible{transform:translateY(-3px);box-shadow:0 12px 28px rgba(36,39,31,.14);outline:2px solid var(--accent);outline-offset:2px;}
       .rl-card-image{position:relative;aspect-ratio:4/3;background:var(--paper-2,#f4f1e8);display:flex;align-items:center;justify-content:center;color:var(--ink-soft,#6b665a);font-size:12.5px;overflow:hidden;}
       .rl-card-image img{width:100%;height:100%;object-fit:cover;}
+      .rl-sample-badge{position:absolute;top:10px;right:10px;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.92);color:#7b3f2d;font-size:10px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.12);}
       .rl-badge{position:absolute;top:8px;left:8px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:var(--radius-pill);color:#fff;}
       .rl-badge.share{background:#447c89;}
       .rl-badge.tenant{background:var(--accent);}
@@ -35,11 +72,29 @@
       .rl-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1;}
       .rl-body h3{margin:0;font-size:14.5px;}
       .rl-meta{font-size:12px;color:var(--ink-soft,#6b665a);display:flex;flex-direction:column;gap:2px;}
+      .rl-filter-switch{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;}.rl-filter-switch .util-doc-tab{width:100%;}
+      .rl-feature-filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:10px;}.rl-feature-filter{min-height:36px;padding:6px 8px;border:1px solid var(--line,#ddd6c5);border-radius:8px;background:#fff;color:var(--ink,#2b2b26);font:inherit;font-size:11px;font-weight:700;cursor:pointer;transition:.18s ease;}.rl-feature-filter:hover,.rl-feature-filter.active{border-color:var(--accent);background:rgba(37,67,145,.08);color:var(--accent);}.rl-feature-filter.active{box-shadow:inset 0 0 0 1px var(--accent);}.rl-feature-select{width:100%;text-align:center;appearance:auto;}
+      .rl-list-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px;}.rl-list-control{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--line,#ddd6c5);border-radius:8px;background:#fff;color:var(--ink-soft,#6b665a);font-size:11px;font-weight:700;}.rl-list-control select{min-width:0;flex:1;border:0;background:transparent;color:var(--ink,#2b2b26);font:inherit;font-weight:700;outline:0;cursor:pointer;}.rl-pagination{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px;}.rl-page-button{min-width:32px;height:32px;padding:0 9px;border:1px solid var(--line,#ddd6c5);border-radius:8px;background:#fff;color:var(--ink,#2b2b26);font:inherit;font-size:11px;font-weight:700;cursor:pointer;}.rl-page-button:hover:not(:disabled),.rl-page-button.active{border-color:var(--accent);background:var(--accent);color:#fff;}.rl-page-button:disabled{opacity:.4;cursor:default;}.rl-page-status{font-size:11px;color:var(--ink-soft,#6b665a);}
       .rl-price{font-size:15px;font-weight:700;color:var(--accent);}
       .rl-desc{font-size:12.5px;line-height:1.6;color:var(--ink,#2b2b26);}
       .rl-footer{margin-top:auto;padding-top:8px;border-top:1px dashed var(--line,#ddd6c5);font-size:11.5px;color:var(--ink-soft,#6b665a);display:flex;justify-content:space-between;align-items:center;}
       .rl-contact{font-size:12px;font-weight:700;color:var(--accent);text-decoration:none;}
       .rl-empty{padding:30px;text-align:center;color:var(--ink-soft,#6b665a);font-size:13px;}
+      .rl-modal[hidden]{display:none;}
+      .rl-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px;}
+      .rl-modal-backdrop{position:absolute;inset:0;background:rgba(27,28,25,.72);backdrop-filter:blur(4px);}
+      .rl-modal-panel{position:relative;z-index:1;width:min(1180px,100%);max-height:calc(100vh - 48px);overflow:auto;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(340px,.9fr);align-items:start;background:var(--paper,#fbfaf6);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.28);}
+      .rl-modal-media{min-width:0;padding:22px 0 22px 22px;}
+      .rl-modal-close{position:absolute;z-index:2;top:12px;right:14px;width:38px;height:38px;border:0;border-radius:50%;background:rgba(0,0,0,.58);color:#fff;font-size:27px;line-height:1;cursor:pointer;}
+      .rl-modal-gallery{position:relative;background:var(--paper-2,#f4f1e8);display:grid;place-items:center;min-height:360px;height:min(58vh,590px);overflow:hidden;}
+      .rl-modal-gallery img{display:block;width:auto;max-width:100%;height:auto;max-height:100%;padding:0;object-fit:contain!important;object-position:center;}
+      #rlModalImage{width:auto!important;height:min(calc(58vh - 32px),558px)!important;max-width:calc(100% - 32px)!important;max-height:none!important;}
+      .rl-gallery-arrow{position:absolute;z-index:1;top:50%;transform:translateY(-50%);width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.88);color:#282a25;font-size:38px;line-height:30px;cursor:pointer;}
+      .rl-gallery-arrow.prev{left:18px;}.rl-gallery-arrow.next{right:18px;}
+      .rl-gallery-count{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);padding:4px 10px;border-radius:99px;background:rgba(0,0,0,.62);color:#fff;font-size:12px;}
+      .rl-modal-content{padding:34px 30px 30px;min-width:0;}.rl-modal-content h2{margin:3px 0 18px;padding-right:24px;font-size:clamp(20px,3vw,30px);}
+      .rl-detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}.rl-detail-item{margin:0;padding:10px 8px;border:1px solid var(--line,#ddd6c5);background:#fff;border-radius:10px;min-width:0;}.rl-detail-item:nth-child(-n+4){grid-column:span 4;}.rl-detail-item:nth-child(n+5){grid-column:span 2;}.rl-detail-item.rl-detail-wide{grid-column:span 4;}.rl-detail-item dt{font-size:10px;color:var(--ink-soft,#6b665a);font-weight:700;}.rl-detail-item dd{margin:4px 0 0;font-size:12px;line-height:1.45;overflow-wrap:anywhere;}.rl-thumbs{display:grid;grid-template-columns:repeat(9,1fr);gap:7px;margin:12px 0 0;}.rl-thumb{padding:0;border:2px solid transparent;background:none;aspect-ratio:1;overflow:hidden;cursor:pointer;border-radius:6px;}.rl-thumb.active{border-color:var(--accent);}.rl-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+      .rl-modal-open{overflow:hidden;}
       @media(max-width:640px){
         .rl-grid{grid-template-columns:1fr;}
         .rl-body h3{font-size:15.5px;}
@@ -48,6 +103,7 @@
         .rl-desc{font-size:13.5px;}
         .rl-footer{font-size:12.5px;}
         .rl-contact{font-size:13px;}
+        .rl-feature-filters{grid-template-columns:repeat(2,minmax(0,1fr));}.rl-feature-filter{font-size:11.5px;}.rl-list-controls{grid-template-columns:1fr;}.rl-modal{padding:0;}.rl-modal-panel{display:block;width:100%;max-height:100vh;border-radius:0;}.rl-modal-media{padding:0;}.rl-modal-gallery{min-height:280px;height:42vh;}#rlModalImage{height:calc(42vh - 20px)!important;max-width:calc(100% - 20px)!important;}.rl-gallery-arrow{width:38px;height:38px;font-size:31px;}.rl-gallery-arrow.prev{left:10px;}.rl-gallery-arrow.next{right:10px;}.rl-modal-content{padding:18px 16px 20px;}.rl-detail-grid{grid-template-columns:1fr;gap:8px;}.rl-detail-item:nth-child(-n+4),.rl-detail-item:nth-child(n+5),.rl-detail-item.rl-detail-wide{grid-column:auto;}.rl-thumbs{grid-template-columns:repeat(5,1fr);gap:5px;margin:8px 16px 0;}
       }
     </style>
 
@@ -59,30 +115,85 @@
       var RL_LISTINGS = [
         {
           type: "tenant",
+          region: "東京都",
           image: "",
-          title: "足立区 千住 1LDK 大家さん直貸し",
-          address: "東京都足立区（詳しい住所はDMでお伝えします）",
-          price: "家賃 85,000円（管理費別）",
+          title: "足立区 千住 1LDK",
+          address: "東京都足立区（北千住駅から徒歩8分）",
+          price: "家賃 90,000円（管理費 5,000円込み）",
           origin: "大家さん：台湾人",
           desc: "1LDK、北千住駅から徒歩8分。猫の飼育可、外国人の申込可。保証人または保証会社が必要です。",
+          features: ["pet", "nationality", "contract", "furnished"],
+          minMonths: 6,
+          sample: true,
           contact: "LINE：@kojian-sample",
-          updated: "2026/07"
+          updated: "2026/08/07 07:29",
+          photos: [
+            "/images/listings/senju-1ldk/living-room.png",
+            "/images/listings/senju-1ldk/entrance.png",
+            "/images/listings/senju-1ldk/bathroom.png",
+            "/images/listings/senju-1ldk/toilet.png",
+            "/images/listings/senju-1ldk/balcony.png",
+            "/images/listings/senju-1ldk/exterior.png",
+            "/images/listings/senju-1ldk/building-entrance.png",
+            "/images/listings/senju-1ldk/mailboxes.png",
+            "/images/listings/senju-1ldk/elevator.png"
+          ],
+          details: [
+            ["物件住所", "東京都足立区千住（北千住駅から徒歩8分）"],
+            ["家賃", "90,000円／月（管理費 5,000円込み）"],
+            ["初期費用", "敷金1か月・礼金1か月・清掃費 55,000円（退居時）"],
+            ["物件紹介", "家具・家電付き。エレベーター付きのマンションで、駅から徒歩8分。共用部も管理されています。"],
+            ["条件", "保証人または保証会社が必要です。"],
+            ["間取り", "1LDK・約40㎡"],
+            ["契約期間", "半年以上"],
+            ["国籍", "不限"],
+            ["ペット", "猫1匹まで相談可"]
+          ]
         },
         {
           type: "share",
+          region: "東京都",
           image: "",
-          title: "同居人募集 葛飾区 2LDKの1部屋",
-          address: "東京都葛飾区（詳しい住所はDMでお伝えします）",
-          price: "家賃 45,000円（水道光熱費・ネット込み）",
-          origin: "現在の入居者：香港人",
-          desc: "現在2人で住んでいます。和室1部屋をシェアする3人目を募集中。共用スペースは共同利用、禁煙・ペット不可です。",
-          contact: "Instagram：@sample_account",
-          updated: "2026/07"
+          title: "台東区 上野 1室",
+          address: "東京都台東区（上野駅から徒歩8分）",
+          price: "家賃 58,000円",
+          origin: "現在の入居者：静かな会社員",
+          desc: "家具・家電付きの個室です。現在の同居人は静かな会社員で、共用スペースもきれいに使っています。落ち着いて暮らせる方を募集しています。",
+          features: ["pet", "nationality", "contract", "furnished"],
+          minMonths: 6,
+          sample: true,
+          contact: "LINE：@kojian-sample",
+          updated: "2026/08/07 07:29",
+          photos: [
+            "/images/listings/roomshare-katsushika/living-room.png",
+            "/images/listings/roomshare-katsushika/kitchen-dining.png",
+            "/images/listings/roomshare-katsushika/bedroom.png",
+            "/images/listings/roomshare-katsushika/entrance.png",
+            "/images/listings/roomshare-katsushika/bathroom-laundry.png",
+            "/images/listings/roomshare-katsushika/balcony.png"
+          ],
+          details: [
+            ["物件住所", "東京都台東区（上野駅から徒歩8分）"],
+            ["家賃", "58,000円／月（毎月光熱費等割り勘）"],
+            ["初期費用", "敷金 1か月分・礼金なし・初月家賃・清掃費 30,000円（退居時）"],
+            ["物件紹介", "家具・家電付きの個室です。現在の室友は静かな会社員で、共用スペースもきれいに使っています。"],
+            ["条件", "3室ある物件で、現在空いているのは1室です。トイレ・浴室は1か所のみ。掃除は住人で順番に行います。ペットを怖がらない方・大きな音を出さない方・きれい好きな方"],
+            ["間取り", "2LDK・個室1室"],
+            ["契約期間", "半年以上"],
+            ["国籍", "不限"],
+            ["ペット", "相談可"]
+          ]
         }
       ];
       // ▲▲▲ 物件データここまで ▲▲▲
 
       var currentFilter = "all";
+      var currentFeatures = [];
+      var currentContractMonths = 0;
+      var currentSort = "newest";
+      var currentRegion = "all";
+      var currentPage = 1;
+      var pageSize = 8;
 
       function esc(s){
         var d = document.createElement("div");
@@ -90,29 +201,51 @@
         return d.innerHTML;
       }
 
-      function badgeLabel(type){ return type === "share" ? "ルームシェア募集" : "入居者募集"; }
+      function badgeLabel(type){ return type === "share" ? "ルームシェア募集" : "オーナー直貸し"; }
+
+      function renderPagination(totalPages){
+        var pagination = document.getElementById("rlPagination");
+        if (totalPages <= 1) { pagination.innerHTML = ""; return; }
+        var html = '<button type="button" class="rl-page-button" data-rl-page="' + (currentPage - 1) + '"' + (currentPage === 1 ? ' disabled' : '') + '>前へ</button>';
+        for (var i = 1; i <= totalPages; i++) html += '<button type="button" class="rl-page-button' + (i === currentPage ? ' active' : '') + '" data-rl-page="' + i + '">' + i + '</button>';
+        html += '<button type="button" class="rl-page-button" data-rl-page="' + (currentPage + 1) + '"' + (currentPage === totalPages ? ' disabled' : '') + '>次へ</button>';
+        pagination.innerHTML = html;
+      }
 
       function render(){
-        var list = RL_LISTINGS.filter(function(item){
-          return currentFilter === "all" || item.type === currentFilter;
+        tabs.forEach(function(pair){
+          var tab = document.getElementById(pair[0]);
+          if (tab) tab.classList.toggle("active", currentFilter === pair[1]);
         });
-        document.getElementById("rlResultCount").textContent = "全 " + list.length + " 件";
+        var list = RL_LISTINGS.filter(function(item){
+          var featureMatch = currentFeatures.every(function(feature){ return (item.features || []).indexOf(feature) !== -1; });
+          var contractMatch = !currentContractMonths || (item.minMonths || 0) <= currentContractMonths;
+          var regionMatch = currentRegion === "all" || item.region === currentRegion;
+          return (currentFilter === "all" || item.type === currentFilter) && featureMatch && contractMatch && regionMatch;
+        });
+        list.sort(function(a, b){ return currentSort === "newest" ? b.updated.localeCompare(a.updated) : a.updated.localeCompare(b.updated); });
+        var totalPages = Math.max(1, Math.ceil(list.length / pageSize));
+        if (currentPage > totalPages) currentPage = totalPages;
+        var pageItems = list.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+        document.getElementById("rlResultCount").textContent = "全 " + list.length + " 件" + (totalPages > 1 ? "（" + currentPage + " / " + totalPages + "ページ）" : "");
 
         var grid = document.getElementById("rlGrid");
         if (!list.length){
           grid.innerHTML = '<div class="rl-empty">このカテゴリにはまだ物件がありません。掲載をご希望の方はお気軽にご連絡ください。</div>';
+          renderPagination(1);
           return;
         }
 
-        grid.innerHTML = list.map(function(item){
-          var imageHtml = item.image
-            ? '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<span>写真準備中</span>\'">'
+        grid.innerHTML = pageItems.map(function(item){
+          var imageSrc = item.image || (item.photos && item.photos[0]);
+          var imageHtml = imageSrc
+            ? '<img src="' + esc(imageSrc) + '" alt="' + esc(item.title) + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<span>写真準備中</span>\'">'
             : '<span>写真準備中</span>';
           return '' +
-            '<div class="rl-card">' +
+            '<div class="rl-card' + (item.photos ? ' rl-card-link' : '') + '"' + (item.photos ? ' data-rl-open="' + RL_LISTINGS.indexOf(item) + '" tabindex="0" role="button" aria-label="' + esc(item.title) + 'の詳細を見る"' : '') + '>' +
               '<div class="rl-card-image">' + imageHtml +
                 '<span class="rl-badge ' + item.type + '">' + badgeLabel(item.type) + '</span>' +
-                (item.origin ? '<span class="rl-origin">' + esc(item.origin) + '</span>' : '') +
+                (item.sample ? '<span class="rl-sample-badge">例示・実在しない物件</span>' : '') +
               '</div>' +
               '<div class="rl-body">' +
                 '<h3>' + esc(item.title) + '</h3>' +
@@ -120,18 +253,16 @@
                   '<span>📍 ' + esc(item.address) + '</span>' +
                 '</div>' +
                 '<div class="rl-price">' + esc(item.price) + '</div>' +
-                '<div class="rl-desc">' + esc(item.desc) + '</div>' +
                 '<div class="rl-footer">' +
                   '<span>更新：' + esc(item.updated) + '</span>' +
-                  '<span class="rl-contact">' + esc(item.contact) + '</span>' +
                 '</div>' +
               '</div>' +
             '</div>';
         }).join("");
+        renderPagination(totalPages);
       }
 
       var tabs = [
-        ["rlTabAll", "all"],
         ["rlTabShare", "share"],
         ["rlTabTenant", "tenant"]
       ];
@@ -139,14 +270,124 @@
         var el = document.getElementById(pair[0]);
         if (!el) return;
         el.addEventListener("click", function(){
-          currentFilter = pair[1];
+          var wasActive = el.classList.contains("active");
+          currentFilter = wasActive ? "all" : pair[1];
+          currentPage = 1;
           tabs.forEach(function(p){ document.getElementById(p[0]).classList.remove("active"); });
-          el.classList.add("active");
+          if (!wasActive) el.classList.add("active");
           render();
+          if (currentFilter === "all") window.setTimeout(function(){ tabs.forEach(function(p){ document.getElementById(p[0]).classList.remove("active"); }); }, 0);
         });
       });
 
+      document.querySelectorAll("[data-rl-feature]").forEach(function(el){
+        el.addEventListener("click", function(){
+          var feature = el.getAttribute("data-rl-feature");
+          var featureIndex = currentFeatures.indexOf(feature);
+          if (featureIndex === -1) currentFeatures.push(feature);
+          else currentFeatures.splice(featureIndex, 1);
+          el.classList.toggle("active", currentFeatures.indexOf(feature) !== -1);
+          currentPage = 1;
+          render();
+        });
+      });
+      document.getElementById("rlContractFilter").addEventListener("change", function(){
+        currentContractMonths = Number(this.value) || 0;
+        currentPage = 1;
+        this.classList.toggle("active", currentContractMonths > 0);
+        render();
+      });
+      document.getElementById("rlSortFilter").addEventListener("change", function(){
+        currentSort = this.value;
+        currentPage = 1;
+        render();
+      });
+      document.getElementById("rlRegionFilter").addEventListener("change", function(){
+        currentRegion = this.value;
+        currentPage = 1;
+        render();
+      });
+      document.addEventListener("click", function(event){
+        var pageButton = event.target.closest("[data-rl-page]");
+        if (!pageButton || pageButton.disabled) return;
+        currentPage = Number(pageButton.getAttribute("data-rl-page"));
+        render();
+      });
+
       render();
+
+      var modal = document.getElementById("rlModal");
+      var modalImage = document.getElementById("rlModalImage");
+      var modalBadge = document.getElementById("rlModalBadge");
+      var modalTitle = document.getElementById("rlModalTitle");
+      var modalDetails = document.getElementById("rlModalDetails");
+      var modalThumbs = document.getElementById("rlModalThumbs");
+      var galleryCount = document.getElementById("rlGalleryCount");
+      var currentPhotos = [];
+      var currentPhotoIndex = 0;
+
+      function showPhoto(index){
+        currentPhotoIndex = (index + currentPhotos.length) % currentPhotos.length;
+        modalImage.src = currentPhotos[currentPhotoIndex];
+        modalImage.alt = modalTitle.textContent + " 写真" + (currentPhotoIndex + 1);
+        galleryCount.textContent = (currentPhotoIndex + 1) + " / " + currentPhotos.length;
+        fitModalImage();
+        window.setTimeout(fitModalImage, 0);
+        Array.prototype.forEach.call(modalThumbs.children, function(thumb, i){ thumb.classList.toggle("active", i === currentPhotoIndex); });
+      }
+
+      function fitModalImage(){
+        var gallery = modalImage.parentElement;
+        if (!gallery || !modalImage.naturalWidth) return;
+        var availableHeight = Math.max(1, gallery.clientHeight - 32);
+        var availableWidth = Math.max(1, gallery.clientWidth - 32);
+        var ratio = modalImage.naturalWidth / modalImage.naturalHeight;
+        var width = Math.min(availableWidth, availableHeight * ratio);
+        var height = width / ratio;
+        if (height > availableHeight) { height = availableHeight; width = height * ratio; }
+        modalImage.style.width = Math.round(width) + "px";
+        modalImage.style.height = Math.round(height) + "px";
+        modalImage.style.maxWidth = "none";
+        modalImage.style.maxHeight = "none";
+      }
+
+      function openModal(index){
+        var item = RL_LISTINGS[index];
+        if (!item || !item.photos) return;
+        currentPhotos = item.photos;
+        modalBadge.textContent = badgeLabel(item.type) + (item.sample ? "・例示（実在しない物件）" : "");
+        modalTitle.textContent = item.title;
+        modalDetails.innerHTML = item.details.map(function(detail){ return '<div class="rl-detail-item' + (detail[0] === "物件紹介" || detail[0] === "条件" ? ' rl-detail-wide' : '') + '"><dt>' + esc(detail[0]) + '</dt><dd>' + esc(detail[1]) + '</dd></div>'; }).join("");
+        modalThumbs.innerHTML = item.photos.map(function(photo, i){ return '<button type="button" class="rl-thumb" data-rl-photo="' + i + '"><img src="' + photo + '" alt="写真' + (i + 1) + '"></button>'; }).join("");
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("rl-modal-open");
+        showPhoto(0);
+      }
+
+      document.addEventListener("click", function(event){
+        var open = event.target.closest("[data-rl-open]");
+        var close = event.target.closest("[data-rl-close]");
+        var thumb = event.target.closest("[data-rl-photo]");
+        if (open) openModal(Number(open.getAttribute("data-rl-open")));
+        if (close) { modal.hidden = true; modal.setAttribute("aria-hidden", "true"); document.body.classList.remove("rl-modal-open"); }
+        if (thumb) showPhoto(Number(thumb.getAttribute("data-rl-photo")));
+      });
+      document.addEventListener("keydown", function(event){
+        var card = event.target.closest(".rl-card-link[data-rl-open]");
+        if (card && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); openModal(Number(card.getAttribute("data-rl-open"))); }
+      });
+      document.querySelector("[data-rl-prev]").addEventListener("click", function(){ showPhoto(currentPhotoIndex - 1); });
+      document.querySelector("[data-rl-next]").addEventListener("click", function(){ showPhoto(currentPhotoIndex + 1); });
+      modalImage.onload = fitModalImage;
+      modalImage.addEventListener("load", fitModalImage);
+      window.addEventListener("resize", fitModalImage);
+      document.addEventListener("keydown", function(event){
+        if (modal.hidden) return;
+        if (event.key === "Escape") document.querySelector("[data-rl-close]").click();
+        if (event.key === "ArrowLeft") showPhoto(currentPhotoIndex - 1);
+        if (event.key === "ArrowRight") showPhoto(currentPhotoIndex + 1);
+      });
     })();
     </script>
   </div><!-- /page-listings -->
