@@ -1,9 +1,6 @@
 <div id="page-route" class="page-view active theme-route">
     <div class="route-eyebrow-row">
       <div class="eyebrow">通勤計算・地点・周辺の駅・定期券費用</div>
-      <div class="route-header-actions">
-        <button type="button" class="route-commuter-trigger" id="commuterOpenBtn">🎫 定期券費用の試算</button>
-      </div>
     </div>
     <div class="route-db-stats">
       <div class="route-db-stat"><strong id="routeStationCount">—</strong><span>駅</span></div>
@@ -16,7 +13,13 @@
 
     <div class="grid route-main-layout">
       <div class="card" id="routeFormCard" data-no-collapse>
-        <div class="section-title"><span class="section-title-text">地点を選択</span><button type="button" class="route-commuter-trigger" id="routeLineBrowserBtn">🚉 すべての路線図を見る</button></div>
+        <div class="section-title route-section-title">
+          <span class="section-title-text">地点を選択</span>
+          <div class="route-section-actions">
+            <button type="button" class="route-commuter-trigger" id="routeLineBrowserBtn">🚉 すべての路線図を見る</button>
+            <button type="button" class="route-commuter-trigger" id="commuterOpenBtn">🎫 定期券費用の試算</button>
+          </div>
+        </div>
         <div class="route-pair">
           <div>
             <div class="route-endpoint-head"><strong>物件 Origin</strong></div>
@@ -145,8 +148,8 @@
         <div class="route-line-target-switch">
           <span class="route-line-target-label">駅をタップして設定：</span>
           <div class="route-pill-group">
-            <button type="button" class="route-pill" data-line-target="origin">出発地</button>
-            <button type="button" class="route-pill active" data-line-target="destination">目的地</button>
+            <button type="button" class="route-pill active" data-line-target="origin">出発地</button>
+            <button type="button" class="route-pill" data-line-target="destination">目的地</button>
           </div>
         </div>
         <div class="route-line-target-switch">
@@ -682,8 +685,13 @@ function routeEstimateTrain(){
     <div class="route-source-note">所要時間は内蔵の駅データ、駅間距離、路線の平均速度、乗換1回あたり約4分から推定しています。運賃は距離から概算した参考値で、各鉄道会社の実際の運賃ではありません。最初の待ち時間、遅延、快速の停車駅の違い、ホーム間の実際の移動は含みません。内見や通勤の判断には、あらためて Google Maps／NAVITIME でご確認ください。</div>`;
   status.textContent = `完了：${routeDisplayName(origin.item,origin.type)} から ${routeDisplayName(destination.item,destination.type)} まで約 ${total} 分。`;
 }
-function routeStationRows(origin){
-  return ROUTE_DATA.stations.map(station => {
+function routeIsSameStation(first,second){
+  if (!first || !second) return false;
+  if (first === second) return true;
+  return routeNormalize(first.n) === routeNormalize(second.n) && routeDistanceMetres(first,second) < 30;
+}
+function routeStationRows(origin,excludeOriginStation=false){
+  return ROUTE_DATA.stations.filter(station => !excludeOriginStation || !routeIsSameStation(origin,station)).map(station => {
     const distance = routeDistanceMetres(origin,station);
     return {station,distance,walk:routeWalkingMinutes(distance),drive:routeDrivingMinutes(distance)};
   }).sort((a,b) => a.distance - b.distance);
@@ -694,7 +702,7 @@ function routeRenderStationResults(){
   const selected = routeState[anchorKey];
   const result = document.getElementById("routeTransitResult");
   if (!selected || !routeHasPoint(selected.item)) return;
-  const allRows = routeStationRows(selected.item);
+  const allRows = routeStationRows(selected.item,selected.type === "station");
   const metric = routeState.travelMode === "drive" ? "drive" : "walk";
   const modeLabel = metric === "drive" ? "車での所要時間" : "徒歩";
   const modeCountLabel = metric === "drive" ? "車" : "徒歩";
@@ -755,7 +763,14 @@ function routeRenderStationResults(){
       <div class="route-pill-group">${transferPills}</div>
     </div>` : `<div class="route-quick-filter-hint">上で${targetLabel}を選ぶと、乗換回数で絞り込めるほか、各駅から${targetLabel}までの電車時間と概算運賃を表示できます。</div>`}
     <span class="route-result-count">${modeCountLabel}${routeState.limit} 分以内：全 ${rows.length} 駅</span>
-    <div class="route-table-wrap"><table class="route-result-table">
+    <div class="route-table-wrap"><table class="route-result-table${transitMap ? " has-transit" : ""}">
+      <colgroup>
+        <col class="route-col-station">
+        <col class="route-col-distance">
+        <col class="route-col-duration">
+        ${transitMap ? `<col class="route-col-transit">` : ""}
+        <col class="route-col-actions">
+      </colgroup>
       <thead><tr><th>駅・路線</th><th>直線距離</th><th>${modeLabel}の概算</th>${transitMap ? `<th>${targetLabel}まで</th>` : ""}<th></th></tr></thead>
       <tbody>${rows.map(row => {
         const {station,distance,transit,total} = row;
@@ -784,7 +799,7 @@ async function routeAnalyzeNearby(anchor){
     return;
   }
   status.textContent = "完了：距離と徒歩分数はすべてブラウザ内で計算しています。";
-  const allRows = routeStationRows(resolved.item);
+  const allRows = routeStationRows(resolved.item,resolved.type === "station");
   if (routeState.travelMode === "walk" && !allRows.some(row => row.walk <= routeState.limit) && allRows.some(row => row.drive <= routeState.limit)){
     routeState.travelMode = "drive";
     status.textContent = "徒歩の範囲に駅が見つからなかったため、自動的に「車での所要時間」の表示に切り替えました。";
@@ -875,7 +890,7 @@ function routeStripSchematic(line,stations,color){
   }).join("");
   return `<svg class="route-line-map" viewBox="0 0 ${width} ${height}" role="img" aria-label="${routeEscape(line.n)}の駅の模式図"><rect width="${width}" height="${height}" fill="#fbfcfa"/><text x="50" y="50" font-size="38" font-weight="800" fill="#26352c" paint-order="stroke fill" stroke="#fbfcfa" stroke-width="7.5" stroke-linejoin="round">${routeEscape(line.n)}</text><text x="50" y="86" font-size="17" fill="#627066" paint-order="stroke fill" stroke="#fbfcfa" stroke-width="5" stroke-linejoin="round">${routeEscape(line.r)}・簡易駅順序図</text><path d="${path}" fill="none" stroke="${color}" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>`;
 }
-let routeLineTargetMode = "destination";
+let routeLineTargetMode = "origin";
 let routeLinePickerBuilt = false;
 let routeStationNameIndex = null;
 const routeKantoPrefs = ["東京都","神奈川県","埼玉県","千葉県"];
@@ -933,8 +948,30 @@ function routeFilterLinePicker(pref){
     group.style.display = visible ? "" : "none";
   });
 }
+function routeSetLineTargetMode(mode){
+  routeLineTargetMode = mode === "destination" ? "destination" : "origin";
+  document.querySelectorAll("[data-line-target]").forEach(button => button.classList.toggle("active",button.dataset.lineTarget === routeLineTargetMode));
+}
+function routeLineStationMatches(selected,station){
+  return !!selected && routeNormalize(selected.n) === routeNormalize(station.n) && routeDistanceMetres(selected,station) < 1500;
+}
+function routeLineStationSelectionRole(station){
+  const isOrigin = routeState.origin?.type === "station" && routeLineStationMatches(routeState.origin.item,station);
+  const isDestination = routeState.destination?.type === "station" && routeLineStationMatches(routeState.destination.item,station);
+  if (isOrigin && isDestination) return "both";
+  if (isOrigin) return "origin";
+  if (isDestination) return "destination";
+  return "";
+}
+function routeLineStationSelectionLabel(role){
+  if (role === "origin") return "出発地に選択済み";
+  if (role === "destination") return "目的地に選択済み";
+  if (role === "both") return "出発地・目的地に選択済み";
+  return "";
+}
 function routeOpenLineBrowser(){
   routeBuildLinePicker();
+  routeSetLineTargetMode(!routeState.origin ? "origin" : (!routeState.destination ? "destination" : "origin"));
   const first = ROUTE_DATA.lineMaps.find(line => [...routeLinePrefectures(line)].some(pref => routeKantoPrefs.includes(pref)));
   if (first) routeOpenLineMap(first.k);
 }
@@ -950,9 +987,15 @@ function routeOpenLineMap(key){
   document.getElementById("routeLineTitle").textContent = `${displayName}｜駅の路線図`;
   document.getElementById("routeLineOperator").textContent = `${line.r}・${line.s.length} 駅`;
   document.getElementById("routeLineMap").innerHTML = line.z === "loop" ? routeLoopSchematic(displayLine,ordered,color) : routeStripSchematic(displayLine,ordered,color);
-  document.getElementById("routeLineStations").innerHTML = ordered.map((station,index) => `<button type="button" class="route-line-station" data-line-station-index="${station.sourceIndex}" data-line-map-key="${routeEscape(key)}">${line.z === "loop" ? `${String(index + 1).padStart(2,"0")}　` : ""}${routeEscape(station.n)}駅</button>`).join("");
+  document.getElementById("routeLineStations").innerHTML = ordered.map((station,index) => {
+    const role = routeLineStationSelectionRole(station);
+    const label = routeLineStationSelectionLabel(role);
+    return `<button type="button" class="route-line-station${role ? ` is-selected is-selected-${role}` : ""}" data-line-station-index="${station.sourceIndex}" data-line-map-key="${routeEscape(key)}"><span class="route-line-station-name">${line.z === "loop" ? `${String(index + 1).padStart(2,"0")}　` : ""}${routeEscape(station.n)}駅</span>${label ? `<span class="route-line-station-state">${label}</span>` : ""}</button>`;
+  }).join("");
   document.querySelectorAll("#routeLinePicker .route-line-pick-item").forEach(btn => btn.classList.toggle("active",btn.dataset.lineMapKey === key));
-  if (typeof dialog.showModal === "function") dialog.showModal(); else dialog.setAttribute("open","");
+  if (!dialog.open){
+    if (typeof dialog.showModal === "function") dialog.showModal(); else dialog.setAttribute("open","");
+  }
 }
 function routeSetLineOrigin(key,index){
   const line = ROUTE_DATA.lineMaps.find(row => row.k === key);
@@ -964,9 +1007,15 @@ function routeSetLineOrigin(key,index){
   document.getElementById("routeOrigin").value = routeDisplayName(item,"station");
   routeState.origin = {type:"station",item};
   routeRenderSelected("Origin");
-  document.getElementById("routeLineDialog").close();
   document.getElementById("routeSearchStatus").textContent = `${station.n}駅を出発地に設定しました。`;
-  if (routeState.destination) routeEstimateTrain(); else routeAnalyzeNearby();
+  if (routeState.destination){
+    routeEstimateTrain();
+    document.getElementById("routeLineDialog").close();
+  } else {
+    routeAnalyzeNearby();
+    routeSetLineTargetMode("destination");
+    routeOpenLineMap(key);
+  }
 }
 function routeOpenExternalForStation(kind,key){
   const splitAt = key.indexOf("|");
@@ -995,9 +1044,14 @@ function routeSetLineDestination(key,index){
   document.getElementById("routeDestination").value = routeDisplayName(item,"station");
   routeState.destination = {type:"station",item};
   routeRenderSelected("Destination");
-  document.getElementById("routeLineDialog").close();
   document.getElementById("routeSearchStatus").textContent = `${station.n}駅を目的地に設定しました。`;
-  if (routeState.origin) routeEstimateTrain();
+  if (routeState.origin){
+    routeEstimateTrain();
+    document.getElementById("routeLineDialog").close();
+  } else {
+    routeSetLineTargetMode("origin");
+    routeOpenLineMap(key);
+  }
 }
 
 document.getElementById("routeStationCount").textContent = ROUTE_DATA.stations.length.toLocaleString("ja-JP");
@@ -1031,8 +1085,7 @@ document.addEventListener("click",event => {
   }
   const lineTarget = event.target.closest("[data-line-target]");
   if (lineTarget){
-    routeLineTargetMode = lineTarget.dataset.lineTarget;
-    document.querySelectorAll("[data-line-target]").forEach(btn => btn.classList.toggle("active",btn === lineTarget));
+    routeSetLineTargetMode(lineTarget.dataset.lineTarget);
     return;
   }
   const lineStation = event.target.closest("[data-line-station-index]");
@@ -1052,7 +1105,8 @@ document.addEventListener("keydown",event => {
   const lineStation = event.target.closest && event.target.closest("[data-line-station-index]");
   if (!lineStation) return;
   event.preventDefault();
-  routeSetLineDestination(lineStation.dataset.lineMapKey,Number(lineStation.dataset.lineStationIndex));
+  if (routeLineTargetMode === "origin") routeSetLineOrigin(lineStation.dataset.lineMapKey,Number(lineStation.dataset.lineStationIndex));
+  else routeSetLineDestination(lineStation.dataset.lineMapKey,Number(lineStation.dataset.lineStationIndex));
 });
 function routeScrollToResult(){
   const el = document.getElementById("routeTransitResult");
