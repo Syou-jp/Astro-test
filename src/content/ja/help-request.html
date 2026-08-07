@@ -1,31 +1,9 @@
 <div id="page-help-request" class="page-view active help-request-page" data-no-i18n>
-  <div class="eyebrow">MUTUAL AID · TOKYO</div>
-
-  <section class="hr-hero">
-    <div>
-      <p class="hr-kicker">困ったときは、おたがいさま。</p>
-      <h2>助け合い掲示板</h2>
-      <p class="hr-lead">通訳・ペットのお世話・力仕事など、<strong>ちょっとした「助けてほしい」</strong>を投稿できる掲示板です。掲載の依頼は、LINE Botで本人確認後に受け付けます。</p>
-      <div class="hr-hero-actions">
-        <a class="hr-primary-link" href="#post-flow">依頼を掲載する <span aria-hidden="true">↓</span></a>
-        <a class="hr-text-link" href="#request-items">依頼を見る</a>
-      </div>
-    </div>
-    <aside class="hr-rule-card">
-      <span class="hr-rule-number">個人間</span>
-      <strong>あくまで個人同士の助け合い</strong>
-      <p>営利目的の勧誘や斡旋業者による投稿はご遠慮ください。謝礼の有無・金額は当事者間で合意のうえ決めてください。</p>
-      <div class="hr-rule-line"></div>
-      <small>掲載前に内容を確認し、AIで読みやすく整えて公開します。</small>
-    </aside>
-  </section>
-
-  <div class="hr-notice"><strong>ご利用前に</strong><span>依頼者・協力者ともに、必ず事前にやり取りして詳細を確認してください。住所は「最寄り駅・エリア」など、待ち合わせに必要な範囲だけを掲載してください。</span></div>
+  <div class="eyebrow">助け合い掲示板</div>
 
   <section class="hr-section" id="request-items">
     <div class="hr-section-head">
-      <div><span>NOW SEEKING</span><h3>助けを探している人</h3></div>
-      <p>すべて掲載イメージです</p>
+      <div><h3>助けを探している人</h3></div>
     </div>
 
     <div class="hr-filters" aria-label="依頼カテゴリー">
@@ -39,39 +17,10 @@
     <div class="hr-request-grid" id="hrRequestGrid"></div>
   </section>
 
-  <section class="hr-flow" id="post-flow">
-    <div class="hr-flow-copy">
-      <span>HOW TO POST</span>
-      <h3>LINEで送るだけ。<br>掲載作業はおまかせください。</h3>
-      <p>中古市場と同じBotで受け付けています。Botで認証したあと、「いつ・どこで・何を手伝ってほしいか・謝礼の有無・連絡方法」をLINEで送信してください。内容をAIで整え、確認後にこのページへ掲載します。</p>
-      <div class="hr-bot-pending">
-        <b>LINE Botの追加リンク</b>
-        <span>準備中 — BotのURLまたはQRコードを設定すると、ここから直接追加できます。</span>
-      </div>
-    </div>
-    <ol class="hr-flow-steps">
-      <li><span>01</span><div><b>LINE Botを追加・認証</b><p>初回だけ本人確認を行います。</p></div></li>
-      <li><span>02</span><div><b>依頼内容をLINEで送信</b><p>日時／場所／内容／謝礼の有無／連絡方法。</p></div></li>
-      <li><span>03</span><div><b>AI整形後に掲載</b><p>内容を確認し、読みやすい掲載ページにします。</p></div></li>
-    </ol>
-  </section>
-
-  <section class="hr-checklist">
-    <div><span>POSTING CHECKLIST</span><h3>送る前に、これだけ確認</h3></div>
-    <ul>
-      <li>個人情報（住所の番地・電話番号など）は最小限にとどめる</li>
-      <li>謝礼の有無・金額の目安があれば明記する</li>
-      <li>緊急の依頼は、いつまでに対応が必要か日時を明記する</li>
-      <li>連絡方法はLINE ID、メールなど希望の方法を明記する</li>
-    </ul>
-  </section>
-
-  <div class="market-note" style="margin-top:15px;">
-    本ページの依頼内容は投稿者本人が提供したものです。内容の真実性・実現可否は当事者同士でご確認ください。金銭のやり取りやトラブルについて、本サイトは一切の責任を負いません。
-  </div>
+  <div class="hr-modal" id="hrModal" hidden><div class="hr-modal-backdrop" data-close-modal></div><div class="hr-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="hrModalTitle"><button type="button" class="hr-modal-close" data-close-modal aria-label="閉じる">×</button><span class="hr-card-category" id="hrModalCategory"></span><h3 id="hrModalTitle"></h3><div class="hr-modal-note" id="hrModalNote"></div><dl id="hrModalMeta"></dl></div></div>
 
   <style>
-    .help-request-page{--hr-dark:#203b30;--hr-sage:#e7eee7;--hr-cream:#f6f1e8;--hr-red:#a8482f;--hr-muted:#756f68}.hr-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:20px;align-items:stretch;padding:7px 0 28px}.hr-kicker,.hr-section-head span,.hr-flow-copy>span,.hr-checklist span{font:700 10px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--hr-red)}.hr-hero h2{font-family:"Shippori Mincho",serif;font-size:38px;line-height:1.25;letter-spacing:.05em;margin:7px 0 12px}.hr-lead{max-width:620px;margin:0;font-size:14px;line-height:2;color:var(--ink-soft)}.hr-lead strong{color:var(--hr-red)}.hr-hero-actions{display:flex;align-items:center;gap:18px;margin-top:23px}.hr-primary-link{display:inline-flex;align-items:center;gap:20px;padding:11px 15px;background:var(--hr-dark);color:#fff;text-decoration:none;font-size:12px;font-weight:700}.hr-primary-link:hover{background:var(--accent-2)}.hr-text-link{color:var(--hr-dark);font-size:12px;font-weight:700;text-decoration:none;border-bottom:1px solid currentColor}.hr-rule-card{border:1px solid var(--hr-dark);background:var(--hr-sage);padding:21px;display:flex;flex-direction:column}.hr-rule-number{font:700 24px "JetBrains Mono",monospace;letter-spacing:-.03em;color:var(--hr-dark)}.hr-rule-card strong{font-family:"Shippori Mincho",serif;font-size:16px;margin-top:2px}.hr-rule-card p{font-size:11px;line-height:1.75;color:var(--ink-soft);margin:12px 0}.hr-rule-line{height:1px;background:rgba(32,59,48,.25);margin-top:auto}.hr-rule-card small{font-size:10px;color:var(--ink-soft);line-height:1.6;margin-top:11px}.hr-notice{display:flex;gap:14px;align-items:flex-start;border-left:3px solid var(--hr-red);background:#fbf5f1;padding:12px 14px;font-size:11.5px;line-height:1.75;margin-bottom:31px}.hr-notice strong{color:var(--hr-red);white-space:nowrap}.hr-notice span{color:var(--ink-soft)}.hr-section{padding-top:2px}.hr-section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:12px}.hr-section-head h3,.hr-flow h3,.hr-checklist h3{font-family:"Shippori Mincho",serif;font-size:22px;line-height:1.45;margin:3px 0 0}.hr-section-head p{margin:0;color:var(--ink-soft);font-size:10.5px}.hr-filters{display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:13px}.hr-filter{border:1px solid var(--line);background:#fff;color:var(--ink-soft);font:600 11px inherit;padding:7px 12px;cursor:pointer}.hr-filter small{font:400 9px "JetBrains Mono",monospace;margin-left:4px}.hr-filter.active,.hr-filter:hover{border-color:var(--hr-dark);background:var(--hr-dark);color:#fff}.hr-request-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:17px}.hr-card{border:1px solid var(--line);background:#fff;min-width:0;overflow:hidden;display:flex;flex-direction:column;padding:16px}.hr-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.hr-card-category{color:var(--hr-red);font:700 9px "JetBrains Mono",monospace;letter-spacing:.1em}.hr-urgent{background:var(--hr-red);color:#fff;font:700 9px "JetBrains Mono",monospace;letter-spacing:.06em;padding:3px 8px;white-space:nowrap}.hr-card h4{margin:9px 0;font-size:16px;line-height:1.45}.hr-card-note{font-size:11.5px;color:var(--ink-soft);line-height:1.75;margin:0 0 10px}.hr-meta{display:grid;gap:5px;margin-top:auto;padding-top:10px;border-top:1px dashed var(--line)}.hr-meta div{display:flex;gap:7px;font-size:10.5px;line-height:1.45}.hr-meta b{color:var(--hr-muted);min-width:50px;font-size:9px;letter-spacing:.04em}.hr-meta span{color:var(--ink)}.hr-contact{color:var(--hr-dark)!important;font-weight:700}.hr-flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;margin-top:35px;padding:28px;background:var(--hr-dark);color:#fff}.hr-flow-copy>span{color:#d6b89f}.hr-flow h3{font-size:25px;margin-top:5px}.hr-flow-copy>p{font-size:11.5px;line-height:1.85;color:rgba(255,255,255,.77);margin:14px 0}.hr-bot-pending{border:1px solid rgba(255,255,255,.28);padding:11px 12px;display:grid;gap:3px}.hr-bot-pending b{font-size:11px}.hr-bot-pending span{font-size:10px;line-height:1.55;color:rgba(255,255,255,.68)}.hr-flow-steps{padding:0;margin:0;list-style:none;display:grid;align-content:center}.hr-flow-steps li{display:grid;grid-template-columns:37px minmax(0,1fr);gap:11px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.2)}.hr-flow-steps li:last-child{border-bottom:0}.hr-flow-steps span{font:600 11px "JetBrains Mono",monospace;color:#d6b89f}.hr-flow-steps b{font-size:12px}.hr-flow-steps p{font-size:10.5px;line-height:1.65;color:rgba(255,255,255,.7);margin:3px 0 0}.hr-checklist{display:grid;grid-template-columns:.7fr 1.3fr;gap:20px;margin:25px 0 5px;padding:20px 0;border-top:1px solid var(--ink)}.hr-checklist h3{font-size:18px}.hr-checklist ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 16px}.hr-checklist li{position:relative;padding-left:16px;color:var(--ink-soft);font-size:10.5px;line-height:1.7}.hr-checklist li:before{content:"";position:absolute;left:0;top:.65em;width:6px;height:6px;background:var(--hr-red)}@media(max-width:700px){.hr-hero,.hr-flow,.hr-checklist{grid-template-columns:1fr}.hr-hero h2{font-size:31px}.hr-request-grid{grid-template-columns:1fr}.hr-rule-card{min-height:190px}.hr-checklist ul{grid-template-columns:1fr}.hr-flow{gap:23px}.hr-section-head{align-items:start;flex-direction:column}.hr-hero-actions{gap:12px;flex-wrap:wrap}}
+    .help-request-page{--hr-dark:#203b30;--hr-red:#a8482f;--hr-muted:#756f68}.hr-section-head{margin-bottom:12px}.hr-section-head h3{font-family:"Shippori Mincho",serif;font-size:22px;line-height:1.45;margin:3px 0 0}.hr-filters{display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:13px}.hr-filter{border:1px solid var(--line);background:#fff;color:var(--ink-soft);font:600 11px inherit;padding:7px 12px;cursor:pointer}.hr-filter small{font:400 9px "JetBrains Mono",monospace;margin-left:4px}.hr-filter.active,.hr-filter:hover{border-color:var(--hr-dark);background:var(--hr-dark);color:#fff}.hr-request-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:17px}.hr-card{border:1px solid var(--line);background:#fff;min-width:0;padding:22px 20px;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}.hr-card:hover,.hr-card:focus-within{transform:translateY(-2px);box-shadow:0 8px 24px rgba(32,59,48,.1)}.hr-card-top{display:flex;justify-content:flex-end;min-height:18px}.hr-urgent{background:var(--hr-red);color:#fff;font:700 9px "JetBrains Mono",monospace;letter-spacing:.06em;padding:3px 8px;white-space:nowrap}.hr-card h4{margin:0;font-size:17px;line-height:1.6}.hr-modal[hidden]{display:none}.hr-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px}.hr-modal-backdrop{position:absolute;inset:0;background:rgba(16,28,24,.55)}.hr-modal-dialog{position:relative;width:min(560px,100%);max-height:min(680px,90vh);overflow:auto;background:#fff;padding:28px;box-shadow:0 18px 50px rgba(0,0,0,.2)}.hr-modal-close{position:absolute;top:10px;right:12px;border:0;background:none;font-size:27px;cursor:pointer;color:var(--ink-soft)}.hr-modal-dialog .hr-card-category{color:var(--hr-red);font:700 9px "JetBrains Mono",monospace;letter-spacing:.1em}.hr-modal-dialog h3{font-family:"Shippori Mincho",serif;font-size:24px;line-height:1.5;margin:9px 30px 14px 0}.hr-modal-note{padding-bottom:18px;border-bottom:1px solid var(--line);font-size:13px;line-height:1.85;color:var(--ink-soft)}.hr-modal-dialog dl{display:grid;grid-template-columns:58px 1fr;gap:10px 14px;margin:18px 0 0;font-size:12px}.hr-modal-dialog dt{color:var(--hr-muted);font-weight:700}.hr-modal-dialog dd{margin:0;line-height:1.6}.hr-contact{color:var(--hr-dark)!important;font-weight:700}@media(max-width:700px){.hr-request-grid{grid-template-columns:1fr}.hr-modal-dialog{padding:24px 20px}}
   </style>
 
   <script>
@@ -92,10 +41,24 @@
           return;
         }
         grid.innerHTML = visible.map(function (item) {
-          return '<article class="hr-card"><div class="hr-card-top"><span class="hr-card-category">' + item.categoryLabel + '</span>' + (item.urgent ? '<span class="hr-urgent">急募</span>' : '') + '</div><h4>' + escapeHtml(item.title) + '</h4><p class="hr-card-note">' + escapeHtml(item.note) + '</p><div class="hr-meta"><div><b>日時</b><span>' + escapeHtml(item.date) + '</span></div><div><b>場所</b><span>' + escapeHtml(item.area) + '</span></div><div><b>謝礼</b><span>' + escapeHtml(item.reward) + '</span></div><div><b>連絡先</b><span class="hr-contact">' + escapeHtml(item.contact) + '</span></div></div></article>';
+          return '<article class="hr-card" tabindex="0" role="button" data-request-index="' + requests.indexOf(item) + '"><div class="hr-card-top">' + (item.urgent ? '<span class="hr-urgent">急募</span>' : '') + '</div><h4>' + escapeHtml(item.title) + '</h4></article>';
         }).join("");
+        grid.querySelectorAll(".hr-card").forEach(function (card) {
+          card.addEventListener("click", function () { openModal(requests[Number(card.dataset.requestIndex)]); });
+          card.addEventListener("keydown", function (event) { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openModal(requests[Number(card.dataset.requestIndex)]); } });
+        });
       }
+      function openModal(item) {
+        document.getElementById("hrModalCategory").textContent = item.categoryLabel;
+        document.getElementById("hrModalTitle").textContent = item.title;
+        document.getElementById("hrModalNote").textContent = item.note;
+        document.getElementById("hrModalMeta").innerHTML = [["日時", item.date], ["場所", item.area], ["謝礼", item.reward], ["連絡先", item.contact]].map(function (entry) { return "<dt>" + escapeHtml(entry[0]) + "</dt><dd" + (entry[0] === "連絡先" ? " class=\"hr-contact\"" : "") + ">" + escapeHtml(entry[1]) + "</dd>"; }).join("");
+        document.getElementById("hrModal").hidden = false;
+      }
+      function closeModal() { document.getElementById("hrModal").hidden = true; }
       document.querySelectorAll(".hr-filter").forEach(function (button) { button.addEventListener("click", function () { activeFilter = button.dataset.filter; document.querySelectorAll(".hr-filter").forEach(function (entry) { entry.classList.toggle("active", entry === button); }); render(); }); });
+      document.querySelectorAll("[data-close-modal]").forEach(function (element) { element.addEventListener("click", closeModal); });
+      document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeModal(); });
       render();
     })();
   </script>
