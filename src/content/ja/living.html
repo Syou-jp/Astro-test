@@ -50,6 +50,7 @@
         <div class="apply-fields" style="margin-bottom:14px;">
           <div class="apply-field"><label>収入の種類</label><select id="livingIncomeType"><option value="net">手取り</option><option value="gross">税前</option></select></div>
           <div class="apply-field"><label id="livingIncomeLabel">月の手取り収入</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span>円/月</span></div></div>
+          <div class="apply-field"><label>副業収入</label><div class="input-wrap"><input type="number" id="livingSideIncome" value="0" min="0" step="1000"><span>円/月</span></div></div>
           <button type="button" class="secondary-btn" id="livingClearBtn" style="width:100%;margin-top:8px;">🔄 すべてリセット</button>
         </div>
         <div class="expense-groups" id="livingExpenseGroups">
@@ -293,7 +294,7 @@
 const toolYen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
 const toolNum = id => Math.max(0,Number(document.getElementById(id)?.value) || 0);
 function livingRender(){
-  const income=toolNum("livingIncome"),groups=[...document.querySelectorAll("#livingExpenseGroups .expense-group")];let expense=0,savings=0;const summary=[];
+  const income=toolNum("livingIncome")+toolNum("livingSideIncome"),groups=[...document.querySelectorAll("#livingExpenseGroups .expense-group")];let expense=0,savings=0;const summary=[];
   groups.forEach(group=>{if(group.dataset.expenseGroup==="自由入力"){[...group.querySelectorAll(".living-custom-row")].forEach(row=>{const label=row.querySelector(".living-custom-label").value||"（名称未設定）";const amount=Number(row.querySelector(".living-expense").value)||0;expense+=amount;summary.push([label,amount]);});}else{const amount=[...group.querySelectorAll(".living-expense")].reduce((s,x)=>s+(Number(x.value)||0),0);if(group.dataset.savings==="true")savings+=amount;else expense+=amount;summary.push([group.dataset.expenseGroup,amount]);}});
   const balance=income-expense-savings;document.getElementById("livingExpenseOut").textContent=toolYen(expense);document.getElementById("livingSavingsOut").textContent=toolYen(savings);document.getElementById("livingBalanceOut").textContent=toolYen(balance);document.getElementById("livingAnnualOut").textContent=toolYen(expense*12);document.getElementById("livingSavingsRateOut").textContent=income?(savings/income*100).toFixed(1)+"%":"—";document.getElementById("livingSavingsAnnualOut").textContent=toolYen(savings*12);document.getElementById("livingBalanceAnnualOut").textContent=toolYen(balance*12);
   const max=Math.max(1,...summary.map(x=>x[1]));document.getElementById("livingBreakdown").innerHTML=summary.filter(x=>x[1]>0).map(x=>`<div style="margin-top:10px;font-size:11px;"><div style="display:flex;justify-content:space-between;"><span>${x[0]}</span><strong>${toolYen(x[1])}</strong></div><div class="expense-bar"><i style="width:${x[1]/max*100}%"></i></div></div>`).join("");
@@ -316,6 +317,7 @@ function livingMakeCustomRow(label,value){
 document.getElementById("livingClearBtn").addEventListener("click",()=>{
   if(!confirm("すべての入力値をリセットしてもよろしいですか？"))return;
   document.getElementById("livingIncome").value=0;
+  document.getElementById("livingSideIncome").value=0;
   document.querySelectorAll(".living-expense").forEach(el=>el.value=0);
   document.getElementById("livingCustomFields").innerHTML="";
   livingRender();
@@ -340,6 +342,7 @@ function livingSnapshot(){
   return {
     incomeType:document.getElementById("livingIncomeType").value,
     income:document.getElementById("livingIncome").value,
+    sideIncome:document.getElementById("livingSideIncome").value,
     expenses:[...document.querySelectorAll('#livingExpenseGroups .expense-group:not([data-expense-group="自由入力"]) .living-expense')].map(x=>x.value),
     customFields:[...document.querySelectorAll("#livingCustomFields .living-custom-row")].map(row=>({label:row.querySelector(".living-custom-label").value,value:row.querySelector(".living-expense").value}))
   };
@@ -347,6 +350,7 @@ function livingSnapshot(){
 function livingApplySnapshot(data){
   document.getElementById("livingIncomeType").value=data.incomeType||"net";
   document.getElementById("livingIncome").value=data.income||0;
+  document.getElementById("livingSideIncome").value=data.sideIncome||0;
   const inputs=[...document.querySelectorAll('#livingExpenseGroups .expense-group:not([data-expense-group="自由入力"]) .living-expense')];
   (data.expenses||[]).forEach((v,i)=>{if(inputs[i])inputs[i].value=v;});
   const customFieldsEl=document.getElementById("livingCustomFields");
