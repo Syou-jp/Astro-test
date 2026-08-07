@@ -13,7 +13,18 @@
       <div class="job-list" id="jobDemoList"></div>
     </div>
 
-    <div class="job-builder">
+    <section class="job-detail-page" id="jobDetailPage" hidden aria-hidden="true">
+      <div class="job-detail-backdrop" id="jobDetailBackdrop"></div>
+      <div class="job-detail-panel" role="dialog" aria-modal="true" aria-labelledby="jobDetailTitle">
+        <button type="button" class="job-detail-close" id="jobDetailBack" aria-label="閉じる">×</button>
+        <div class="job-detail-sheet" id="jobDetailSheet"></div>
+      </div>
+    </section>
+
+    <button type="button" class="job-builder-toggle" id="jobBuilderToggle" aria-expanded="true" aria-controls="jobBuilder">
+      <span>求人票を作成する</span><span class="job-builder-toggle-icon" aria-hidden="true">＋</span>
+    </button>
+    <div class="job-builder" id="jobBuilder">
       <div class="card" id="jobPostingForm">
         <div class="section-title"><span id="jobCreateTitle">求人票を作成する</span></div>
         <div class="job-form-grid">
@@ -109,6 +120,16 @@ function jobRenderSamples(){
  const list=JOB_SAMPLES.filter(x=>(i==="all"||x.i===i)&&(t==="all"||x.t===t)&&(j==="all"||JOB_JP_RANK[x.j]<=JOB_JP_RANK[j])&&(v==="all"||x.v.includes(v)));
  const lang=typeof siteCurrentLanguage!=="undefined"?siteCurrentLanguage:"ja",c=JOB_COPY[lang]||JOB_COPY.ja;document.getElementById("jobsResultCount").textContent=c.count(list.length);document.getElementById("jobsDemoNotice").textContent=c.demo;
  document.getElementById("jobDemoList").innerHTML=list.length?list.map(x=>`<article class="job-card"><span class="job-demo">DEMO</span><h3>${jobEscape(jobTxt(x.title))}</h3><div class="job-meta">${jobEscape(x.company)} ｜ ${jobEscape(x.place)} ｜ ${jobEscape(x.salary)}</div><p>${jobEscape(jobTxt(x.desc))}</p><div class="job-tags"><span class="job-tag">${jobEscape(jobTxt(JOB_INDUSTRIES[x.i]))}</span><span class="job-tag">${jobEscape(jobTxt(JOB_TYPES[x.t]))}</span><span class="job-tag">${jobEscape(jobTxt(JOB_JAPANESE[x.j]))}</span>${x.v.map(k=>`<span class="job-tag">${jobEscape(jobTxt(JOB_VISAS[k]))}</span>`).join("")}</div></article>`).join(""):`<div class="job-empty">${c.empty}</div>`;
+ document.querySelectorAll("#jobDemoList .job-card").forEach((card,index)=>{const open=()=>jobOpenSample(list[index]);card.addEventListener("click",open);card.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();open();}});});
+}
+function jobOpenSample(sample){
+ if(!sample)return;
+ const set=(id,value)=>{const el=document.getElementById(id);if(el)el.value=value??"";};
+ set("jobCompany",sample.company);set("jobTitle",jobTxt(sample.title));set("jobIndustry",sample.i);set("jobType",sample.t);set("jobJapanese",sample.j);set("jobPrefecture",sample.place);set("jobSalary",sample.salary);set("jobWork",jobTxt(sample.desc));
+ document.querySelectorAll("#jobVisaChecks input").forEach(input=>input.checked=sample.v.includes(input.value));
+ jobRenderPreview();
+ document.getElementById("jobDetailSheet").innerHTML=document.getElementById("jobPostingPreview").innerHTML;
+ document.querySelector("#page-jobs > .card").hidden=true;document.getElementById("jobDetailPage").hidden=false;document.getElementById("jobDetailPage").setAttribute("aria-hidden","false");document.body.classList.add("job-detail-open");
 }
 function jobVal(id){return document.getElementById(id)?.value||"—";}
 function jobRenderPreview(){
@@ -128,6 +149,10 @@ function jobPageSetLanguage(lang){
 }
 ["jobFilterIndustry","jobFilterType","jobFilterJapanese","jobFilterVisa"].forEach(id=>document.getElementById(id).addEventListener("change",jobRenderSamples));
 document.querySelectorAll("#jobPostingForm input,#jobPostingForm select,#jobPostingForm textarea").forEach(el=>el.addEventListener(el.tagName==="SELECT"?"change":"input",jobRenderPreview));
+const jobBuilderToggle=document.getElementById("jobBuilderToggle"),jobBuilder=document.getElementById("jobBuilder");
+jobBuilderToggle.addEventListener("click",()=>{const collapsed=jobBuilder.classList.toggle("is-collapsed");jobBuilderToggle.setAttribute("aria-expanded",String(!collapsed));jobBuilderToggle.classList.toggle("is-open",!collapsed);});
+const closeJobDetail=()=>{document.getElementById("jobDetailPage").hidden=true;document.getElementById("jobDetailPage").setAttribute("aria-hidden","true");document.querySelector("#page-jobs > .card").hidden=false;document.body.classList.remove("job-detail-open");};
+document.getElementById("jobDetailBack").addEventListener("click",closeJobDetail);document.getElementById("jobDetailBackdrop").addEventListener("click",closeJobDetail);
 const jobDeadline=new Date();jobDeadline.setDate(jobDeadline.getDate()+30);document.getElementById("jobDeadline").value=jobDeadline.toISOString().slice(0,10);
 document.getElementById("jobPdfBtn").addEventListener("click",async()=>{try{const canvas=await html2canvas(document.getElementById("jobPostingPreview"),{scale:2,backgroundColor:"#fff"});const {jsPDF}=window.jspdf,pdf=new jsPDF({unit:"pt",format:"a4"}),pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight(),m=24,w=pw-m*2,h=canvas.height*w/canvas.width;if(h>ph-m*2){h=ph-m*2;w=canvas.width*h/canvas.height}pdf.addImage(canvas.toDataURL("image/png"),"PNG",(pw-w)/2,m,w,h);pdf.save(`${exportSafeName(jobVal("jobTitle"))}_求人票.pdf`);}catch(e){alert("PDF generation failed.");}});
 jobPageSetLanguage("ja");
