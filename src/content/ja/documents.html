@@ -62,7 +62,8 @@ const BUSINESS_TEMPLATES={
 };
 function addBusinessRow(){
   const row=document.createElement("tr");
-  row.innerHTML=`<td><input class="biz-desc"></td><td><input class="biz-qty" type="number" min="0" step="0.01"></td><td><input class="biz-unit"></td><td><input class="biz-price" type="number" min="0" step="1"></td><td><input class="biz-tax" type="number" min="0" max="100" step="0.1" placeholder="0"></td>`;
+  const defaultTax=document.getElementById("businessTaxRate").value;
+  row.innerHTML=`<td><input class="biz-desc"></td><td><input class="biz-qty" type="number" min="0" step="0.01"></td><td><input class="biz-unit"></td><td><input class="biz-price" type="number" min="0" step="1"></td><td><input class="biz-tax" type="number" min="0" max="100" step="0.1" placeholder="0" value="${defaultTax}"></td>`;
   document.getElementById("businessItemRows").appendChild(row);
   row.querySelectorAll("input").forEach(el=>el.addEventListener("input",businessRender));
 }
@@ -79,8 +80,10 @@ function businessRender(){
   const date=document.getElementById("businessDate").value,no=document.getElementById("businessNo").value,subject=document.getElementById("businessSubject").value,recipient=document.getElementById("businessRecipient").value,issuer=document.getElementById("businessIssuer").value,issuerAddr=document.getElementById("businessIssuerAddress").value,issuerPhone=document.getElementById("businessIssuerPhone").value,issuerContact=document.getElementById("businessIssuerContact").value,issuerInfo=document.getElementById("businessIssuerInfo").value,body=document.getElementById("businessBody").value,due=document.getElementById("businessDue").value,noDue=document.getElementById("businessNoDue").checked;
   const issuerLines=[esc(issuerAddr),esc(issuerPhone),esc(issuerContact),esc(issuerInfo)].filter(x=>x).join("<br>");
   const dueStr=noDue?"":"期限："+esc(due);
-  const table=finance?`<table><thead><tr><th>品目・内容</th><th>数量</th><th>単位</th><th>単価</th><th>税率</th><th>金額</th></tr></thead><tbody>${items.map(x=>`<tr><td>${esc(x.d)}</td><td>${x.q}</td><td>${esc(x.u)}</td><td>${toolYen(x.p)}</td><td>${x.t}%</td><td>${toolYen(x.q*x.p+Math.floor(x.q*x.p*x.t/100))}</td></tr>`).join("")||'<tr><td colspan="6">明細を入力してください</td></tr>'}</tbody><tfoot><tr><th colspan="5">合計</th><td>${toolYen(total)}</td></tr></tfoot></table>`:"";
-  document.getElementById("businessDocPreview").innerHTML=`<h2>${name}</h2><div class="business-preview-head"><div><strong>${esc(recipient||"宛先")}</strong><br>${esc(subject)}${dueStr?`<br>${dueStr}`:""}</div><div>${esc(date)}<br>No. ${esc(no)}<br><strong>${esc(issuer||"発行者")}</strong><br>${issuerLines}</div></div>${table}<div class="doc-body">${esc(body||"本文・備考を入力してください。")}</div>`;
+  const recipientStr=esc(recipient)?`<strong>${esc(recipient)}</strong>`:"";
+  const issuerStr=esc(issuer)?`<strong>${esc(issuer)}</strong>`:"";
+  const table=finance?`<table><thead><tr><th>品目・内容</th><th>数量</th><th>単位</th><th>単価</th><th>税率</th><th>金額</th></tr></thead><tbody>${items.map(x=>`<tr><td>${esc(x.d)}</td><td>${x.q}</td><td>${esc(x.u)}</td><td>${toolYen(x.p)}</td><td>${x.t}%</td><td>${toolYen(x.q*x.p+Math.floor(x.q*x.p*x.t/100))}</td></tr>`).join("")||'<tr><td colspan="6">明細を入力してください</td></tr>'}</tbody><tfoot><tr><th colspan="5">合計 税込み</th><td>${toolYen(total)}</td></tr></tfoot></table>`:"";
+  document.getElementById("businessDocPreview").innerHTML=`<h2>${name}</h2><div class="business-preview-head"><div>${recipientStr}<br>${esc(subject)}${dueStr?`<br>${dueStr}`:""}</div><div>${esc(date)}<br>No. ${esc(no)}<br>${issuerStr}${issuerLines?`<br>${issuerLines}`:""}</div></div>${table}<div class="doc-body">${esc(body||"本文・備考を入力してください。")}</div>`;
   document.querySelector('[data-export-target="businessDocPreview"]').dataset.exportName=name;
 }
 function setBusinessTemplate(){const type=document.getElementById("businessDocType").value;document.getElementById("businessBody").value=BUSINESS_TEMPLATES[type]||"下記のとおりご案内いたします。\n\n振込先：\n備考：";}
