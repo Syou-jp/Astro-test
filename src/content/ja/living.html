@@ -48,8 +48,7 @@
     <div class="grid">
       <div class="card">
         <div class="apply-fields" style="margin-bottom:14px;">
-          <div class="apply-field"><label>収入の種類</label><select id="livingIncomeType"><option value="net">手取り</option><option value="gross">税前</option></select></div>
-          <div class="apply-field"><label id="livingIncomeLabel">月の手取り収入</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span>円/月</span></div></div>
+          <div class="apply-field"><label id="livingIncomeLabel">月の手取り収入</label><div class="input-wrap" style="display:flex;gap:8px;align-items:center;"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><select id="livingIncomePeriod" style="flex:0 0 auto;"><option value="monthly">円/月</option><option value="yearly">円/年</option></select><select id="livingIncomeType" style="flex:0 0 auto;"><option value="net">手取り</option><option value="gross">税前</option></select></div></div>
           <div class="apply-field"><label>副業収入</label><div class="input-wrap"><input type="number" id="livingSideIncome" value="0" min="0" step="1000"><span>円/月</span></div></div>
           <button type="button" class="secondary-btn" id="livingClearBtn" style="width:100%;margin-top:8px;">🔄 すべてリセット</button>
         </div>
@@ -294,7 +293,7 @@
 const toolYen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
 const toolNum = id => Math.max(0,Number(document.getElementById(id)?.value) || 0);
 function livingRender(){
-  const income=toolNum("livingIncome")+toolNum("livingSideIncome"),groups=[...document.querySelectorAll("#livingExpenseGroups .expense-group")];let expense=0,savings=0;const summary=[];
+  const income=livingGetMonthlyIncome()+toolNum("livingSideIncome"),groups=[...document.querySelectorAll("#livingExpenseGroups .expense-group")];let expense=0,savings=0;const summary=[];
   groups.forEach(group=>{if(group.dataset.expenseGroup==="自由入力"){[...group.querySelectorAll(".living-custom-row")].forEach(row=>{const label=row.querySelector(".living-custom-label").value||"（名称未設定）";const amount=Number(row.querySelector(".living-expense").value)||0;expense+=amount;summary.push([label,amount]);});}else{const amount=[...group.querySelectorAll(".living-expense")].reduce((s,x)=>s+(Number(x.value)||0),0);if(group.dataset.savings==="true")savings+=amount;else expense+=amount;summary.push([group.dataset.expenseGroup,amount]);}});
   const balance=income-expense-savings;document.getElementById("livingExpenseOut").textContent=toolYen(expense);document.getElementById("livingSavingsOut").textContent=toolYen(savings);document.getElementById("livingBalanceOut").textContent=toolYen(balance);document.getElementById("livingAnnualOut").textContent=toolYen(expense*12);document.getElementById("livingSavingsRateOut").textContent=income?(savings/income*100).toFixed(1)+"%":"—";document.getElementById("livingSavingsAnnualOut").textContent=toolYen(savings*12);document.getElementById("livingBalanceAnnualOut").textContent=toolYen(balance*12);
   const max=Math.max(1,...summary.map(x=>x[1]));document.getElementById("livingBreakdown").innerHTML=summary.filter(x=>x[1]>0).map(x=>`<div style="margin-top:10px;font-size:11px;"><div style="display:flex;justify-content:space-between;"><span>${x[0]}</span><strong>${toolYen(x[1])}</strong></div><div class="expense-bar"><i style="width:${x[1]/max*100}%"></i></div></div>`).join("");
@@ -302,10 +301,18 @@ function livingRender(){
 }
 function livingUpdateIncomeLabel(){
   const isGross=document.getElementById("livingIncomeType").value==="gross";
-  document.getElementById("livingIncomeLabel").textContent=isGross?"月の税前収入（額面）":"月の手取り収入";
+  const period=document.getElementById("livingIncomePeriod").value;
+  const periodLabel=period==="yearly"?"年":"月";
+  document.getElementById("livingIncomeLabel").textContent=isGross?`${periodLabel}の税前収入（額面）`:`${periodLabel}の手取り収入`;
   document.getElementById("livingAlert").innerHTML=isGross?'<strong>税前収入から残額を自動計算：</strong>「税・保険」に所得税・住民税・社会保険料を入力してください。貯蓄・投資は消費と分けて表示します。':'<strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。';
 }
+function livingGetMonthlyIncome(){
+  const baseIncome=toolNum("livingIncome");
+  const period=document.getElementById("livingIncomePeriod").value;
+  return period==="yearly"?Math.round(baseIncome/12):baseIncome;
+}
 document.getElementById("livingIncomeType").addEventListener("change",()=>{livingUpdateIncomeLabel();livingRender();});
+document.getElementById("livingIncomePeriod").addEventListener("change",()=>{livingUpdateIncomeLabel();livingRender();});
 document.getElementById("page-living").addEventListener("input",livingRender);livingUpdateIncomeLabel();livingRender();
 
 function livingMakeCustomRow(label,value){
@@ -341,6 +348,7 @@ function livingWriteConfigs(list){localStorage.setItem(LIVING_CONFIG_KEY,JSON.st
 function livingSnapshot(){
   return {
     incomeType:document.getElementById("livingIncomeType").value,
+    incomePeriod:document.getElementById("livingIncomePeriod").value,
     income:document.getElementById("livingIncome").value,
     sideIncome:document.getElementById("livingSideIncome").value,
     expenses:[...document.querySelectorAll('#livingExpenseGroups .expense-group:not([data-expense-group="自由入力"]) .living-expense')].map(x=>x.value),
@@ -349,6 +357,7 @@ function livingSnapshot(){
 }
 function livingApplySnapshot(data){
   document.getElementById("livingIncomeType").value=data.incomeType||"net";
+  document.getElementById("livingIncomePeriod").value=data.incomePeriod||"monthly";
   document.getElementById("livingIncome").value=data.income||0;
   document.getElementById("livingSideIncome").value=data.sideIncome||0;
   const inputs=[...document.querySelectorAll('#livingExpenseGroups .expense-group:not([data-expense-group="自由入力"]) .living-expense')];
