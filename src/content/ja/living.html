@@ -313,7 +313,7 @@ function livingMakeCustomRow(label,value){
   return row;
 }
 document.getElementById("livingCustomAddBtn").addEventListener("click",()=>{
-  document.getElementById("livingCustomFields").appendChild(livingMakeCustomRow("新規項目",0));
+  document.getElementById("livingCustomFields").appendChild(livingMakeCustomRow("",0));
   livingRender();
 });
 document.getElementById("livingCustomFields").addEventListener("click",(e)=>{
