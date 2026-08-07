@@ -49,7 +49,7 @@
       <div class="card">
         <div class="apply-fields" style="margin-bottom:14px;">
           <div class="apply-field"><label>月の手取り収入</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span>円/月</span></div></div>
-          <div class="apply-field"><label>収入の種類</label><select id="livingIncomeType"><option value="net">手取り</option><option value="gross">税前</option></select></div>
+          <div class="apply-field" style="display:flex;gap:8px;align-items:center;"><label style="flex-shrink:0;">収入の種類</label><div style="display:flex;gap:4px;"><button type="button" id="livingIncomeTypeNet" class="income-type-btn active" data-type="net" style="padding:6px 12px;font-size:12px;border:1px solid var(--border,#e5e5e5);border-radius:var(--radius-sm,4px);background:#fff;cursor:pointer;">手取り</button><button type="button" id="livingIncomeTypeGross" class="income-type-btn" data-type="gross" style="padding:6px 12px;font-size:12px;border:1px solid var(--border,#e5e5e5);border-radius:var(--radius-sm,4px);background:#fff;cursor:pointer;">税前</button></div></div>
           <button type="button" class="secondary-btn" id="livingClearBtn" style="width:100%;margin-top:8px;">🔄 すべてリセット</button>
         </div>
         <div class="expense-groups" id="livingExpenseGroups">
@@ -288,6 +288,10 @@
         document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !backdrop.hidden) closeModal(); });
       })();
     </script>
+    <style>
+      .income-type-btn.active{background:var(--accent,#3b6fd6);color:#fff;border-color:var(--accent,#3b6fd6);}
+      .income-type-btn:hover{background:var(--accent-soft,#eef4ff);border-color:var(--accent,#3b6fd6);}
+    </style>
   </div><!-- /page-living -->
 <script>
 const toolYen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
@@ -300,10 +304,25 @@ function livingRender(){
   document.getElementById("livingAdvice").innerHTML=balance<0?`毎月 <strong>${toolYen(Math.abs(balance))}</strong> の赤字です。固定費と大きいカテゴリーから見直してください。`:balance<income*.1?`残額は <strong>${toolYen(balance)}</strong>。突発費に備え、使途未定の余裕資金も確保してください。`:`毎月の未配分額は <strong>${toolYen(balance)}</strong> です。`;
 }
 function livingUpdateIncomeLabel(){
-  const isGross=document.getElementById("livingIncomeType").value==="gross";
+  const incomeType=document.querySelector(".income-type-btn.active")?.dataset.type||"net";
+  const isGross=incomeType==="gross";
   document.getElementById("livingAlert").innerHTML=isGross?'<strong>税前収入から残額を自動計算：</strong>「税・保険」に所得税・住民税・社会保険料を入力してください。貯蓄・投資は消費と分けて表示します。':'<strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。';
 }
-document.getElementById("livingIncomeType").addEventListener("change",()=>{livingUpdateIncomeLabel();livingRender();});
+function livingSetIncomeType(type){
+  document.querySelectorAll(".income-type-btn").forEach(btn=>{btn.classList.toggle("active",btn.dataset.type===type);});
+  if(!document.getElementById("livingIncomeType")){
+    const typeInput=document.createElement("input");
+    typeInput.type="hidden";
+    typeInput.id="livingIncomeType";
+    typeInput.value=type;
+    document.body.appendChild(typeInput);
+  }else{
+    document.getElementById("livingIncomeType").value=type;
+  }
+  livingUpdateIncomeLabel();livingRender();
+}
+document.getElementById("livingIncomeTypeNet").addEventListener("click",()=>livingSetIncomeType("net"));
+document.getElementById("livingIncomeTypeGross").addEventListener("click",()=>livingSetIncomeType("gross"));
 document.getElementById("page-living").addEventListener("input",livingRender);livingUpdateIncomeLabel();livingRender();
 
 function livingMakeCustomRow(label,value){
@@ -336,15 +355,16 @@ let livingLoadedIndex=-1;
 function livingReadConfigs(){try{return JSON.parse(localStorage.getItem(LIVING_CONFIG_KEY))||[];}catch(e){return [];}}
 function livingWriteConfigs(list){localStorage.setItem(LIVING_CONFIG_KEY,JSON.stringify(list));}
 function livingSnapshot(){
+  const incomeType=document.querySelector(".income-type-btn.active")?.dataset.type||"net";
   return {
-    incomeType:document.getElementById("livingIncomeType").value,
+    incomeType:incomeType,
     income:document.getElementById("livingIncome").value,
     expenses:[...document.querySelectorAll('#livingExpenseGroups .expense-group:not([data-expense-group="自由入力"]) .living-expense')].map(x=>x.value),
     customFields:[...document.querySelectorAll("#livingCustomFields .living-custom-row")].map(row=>({label:row.querySelector(".living-custom-label").value,value:row.querySelector(".living-expense").value}))
   };
 }
 function livingApplySnapshot(data){
-  document.getElementById("livingIncomeType").value=data.incomeType||"net";
+  livingSetIncomeType(data.incomeType||"net");
   document.getElementById("livingIncome").value=data.income||0;
   const inputs=[...document.querySelectorAll('#livingExpenseGroups .expense-group:not([data-expense-group="自由入力"]) .living-expense')];
   (data.expenses||[]).forEach((v,i)=>{if(inputs[i])inputs[i].value=v;});
