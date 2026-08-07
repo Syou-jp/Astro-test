@@ -12,13 +12,16 @@
                 <div class="apply-field full"><label>件名 Subject</label><input id="businessSubject" placeholder="業務委託料のご請求"></div>
                 <div class="apply-field"><label>宛先 Recipient</label><input id="businessRecipient" placeholder="株式会社○○ 御中"></div>
                 <div class="apply-field"><label>発行者 Issuer</label><input id="businessIssuer" placeholder="株式会社△△"></div>
-                <div class="apply-field full"><label>発行者住所・連絡先</label><textarea id="businessIssuerInfo" placeholder="〒000-0000 東京都…&#10;TEL / Email / 登録番号"></textarea></div>
-                <div class="apply-field"><label>支払・有効期限 Due date</label><input type="date" id="businessDue"></div>
-                <div class="apply-field"><label>消費税 Tax rate</label><select id="businessTaxRate"><option value="10">10%</option><option value="8">8%</option><option value="0">非課税・0%</option></select></div>
+                <div class="apply-field full"><label>発行者住所</label><input id="businessIssuerAddress" placeholder="〒000-0000 東京都…"></div>
+                <div class="apply-field"><label>電話番号</label><input id="businessIssuerPhone" placeholder="000-0000-0000"></div>
+                <div class="apply-field"><label>担当名</label><input id="businessIssuerContact" placeholder="山田太郎"></div>
+                <div class="apply-field full"><label>登録番号・その他</label><input id="businessIssuerInfo" placeholder="インボイス登録番号"></div>
+                <div class="apply-field"><label>支払・有効期限 Due date</label><input type="date" id="businessDue"><label style="margin-left:20px;"><input type="checkbox" id="businessNoDue"> 期限なし</label></div>
+                <div class="apply-field"><label>デフォルト消費税 Default tax rate</label><select id="businessTaxRate"><option value="10">10%</option><option value="8">8%</option><option value="0">非課税・0%</option></select></div>
               </div>
               <div id="businessFinanceFields">
                 <div class="section-title" style="margin-top:18px;">明細</div>
-                <table class="business-items"><thead><tr><th>品目・内容</th><th>数量</th><th>単位</th><th>単価</th></tr></thead><tbody id="businessItemRows"></tbody></table>
+                <table class="business-items"><thead><tr><th>品目・内容</th><th>数量</th><th>単位</th><th>単価</th><th>税率</th></tr></thead><tbody id="businessItemRows"></tbody></table>
                 <div style="text-align:center;margin-top:10px;"><button type="button" class="secondary-btn" id="businessAddRowBtn" style="width:32px;height:32px;font-size:18px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">＋</button></div>
               </div>
               <div class="section-title" style="margin-top:18px;">本文・備考</div>
@@ -59,28 +62,31 @@ const BUSINESS_TEMPLATES={
 };
 function addBusinessRow(){
   const row=document.createElement("tr");
-  row.innerHTML=`<td><input class="biz-desc"></td><td><input class="biz-qty" type="number" min="0" step="0.01"></td><td><input class="biz-unit"></td><td><input class="biz-price" type="number" min="0" step="1"></td>`;
+  row.innerHTML=`<td><input class="biz-desc"></td><td><input class="biz-qty" type="number" min="0" step="0.01"></td><td><input class="biz-unit"></td><td><input class="biz-price" type="number" min="0" step="1"></td><td><input class="biz-tax" type="number" min="0" max="100" step="0.1" placeholder="0"></td>`;
   document.getElementById("businessItemRows").appendChild(row);
   row.querySelectorAll("input").forEach(el=>el.addEventListener("input",businessRender));
 }
 const businessRows=document.getElementById("businessItemRows");
-if(businessRows){businessRows.innerHTML=Array.from({length:3},(_,i)=>`<tr><td><input class="biz-desc" value="${i===0?'サービス・商品':''}"></td><td><input class="biz-qty" type="number" value="${i===0?1:''}" min="0" step="0.01"></td><td><input class="biz-unit" value="${i===0?'式':''}"></td><td><input class="biz-price" type="number" value="${i===0?100000:''}" min="0" step="1"></td></tr>`).join("");businessRows.querySelectorAll("input").forEach(el=>el.addEventListener("input",businessRender));}
+if(businessRows){businessRows.innerHTML=Array.from({length:3},(_,i)=>`<tr><td><input class="biz-desc" value="${i===0?'サービス・商品':''}"></td><td><input class="biz-qty" type="number" value="${i===0?1:''}" min="0" step="0.01"></td><td><input class="biz-unit" value="${i===0?'式':''}"></td><td><input class="biz-price" type="number" value="${i===0?100000:''}" min="0" step="1"></td><td><input class="biz-tax" type="number" min="0" max="100" step="0.1" placeholder="0" value="${i===0?10:''}"></td></tr>`).join("");businessRows.querySelectorAll("input").forEach(el=>el.addEventListener("input",businessRender));}
 document.getElementById("businessAddRowBtn")?.addEventListener("click",addBusinessRow);
 function businessRender(){
   if (!document.querySelector("#businessFormCard")) return;
   const type=document.getElementById("businessDocType").value,name=BUSINESS_NAMES[type],isBroker=["viewing-request","move-in-application","purchase-offer"].includes(type),finance=BUSINESS_FINANCE.has(type),esc=routeEscape;
   if(isBroker){document.getElementById("businessDocPreview").innerHTML=`<div style="padding:20px;text-align:center;color:var(--ink-soft);">仲介用書類は別フォームで入力してください。<br><strong>${name}</strong></div>`;document.querySelector('[data-export-target="businessDocPreview"]').dataset.exportName=name;return;}
   document.getElementById("businessFinanceFields").style.display=finance?"block":"none";
-  const items=[...document.querySelectorAll("#businessItemRows tr")].map(row=>({d:row.querySelector(".biz-desc").value,q:Number(row.querySelector(".biz-qty").value)||0,u:row.querySelector(".biz-unit").value,p:Number(row.querySelector(".biz-price").value)||0})).filter(x=>x.d||x.q||x.p);
-  const subtotal=items.reduce((s,x)=>s+x.q*x.p,0),taxRate=toolNum("businessTaxRate"),tax=Math.floor(subtotal*taxRate/100),total=subtotal+tax;
-  const date=document.getElementById("businessDate").value,no=document.getElementById("businessNo").value,subject=document.getElementById("businessSubject").value,recipient=document.getElementById("businessRecipient").value,issuer=document.getElementById("businessIssuer").value,issuerInfo=document.getElementById("businessIssuerInfo").value,body=document.getElementById("businessBody").value,due=document.getElementById("businessDue").value;
-  const table=finance?`<table><thead><tr><th>品目・内容</th><th>数量</th><th>単位</th><th>単価</th><th>金額</th></tr></thead><tbody>${items.map(x=>`<tr><td>${esc(x.d)}</td><td>${x.q}</td><td>${esc(x.u)}</td><td>${toolYen(x.p)}</td><td>${toolYen(x.q*x.p)}</td></tr>`).join("")||'<tr><td colspan="5">明細を入力してください</td></tr>'}</tbody><tfoot><tr><th colspan="4">小計</th><td>${toolYen(subtotal)}</td></tr><tr><th colspan="4">消費税 ${taxRate}%</th><td>${toolYen(tax)}</td></tr></tfoot></table><div class="doc-total">合計 ${toolYen(total)}</div>`:"";
-  document.getElementById("businessDocPreview").innerHTML=`<h2>${name}</h2><div class="business-preview-head"><div><strong>${esc(recipient||"宛先")}</strong><br>${esc(subject||"件名未入力")}${due?`<br>期限：${esc(due)}`:""}</div><div>発行日：${esc(date)}<br>No. ${esc(no)}<br><strong>${esc(issuer||"発行者")}</strong><br>${esc(issuerInfo).replace(/\n/g,"<br>")}</div></div>${table}<div class="doc-body">${esc(body||"本文・備考を入力してください。")}</div><div style="text-align:right;margin-top:36px;">署名・押印 ____________________</div>`;
+  const items=[...document.querySelectorAll("#businessItemRows tr")].map(row=>({d:row.querySelector(".biz-desc").value,q:Number(row.querySelector(".biz-qty").value)||0,u:row.querySelector(".biz-unit").value,p:Number(row.querySelector(".biz-price").value)||0,t:Number(row.querySelector(".biz-tax").value)||0})).filter(x=>x.d||x.q||x.p);
+  const subtotal=items.reduce((s,x)=>s+x.q*x.p,0),itemsTax=items.reduce((s,x)=>s+Math.floor(x.q*x.p*x.t/100),0),total=subtotal+itemsTax;
+  const date=document.getElementById("businessDate").value,no=document.getElementById("businessNo").value,subject=document.getElementById("businessSubject").value,recipient=document.getElementById("businessRecipient").value,issuer=document.getElementById("businessIssuer").value,issuerAddr=document.getElementById("businessIssuerAddress").value,issuerPhone=document.getElementById("businessIssuerPhone").value,issuerContact=document.getElementById("businessIssuerContact").value,issuerInfo=document.getElementById("businessIssuerInfo").value,body=document.getElementById("businessBody").value,due=document.getElementById("businessDue").value,noDue=document.getElementById("businessNoDue").checked;
+  const issuerLines=[esc(issuerAddr),esc(issuerPhone),esc(issuerContact),esc(issuerInfo)].filter(x=>x).join("<br>");
+  const dueStr=noDue?"":"期限："+esc(due);
+  const table=finance?`<table><thead><tr><th>品目・内容</th><th>数量</th><th>単位</th><th>単価</th><th>税率</th><th>金額</th></tr></thead><tbody>${items.map(x=>`<tr><td>${esc(x.d)}</td><td>${x.q}</td><td>${esc(x.u)}</td><td>${toolYen(x.p)}</td><td>${x.t}%</td><td>${toolYen(x.q*x.p+Math.floor(x.q*x.p*x.t/100))}</td></tr>`).join("")||'<tr><td colspan="6">明細を入力してください</td></tr>'}</tbody><tfoot><tr><th colspan="5">合計</th><td>${toolYen(total)}</td></tr></tfoot></table>`:"";
+  document.getElementById("businessDocPreview").innerHTML=`<h2>${name}</h2><div class="business-preview-head"><div><strong>${esc(recipient||"宛先")}</strong><br>${esc(subject)}${dueStr?`<br>${dueStr}`:""}</div><div>発行日：${esc(date)}<br>No. ${esc(no)}<br><strong>${esc(issuer||"発行者")}</strong><br>${issuerLines}</div></div>${table}<div class="doc-body">${esc(body||"本文・備考を入力してください。")}</div><div style="text-align:right;margin-top:36px;">署名・押印 ____________________</div>`;
   document.querySelector('[data-export-target="businessDocPreview"]').dataset.exportName=name;
 }
 function setBusinessTemplate(){const type=document.getElementById("businessDocType").value;document.getElementById("businessBody").value=BUSINESS_TEMPLATES[type]||"下記のとおりご案内いたします。\n\n振込先：\n備考：";}
 document.querySelectorAll("#businessFormCard input,#businessFormCard select,#businessFormCard textarea").forEach(el=>el.addEventListener("input",businessRender));
 document.getElementById("businessDocType")?.addEventListener("change",()=>{setBusinessTemplate();businessRender();});
+document.getElementById("businessNoDue")?.addEventListener("change",businessRender);
 document.getElementById("businessPdfBtn")?.addEventListener("click",async()=>{try{const canvas=await html2canvas(document.getElementById("businessDocPreview"),{scale:2,backgroundColor:"#fff",useCORS:true});const {jsPDF}=window.jspdf,pdf=new jsPDF({unit:"pt",format:"a4"}),w=pdf.internal.pageSize.getWidth(),h=canvas.height*(w-40)/canvas.width;pdf.addImage(canvas.toDataURL("image/png"),"PNG",20,20,w-40,Math.min(h,pdf.internal.pageSize.getHeight()-40));pdf.save(BUSINESS_NAMES[document.getElementById("businessDocType").value]+".pdf");}catch(e){alert("PDF生成に失敗しました。");}});
 if(document.getElementById("businessDate")){const now=new Date(),due=new Date(now);due.setDate(due.getDate()+30);document.getElementById("businessDate").value=now.toISOString().slice(0,10);document.getElementById("businessDue").value=due.toISOString().slice(0,10);setBusinessTemplate();}businessRender();
 </script>
