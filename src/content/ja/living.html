@@ -50,6 +50,7 @@
         <div class="apply-fields" style="margin-bottom:14px;">
           <div class="apply-field"><label>収入の種類</label><select id="livingIncomeType"><option value="net">手取り</option><option value="gross">税前</option></select></div>
           <div class="apply-field"><label id="livingIncomeLabel">月の手取り収入</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span>円/月</span></div></div>
+          <button type="button" class="secondary-btn" id="livingClearBtn" style="width:100%;margin-top:8px;">🔄 すべてリセット</button>
         </div>
         <div class="expense-groups" id="livingExpenseGroups">
           <div class="expense-group" data-expense-group="住居"><h3>住居 Housing</h3><div class="expense-line"><span>家賃・住宅ローン</span><input class="living-expense" value="90000" type="number" min="0"></div><div class="expense-line"><span>管理費・共益費</span><input class="living-expense" value="8000" type="number" min="0"></div><div class="expense-line"><span>駐車場・駐輪場</span><input class="living-expense" value="0" type="number" min="0"></div></div>
@@ -312,6 +313,13 @@ function livingMakeCustomRow(label,value){
   row.innerHTML=`<input class="living-custom-label" value="${String(label??"").replace(/"/g,"&quot;")}" aria-label="項目名"><input class="living-expense" value="${Number(value)||0}" type="number" min="0"><button type="button" class="living-custom-remove" aria-label="削除" style="border:none;background:none;color:var(--muted,#888);cursor:pointer;font-size:14px;padding:0 4px;">✕</button>`;
   return row;
 }
+document.getElementById("livingClearBtn").addEventListener("click",()=>{
+  if(!confirm("すべての入力値をリセットしてもよろしいですか？"))return;
+  document.getElementById("livingIncome").value=0;
+  document.querySelectorAll(".living-expense").forEach(el=>el.value=0);
+  document.getElementById("livingCustomFields").innerHTML="";
+  livingRender();
+});
 document.getElementById("livingCustomAddBtn").addEventListener("click",()=>{
   document.getElementById("livingCustomFields").appendChild(livingMakeCustomRow("",0));
   livingRender();
