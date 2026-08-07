@@ -99,10 +99,6 @@
     min-height:100vh;
     padding:24px 20px;
     line-height:1.7;
-    /* "palt" swaps CJK glyphs to proportional widths, closing the loose gaps
-       around 、。（） that make full-width Japanese look airy and uneven.
-       It only ever tightens text, so it cannot overflow an existing layout. */
-    font-feature-settings:"palt" 1;
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing:grayscale;
     text-rendering:optimizeLegibility;
