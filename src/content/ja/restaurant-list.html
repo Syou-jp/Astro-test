@@ -1,11 +1,21 @@
 <div id="page-restaurant-list" class="page-view active theme-route" data-no-i18n>
+  <style>
+    .restaurant-hero{display:block;min-height:0;margin-bottom:17px}
+    .restaurant-hero h2.section-title{display:flex;align-items:center;gap:14px;font-size:15px;line-height:1.4;letter-spacing:.04em;color:#2f4f8f;margin:0;padding:0;border:0;background:none}
+    .restaurant-hero h2.section-title::after{content:"";height:1px;flex:1;background:#d7dde6}
+    .restaurant-filters button{width:90px;height:44px;display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:0}
+    .restaurant-filters-region{margin-top:0}
+    #rlCountryFilters:empty{display:none;margin:0}
+    @media(max-width:520px){.restaurant-filters button{width:calc((100vw - 48px)/3);min-width:0}}
+  </style>
   <div class="restaurant-hero">
     <div>
-      <h2>お店リスト</h2>
+      <h2 class="section-title">お店リスト</h2>
     </div>
   </div>
-  <div class="restaurant-note"><b>掲載について：</b>現在は掲載イメージとしての東京の店舗例です。「正宗」は店の出身地・専門料理／専門分野・公式案内を確認しながら追加する運用をおすすめします。営業日・住所・メニューは変更されるため、来店前に Google Maps または公式情報でご確認ください。</div>
+  <div class="restaurant-note"><b>掲載について：</b>営業日・住所・メニューは変更されるため、来店前に Google Maps または公式情報でご確認ください。</div>
   <div class="restaurant-filters" aria-label="お店の種類で絞り込む" id="rlTypeFilters"></div>
+  <div class="restaurant-filters" aria-label="地域区分で絞り込む" id="rlContinentFilters"></div>
   <div class="restaurant-filters" aria-label="国で絞り込む" id="rlCountryFilters"></div>
   <div class="restaurant-filters restaurant-filters-region" aria-label="地域で絞り込む" id="rlRegionFilters"></div>
   <div class="restaurant-result"><strong id="restaurantCount">0</strong> 件のお店を表示しています <span>東京・掲載例</span></div>
@@ -113,10 +123,14 @@
       var types = ["all"].concat(Array.from(new Set(restaurants.map(function (r) { return r.type || "restaurant"; }))));
 
       var typeLabels = { all: "すべて", restaurant: "レストラン", beauty: "美容・ネイル", grocery: "物産店" };
+      var continentLabels = { all: "すべて", asia: "アジア", europe: "ヨーロッパ", northAmerica: "北米" };
+      var countryContinents = { 台湾: "asia", タイ: "asia", ベトナム: "asia", トルコ: "europe", インド: "asia", 香港: "asia", 韓国: "asia", イタリア: "europe", メキシコ: "northAmerica", フィリピン: "asia", 中国: "asia" };
       var countryLabels = { all: "すべて" };
       var regionLabels = { all: "全地域" };
+      var regionOptions = ["all", "東京", "神奈川", "埼玉", "千葉", "大阪", "その他"];
 
       var typeFiltersEl = document.getElementById("rlTypeFilters");
+      var continentFiltersEl = document.getElementById("rlContinentFilters");
       var countryFiltersEl = document.getElementById("rlCountryFilters");
       var regionFiltersEl = document.getElementById("rlRegionFilters");
       var listEl = document.getElementById("restaurantList");
@@ -132,11 +146,15 @@
       var lightboxIndex = 0;
 
       var currentType = "all";
+      var currentContinent = "all";
       var currentCountry = "all";
       var currentRegion = "all";
 
       function byType(list) {
         return currentType === "all" ? list : list.filter(function (r) { return (r.type || "restaurant") === currentType; });
+      }
+      function byContinent(list) {
+        return currentContinent === "all" ? list : list.filter(function (r) { return countryContinents[r.country] === currentContinent; });
       }
 
       function renderFilters() {
@@ -146,13 +164,24 @@
           return '<button type="button" class="' + (t === currentType ? "active" : "") + '" data-type="' + escapeHtml(t) + '">' + escapeHtml(label) + " <small>" + count + "</small></button>";
         }).join("");
 
-        var scoped = byType(restaurants);
+        var typed = byType(restaurants);
+        var continents = ["all"].concat(Array.from(new Set(typed.map(function (r) { return countryContinents[r.country]; }).filter(Boolean))));
+        if (continents.indexOf(currentContinent) === -1) currentContinent = "all";
+        continentFiltersEl.innerHTML = continents.map(function (c) {
+          var label = continentLabels[c] || c;
+          var count = c === "all" ? typed.length : typed.filter(function (r) { return countryContinents[r.country] === c; }).length;
+          return '<button type="button" class="' + (c === currentContinent ? "active" : "") + '" data-continent="' + escapeHtml(c) + '">' + escapeHtml(label) + " <small>" + count + "</small></button>";
+        }).join("");
+        continentFiltersEl.querySelectorAll("button").forEach(function (btn) {
+          btn.addEventListener("click", function () { currentContinent = btn.dataset.continent; currentCountry = "all"; renderFilters(); renderList(); });
+        });
+        var scoped = byContinent(typed);
         var countries = ["all"].concat(Array.from(new Set(scoped.map(function (r) { return r.country; }))));
-        var regions = ["all"].concat(Array.from(new Set(scoped.map(function (r) { return r.region; }))));
+        var regions = regionOptions.slice();
         if (countries.indexOf(currentCountry) === -1) currentCountry = "all";
         if (regions.indexOf(currentRegion) === -1) currentRegion = "all";
 
-        countryFiltersEl.innerHTML = countries.map(function (c) {
+        countryFiltersEl.innerHTML = currentContinent === "all" ? "" : countries.map(function (c) {
           var label = countryLabels[c] || c;
           var count = c === "all" ? scoped.length : scoped.filter(function (r) { return r.country === c; }).length;
           return '<button type="button" class="' + (c === currentCountry ? "active" : "") + '" data-country="' + escapeHtml(c) + '">' + escapeHtml(label) + (c === "all" ? " <small>" + count + "</small>" : "") + "</button>";
@@ -165,6 +194,7 @@
         typeFiltersEl.querySelectorAll("button").forEach(function (btn) {
           btn.addEventListener("click", function () {
             currentType = btn.dataset.type;
+            currentContinent = "all";
             currentCountry = "all";
             currentRegion = "all";
             renderFilters();
@@ -188,7 +218,7 @@
       }
 
       function renderList() {
-        var visible = byType(restaurants).filter(function (r) {
+        var visible = byContinent(byType(restaurants)).filter(function (r) {
           return (currentCountry === "all" || r.country === currentCountry) && (currentRegion === "all" || r.region === currentRegion);
         }).sort(function (a, b) {
           return (b.claimed ? 1 : 0) - (a.claimed ? 1 : 0);
