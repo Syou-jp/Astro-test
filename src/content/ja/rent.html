@@ -259,6 +259,7 @@
         <div class="actions">
           <button class="btn-copy" id="copyBtn">📋 テキストをコピーする</button>
           <button class="btn-copy" id="screenshotBtn">📷 スクリーンショットを保存</button>
+          <button class="secondary-btn" id="toggleSealBtn">🔲 見積を削除</button>
         </div>
         <div class="footnote" id="footnote"></div>
       </div>
@@ -826,6 +827,16 @@ document.getElementById("screenshotBtn").addEventListener("click", async () => {
   }
   window.scrollTo(scrollX, scrollY);
   setTimeout(() => { btn.innerHTML = original; }, 1600);
+});
+
+/* ---------- Toggle Seal ---------- */
+let sealVisible = true;
+document.getElementById("toggleSealBtn").addEventListener("click", () => {
+  const sealMark = document.getElementById("sealMark");
+  const btn = document.getElementById("toggleSealBtn");
+  sealVisible = !sealVisible;
+  sealMark.style.display = sealVisible ? "block" : "none";
+  btn.textContent = sealVisible ? "🔲 見積を削除" : "✓ 見積を表示";
 });
 
 function fallbackCopy(text, cb){
