@@ -48,25 +48,24 @@
     <div class="grid">
       <div class="card">
         <div class="apply-fields" style="margin-bottom:14px;">
-          <div class="apply-field"><label>月の手取り収入</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span>円/月</span></div></div>
-          <div class="apply-field" style="display:flex;gap:8px;align-items:center;"><label style="flex-shrink:0;">収入の種類</label><div style="display:flex;gap:4px;"><button type="button" id="livingIncomeTypeNet" class="income-type-btn active" data-type="net" style="padding:6px 12px;font-size:12px;border:1px solid var(--border,#e5e5e5);border-radius:var(--radius-sm,4px);background:#fff;cursor:pointer;">手取り</button><button type="button" id="livingIncomeTypeGross" class="income-type-btn" data-type="gross" style="padding:6px 12px;font-size:12px;border:1px solid var(--border,#e5e5e5);border-radius:var(--radius-sm,4px);background:#fff;cursor:pointer;">税前</button></div></div>
-          <button type="button" class="secondary-btn" id="livingClearBtn" style="width:100%;margin-top:8px;">🔄 すべてリセット</button>
+          <div class="apply-field"><label>収入</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span>円/月</span></div><div id="livingIncomeEstimate" style="display:none;font-size:11px;color:var(--muted,#888);margin-top:4px;"></div></div>
+          <div class="apply-field"><label>収入の種類</label><select id="livingIncomeType" onchange="window.livingUpdateIncomeLabel();window.livingRender();"><option value="net">手取り</option><option value="gross">税前</option></select></div>
         </div>
         <div class="expense-groups" id="livingExpenseGroups">
           <div class="expense-group" data-expense-group="住居"><h3>住居 Housing</h3><div class="expense-line"><span>家賃・住宅ローン</span><input class="living-expense" value="90000" type="number" min="0"></div><div class="expense-line"><span>管理費・共益費</span><input class="living-expense" value="8000" type="number" min="0"></div><div class="expense-line"><span>駐車場・駐輪場</span><input class="living-expense" value="0" type="number" min="0"></div></div>
           <div class="expense-group" data-expense-group="光熱・通信"><h3>光熱・通信 Utilities</h3><div class="expense-line"><span>電気</span><input class="living-expense" value="8000" type="number" min="0"></div><div class="expense-line"><span>ガス</span><input class="living-expense" value="5000" type="number" min="0"></div><div class="expense-line"><span>水道</span><input class="living-expense" value="3000" type="number" min="0"></div><div class="expense-line"><span>携帯・インターネット</span><input class="living-expense" value="8000" type="number" min="0"></div></div>
           <div class="expense-group" data-expense-group="食費"><h3>食費 Food</h3><div class="expense-line"><span>食材・自炊</span><input class="living-expense" value="35000" type="number" min="0"></div><div class="expense-line"><span>外食・デリバリー</span><input class="living-expense" value="12000" type="number" min="0"></div></div>
-          <div class="expense-group" data-expense-group="交通"><h3>交通・車 Transport</h3><div class="expense-line"><span>定期券・電車・バス</span><input class="living-expense" value="10000" type="number" min="0"></div><div class="expense-line"><span>車ローン・燃料・保険</span><input class="living-expense" value="0" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="交通"><h3>交通・車</h3><div class="expense-line"><span>定期券・電車・バス</span><input class="living-expense" value="10000" type="number" min="0"></div><div class="expense-line"><span>車ローン・燃料・保険</span><input class="living-expense" value="0" type="number" min="0"></div></div>
           <div class="expense-group" data-expense-group="税・保険"><h3>税・保険 Tax &amp; Insurance</h3><div class="expense-line"><span>所得税・住民税</span><input class="living-expense" value="0" type="number" min="0"></div><div class="expense-line"><span>健康保険・年金</span><input class="living-expense" value="0" type="number" min="0"></div><div class="expense-line"><span>生命・医療保険</span><input class="living-expense" value="5000" type="number" min="0"></div></div>
           <div class="expense-group" data-expense-group="家族・医療"><h3>家族・医療 Family</h3><div class="expense-line"><span>医療・薬</span><input class="living-expense" value="5000" type="number" min="0"></div><div class="expense-line"><span>保育・教育・学費</span><input class="living-expense" value="0" type="number" min="0"></div><div class="expense-line"><span>仕送り・ペット</span><input class="living-expense" value="0" type="number" min="0"></div></div>
           <div class="expense-group" data-expense-group="日用品・娯楽"><h3>日用品・娯楽 Lifestyle</h3><div class="expense-line"><span>日用品・衣服</span><input class="living-expense" value="10000" type="number" min="0"></div><div class="expense-line"><span>交際費・娯楽・旅行</span><input class="living-expense" value="15000" type="number" min="0"></div><div class="expense-line"><span>サブスク・その他</span><input class="living-expense" value="5000" type="number" min="0"></div></div>
-          <div class="expense-group" data-expense-group="貯蓄" data-savings="true"><h3>貯蓄・投資 Savings</h3><div class="expense-line"><span>貯金・NISA・投資</span><input class="living-expense" value="30000" type="number" min="0"></div></div>
-          <div class="expense-group" data-expense-group="返済"><h3>借入返済 Debt</h3><div class="expense-line"><span>カード・奨学金・その他</span><input class="living-expense" value="0" type="number" min="0"></div></div>
+          <div class="expense-group" data-expense-group="貯蓄" data-savings="true"><h3>貯蓄・投資・返済</h3><div class="expense-line"><span>貯金・NISA・投資</span><input class="living-expense" value="30000" type="number" min="0"></div><div class="expense-line"><span>カード・奨学金・その他</span><input class="living-expense" value="0" type="number" min="0"></div></div>
           <div class="expense-group" data-expense-group="自由入力"><h3><input class="living-group-title" id="livingCustomGroupTitle" value="自由入力（変更可）" aria-label="グループ名" style="border:none;background:none;color:inherit;font:inherit;padding:0;width:100%;"></h3>
             <div id="livingCustomFields">
             </div>
             <button type="button" class="btn-copy" id="livingCustomAddBtn" style="margin-top:8px;padding:4px 12px;font-size:12px;">＋ 項目を追加</button>
           </div>
+          <div class="expense-group plain" style="display:flex;align-items:flex-end;justify-content:flex-end;"><button type="button" class="secondary-btn" id="livingClearBtn" style="padding:8px 16px;border-radius:4px;">🔄 すべてリセット</button></div>
         </div>
       </div>
       <div>
@@ -289,41 +288,58 @@
       })();
     </script>
     <style>
+      #page-living .card{border-radius:8px;}
+      #page-living .input-wrap input,#page-living .input-wrap select{border-radius:4px;}
+      #page-living .expense-group{border-radius:8px;}
+      #page-living .btn-copy,#page-living .secondary-btn{border-radius:4px;}
+      #page-living .expense-bar{border-radius:2px;}
       .income-type-btn.active{background:var(--accent,#3b6fd6);color:#fff;border-color:var(--accent,#3b6fd6);}
       .income-type-btn:hover{background:var(--accent-soft,#eef4ff);border-color:var(--accent,#3b6fd6);}
+      #page-living .expense-group.plain{border:none;background:transparent;padding:0;}
     </style>
   </div><!-- /page-living -->
 <script>
-const toolYen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
-const toolNum = id => Math.max(0,Number(document.getElementById(id)?.value) || 0);
-function livingRender(){
-  const income=toolNum("livingIncome"),groups=[...document.querySelectorAll("#livingExpenseGroups .expense-group")];let expense=0,savings=0;const summary=[];
+window.toolYen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
+window.toolNum = id => Math.max(0,Number(document.getElementById(id)?.value) || 0);
+window.livingEstimateNet=function(grossMonthly){
+  const annual=grossMonthly*12;
+  let rate;
+  if(annual<=1000000)rate=0.04;
+  else if(annual<=2000000)rate=0.10;
+  else if(annual<=3000000)rate=0.15;
+  else if(annual<=4000000)rate=0.18;
+  else if(annual<=5000000)rate=0.21;
+  else if(annual<=6000000)rate=0.24;
+  else if(annual<=8000000)rate=0.27;
+  else if(annual<=10000000)rate=0.30;
+  else if(annual<=15000000)rate=0.33;
+  else rate=0.36;
+  return Math.round(grossMonthly*(1-rate));
+}
+window.livingGetIncomeType=function(){
+  return document.getElementById("livingIncomeType")?.value||"net";
+}
+window.livingRender=function(){
+  const incomeType=livingGetIncomeType();
+  const rawIncome=toolNum("livingIncome");
+  const income=incomeType==="gross"?livingEstimateNet(rawIncome):rawIncome;
+  const estimateEl=document.getElementById("livingIncomeEstimate");
+  if(estimateEl){
+    if(incomeType==="gross"){estimateEl.style.display="block";estimateEl.textContent=`概算手取り：${toolYen(income)}/月`;}
+    else{estimateEl.style.display="none";}
+  }
+  const groups=[...document.querySelectorAll("#livingExpenseGroups .expense-group")];let expense=0,savings=0;const summary=[];
   groups.forEach(group=>{if(group.dataset.expenseGroup==="自由入力"){[...group.querySelectorAll(".living-custom-row")].forEach(row=>{const label=row.querySelector(".living-custom-label").value||"（名称未設定）";const amount=Number(row.querySelector(".living-expense").value)||0;expense+=amount;summary.push([label,amount]);});}else{const amount=[...group.querySelectorAll(".living-expense")].reduce((s,x)=>s+(Number(x.value)||0),0);if(group.dataset.savings==="true")savings+=amount;else expense+=amount;summary.push([group.dataset.expenseGroup,amount]);}});
   const balance=income-expense-savings;document.getElementById("livingExpenseOut").textContent=toolYen(expense);document.getElementById("livingSavingsOut").textContent=toolYen(savings);document.getElementById("livingBalanceOut").textContent=toolYen(balance);document.getElementById("livingAnnualOut").textContent=toolYen(expense*12);document.getElementById("livingSavingsRateOut").textContent=income?(savings/income*100).toFixed(1)+"%":"—";document.getElementById("livingSavingsAnnualOut").textContent=toolYen(savings*12);document.getElementById("livingBalanceAnnualOut").textContent=toolYen(balance*12);
   const max=Math.max(1,...summary.map(x=>x[1]));document.getElementById("livingBreakdown").innerHTML=summary.filter(x=>x[1]>0).map(x=>`<div style="margin-top:10px;font-size:11px;"><div style="display:flex;justify-content:space-between;"><span>${x[0]}</span><strong>${toolYen(x[1])}</strong></div><div class="expense-bar"><i style="width:${x[1]/max*100}%"></i></div></div>`).join("");
   document.getElementById("livingAdvice").innerHTML=balance<0?`毎月 <strong>${toolYen(Math.abs(balance))}</strong> の赤字です。固定費と大きいカテゴリーから見直してください。`:balance<income*.1?`残額は <strong>${toolYen(balance)}</strong>。突発費に備え、使途未定の余裕資金も確保してください。`:`毎月の未配分額は <strong>${toolYen(balance)}</strong> です。`;
 }
-function livingUpdateIncomeLabel(){
-  const incomeType=document.querySelector(".income-type-btn.active")?.dataset.type||"net";
+window.livingUpdateIncomeLabel=function(){
+  const incomeType=livingGetIncomeType();
   const isGross=incomeType==="gross";
-  document.getElementById("livingAlert").innerHTML=isGross?'<strong>税前収入から残額を自動計算：</strong>「税・保険」に所得税・住民税・社会保険料を入力してください。貯蓄・投資は消費と分けて表示します。':'<strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。';
+  document.getElementById("livingAlert").innerHTML=isGross?'<strong>税前収入から概算で手取りを自動計算：</strong>年収に応じた概算税率で所得税・住民税・社会保険料を差し引いています。二重計上を避けるため「税・保険」の所得税・住民税・社会保険料は0円のままにしてください。':'<strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。';
 }
-function livingSetIncomeType(type){
-  document.querySelectorAll(".income-type-btn").forEach(btn=>{btn.classList.toggle("active",btn.dataset.type===type);});
-  if(!document.getElementById("livingIncomeType")){
-    const typeInput=document.createElement("input");
-    typeInput.type="hidden";
-    typeInput.id="livingIncomeType";
-    typeInput.value=type;
-    document.body.appendChild(typeInput);
-  }else{
-    document.getElementById("livingIncomeType").value=type;
-  }
-  livingUpdateIncomeLabel();livingRender();
-}
-document.getElementById("livingIncomeTypeNet").addEventListener("click",()=>livingSetIncomeType("net"));
-document.getElementById("livingIncomeTypeGross").addEventListener("click",()=>livingSetIncomeType("gross"));
-document.getElementById("page-living").addEventListener("input",livingRender);livingUpdateIncomeLabel();livingRender();
+document.getElementById("page-living").addEventListener("input",window.livingRender);window.livingUpdateIncomeLabel();window.livingRender();
 
 function livingMakeCustomRow(label,value){
   const row=document.createElement("div");
@@ -354,8 +370,8 @@ const LIVING_CONFIG_KEY="livingConfigsV1";
 let livingLoadedIndex=-1;
 function livingReadConfigs(){try{return JSON.parse(localStorage.getItem(LIVING_CONFIG_KEY))||[];}catch(e){return [];}}
 function livingWriteConfigs(list){localStorage.setItem(LIVING_CONFIG_KEY,JSON.stringify(list));}
-function livingSnapshot(){
-  const incomeType=document.querySelector(".income-type-btn.active")?.dataset.type||"net";
+window.livingSnapshot=function(){
+  const incomeType=document.getElementById("livingIncomeType")?.value||"net";
   return {
     incomeType:incomeType,
     income:document.getElementById("livingIncome").value,
@@ -363,8 +379,8 @@ function livingSnapshot(){
     customFields:[...document.querySelectorAll("#livingCustomFields .living-custom-row")].map(row=>({label:row.querySelector(".living-custom-label").value,value:row.querySelector(".living-expense").value}))
   };
 }
-function livingApplySnapshot(data){
-  livingSetIncomeType(data.incomeType||"net");
+window.livingApplySnapshot=function(data){
+  document.getElementById("livingIncomeType").value=data.incomeType||"net";
   document.getElementById("livingIncome").value=data.income||0;
   const inputs=[...document.querySelectorAll('#livingExpenseGroups .expense-group:not([data-expense-group="自由入力"]) .living-expense')];
   (data.expenses||[]).forEach((v,i)=>{if(inputs[i])inputs[i].value=v;});
