@@ -1,30 +1,11 @@
 <div id="page-events" class="page-view active events-page" data-no-i18n>
-  <div class="eyebrow">EVENTS · TOKYO</div>
-
-  <section class="ev-hero">
-    <div>
-      <p class="ev-kicker">外国人コミュニティとのつながり。</p>
-      <h2>イベント・交流会</h2>
-      <p class="ev-lead">東京で開催される<strong>外国人交流・語言交換・文化イベント</strong>の情報を集めています。台湾祭やタイ系コミュニティのイベント、言語交換パーティーなど、様々なコミュニティの催しが見つかります。</p>
-      <div class="ev-hero-actions">
-        <a class="ev-primary-link" href="#events-calendar">イベントを探す <span aria-hidden="true">↓</span></a>
-        <a class="ev-text-link" href="#event-submission">イベントを掲載する</a>
-      </div>
-    </div>
-    <aside class="ev-rule-card">
-      <span class="ev-rule-number">季節</span>
-      <strong>通年でイベント開催</strong>
-      <p>春の台湾祭、夏の多文化交流イベント、秋冬の言語交換パーティーなど、季節を通じて様々なコミュニティイベントが開催されています。</p>
-      <div class="ev-rule-line"></div>
-      <small>各イベントの詳細は主催者にお問い合わせください。</small>
-    </aside>
-  </section>
+  <div class="eyebrow">イベント・交流会</div>
 
   <div class="ev-notice"><strong>ご注意</strong><span>開催日時や内容は変更される場合があります。参加前に各イベントの公式情報をご確認ください。</span></div>
 
   <section class="ev-section" id="events-calendar">
     <div class="ev-section-head">
-      <div><span>COMING SOON</span><h3>開催予定のイベント</h3></div>
+      <div><h3>開催予定のイベント</h3></div>
       <p>掲載イメージです</p>
     </div>
 
@@ -41,7 +22,6 @@
 
   <section class="ev-flow" id="event-submission">
     <div class="ev-flow-copy">
-      <span>HOST AN EVENT</span>
       <h3>イベント情報を<br>シェアしませんか？</h3>
       <p>外国人コミュニティが開催するイベントなら、定期的な集まりも一度きりのイベントも掲載できます。イベント名・日時・場所・内容・参加方法などを、フォームから送信してください。確認後にこのページに掲載します。</p>
       <div class="ev-submission-pending">
@@ -56,68 +36,84 @@
     </ol>
   </section>
 
-  <section class="ev-guide">
-    <div><span>POPULAR EVENTS</span><h3>よく知られているイベント</h3></div>
-    <div class="ev-guide-grid">
-      <div class="ev-guide-card">
-        <div class="ev-guide-header">🇹🇼</div>
-        <h4>上野台湾祭（春）</h4>
-        <p>毎年春に上野公園で開催される台湾の文化を紹介するイベント。台湾食や工芸品の販売、ステージパフォーマンスなどが行われます。</p>
-        <div class="ev-guide-meta">
-          <span><b>時期</b> 毎年3月〜4月</span>
-          <span><b>場所</b> 上野公園</span>
-        </div>
-      </div>
-      <div class="ev-guide-card">
-        <div class="ev-guide-header">🇹🇭</div>
-        <h4>タイ・フェスティバル</h4>
-        <p>タイ系コミュニティが中心となって開催するイベント。タイ料理、音楽、ダンスなど、タイの文化を体験できます。定期的に開催されています。</p>
-        <div class="ev-guide-meta">
-          <span><b>時期</b> 年数回開催</span>
-          <span><b>場所</b> 赤坂見附周辺</span>
-        </div>
-      </div>
-      <div class="ev-guide-card">
-        <div class="ev-guide-header">🌍</div>
-        <h4>言語交換パーティー</h4>
-        <p>東京各地で開催される言語交換の集い。日本語を学ぶ外国人と、他言語を学ぶ日本人が交流できるカジュアルなイベントです。</p>
-        <div class="ev-guide-meta">
-          <span><b>時期</b> 毎月開催</span>
-          <span><b>場所</b> 渋谷・新宿・六本木など</span>
-        </div>
-      </div>
-      <div class="ev-guide-card">
-        <div class="ev-guide-header">👥</div>
-        <h4>多文化交流フェア</h4>
-        <p>複数の外国人コミュニティが一堂に集まるイベント。様々な国の料理・音楽・工芸品などが紹介され、異なる文化を学ぶことができます。</p>
-        <div class="ev-guide-meta">
-          <span><b>時期</b> 年数回開催</span>
-          <span><b>場所</b> 新宿・渋谷イベント会場</span>
+  <div class="ev-note portal-source">
+    本ページのイベント情報は投稿者が提供したものです。<br>
+    内容の正確性・最新情報は各イベント主催者へお問い合わせください。イベント参加による事故やトラブルについて、本サイトは一切の責任を負いません。
+  </div>
+
+  <div class="ev-modal" id="evModal" hidden aria-hidden="true">
+    <div class="ev-modal-backdrop" data-ev-close></div>
+    <div class="ev-modal-panel" role="dialog" aria-modal="true" aria-labelledby="evModalTitle">
+      <button type="button" class="ev-modal-close" data-ev-close aria-label="閉じる">×</button>
+      <div class="ev-modal-media"><img id="evModalImage" src="" alt=""></div>
+      <div class="ev-modal-content">
+        <div class="ev-modal-eyebrow">イベント・交流会</div>
+        <h2 id="evModalTitle"></h2>
+        <p class="ev-modal-intro" id="evModalIntro"></p>
+        <div class="ev-modal-details" id="evModalDetails"></div>
+        <div class="ev-modal-note">
+          <b>参加前にご確認ください</b>
+          <span>掲載内容はイメージです。参加前には、主催者の公式情報で開催日時・会場・参加条件をご確認ください。</span>
         </div>
       </div>
     </div>
-  </section>
-
-  <div class="ev-note" style="margin-top:15px;">
-    本ページのイベント情報は投稿者が提供したものです。内容の正確性・最新情報は各イベント主催者へお問い合わせください。イベント参加による事故やトラブルについて、本サイトは一切の責任を負いません。
   </div>
 
   <style>
     .events-page{--ev-dark:#1a3d5c;--ev-sage:#e8f0f7;--ev-cream:#f0f4f8;--ev-accent:#0066cc;--ev-muted:#667080}.ev-kicker,.ev-section-head span,.ev-flow-copy>span,.ev-guide span{font:700 10px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--ev-accent)}.ev-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:20px;align-items:stretch;padding:7px 0 28px}.ev-hero h2{font-family:"Shippori Mincho",serif;font-size:38px;line-height:1.25;letter-spacing:.05em;margin:7px 0 12px}.ev-lead{max-width:620px;margin:0;font-size:14px;line-height:2;color:var(--ink-soft)}.ev-lead strong{color:var(--ev-accent)}.ev-hero-actions{display:flex;align-items:center;gap:18px;margin-top:23px}.ev-primary-link{display:inline-flex;align-items:center;gap:20px;padding:11px 15px;background:var(--ev-dark);color:#fff;text-decoration:none;font-size:12px;font-weight:700}.ev-primary-link:hover{background:var(--accent-2)}.ev-text-link{color:var(--ev-dark);font-size:12px;font-weight:700;text-decoration:none;border-bottom:1px solid currentColor}.ev-rule-card{border:1px solid var(--ev-dark);background:var(--ev-sage);padding:21px;display:flex;flex-direction:column}.ev-rule-number{font:700 24px "JetBrains Mono",monospace;letter-spacing:-.03em;color:var(--ev-dark)}.ev-rule-card strong{font-family:"Shippori Mincho",serif;font-size:16px;margin-top:2px}.ev-rule-card p{font-size:11px;line-height:1.75;color:var(--ink-soft);margin:12px 0}.ev-rule-line{height:1px;background:rgba(26,61,92,.25);margin-top:auto}.ev-rule-card small{font-size:10px;color:var(--ink-soft);line-height:1.6;margin-top:11px}.ev-notice{display:flex;gap:14px;align-items:flex-start;border-left:3px solid var(--ev-accent);background:#f0f4f8;padding:12px 14px;font-size:11.5px;line-height:1.75;margin-bottom:31px}.ev-notice strong{color:var(--ev-accent);white-space:nowrap}.ev-notice span{color:var(--ink-soft)}.ev-section{padding-top:2px}.ev-section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:12px}.ev-section-head h3,.ev-flow h3,.ev-guide h3{font-family:"Shippori Mincho",serif;font-size:22px;line-height:1.45;margin:3px 0 0}.ev-section-head p{margin:0;color:var(--ink-soft);font-size:10.5px}.ev-filters{display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:13px}.ev-filter{border:1px solid var(--line);background:#fff;color:var(--ink-soft);font:600 11px inherit;padding:7px 12px;cursor:pointer}.ev-filter small{font:400 9px "JetBrains Mono",monospace;margin-left:4px}.ev-filter.active,.ev-filter:hover{border-color:var(--ev-dark);background:var(--ev-dark);color:#fff}.ev-event-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:17px}.ev-card{border:1px solid var(--line);background:#fff;min-width:0;overflow:hidden;display:flex;flex-direction:column;padding:16px}.ev-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.ev-card-category{color:var(--ev-accent);font:700 9px "JetBrains Mono",monospace;letter-spacing:.1em}.ev-popular{background:var(--ev-accent);color:#fff;font:700 9px "JetBrains Mono",monospace;letter-spacing:.06em;padding:3px 8px;white-space:nowrap}.ev-card h4{margin:9px 0;font-size:16px;line-height:1.45}.ev-card-note{font-size:11.5px;color:var(--ink-soft);line-height:1.75;margin:0 0 10px}.ev-meta{display:grid;gap:5px;margin-top:auto;padding-top:10px;border-top:1px dashed var(--line)}.ev-meta div{display:flex;gap:7px;font-size:10.5px;line-height:1.45}.ev-meta b{color:var(--ev-muted);min-width:50px;font-size:9px;letter-spacing:.04em}.ev-meta span{color:var(--ink)}.ev-url{color:var(--ev-dark)!important;font-weight:700}.ev-flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;margin-top:35px;padding:28px;background:var(--ev-dark);color:#fff}.ev-flow-copy>span{color:#8ab4d5}.ev-flow h3{font-size:25px;margin-top:5px}.ev-flow-copy>p{font-size:11.5px;line-height:1.85;color:rgba(255,255,255,.77);margin:14px 0}.ev-submission-pending{border:1px solid rgba(255,255,255,.28);padding:11px 12px;display:grid;gap:3px}.ev-submission-pending b{font-size:11px}.ev-submission-pending span{font-size:10px;line-height:1.55;color:rgba(255,255,255,.68)}.ev-flow-steps{padding:0;margin:0;list-style:none;display:grid;align-content:center}.ev-flow-steps li{display:grid;grid-template-columns:37px minmax(0,1fr);gap:11px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.2)}.ev-flow-steps li:last-child{border-bottom:0}.ev-flow-steps span{font:600 11px "JetBrains Mono",monospace;color:#8ab4d5}.ev-flow-steps b{font-size:12px}.ev-flow-steps p{font-size:10.5px;line-height:1.65;color:rgba(255,255,255,.7);margin:3px 0 0}.ev-guide{margin:25px 0 5px;padding:20px 0;border-top:1px solid var(--ink)}.ev-guide h3{font-size:18px}.ev-guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:15px}.ev-guide-card{border:1px solid var(--line);background:#fafbfc;padding:16px;display:flex;flex-direction:column}.ev-guide-header{font-size:28px;margin-bottom:10px}.ev-guide-card h4{margin:0 0 8px;font-size:14px;line-height:1.45}.ev-guide-card p{font-size:11.5px;color:var(--ink-soft);line-height:1.75;margin:0 0 12px}.ev-guide-meta{display:grid;gap:5px}.ev-guide-meta span{font-size:10px;color:var(--ink-soft)}.ev-guide-meta b{color:var(--ev-muted);font-size:9px;letter-spacing:.04em}@media(max-width:700px){.ev-hero,.ev-flow{grid-template-columns:1fr}.ev-hero h2{font-size:31px}.ev-event-grid{grid-template-columns:1fr}.ev-guide-grid{grid-template-columns:1fr}.ev-rule-card{min-height:190px}.ev-flow{gap:23px}.ev-section-head{align-items:start;flex-direction:column}.ev-hero-actions{gap:12px;flex-wrap:wrap}}
+    .events-page .ev-primary-link,.events-page .ev-rule-card,.events-page .ev-notice,.events-page .ev-filter,.events-page .ev-card,.events-page .ev-popular,.events-page .ev-flow,.events-page .ev-submission-pending,.events-page .ev-guide-card,.events-page .ev-note{border-radius:var(--radius-md)}.events-page .ev-card{width:100%;font:inherit;text-align:left;cursor:pointer;text-decoration:none;color:inherit;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}.events-page .ev-card:hover{border-color:var(--ev-accent);box-shadow:0 8px 18px rgba(26,61,92,.1);transform:translateY(-2px)}.events-page .ev-card:focus-visible{outline:3px solid rgba(0,102,204,.3);outline-offset:3px}
+    .events-page .ev-note{margin-top:18px;padding:13px 16px;border:1px solid var(--line);border-left:4px solid var(--ev-accent);background:var(--paper-2);color:var(--ink-soft);font-size:12px;line-height:1.85;text-align:left}
+    .ev-modal[hidden]{display:none}.ev-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px}.ev-modal-backdrop{position:absolute;inset:0;background:rgba(20,30,42,.72);backdrop-filter:blur(4px)}.ev-modal-panel{position:relative;z-index:1;width:min(1180px,100%);max-height:calc(100vh - 48px);overflow:auto;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);background:var(--paper);border-radius:var(--radius-lg);box-shadow:0 24px 80px rgba(0,0,0,.28)}.ev-modal-close{position:absolute;z-index:2;top:12px;right:14px;width:38px;height:38px;border:0;border-radius:var(--radius-full);background:rgba(0,0,0,.58);color:#fff;font-size:27px;line-height:1;cursor:pointer}.ev-modal-media{min-width:0;padding:22px;background:var(--paper-2);display:grid;place-items:center}.ev-modal-media img{display:block;width:auto;max-width:100%;height:auto;max-height:min(68vh,680px);object-fit:contain;border-radius:var(--radius-md);box-shadow:0 3px 14px rgba(0,0,0,.08)}.ev-modal-content{padding:34px 30px 30px;min-width:0}.ev-modal-eyebrow{font:700 10px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--ev-accent)}.ev-modal-content h2{font-family:"Shippori Mincho",serif;font-size:clamp(23px,3vw,32px);line-height:1.4;margin:5px 30px 12px 0}.ev-modal-intro{font-size:12px;line-height:1.8;color:var(--ink-soft);margin:0 0 17px}.ev-modal-details{display:grid;gap:8px}.ev-modal-detail{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);padding:11px 12px}.ev-modal-detail b{display:block;font-size:10px;color:var(--ink-soft);letter-spacing:.06em;margin-bottom:3px}.ev-modal-detail span{font-size:12px;line-height:1.55}.ev-modal-note{display:grid;gap:4px;margin-top:14px;padding:12px;border-left:3px solid var(--ev-accent);border-radius:var(--radius-sm);background:var(--ev-sage)}.ev-modal-note b{font-size:11px;color:var(--ev-dark)}.ev-modal-note span{font-size:10.5px;line-height:1.7;color:var(--ink-soft)}body.ev-modal-open{overflow:hidden}@media(max-width:700px){.ev-modal{padding:0}.ev-modal-panel{display:block;width:100%;max-height:100vh;border-radius:0}.ev-modal-media{padding:16px;min-height:0}.ev-modal-media img{max-height:48vh}.ev-modal-content{padding:20px 16px 24px}}
+    .events-page .ev-note{margin-top:18px;padding:13px 16px;border:1px solid var(--line);border-left:4px solid var(--ev-accent);background:var(--paper-2);color:var(--ink-soft);font-size:12px;line-height:1.85;text-align:left}
+    .ev-modal[hidden]{display:none}.ev-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px}.ev-modal-backdrop{position:absolute;inset:0;background:rgba(20,30,42,.72);backdrop-filter:blur(4px)}.ev-modal-panel{position:relative;z-index:1;width:min(1180px,100%);max-height:calc(100vh - 48px);overflow:auto;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);background:var(--paper);border-radius:var(--radius-lg);box-shadow:0 24px 80px rgba(0,0,0,.28)}.ev-modal-close{position:absolute;z-index:2;top:12px;right:14px;width:38px;height:38px;border:0;border-radius:var(--radius-full);background:rgba(0,0,0,.58);color:#fff;font-size:27px;line-height:1;cursor:pointer}.ev-modal-media{min-width:0;padding:22px;background:var(--paper-2);display:grid;place-items:center}.ev-modal-media img{display:block;width:auto;max-width:100%;height:auto;max-height:min(68vh,680px);object-fit:contain;border-radius:var(--radius-md);box-shadow:0 3px 14px rgba(0,0,0,.08)}.ev-modal-content{padding:34px 30px 30px;min-width:0}.ev-modal-eyebrow{font:700 10px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--ev-accent)}.ev-modal-content h2{font-family:"Shippori Mincho",serif;font-size:clamp(23px,3vw,32px);line-height:1.4;margin:5px 30px 12px 0}.ev-modal-intro{font-size:12px;line-height:1.8;color:var(--ink-soft);margin:0 0 17px}.ev-modal-details{display:grid;gap:8px}.ev-modal-detail{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);padding:11px 12px}.ev-modal-detail b{display:block;font-size:10px;color:var(--ink-soft);letter-spacing:.06em;margin-bottom:3px}.ev-modal-detail span{font-size:12px;line-height:1.55}.ev-modal-link{color:var(--ev-dark);font-weight:700;text-decoration:underline;word-break:break-all}.ev-modal-note{display:grid;gap:4px;margin-top:14px;padding:12px;border-left:3px solid var(--ev-accent);border-radius:var(--radius-sm);background:var(--ev-sage)}.ev-modal-note b{font-size:11px;color:var(--ev-dark)}.ev-modal-note span{font-size:10.5px;line-height:1.7;color:var(--ink-soft)}body.ev-modal-open{overflow:hidden}@media(max-width:700px){.ev-modal{padding:0}.ev-modal-panel{display:block;width:100%;max-height:100vh;border-radius:0}.ev-modal-media{padding:16px;min-height:0}.ev-modal-media img{max-height:48vh}.ev-modal-content{padding:20px 16px 24px}}
   </style>
 
   <script>
     (function () {
       var events = [
-        { category: "cultural", categoryLabel: "CULTURAL", popular: false, title: "上野台湾祭 2024春", date: "2024年3月30日（土）〜4月1日（月）", time: "10:00〜18:00", area: "上野公園", description: "台湾の文化・グルメ・工芸品が一堂に集まるイベント。台湾の地元の味を楽しんだり、文化を学んだりできます。", url: "www.taipeifestival-tokyo.jp" },
-        { category: "language", categoryLabel: "LANGUAGE EXCHANGE", popular: false, title: "金曜夜の言語交換パーティー", date: "毎週金曜日", time: "19:00〜21:00", area: "渋谷 カフェアリス", description: "日本語を学ぶ外国人と他言語を学ぶ日本人が集まる、カジュアルな言語交換イベント。飲食代実費のみ。", url: "www.language-exchange-tokyo.com" },
-        { category: "regional", categoryLabel: "THAI COMMUNITY", popular: true, title: "タイ・フェスティバル 2024", date: "2024年5月19日（日）", time: "11:00〜18:00", area: "赤坂見附 TRY横丁", description: "タイ系コミュニティが主催する、タイ料理・音楽・ダンスのイベント。毎年多くの外国人が参加します。", url: "www.thai-festival-tokyo.net" },
-        { category: "networking", categoryLabel: "NETWORKING", popular: false, title: "外国人起業家の朝食会", date: "毎月第一日曜日", time: "07:30〜09:00", area: "新宿 ビジネスラウンジ", description: "東京で起業・ビジネスを立ち上げた外国人が集まり、経験やアイデアをシェアする朝食イベント。参加費 1,500円。", url: "www.startup-tokyo-network.jp" },
-        { category: "cultural", categoryLabel: "CULTURAL", popular: false, title: "多文化フェスティバル 2024秋", date: "2024年10月12日（土）〜10月14日（月）", time: "10:00〜19:00", area: "新宿バルト広場", description: "アジア・アフリカ・ヨーロッパなど、様々な国の文化を紹介するイベント。料理・音楽・工芸品・ダンスなど。", url: "www.multiculture-tokyo.org" },
-        { category: "language", categoryLabel: "LANGUAGE EXCHANGE", popular: false, title: "日本語・英語 カフェテーブル", date: "毎週水曜日", time: "18:00〜20:00", area: "六本木 Caféラングエッジ", description: "テーブルごとに異なる言語で会話する、少人数の言語交換イベント。初心者からビジネスレベルまで対応。", url: "www.language-cafe-tokyo.jp" }
+        { slug: "ueno-taiwan-festival", category: "cultural", categoryLabel: "CULTURAL", popular: false, title: "上野台湾祭 2024春", date: "2024年3月30日（土）〜4月1日（月）", time: "10:00〜18:00", area: "上野公園", description: "台湾の文化・グルメ・工芸品が一堂に集まるイベント。台湾の地元の味を楽しんだり、文化を学んだりできます。", url: "www.taipeifestival-tokyo.jp" },
+        { slug: "shibuya-language-exchange", category: "language", categoryLabel: "LANGUAGE EXCHANGE", popular: false, title: "金曜夜の言語交換パーティー", date: "毎週金曜日", time: "19:00〜21:00", area: "渋谷 カフェアリス", description: "日本語を学ぶ外国人と他言語を学ぶ日本人が集まる、カジュアルな言語交換イベント。飲食代実費のみ。", url: "www.language-exchange-tokyo.com" },
+        { slug: "thai-community-festival", category: "regional", categoryLabel: "THAI COMMUNITY", popular: true, title: "タイ・フェスティバル 2024", date: "2024年5月19日（日）", time: "11:00〜18:00", area: "赤坂見附 TRY横丁", description: "タイ系コミュニティが主催する、タイ料理・音楽・ダンスのイベント。毎年多くの外国人が参加します。", url: "www.thai-festival-tokyo.net" },
+        { slug: "shinjuku-startup-breakfast", category: "networking", categoryLabel: "NETWORKING", popular: false, title: "外国人起業家の朝食会", date: "毎月第一日曜日", time: "07:30〜09:00", area: "新宿 ビジネスラウンジ", description: "東京で起業・ビジネスを立ち上げた外国人が集まり、経験やアイデアをシェアする朝食イベント。参加費 1,500円。", url: "www.startup-tokyo-network.jp" },
+        { slug: "multicultural-autumn-festival", category: "cultural", categoryLabel: "CULTURAL", popular: false, title: "多文化フェスティバル 2024秋", date: "2024年10月12日（土）〜10月14日（月）", time: "10:00〜19:00", area: "新宿バルト広場", description: "アジア・アフリカ・ヨーロッパなど、様々な国の文化を紹介するイベント。料理・音楽・工芸品・ダンスなど。", url: "www.multiculture-tokyo.org" },
+        { slug: "roppongi-language-cafe", category: "language", categoryLabel: "LANGUAGE EXCHANGE", popular: false, title: "日本語・英語 カフェテーブル", date: "毎週水曜日", time: "18:00〜20:00", area: "六本木 Caféラングエッジ", description: "テーブルごとに異なる言語で会話する、少人数の言語交換イベント。初心者からビジネスレベルまで対応。", url: "www.language-cafe-tokyo.jp" }
       ];
       var activeFilter = "all";
+      var eventImages = {
+        "ueno-taiwan-festival": "/events/ueno-taiwan-festival.png",
+        "shibuya-language-exchange": "/events/shibuya-language-exchange.png",
+        "thai-community-festival": "/events/thai-community-festival.png",
+        "shinjuku-startup-breakfast": "/events/shinjuku-startup-breakfast.png",
+        "multicultural-autumn-festival": "/events/multicultural-autumn-festival.png",
+        "roppongi-language-cafe": "/events/roppongi-language-cafe.png"
+      };
+      var eventDescriptions = {
+        "ueno-taiwan-festival": "台湾の屋台グルメ、ドリンク、雑貨、文化体験が集まる春の屋外イベントです。会場では、ひとりでゆっくり食べ歩きを楽しむ人から、家族や友人と写真を撮る人まで、幅広い来場者が交流します。ステージ企画や出店内容は日によって変わることがあるため、気になる催しがある場合は事前に主催者の発表を確認してください。混雑しやすい時間帯を避けたい場合は、開場直後または夕方前の来場がおすすめです。",
+        "shibuya-language-exchange": "日本語を学ぶ外国人と、外国語を練習したい日本人が気軽に会話できる交流会です。少人数のテーブルでテーマに沿って話すため、初参加でも会話に入りやすく、聞き役から始めることもできます。仕事、旅行、東京での暮らしなど、日常的な話題を通じて自然に言葉を使えるのが特徴です。参加前に、使用言語・参加費・予約の必要性を主催者案内で確認してください。",
+        "thai-community-festival": "タイ料理、音楽、ダンスを通じて、タイの文化とコミュニティにふれられるイベントです。会場にはフードブースや文化紹介コーナーが並び、ステージでは伝統舞踊や音楽のプログラムが行われることがあります。タイに関心のある人だけでなく、東京で新しいコミュニティとつながりたい人にも参加しやすい雰囲気です。プログラムの時間や混雑状況は変わる場合があるため、当日の案内を確認してからお出かけください。",
+        "shinjuku-startup-breakfast": "東京で起業している人、フリーランスとして活動している人、これから事業を始めたい人のための朝のネットワーキングです。短い自己紹介のあと、仕事上の課題、協業のアイデア、生活やビザに関する情報などを自由に共有します。大人数の交流会が苦手な人でも話しやすいよう、少人数の会話を中心に進める想定です。名刺やプロフィールを準備しておくと、イベント後のつながりづくりにも役立ちます。",
+        "multicultural-autumn-festival": "さまざまな国や地域のコミュニティが集まり、料理、音楽、ダンス、工芸品を紹介する多文化交流イベントです。会場を歩きながら複数の文化にふれられるため、東京に住む外国人同士や日本人との新しい出会いのきっかけにもなります。家族連れでも参加しやすい内容を予定していますが、入場ルールや体験プログラムの受付方法は催しごとに異なる場合があります。参加前には主催者の最新案内をご確認ください。",
+        "roppongi-language-cafe": "カフェのテーブルを囲み、日本語と英語を中心に会話を楽しむ小規模な交流会です。テーマカードや自己紹介をきっかけに進めるため、会話に自信がない人も無理なく参加できます。文法を勉強する場というより、実際の会話を通して表現を試したい人、東京で気軽に友人をつくりたい人に向いた雰囲気です。ドリンク代、予約の有無、参加できる言語レベルは開催回ごとに確認してください。"
+      };
       function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value; return el.innerHTML; }
+      function openModal(item) {
+        var modal = document.getElementById("evModal");
+        document.getElementById("evModalTitle").textContent = item.title;
+        document.getElementById("evModalIntro").textContent = eventDescriptions[item.slug];
+        var image = document.getElementById("evModalImage");
+        image.src = eventImages[item.slug];
+        image.alt = item.title + "のイメージ";
+        document.getElementById("evModalDetails").innerHTML = [["日時", item.date + " " + item.time], ["場所", item.area], ["参考URL", '<a class="ev-modal-link" href="' + ((/^https?:\/\//i.test(item.url)) ? item.url : "https://" + item.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.url) + '</a>']].map(function (detail) { return '<div class="ev-modal-detail"><b>' + escapeHtml(detail[0]) + '</b><span>' + detail[1] + '</span></div>'; }).join("");
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("ev-modal-open");
+      }
+      function closeModal() {
+        var modal = document.getElementById("evModal");
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("ev-modal-open");
+      }
       function render() {
         var visible = events.filter(function (item) { return activeFilter === "all" || item.category === activeFilter; });
         var grid = document.getElementById("evEventGrid");
@@ -126,10 +122,13 @@
           return;
         }
         grid.innerHTML = visible.map(function (item) {
-          return '<article class="ev-card"><div class="ev-card-top"><span class="ev-card-category">' + item.categoryLabel + '</span>' + (item.popular ? '<span class="ev-popular">人気</span>' : '') + '</div><h4>' + escapeHtml(item.title) + '</h4><p class="ev-card-note">' + escapeHtml(item.description) + '</p><div class="ev-meta"><div><b>日時</b><span>' + escapeHtml(item.date) + ' ' + escapeHtml(item.time) + '</span></div><div><b>場所</b><span>' + escapeHtml(item.area) + '</span></div><div><b>URL</b><span class="ev-url">' + escapeHtml(item.url) + '</span></div></div></article>';
+          return '<button type="button" class="ev-card" data-event-slug="' + item.slug + '"><div class="ev-card-top">' + (item.popular ? '<span class="ev-popular">人気</span>' : '') + '</div><h4>' + escapeHtml(item.title) + '</h4><p class="ev-card-note">' + escapeHtml(item.description) + '</p><div class="ev-meta"><div><b>日時</b><span>' + escapeHtml(item.date) + ' ' + escapeHtml(item.time) + '</span></div><div><b>場所</b><span>' + escapeHtml(item.area) + '</span></div></div></button>';
         }).join("");
+        grid.querySelectorAll("[data-event-slug]").forEach(function (card) { card.addEventListener("click", function () { var item = events.find(function (event) { return event.slug === card.dataset.eventSlug; }); if (item) openModal(item); }); });
       }
       document.querySelectorAll(".ev-filter").forEach(function (button) { button.addEventListener("click", function () { activeFilter = button.dataset.filter; document.querySelectorAll(".ev-filter").forEach(function (entry) { entry.classList.toggle("active", entry === button); }); render(); }); });
+      document.querySelectorAll("[data-ev-close]").forEach(function (button) { button.addEventListener("click", closeModal); });
+      document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !document.getElementById("evModal").hidden) closeModal(); });
       render();
     })();
   </script>

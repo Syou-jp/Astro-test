@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { EVENTS } from "../../../data/events";
+import { ENABLED_LOCALES } from "../../../data/locales";
+
+export function getStaticPaths() {
+  return ENABLED_LOCALES.flatMap((locale) =>
+    EVENTS.map((event) => ({ params: { locale: locale.code, event: event.slug }, props: { locale: locale.code, event } }))
+  );
+}
+
+const { locale, event } = Astro.props;
+---
+
+<BaseLayout title={`Sotocom | ${event.title}`} activeId="page-events" locale={locale} slug="events">
+  <main class="event-detail">
+    <a class="event-detail-back" href={`/${locale}/events/`}>← イベント・交流会に戻る</a>
+    <p class="event-detail-label">イベント詳細</p>
+    <h1>{event.title}</h1>
+    <p class="event-detail-summary">{event.summary}</p>
+    <img class="event-detail-cover" src={event.image} alt="" />
+
+    <section class="event-detail-info" aria-label="開催情報">
+      <div><span>日時</span><strong>{event.date}<br />{event.time}</strong></div>
+      <div><span>場所</span><strong>{event.location}</strong></div>
+    </section>
+
+    <section class="event-detail-section">
+      <h2>イベントについて</h2>
+      <p>{event.description}</p>
+    </section>
+
+    <section class="event-detail-section">
+      <h2>参加について</h2>
+      <p>{event.participation}</p>
+    </section>
+
+    <section class="event-detail-note">
+      <h2>参加前の確認</h2>
+      <ul>{event.notes.map((note: string) => <li>{note}</li>)}</ul>
+      <p>このページは掲載イメージです。参加前には必ず主催者の公式情報で開催日時・会場・参加条件をご確認ください。</p>
+    </section>
+  </main>
+
+  <style>
+    .event-detail{max-width:900px;margin:0 auto;padding:10px 0 42px}.event-detail-back{display:inline-flex;color:var(--accent);font-size:12px;font-weight:700;text-decoration:none;margin-bottom:24px}.event-detail-label{margin:0 0 6px;color:var(--accent);font:700 10px "JetBrains Mono",monospace;letter-spacing:.12em}.event-detail h1{font-family:"Shippori Mincho",serif;font-size:36px;line-height:1.35;letter-spacing:.03em;margin:0}.event-detail-summary{max-width:680px;font-size:15px;line-height:1.9;color:var(--ink-soft);margin:12px 0 22px}.event-detail-cover{display:block;width:100%;max-height:680px;object-fit:contain;border:1px solid var(--line);border-radius:var(--radius-lg);background:var(--paper-2)}.event-detail-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.event-detail-info div,.event-detail-section,.event-detail-note{border:1px solid var(--line);border-radius:var(--radius-md);background:var(--white);padding:17px}.event-detail-info span{display:block;color:var(--ink-soft);font-size:10px;font-weight:700;letter-spacing:.08em;margin-bottom:6px}.event-detail-info strong{font-size:13px;line-height:1.7}.event-detail-section{margin-top:12px}.event-detail-section h2,.event-detail-note h2{font-family:"Shippori Mincho",serif;font-size:19px;margin:0 0 9px}.event-detail-section p,.event-detail-note p,.event-detail-note li{font-size:12px;line-height:1.85;color:var(--ink-soft)}.event-detail-section p,.event-detail-note p{margin:0}.event-detail-note{margin-top:12px;border-left:4px solid var(--accent);background:var(--paper-2)}.event-detail-note ul{margin:0 0 10px;padding-left:1.25em}.event-detail-note li+li{margin-top:3px}@media(max-width:700px){.event-detail{padding-bottom:28px}.event-detail h1{font-size:28px}.event-detail-info{grid-template-columns:1fr}}
+  </style>
+</BaseLayout>
