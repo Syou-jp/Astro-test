@@ -48,7 +48,7 @@
     <div class="grid">
       <div class="card">
         <div class="apply-fields" style="margin-bottom:14px;">
-          <div class="apply-field"><label id="livingIncomeLabel">月の手取り収入</label><div class="input-wrap" style="display:flex;gap:8px;align-items:center;"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><select id="livingIncomePeriod" style="flex:0 0 auto;"><option value="monthly">円/月</option><option value="yearly">円/年</option></select><select id="livingIncomeType" style="flex:0 0 auto;"><option value="net">手取り</option><option value="gross">税前</option></select></div></div>
+          <div class="apply-field" style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:end;"><label id="livingIncomeLabel" style="grid-column:1/-1;">月の手取り収入</label><div class="input-wrap"><input type="number" id="livingIncome" value="300000" min="0" step="1000"><span id="livingIncomeUnit">円/月</span></div><select id="livingIncomePeriod" style="padding:8px 12px;"><option value="monthly">月</option><option value="yearly">年</option></select><select id="livingIncomeType" style="padding:8px 12px;"><option value="net">手取り</option><option value="gross">税前</option></select></div>
           <div class="apply-field"><label>副業収入</label><div class="input-wrap"><input type="number" id="livingSideIncome" value="0" min="0" step="1000"><span>円/月</span></div></div>
           <button type="button" class="secondary-btn" id="livingClearBtn" style="width:100%;margin-top:8px;">🔄 すべてリセット</button>
         </div>
@@ -304,6 +304,7 @@ function livingUpdateIncomeLabel(){
   const period=document.getElementById("livingIncomePeriod").value;
   const periodLabel=period==="yearly"?"年":"月";
   document.getElementById("livingIncomeLabel").textContent=isGross?`${periodLabel}の税前収入（額面）`:`${periodLabel}の手取り収入`;
+  document.getElementById("livingIncomeUnit").textContent=period==="yearly"?"円/年":"円/月";
   document.getElementById("livingAlert").innerHTML=isGross?'<strong>税前収入から残額を自動計算：</strong>「税・保険」に所得税・住民税・社会保険料を入力してください。貯蓄・投資は消費と分けて表示します。':'<strong>手取り収入から残額を自動計算：</strong>税金や社会保険がすでに給与から引かれている場合は、二重計上しないよう「税・社会保険」を0円にしてください。貯蓄・投資は消費と分けて表示します。';
 }
 function livingGetMonthlyIncome(){
