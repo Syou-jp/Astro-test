@@ -14,7 +14,7 @@
     "id": "page-news",
     "slug": "news",
     "file": "news.html",
-    "title": "時事日報｜日本の最新ニュースまとめ"
+    "title": "ニュース日報｜日本の最新ニュースまとめ"
   },
   {
     "id": "page-rent",
@@ -180,7 +180,7 @@
     "id": "page-restaurant-list",
     "slug": "restaurant-list",
     "file": "restaurant-list.html",
-    "title": "お店リスト｜レストラン・美容・物産店"
+    "title": "お店リスト｜飲食店・美容・物産店"
   },
   {
     "id": "page-partners",

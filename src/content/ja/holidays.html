@@ -4,14 +4,14 @@
     <style>
       .hcal-wrap{display:flex;flex-direction:column;gap:16px;}
       .hcal-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;}
-      .hcal-stat{background:var(--paper-2);border:1px solid var(--line);padding:9px 8px;text-align:center;}
+      .hcal-stat{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:9px 8px;text-align:center;}
       .hcal-stat b{display:block;font-size:19px;color:var(--accent);font-family:"JetBrains Mono",monospace;}
       .hcal-stat span{font-size:10.5px;color:var(--ink-soft);}
       .hcal-table{width:100%;border-collapse:collapse;font-size:12.5px;}
       .hcal-table th,.hcal-table td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;}
       .hcal-table th{color:var(--ink-soft);font-weight:700;font-size:11px;}
       .hcal-table td.hcal-date{white-space:nowrap;font-family:"JetBrains Mono",monospace;font-weight:700;}
-      .hcal-badge{font-size:10px;font-weight:700;padding:1px 7px;background:var(--accent);color:#fff;white-space:nowrap;}
+      .hcal-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:var(--radius-pill);background:var(--accent);color:#fff;white-space:nowrap;}
       .hcal-badge.big{background:var(--seal);}
       .hcal-summary{font-size:12.5px;line-height:1.7;color:var(--ink-soft);}
       .hcal-toggle{cursor:pointer;list-style:none;font-size:13px;font-weight:700;color:var(--accent);}
@@ -19,13 +19,13 @@
       .hcal-toggle::before{content:"▸ ";}
       details[open] .hcal-toggle::before{content:"▾ ";}
       .hcal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:12px;}
-      .hcal-month{border:1px solid var(--line);overflow:hidden;background:#fff;}
+      .hcal-month{border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;background:#fff;}
       .hcal-month-head{background:var(--accent);color:#fff;font-size:11.5px;font-weight:700;padding:5px 8px;}
       .hcal-month-body{padding:6px;}
       .hcal-dow{display:grid;grid-template-columns:repeat(7,1fr);font-size:9px;color:var(--ink-soft);text-align:center;margin-bottom:2px;}
       .hcal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
       .hcal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink);}
-      .hcal-day.hol{background:var(--seal);color:#fff;font-weight:700;}
+      .hcal-day.hol{border-radius:var(--radius-xs);background:var(--seal);color:#fff;font-weight:700;}
       .hcal-day.sat{color:#2f5fa8;}
       .hcal-day.sun{color:var(--seal);}
       .hcal-day.empty{visibility:hidden;}
@@ -52,6 +52,11 @@
         </div>
       </div>
 
+      <details class="card" open>
+        <summary class="hcal-toggle">年間カレンダーを表示（赤地＝祝日）</summary>
+        <div class="hcal-grid" id="holidayCalGrid"></div>
+      </details>
+
       <div class="card">
         <div class="section-title">祝日と連休の一覧</div>
         <table class="hcal-table">
@@ -73,11 +78,6 @@
           </tbody>
         </table>
       </div>
-
-      <details class="card">
-        <summary class="hcal-toggle">年間カレンダーを表示（赤地＝祝日）</summary>
-        <div class="hcal-grid" id="holidayCalGrid"></div>
-      </details>
 
       <div class="card">
         <div class="section-title">航空券の繁忙期・閑散期</div>

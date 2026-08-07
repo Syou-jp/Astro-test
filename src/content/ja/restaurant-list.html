@@ -3,7 +3,8 @@
     .restaurant-hero{display:block;min-height:0;margin-bottom:17px}
     .restaurant-hero h2.section-title{display:flex;align-items:center;gap:14px;font-size:15px;line-height:1.4;letter-spacing:.04em;color:#2f4f8f;margin:0;padding:0;border:0;background:none}
     .restaurant-hero h2.section-title::after{content:"";height:1px;flex:1;background:#d7dde6}
-    .restaurant-filters button{width:90px;height:44px;display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:0}
+    .restaurant-note{border-radius:12px}
+    .restaurant-filters button{width:90px;height:40px;display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:0}
     .restaurant-filters-region{margin-top:0}
     #rlCountryFilters:empty{display:none;margin:0}
     @media(max-width:520px){.restaurant-filters button{width:calc((100vw - 48px)/3);min-width:0}}
@@ -122,7 +123,7 @@
 
       var types = ["all"].concat(Array.from(new Set(restaurants.map(function (r) { return r.type || "restaurant"; }))));
 
-      var typeLabels = { all: "すべて", restaurant: "レストラン", beauty: "美容・ネイル", grocery: "物産店" };
+      var typeLabels = { all: "すべて", restaurant: "飲食店", beauty: "美容・ネイル", grocery: "物産店" };
       var continentLabels = { all: "すべて", asia: "アジア", europe: "ヨーロッパ", northAmerica: "北米" };
       var countryContinents = { 台湾: "asia", タイ: "asia", ベトナム: "asia", トルコ: "europe", インド: "asia", 香港: "asia", 韓国: "asia", イタリア: "europe", メキシコ: "northAmerica", フィリピン: "asia", 中国: "asia" };
       var countryLabels = { all: "すべて" };
