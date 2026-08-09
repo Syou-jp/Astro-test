@@ -4,7 +4,6 @@
       <div class="home-hero-text">
         <h2 class="home-hero-title">日本での暮らしを、<br>もっとやさしく。</h2>
         <p class="home-hero-lead">住まい・お金・手続きから、コミュニティの助け合いまで。<br class="home-hero-lead-br">外国人のための生活ガイドが、ぜんぶここに。</p>
-        <a class="home-hero-cta" href="#homeQuickNav">はじめての方はこちら<span aria-hidden="true"> →</span></a>
       </div>
       <div class="home-hero-media">
         <picture>
@@ -20,8 +19,6 @@
     .home-hero-text{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:40px;min-width:0;}
     .home-hero-title{margin:0;font-size:30px;line-height:1.4;font-weight:700;letter-spacing:-0.01em;color:var(--ink);}
     .home-hero-lead{margin:0;font-size:14.5px;line-height:1.75;color:var(--ink-soft);}
-    .home-hero-cta{align-self:flex-start;display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:12px 24px;border-radius:var(--radius-full);background:var(--accent);color:#fff;font-weight:600;font-size:14px;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease;}
-    .home-hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.15);}
     .home-hero-media{position:relative;min-height:100%;background:var(--paper-2);}
     .home-hero-media img{width:100%;height:100%;object-fit:cover;display:block;}
     @media (max-width:860px){
@@ -34,7 +31,6 @@
     @media (max-width:520px){
       .home-hero-title{font-size:21px;}
       .home-hero-text{padding:22px 20px 26px;gap:12px;}
-      .home-hero-cta{padding:11px 20px;font-size:13.5px;}
     }
   </style>
 
@@ -889,17 +885,17 @@
         <h2 class="home-partners-banner-title">外国語対応も<br>安心な専門家たち</h2>
         <p class="home-partners-banner-lead">税理士・行政書士から美容室、車修理、エアコン工事まで。日本で暮らす外国人の毎日を支える専門家・お店・サービスをまとめています。</p>
         <div class="home-partners-banner-actions">
-          <a class="home-partners-banner-btn" href="/ja/partners/">
+          <a class="home-partners-banner-link" href="/ja/partners/">
             <span>専門家リスト</span>
-            <span class="home-partners-banner-arrow" aria-hidden="true">›</span>
+            <span class="home-partners-banner-link-arrow" aria-hidden="true">→</span>
           </a>
-          <a class="home-partners-banner-btn" href="/ja/restaurant-list/">
+          <a class="home-partners-banner-link" href="/ja/restaurant-list/">
             <span>店舗一覧</span>
-            <span class="home-partners-banner-arrow" aria-hidden="true">›</span>
+            <span class="home-partners-banner-link-arrow" aria-hidden="true">→</span>
           </a>
-          <a class="home-partners-banner-btn" href="/ja/kurashi-services/">
+          <a class="home-partners-banner-link" href="/ja/kurashi-services/">
             <span>暮らしのサービス</span>
-            <span class="home-partners-banner-arrow" aria-hidden="true">›</span>
+            <span class="home-partners-banner-link-arrow" aria-hidden="true">→</span>
           </a>
         </div>
       </div>
@@ -940,39 +936,34 @@
     .home-partners-banner-actions{
       display:flex;
       flex-direction:column;
-      gap:8px;
     }
-    .home-partners-banner-btn{
+    .home-partners-banner-link{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:11px 16px;
-      border-radius:999px;
-      background:#fff;
+      padding:13px 2px;
+      border-bottom:1px solid rgba(29,29,31,.1);
       color:var(--ink,#1D1D1F);
-      font-size:13px;
+      font-size:14px;
       font-weight:600;
       text-decoration:none;
-      box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.06);
-      transition:transform .18s ease,box-shadow .18s ease;
+      transition:color .15s ease;
     }
-    .home-partners-banner-btn:hover{
-      transform:translateY(-2px);
-      box-shadow:0 6px 20px rgba(0,0,0,.1);
+    .home-partners-banner-link:last-child{
+      border-bottom:none;
     }
-    .home-partners-banner-arrow{
+    .home-partners-banner-link:hover{
+      color:var(--accent,#0071E3);
+    }
+    .home-partners-banner-link-arrow{
       flex:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:26px;
-      height:26px;
-      border-radius:50%;
-      background:var(--accent,#0071E3);
-      color:#fff;
-      font-size:16px;
-      line-height:1;
+      color:var(--accent,#0071E3);
+      font-size:14px;
+      transition:transform .15s ease;
+    }
+    .home-partners-banner-link:hover .home-partners-banner-link-arrow{
+      transform:translateX(4px);
     }
     .home-partners-banner-media{
       border-radius:18px;
@@ -1152,11 +1143,6 @@
        instead, with overflow:hidden clipping the photo to the card's
        corner radius. */
     #page-home.apple-style .home-hero-section{padding:0 !important;overflow:hidden;}
-    #page-home.apple-style .home-hero-cta{
-      background:#0071E3;
-      color:#fff;
-    }
-    #page-home.apple-style .home-hero-cta:hover{background:#0055C6;}
 
     #page-home.apple-style .section-title{
       font-weight:600 !important;
