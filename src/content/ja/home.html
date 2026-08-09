@@ -359,10 +359,19 @@
       display:flex;
       flex-direction:row;
       align-items:center;
+      justify-content:center;
       gap:0;
       padding:0 0 14px;
       white-space:nowrap;
       position:relative;
+    }
+    /* Fill the full width of the bar (matching the divider rule beneath it)
+       with equal-width tabs instead of leaving the row left-packed with
+       dead space on the right. Kept to wider screens only — on narrow
+       viewports the bar stays horizontally scrollable at natural width. */
+    @media (min-width:641px){
+      .home-tabs-bar{gap:0;overflow-x:visible;}
+      .home-tab{flex:1 1 0;padding:0 6px 14px;}
     }
     .home-tab-icon{display:none;}
     .home-tab-label{font-size:13.5px;line-height:1.3;font-weight:600;}
@@ -405,6 +414,18 @@
       .home-news-tab-title{font-size:32px;}
     }
   </style>
+
+  <script>
+    (function () {
+      var bar = document.querySelector(".home-tabs-bar");
+      if (!bar) return;
+      bar.querySelectorAll(".home-tab").forEach(function (tab) {
+        tab.addEventListener("mouseenter", function () {
+          if (!tab.classList.contains("active")) tab.click();
+        });
+      });
+    })();
+  </script>
 
   <script>
     (function () {
