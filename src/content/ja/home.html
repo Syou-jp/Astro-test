@@ -1,4 +1,4 @@
-<div id="page-home" class="page-view active theme-home">
+<div id="page-home" class="page-view active theme-home apple-style">
   <div class="card" style="margin-bottom:18px;">
     <div class="home-top-row">
       <a class="home-news-card" href="/ja/news/" id="homeNewsCard">
@@ -893,6 +893,113 @@
     .home-latest-item-body strong{font-size:12.5px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .home-latest-item-body small{font-size:11px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .home-latest-date{flex:none;font:600 10.5px "JetBrains Mono",monospace;color:var(--ink-soft);}
+  </style>
+
+  <style>
+    /* Apple Human Interface style pass — scoped to #page-home only.
+       Most of home.html's components already read design tokens
+       (var(--accent), var(--ink), var(--line), var(--radius-*)) from
+       global.css, so re-pointing those tokens on this page cascades the
+       look through the whole page without touching global.css itself. */
+    #page-home.apple-style,
+    #page-home.apple-style *{
+      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI","Noto Sans JP",sans-serif !important;
+      letter-spacing:0;
+    }
+    body:has(#page-home.apple-style){background:#FFFFFF;}
+    .tab-panel:has(#page-home.apple-style){background:#FFFFFF;border:none;box-shadow:none;}
+
+    #page-home.apple-style{
+      --accent:#0071E3;
+      --accent-2:#0055C6;
+      --ink:#1D1D1F;
+      --ink-soft:#6E6E73;
+      --line:#D2D2D7;
+      --line-soft:#E8E8ED;
+      --radius-sm:14px;
+      --radius-md:18px;
+    }
+
+    #page-home.apple-style .card{
+      background:#F5F5F7;
+      border:none;
+      border-radius:18px;
+      box-shadow:none;
+      padding:32px;
+    }
+    #page-home.apple-style .section-title{
+      font-weight:600 !important;
+      font-size:22px;
+      letter-spacing:-0.01em;
+      border-bottom:none;
+      background-image:none;
+      padding-bottom:0;
+    }
+    #page-home.apple-style .home-pros-lead{font-size:14px;}
+
+    /* Quick nav / news / fx tiles sit on the grey card, so keep them white for contrast. */
+    #page-home.apple-style .home-quick-nav-item,
+    #page-home.apple-style .home-news-card,
+    #page-home.apple-style .home-fx-card,
+    #page-home.apple-style .home-fx-row,
+    #page-home.apple-style .home-latest-item,
+    #page-home.apple-style .home-food-photo,
+    #page-home.apple-style .home-category-card{
+      background:#FFFFFF;
+      border:1px solid #D2D2D7;
+      box-shadow:none;
+    }
+    #page-home.apple-style .home-quick-nav-item{border-radius:18px;}
+    #page-home.apple-style .home-quick-nav-item:hover{transform:translateY(-2px);}
+    #page-home.apple-style .home-quick-nav-icon{box-shadow:none;}
+    #page-home.apple-style .home-news-card,
+    #page-home.apple-style .home-fx-card{border-radius:18px;background:#FFFFFF;}
+    #page-home.apple-style .home-fx-row,
+    #page-home.apple-style .home-latest-item,
+    #page-home.apple-style .home-category-card{border-radius:14px;}
+    #page-home.apple-style .home-food-photo{border-radius:14px;}
+
+    #page-home.apple-style .home-fx-swap-btn,
+    #page-home.apple-style .home-fx-calc-btn,
+    #page-home.apple-style .home-fx-amount-toggle,
+    #page-home.apple-style .home-fx-collapse-btn{
+      background:#FFFFFF;
+      border-color:#D2D2D7;
+      border-radius:980px;
+    }
+    #page-home.apple-style .home-fx-swap-btn.is-reversed{background:#0071E3;border-color:#0071E3;}
+    #page-home.apple-style .home-fx-amount-btn.is-active{background:#0071E3;}
+    #page-home.apple-style .home-fx-toggle-btn{background:#0071E3;border-color:#0071E3;border-radius:980px;}
+
+    #page-home.apple-style .secondary-btn{
+      border:none;
+      background:transparent;
+      color:#0071E3;
+      font-weight:500;
+      padding:10px 0;
+    }
+    #page-home.apple-style .secondary-btn:hover{color:#0055C6;}
+
+    #page-home.apple-style .home-pros-item:hover{background:#F5F5F7;border-color:transparent;}
+    #page-home.apple-style .home-pros-item--more .home-pros-avatar{background:#FFFFFF;border:2px dashed #D2D2D7;}
+    #page-home.apple-style .home-pros-item--more:hover .home-pros-avatar{border-color:#0071E3;}
+
+    #page-home.apple-style .home-calc-modal{border-radius:18px;box-shadow:0 40px 80px rgba(0,0,0,.2);}
+    #page-home.apple-style .home-calc-key{background:#FFFFFF;}
+    #page-home.apple-style .home-calc-key:hover{background:#F5F5F7;}
+    #page-home.apple-style .home-calc-display{background:#F5F5F7;}
+    #page-home.apple-style .home-calc-key--eq{background:#0071E3;}
+    #page-home.apple-style .home-calc-key--eq:hover{background:#0055C6;opacity:1;}
+
+    #page-home.apple-style .readiness-summary{background:#F5F5F7;border:none;border-radius:14px;}
+    #page-home.apple-style .home-cat-head{border-bottom:1px solid #E8E8ED;}
+    #page-home.apple-style .home-cat-head .home-cat-glyph{background:#0071E3;font-weight:600;}
+    #page-home.apple-style .home-link-list li{border-bottom:1px solid #E8E8ED;}
+    #page-home.apple-style .home-link-list a:hover{color:#0071E3;}
+
+    @media (max-width:767px){
+      #page-home.apple-style .card{padding:20px;}
+    }
   </style>
 
 </div><!-- /page-home -->
