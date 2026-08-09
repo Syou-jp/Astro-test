@@ -900,14 +900,12 @@
        Most of home.html's components already read design tokens
        (var(--accent), var(--ink), var(--line), var(--radius-*)) from
        global.css, so re-pointing those tokens on this page cascades the
-       look through the whole page without touching global.css itself. */
-    #page-home.apple-style,
+       look through the whole page without touching global.css itself.
+       Sitewide background/font now live in global.css — this block only
+       adds the extra home-page-specific card/button treatment. */
     #page-home.apple-style *{
-      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI","Noto Sans JP",sans-serif !important;
       letter-spacing:0;
     }
-    body:has(#page-home.apple-style){background:#FFFFFF;}
-    .tab-panel:has(#page-home.apple-style){background:#FFFFFF;border:none;box-shadow:none;}
 
     #page-home.apple-style{
       --accent:#0071E3;
@@ -918,6 +916,28 @@
       --line-soft:#E8E8ED;
       --radius-sm:14px;
       --radius-md:18px;
+    }
+
+    /* Keep the "今日の為替レート" card and its calculator exactly as the
+       original site design — reset the tokens back to the paper theme's
+       defaults for that one component only. */
+    #page-home.apple-style #homeFxCard,
+    #page-home.apple-style #homeCalcOverlay .home-calc-modal{
+      --accent:#1E3A8A;
+      --accent-2:#334155;
+      --ink:#0F172A;
+      --ink-soft:#475569;
+      --line:#E2E8F0;
+      --line-soft:#F1F5F9;
+      --radius-sm:8px;
+      --radius-md:12px;
+    }
+    #page-home.apple-style #homeFxCard,
+    #page-home.apple-style #homeFxCard *,
+    #page-home.apple-style #homeCalcOverlay,
+    #page-home.apple-style #homeCalcOverlay *{
+      font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","Noto Sans TC","Noto Sans KR","PingFang TC","Microsoft JhengHei",sans-serif !important;
+      letter-spacing:normal;
     }
 
     #page-home.apple-style .card{
@@ -937,11 +957,9 @@
     }
     #page-home.apple-style .home-pros-lead{font-size:14px;}
 
-    /* Quick nav / news / fx tiles sit on the grey card, so keep them white for contrast. */
+    /* Quick nav / news / latest tiles sit on the grey card, so keep them white for contrast. */
     #page-home.apple-style .home-quick-nav-item,
     #page-home.apple-style .home-news-card,
-    #page-home.apple-style .home-fx-card,
-    #page-home.apple-style .home-fx-row,
     #page-home.apple-style .home-latest-item,
     #page-home.apple-style .home-food-photo,
     #page-home.apple-style .home-category-card{
@@ -952,24 +970,10 @@
     #page-home.apple-style .home-quick-nav-item{border-radius:18px;}
     #page-home.apple-style .home-quick-nav-item:hover{transform:translateY(-2px);}
     #page-home.apple-style .home-quick-nav-icon{box-shadow:none;}
-    #page-home.apple-style .home-news-card,
-    #page-home.apple-style .home-fx-card{border-radius:18px;background:#FFFFFF;}
-    #page-home.apple-style .home-fx-row,
+    #page-home.apple-style .home-news-card{border-radius:18px;background:#FFFFFF;}
     #page-home.apple-style .home-latest-item,
     #page-home.apple-style .home-category-card{border-radius:14px;}
     #page-home.apple-style .home-food-photo{border-radius:14px;}
-
-    #page-home.apple-style .home-fx-swap-btn,
-    #page-home.apple-style .home-fx-calc-btn,
-    #page-home.apple-style .home-fx-amount-toggle,
-    #page-home.apple-style .home-fx-collapse-btn{
-      background:#FFFFFF;
-      border-color:#D2D2D7;
-      border-radius:980px;
-    }
-    #page-home.apple-style .home-fx-swap-btn.is-reversed{background:#0071E3;border-color:#0071E3;}
-    #page-home.apple-style .home-fx-amount-btn.is-active{background:#0071E3;}
-    #page-home.apple-style .home-fx-toggle-btn{background:#0071E3;border-color:#0071E3;border-radius:980px;}
 
     #page-home.apple-style .secondary-btn{
       border:none;
@@ -983,13 +987,6 @@
     #page-home.apple-style .home-pros-item:hover{background:#F5F5F7;border-color:transparent;}
     #page-home.apple-style .home-pros-item--more .home-pros-avatar{background:#FFFFFF;border:2px dashed #D2D2D7;}
     #page-home.apple-style .home-pros-item--more:hover .home-pros-avatar{border-color:#0071E3;}
-
-    #page-home.apple-style .home-calc-modal{border-radius:18px;box-shadow:0 40px 80px rgba(0,0,0,.2);}
-    #page-home.apple-style .home-calc-key{background:#FFFFFF;}
-    #page-home.apple-style .home-calc-key:hover{background:#F5F5F7;}
-    #page-home.apple-style .home-calc-display{background:#F5F5F7;}
-    #page-home.apple-style .home-calc-key--eq{background:#0071E3;}
-    #page-home.apple-style .home-calc-key--eq:hover{background:#0055C6;opacity:1;}
 
     #page-home.apple-style .readiness-summary{background:#F5F5F7;border:none;border-radius:14px;}
     #page-home.apple-style .home-cat-head{border-bottom:1px solid #E8E8ED;}

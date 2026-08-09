@@ -1,5 +1,5 @@
 :root{
-    --paper:#FAFAF9;
+    --paper:#FFFFFF;
     --paper-2:#F1F5F9;
     --ink:#0F172A;
     --ink-soft:#475569;
@@ -92,8 +92,15 @@
   .info-list li{padding-left:2px;}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  /* Apple-style typography pass: several components hardcode "Shippori
+     Mincho" (headings) or "JetBrains Mono" (numeric displays) at a
+     specificity the body rule below can't reach, so the system font
+     stack is forced here to cover the whole site, not just plain text. */
+  *{
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI","Noto Sans JP","Noto Sans SC","Noto Sans TC","Noto Sans KR","PingFang TC","Microsoft JhengHei",sans-serif !important;
+  }
   body{
-    font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","Noto Sans TC","Noto Sans KR","PingFang TC","Microsoft JhengHei",sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI","Noto Sans JP","Noto Sans SC","Noto Sans TC","Noto Sans KR","PingFang TC","Microsoft JhengHei",sans-serif;
     background:var(--paper);
     color:var(--ink);
     min-height:100vh;

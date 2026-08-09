@@ -1,4 +1,4 @@
-<div id="page-nisa" class="page-view active theme-tax apple-style">
+<div id="page-nisa" class="page-view active theme-tax">
     <div class="eyebrow">新NISA計算機</div>
     <div class="portal-alert"><strong>ご参考：</strong>複利計算式により、新NISA制度下での毎月定額積立の資産成長を試算します。あくまで概算の参考値であり、投資助言ではありません。実際の運用成果は市場の変動により異なります。</div>
     <div class="grid">
@@ -43,110 +43,11 @@
     </div>
 
     <style>
-      /* Apple Human Interface style pass — scoped to #page-nisa only. */
-      #page-nisa.apple-style,
-      #page-nisa.apple-style *{
-        font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI","Noto Sans JP",sans-serif;
-        letter-spacing:0;
-      }
-      body:has(#page-nisa.apple-style){background:#FFFFFF;}
-      .tab-panel:has(#page-nisa.apple-style){background:#FFFFFF;border:none;box-shadow:none;}
-      #page-nisa.apple-style .eyebrow{
-        font-size:12px;
-        font-weight:600;
-        letter-spacing:.01em;
-        text-transform:none;
-        color:#0071E3;
-        margin:0 0 20px;
-      }
-      #page-nisa.apple-style .portal-alert{
-        background:#F5F5F7;
-        border-left:none;
-        border-radius:18px;
-        color:#6E6E73;
-        font-size:13px;
-      }
-      #page-nisa.apple-style .portal-alert strong{color:#1D1D1F;}
-      #page-nisa.apple-style .card{
-        background:#F5F5F7;
-        border:none;
-        border-radius:18px;
-        padding:40px;
-        box-shadow:none;
-      }
-      #page-nisa.apple-style .section-title{
-        font-weight:600 !important;
-        font-size:22px;
-        letter-spacing:-0.01em;
-        color:#1D1D1F;
-        margin:0 0 18px;
-        padding-bottom:0;
-        border-bottom:none;
-        background-image:none;
-      }
-      #page-nisa.apple-style .apply-field label{
-        font-weight:500;
-        color:#1D1D1F;
-        font-size:13px;
-      }
-      #page-nisa.apple-style .apply-field input,
-      #page-nisa.apple-style .apply-field select{
-        border:1px solid #D2D2D7;
-        border-radius:10px;
-        background:#FFFFFF;
-        color:#1D1D1F;
-      }
-      #page-nisa.apple-style .apply-field input:focus-visible,
-      #page-nisa.apple-style .apply-field select:focus-visible{
-        border-color:#0071E3;
-      }
-      #page-nisa.apple-style .apply-field .input-wrap{border-radius:10px;overflow:hidden;}
-      #page-nisa.apple-style .apply-field .input-wrap input{border-radius:0;}
-      #page-nisa.apple-style .apply-field .input-wrap > span{
-        background:#F5F5F7;
-        border:1px solid #D2D2D7;
-        border-left:none;
-        color:#6E6E73;
-      }
-      #page-nisa.apple-style .btn-copy{
-        background:#0071E3;
-        color:#FFFFFF;
-        border-radius:980px;
-        font-weight:500;
-        padding:14px;
-        transition:background .2s ease;
-      }
-      #page-nisa.apple-style .btn-copy:hover{background:#0055C6;}
-      #page-nisa.apple-style .market-note{
-        background:#F5F5F7;
-        border:none;
-        border-radius:14px;
-        color:#6E6E73;
-      }
-      #page-nisa.apple-style .market-note strong{color:#1D1D1F;}
-      #page-nisa .calc-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
-      #page-nisa.apple-style .calc-kpi{
-        position:relative;
-        padding:16px 18px;
-        border:none;
-        border-radius:14px;
-        background:#F5F5F7;
-        transition:box-shadow .15s ease,transform .15s ease;
-      }
-      #page-nisa.apple-style .calc-kpi:hover{box-shadow:0 2px 10px rgba(0,0,0,.06);transform:translateY(-1px);}
-      #page-nisa.apple-style .calc-kpi span{font-size:11px;letter-spacing:.01em;color:#6E6E73;}
-      #page-nisa.apple-style .calc-kpi strong{font-size:19px;font-weight:600;font-family:inherit !important;color:#0071E3;}
-      #page-nisa.apple-style .calc-kpi:nth-child(1) strong,
-      #page-nisa.apple-style .calc-kpi:nth-child(4) strong{color:#1D1D1F !important;}
-      @media(max-width:520px){#page-nisa .calc-kpi-grid{grid-template-columns:1fr;}}
       .nisa-table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
       #nisaTable{border-collapse:collapse;font-size:12.5px;width:100%;}
       #nisaTable th,#nisaTable td{border-bottom:1px solid var(--line,#ddd6c5);padding:7px 6px;text-align:right;white-space:nowrap;}
       #nisaTable th:first-child,#nisaTable td:first-child,#nisaTable th:nth-child(2),#nisaTable td:nth-child(2){text-align:left;}
       #nisaTable th{color:var(--ink-soft,#6b665a);font-weight:700;font-size:11px;}
-      #page-nisa.apple-style #nisaTable th,
-      #page-nisa.apple-style #nisaTable td{border-bottom:1px solid #D2D2D7;color:#1D1D1F;}
-      #page-nisa.apple-style #nisaTable th{color:#6E6E73;font-weight:500;}
       @media(max-width:520px){
         #nisaTable{font-size:10.5px;width:100%;table-layout:fixed;}
         #nisaTable th,#nisaTable td{padding:6px 3px;white-space:normal;word-break:break-all;}
@@ -154,6 +55,14 @@
         #nisaTable th:nth-child(2),#nisaTable td:nth-child(2){width:12%;padding-left:0;padding-right:2px;}
         .nisa-suffix{display:none;}
       }
+
+      #page-nisa .calc-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+      #page-nisa .calc-kpi{position:relative;padding:14px 14px 14px 16px;border:1px solid var(--line);border-left:3px solid #F59E0B;border-radius:0;background:var(--paper);transition:box-shadow .15s ease,transform .15s ease;}
+      #page-nisa .calc-kpi:hover{box-shadow:0 2px 10px rgba(0,0,0,.06);transform:translateY(-1px);}
+      #page-nisa .calc-kpi span{font-size:10.5px;letter-spacing:.02em;}
+      #page-nisa .calc-kpi strong{font-size:18px;color:#F59E0B;}
+      #page-nisa .calc-kpi:nth-child(1),#page-nisa .calc-kpi:nth-child(4){border-left-color:var(--ink);}
+      @media(max-width:520px){#page-nisa .calc-kpi-grid{grid-template-columns:1fr;}}
     </style>
 
     <script>
