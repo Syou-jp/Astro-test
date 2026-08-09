@@ -41,7 +41,11 @@ const alternateUrls = ENABLED_LOCALES.map((alternateLocale) => ({
     <div class="wrap">
       <div class="site-header-sticky">
       <div class="masthead">
-        <h1><a href={localePath(currentLocale.code)} class="site-title-link">Sotocom <span class="site-tagline" id="siteTagline" style="font-size:11.5px;color:var(--ink-soft);font-weight:400;white-space:nowrap;">国から日本へ。ともに生きるコミュニティ。</span></a></h1>
+        <h1 class="masthead-brand">
+          <a class="site-title-link" href={localePath(currentLocale.code)} aria-label="Sotocom">
+            <span class="site-logo"><img src="/New Logo.png" alt="Sotocom" /></span>
+          </a>
+        </h1>
 
         <nav class="tab-bar" id="tabBar" aria-label="ページ一覧">
           {navGroups.map((group, i) => (
@@ -1345,7 +1349,7 @@ const UTIL_TAB_LABELS={
 };
 function siteApplyUtilTabLabels(lang){const copy=UTIL_TAB_LABELS[lang]||UTIL_TAB_LABELS.ja;Object.entries(copy).forEach(([id,text])=>{const el=document.getElementById(id);if(el)el.textContent=text;});}
 const SITE_TAGLINE={
- ja:"国から日本へ。ともに生きるコミュニティ。",
+ ja:"日本での暮らしを、もっとやさしく。",
  "zh-TW":"連結在日本生活的外國人",
  "zh-CN":"连接在日本生活的外国人",
  en:"Connecting foreigners living in Japan",

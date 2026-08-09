@@ -155,7 +155,7 @@
     color:var(--ink);
     white-space:nowrap;
   }
-  .masthead-brand-spacer{width:145px;height:44px;flex:0 0 auto;}
+  .masthead-brand{margin:0;flex:0 0 auto;}
   .site-title-link{
     display:inline-flex;
     align-items:center;

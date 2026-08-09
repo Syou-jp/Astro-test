@@ -1,42 +1,36 @@
 <div id="page-home" class="page-view active theme-home apple-style">
   <div class="card home-hero-section" style="margin-bottom:18px;">
-    <div class="home-hero-grid">
-      <div class="home-hero-text">
-        <div class="home-hero-logo" aria-label="Sotocom"><img src="/New Logo.png" alt="Sotocom"></div>
-        <h2 class="home-hero-title">国から日本へ。ともに生きるコミュニティ。</h2>
-        <p class="home-hero-lead">外国人のための生活ガイドが、ぜんぶここに。</p>
-      </div>
-      <div class="home-hero-media">
-        <picture>
-          <source srcset="/hero-photo.webp" type="image/webp">
-          <img src="/hero-photo.jpg" alt="スマートフォンを見ながら会話を楽しむ3人の女性" width="1076" height="423" loading="eager" fetchpriority="high" decoding="async">
-        </picture>
-      </div>
+    <div class="home-hero-head">
+      <h2 class="home-hero-title">国から日本へ。<br class="home-hero-title-br">ともに生きるコミュニティ。</h2>
+    </div>
+    <svg class="home-hero-line" viewBox="0 0 1200 460" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,230 C160,238 260,120 420,120 C500,120 520,190 600,190 C700,190 740,70 900,58 C1000,50 1060,80 1200,40" />
+    </svg>
+    <div class="home-hero-media">
+      <picture>
+        <source srcset="/hero-photo.webp" type="image/webp">
+        <img src="/hero-photo.jpg" alt="スマートフォンを見ながら会話を楽しむ3人の女性" width="1076" height="423" loading="eager" fetchpriority="high" decoding="async">
+      </picture>
     </div>
   </div>
 
   <style>
-    .home-hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;min-height:340px;}
-    .home-hero-text{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:40px;min-width:0;}
-    .home-hero-logo{display:block;width:360px;height:130px;overflow:hidden;margin-bottom:2px;}
-    .home-hero-logo img{display:block;width:360px;max-width:none;height:auto;margin-left:-24px;}
-    .home-hero-title{margin:0;font-size:27px;line-height:1.4;font-weight:700;letter-spacing:-0.01em;color:var(--ink);}
-    .home-hero-lead{margin:0;font-size:14.5px;line-height:1.75;color:var(--ink-soft);}
-    .home-hero-media{position:relative;min-height:100%;overflow:hidden;background:var(--paper-2);border-radius:0 18px 18px 0;}
-    .home-hero-media img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0;transform:translateX(-20px) scale(1.04);transform-origin:center;}
+    .home-hero-section{padding:0;position:relative;overflow:hidden;}
+    .home-hero-head{position:relative;z-index:1;padding:44px 44px 8px;}
+    .home-hero-title{margin:0;max-width:480px;font-size:28px;line-height:1.55;font-weight:700;letter-spacing:.01em;color:var(--ink);}
+    .home-hero-media{position:relative;margin:22px 24px 24px;overflow:hidden;border-radius:14px;aspect-ratio:1076/360;background:var(--paper-2);}
+    .home-hero-media img{width:100%;height:100%;object-fit:cover;display:block;}
+    .home-hero-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;}
+    .home-hero-line path{fill:none;stroke:var(--accent);stroke-width:1.4;opacity:.8;}
     @media (max-width:860px){
-      .home-hero-grid{grid-template-columns:1fr;}
-      .home-hero-media{order:-1;aspect-ratio:1076/423;}
-      .home-hero-media{border-radius:18px 18px 0 0;}
-      .home-hero-text{padding:26px 24px 30px;}
-      .home-hero-logo{width:290px;height:106px;}
-      .home-hero-logo img{width:290px;margin-left:-19px;}
-      .home-hero-title{font-size:24px;}
-      .home-hero-lead-br{display:none;}
+      .home-hero-head{padding:30px 26px 4px;}
+      .home-hero-title{font-size:23px;max-width:none;}
+      .home-hero-media{margin:18px 18px 20px;aspect-ratio:1076/560;}
+      .home-hero-line{display:none;}
     }
     @media (max-width:520px){
-      .home-hero-title{font-size:21px;}
-      .home-hero-text{padding:22px 20px 26px;gap:12px;}
+      .home-hero-title{font-size:20px;}
+      .home-hero-title-br{display:none;}
     }
   </style>
 
@@ -1204,10 +1198,9 @@
     }
     #page-home.apple-style .card:last-of-type{margin-bottom:18px !important;}
 
-    /* Hero: photo bleeds to the card edges, so this one card gets its
-       padding stripped and pushed down into .home-hero-text/.home-hero-media
-       instead, with overflow:hidden clipping the photo to the card's
-       corner radius. */
+    /* Hero: heading sits above a full-width inset photo, so this one card
+       gets its padding stripped and pushed down into .home-hero-head/
+       .home-hero-media instead. */
     #page-home.apple-style .home-hero-section{padding:0 !important;overflow:hidden;}
 
     #page-home.apple-style .section-title{
