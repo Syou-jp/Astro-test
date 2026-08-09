@@ -135,8 +135,6 @@
       <div class="home-tabs-heading">
         <span class="home-news-tab-title">NEWS</span>
         <span class="home-news-tab-sub"><span class="home-news-tab-dash" aria-hidden="true"></span>コミュニティの最新情報</span>
-      </div>
-      <div class="home-tabs-content">
         <div class="util-doc-switch home-tabs-bar" role="tablist" aria-label="カテゴリー切替" data-no-i18n>
           <button type="button" class="util-doc-tab home-tab active" data-util-target="homeTabNews">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M7 13h5M7 16.5h8"/></svg></span>
@@ -163,7 +161,8 @@
             <span class="home-tab-label">助け合い掲示板</span>
           </button>
         </div>
-
+      </div>
+      <div class="home-tabs-content">
         <section id="homeTabNews" class="util-doc-panel home-tab-panel active">
           <a class="home-news-card home-news-card--wide" href="/ja/news/" id="homeNewsCard">
             <span class="home-news-thumb" id="homeNewsThumb">
@@ -346,16 +345,14 @@
   </div>
 
   <style>
-    /* Vertical tab bar on left sidebar */
+    /* Vertical tab bar, stacked below the NEWS heading in the left column */
     .home-tabs-bar{
       display:flex;
       flex-direction:column;
       gap:0;
-      margin-top:0;
+      margin-top:20px;
       margin-bottom:0;
       overflow:visible;
-      flex:0 0 clamp(180px,17vw,260px);
-      order:-1;
     }
     .home-tabs-bar::-webkit-scrollbar{display:none;}
     .home-tab{
@@ -372,7 +369,7 @@
     }
     /* On mobile, switch to horizontal scrollable tabs */
     @media (max-width:768px){
-      .home-tabs-bar{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:28px;margin-top:18px;}
+      .home-tabs-bar{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:28px;margin-top:16px;}
       .home-tab{flex:0 0 auto;padding:0 0 14px;}
     }
     .home-tab-icon{display:none;}
@@ -401,16 +398,16 @@
       font-size:13px;
     }
 
-    /* NEWS title, tabs on left sidebar; content on right */
+    /* NEWS heading + tabs stacked in the left column; content panel on the right */
     .home-tabs-layout{display:flex;align-items:flex-start;gap:clamp(24px,3vw,48px);}
     .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;width:clamp(180px,17vw,260px);padding-top:6px;}
-    .home-tabs-content{flex:1 1 auto;min-width:0;display:flex;gap:clamp(24px,3vw,48px);}
+    .home-tabs-content{flex:1 1 auto;min-width:0;}
     .home-news-tab-title{font-size:clamp(46px,5.4vw,84px);font-weight:800;letter-spacing:.06em;line-height:1;}
     .home-news-tab-sub{display:flex;align-items:center;gap:8px;font-size:clamp(12px,1vw,14px);letter-spacing:.04em;color:var(--ink-soft);}
     .home-news-tab-dash{display:block;width:18px;height:1px;background:var(--ink-soft);flex:0 0 auto;}
     @media (max-width:768px){
       .home-tabs-layout{flex-direction:column;gap:16px;}
-      .home-tabs-heading{width:auto;flex-direction:row;align-items:baseline;gap:12px;padding-top:0;}
+      .home-tabs-heading{width:auto;flex-direction:column;align-items:flex-start;gap:8px;padding-top:0;}
       .home-news-tab-title{font-size:32px;}
     }
   </style>
