@@ -957,23 +957,51 @@
     }
     #page-home.apple-style .home-pros-lead{font-size:14px;}
 
-    /* Quick nav / news / latest tiles sit on the grey card, so keep them white for contrast. */
+    /* Quick nav / news / latest tiles sit on the grey card. Apple rarely
+       outlines these — a soft resting shadow plus a slightly stronger one
+       on hover reads as "tappable" without a hard grey line. */
     #page-home.apple-style .home-quick-nav-item,
     #page-home.apple-style .home-news-card,
     #page-home.apple-style .home-latest-item,
     #page-home.apple-style .home-food-photo,
     #page-home.apple-style .home-category-card{
       background:#FFFFFF;
-      border:1px solid #D2D2D7;
-      box-shadow:none;
+      border:none;
+      box-shadow:0 1px 2px rgba(0,0,0,.04),0 1px 6px rgba(0,0,0,.04);
+      transition:box-shadow .2s ease,transform .2s ease;
     }
     #page-home.apple-style .home-quick-nav-item{border-radius:18px;}
-    #page-home.apple-style .home-quick-nav-item:hover{transform:translateY(-2px);}
+    #page-home.apple-style .home-quick-nav-item:hover,
+    #page-home.apple-style .home-news-card:hover,
+    #page-home.apple-style .home-latest-item:hover,
+    #page-home.apple-style .home-category-card:hover{
+      box-shadow:0 4px 16px rgba(0,0,0,.08);
+      transform:translateY(-2px);
+    }
     #page-home.apple-style .home-quick-nav-icon{box-shadow:none;}
     #page-home.apple-style .home-news-card{border-radius:18px;background:#FFFFFF;}
     #page-home.apple-style .home-latest-item,
     #page-home.apple-style .home-category-card{border-radius:14px;}
-    #page-home.apple-style .home-food-photo{border-radius:14px;}
+    #page-home.apple-style .home-food-photo{border-radius:14px;box-shadow:0 1px 6px rgba(0,0,0,.06);}
+    #page-home.apple-style .home-food-photo:hover{box-shadow:0 6px 18px rgba(0,0,0,.14);}
+    #page-home.apple-style .home-food-tag{
+      left:8px;right:auto;bottom:8px;
+      padding:5px 11px;
+      border-radius:980px;
+      background:rgba(0,0,0,.55);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      font-weight:500 !important;
+      font-size:11px;
+    }
+
+    /* Softer, tinted pill chips instead of solid-fill badges. */
+    #page-home.apple-style .home-latest-badge{background:#EAF2FF;color:#0071E3;font-weight:600;}
+    #page-home.apple-style .home-latest-badge--tenant{background:#EAF2FF;color:#0071E3;}
+    #page-home.apple-style .home-latest-badge--share{background:#E6F5F7;color:#1D7480;}
+    #page-home.apple-style .home-latest-badge--help{background:#FBF0E4;color:#9C6B3E;}
+    #page-home.apple-style .home-latest-badge--event{background:#F1EAFB;color:#6B4FA0;}
+    #page-home.apple-style .home-latest-badge--market{background:#EAF5EA;color:#4B8A4B;}
 
     #page-home.apple-style .secondary-btn{
       border:none;
@@ -985,8 +1013,9 @@
     #page-home.apple-style .secondary-btn:hover{color:#0055C6;}
 
     #page-home.apple-style .home-pros-item:hover{background:#F5F5F7;border-color:transparent;}
-    #page-home.apple-style .home-pros-item--more .home-pros-avatar{background:#FFFFFF;border:2px dashed #D2D2D7;}
+    #page-home.apple-style .home-pros-item--more .home-pros-avatar{background:#FFFFFF;border:2px dashed #D2D2D7;box-shadow:none;}
     #page-home.apple-style .home-pros-item--more:hover .home-pros-avatar{border-color:#0071E3;}
+    #page-home.apple-style .home-pros-avatar{box-shadow:none;}
 
     #page-home.apple-style .readiness-summary{background:#F5F5F7;border:none;border-radius:14px;}
     #page-home.apple-style .home-cat-head{border-bottom:1px solid #E8E8ED;}
