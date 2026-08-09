@@ -394,9 +394,9 @@
        label — it names "latest info by category" as a whole, not just
        the news tab, so it stays put while switching tabs. */
     .home-tabs-layout{display:flex;align-items:flex-start;gap:clamp(24px,3vw,48px);}
-    .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;width:clamp(160px,15vw,230px);padding-top:6px;}
+    .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;width:clamp(180px,17vw,260px);padding-top:6px;}
     .home-tabs-content{flex:1 1 auto;min-width:0;}
-    .home-news-tab-title{font-size:clamp(38px,4.4vw,68px);font-weight:800;letter-spacing:.06em;line-height:1;}
+    .home-news-tab-title{font-size:clamp(46px,5.4vw,84px);font-weight:800;letter-spacing:.06em;line-height:1;}
     .home-news-tab-sub{display:flex;align-items:center;gap:8px;font-size:clamp(12px,1vw,14px);letter-spacing:.04em;color:var(--ink-soft);}
     .home-news-tab-dash{display:block;width:18px;height:1px;background:var(--ink-soft);flex:0 0 auto;}
     @media (max-width:768px){
@@ -907,7 +907,7 @@
 
   <style>
     #page-home.apple-style .card.home-partners-banner{
-      padding:24px !important;
+      padding:24px 32px !important;
     }
     .home-partners-banner{
       background:linear-gradient(135deg,#FFF3E4 0%,#FDE9EF 45%,#EAF1FF 100%);
@@ -1290,6 +1290,12 @@
     }
     #page-home.apple-style .home-quick-nav-icon{box-shadow:none;}
     #page-home.apple-style .home-news-card{border-radius:18px;background:#FFFFFF;}
+    /* The default .home-news-card--wide caps height at 300px, which shrinks
+       its aspect-ratio-derived width below the tab content column and
+       leaves it flush left with dead space on the right — misaligned with
+       the full-width photo grid below it. Drop the cap so it fills the
+       column like that grid does. */
+    #page-home.apple-style .home-news-card--wide{width:100%;max-height:none;}
     #page-home.apple-style .home-latest-item,
     #page-home.apple-style .home-category-card{border-radius:14px;}
     #page-home.apple-style .home-food-photo{border-radius:14px;box-shadow:0 1px 6px rgba(0,0,0,.06);}
