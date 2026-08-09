@@ -346,18 +346,14 @@
   </div>
 
   <style>
-    /* Underline tab bar, text-only, horizontally scrollable on narrow screens
-       instead of wrapping into a multi-row segmented grid. */
+    /* Vertical tab bar on left sidebar */
     .home-tabs-bar{
       display:flex;
-      grid-template-columns:none;
-      flex-wrap:nowrap;
-      overflow-x:auto;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
-      gap:28px;
-      margin-top:18px;
+      flex-direction:column;
+      gap:0;
+      margin-top:0;
       margin-bottom:0;
+      overflow:visible;
     }
     .home-tabs-bar::-webkit-scrollbar{display:none;}
     .home-tab{
@@ -365,19 +361,17 @@
       display:flex;
       flex-direction:row;
       align-items:center;
-      justify-content:center;
-      gap:0;
-      padding:0 0 14px;
+      justify-content:flex-start;
+      gap:8px;
+      padding:12px 0;
       white-space:nowrap;
       position:relative;
+      border-bottom:none;
     }
-    /* Fill the full width of the bar (matching the divider rule beneath it)
-       with equal-width tabs instead of leaving the row left-packed with
-       dead space on the right. Kept to wider screens only — on narrow
-       viewports the bar stays horizontally scrollable at natural width. */
-    @media (min-width:641px){
-      .home-tabs-bar{gap:0;overflow-x:visible;}
-      .home-tab{flex:1 1 0;padding:0 6px 14px;}
+    /* On mobile, switch to horizontal scrollable tabs */
+    @media (max-width:768px){
+      .home-tabs-bar{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:28px;margin-top:18px;}
+      .home-tab{flex:0 0 auto;padding:0 0 14px;}
     }
     .home-tab-icon{display:none;}
     .home-tab-label{font-size:13.5px;line-height:1.3;font-weight:600;}
@@ -405,14 +399,16 @@
       font-size:13px;
     }
 
-    /* NEWS title sits above the tabs+content; tabs are below heading. */
-    .home-tabs-layout{display:flex;flex-direction:column;gap:18px;}
-    .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;width:100%;padding-top:0;}
+    /* NEWS title and tabs on left, content on right */
+    .home-tabs-layout{display:flex;align-items:flex-start;gap:clamp(24px,3vw,48px);}
+    .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;width:clamp(180px,17vw,260px);padding-top:6px;}
     .home-tabs-content{flex:1 1 auto;min-width:0;}
     .home-news-tab-title{font-size:clamp(46px,5.4vw,84px);font-weight:800;letter-spacing:.06em;line-height:1;}
     .home-news-tab-sub{display:flex;align-items:center;gap:8px;font-size:clamp(12px,1vw,14px);letter-spacing:.04em;color:var(--ink-soft);}
     .home-news-tab-dash{display:block;width:18px;height:1px;background:var(--ink-soft);flex:0 0 auto;}
     @media (max-width:768px){
+      .home-tabs-layout{flex-direction:column;gap:16px;}
+      .home-tabs-heading{width:auto;flex-direction:row;align-items:baseline;gap:12px;padding-top:0;}
       .home-news-tab-title{font-size:32px;}
     }
   </style>
