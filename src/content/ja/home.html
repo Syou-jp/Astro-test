@@ -2,8 +2,9 @@
   <div class="card home-hero-section" style="margin-bottom:18px;">
     <div class="home-hero-grid">
       <div class="home-hero-text">
-        <h2 class="home-hero-title">日本での暮らしを、<br>もっとやさしく。</h2>
-        <p class="home-hero-lead">住まい・お金・手続きから、コミュニティの助け合いまで。<br class="home-hero-lead-br">外国人のための生活ガイドが、ぜんぶここに。</p>
+        <div class="home-hero-logo" aria-label="Sotocom"><img src="/New Logo.png" alt="Sotocom"></div>
+        <h2 class="home-hero-title">国から日本へ。ともに生きるコミュニティ。</h2>
+        <p class="home-hero-lead">外国人のための生活ガイドが、ぜんぶここに。</p>
       </div>
       <div class="home-hero-media">
         <picture>
@@ -17,15 +18,19 @@
   <style>
     .home-hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;min-height:340px;}
     .home-hero-text{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:40px;min-width:0;}
-    .home-hero-title{margin:0;font-size:30px;line-height:1.4;font-weight:700;letter-spacing:-0.01em;color:var(--ink);}
+    .home-hero-logo{display:block;width:360px;height:130px;overflow:hidden;margin-bottom:2px;}
+    .home-hero-logo img{display:block;width:360px;max-width:none;height:auto;margin-left:-24px;}
+    .home-hero-title{margin:0;font-size:27px;line-height:1.4;font-weight:700;letter-spacing:-0.01em;color:var(--ink);}
     .home-hero-lead{margin:0;font-size:14.5px;line-height:1.75;color:var(--ink-soft);}
-    .home-hero-media{position:relative;min-height:100%;background:var(--paper-2);}
-    .home-hero-media img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0 18px 18px 0;}
+    .home-hero-media{position:relative;min-height:100%;overflow:hidden;background:var(--paper-2);border-radius:0 18px 18px 0;}
+    .home-hero-media img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0;transform:translateX(-20px) scale(1.04);transform-origin:center;}
     @media (max-width:860px){
       .home-hero-grid{grid-template-columns:1fr;}
       .home-hero-media{order:-1;aspect-ratio:1076/423;}
-      .home-hero-media img{border-radius:18px 18px 0 0;}
+      .home-hero-media{border-radius:18px 18px 0 0;}
       .home-hero-text{padding:26px 24px 30px;}
+      .home-hero-logo{width:290px;height:106px;}
+      .home-hero-logo img{width:290px;margin-left:-19px;}
       .home-hero-title{font-size:24px;}
       .home-hero-lead-br{display:none;}
     }
@@ -129,7 +134,7 @@
     <div class="home-tabs-layout">
       <div class="home-tabs-heading">
         <span class="home-news-tab-title">NEWS</span>
-        <span class="home-news-tab-sub"><span class="home-news-tab-dash" aria-hidden="true"></span>カテゴリー別の最新情報</span>
+        <span class="home-news-tab-sub"><span class="home-news-tab-dash" aria-hidden="true"></span>コミュニティの最新情報</span>
       </div>
       <div class="home-tabs-content">
         <div class="util-doc-switch home-tabs-bar" role="tablist" aria-label="カテゴリー切替" data-no-i18n>
@@ -400,18 +405,14 @@
       font-size:13px;
     }
 
-    /* NEWS title sits beside the tabs+content as a persistent section
-       label — it names "latest info by category" as a whole, not just
-       the news tab, so it stays put while switching tabs. */
-    .home-tabs-layout{display:flex;align-items:flex-start;gap:clamp(24px,3vw,48px);}
-    .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;width:clamp(180px,17vw,260px);padding-top:6px;}
+    /* NEWS title sits above the tabs+content; tabs are below heading. */
+    .home-tabs-layout{display:flex;flex-direction:column;gap:18px;}
+    .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;width:100%;padding-top:0;}
     .home-tabs-content{flex:1 1 auto;min-width:0;}
     .home-news-tab-title{font-size:clamp(46px,5.4vw,84px);font-weight:800;letter-spacing:.06em;line-height:1;}
     .home-news-tab-sub{display:flex;align-items:center;gap:8px;font-size:clamp(12px,1vw,14px);letter-spacing:.04em;color:var(--ink-soft);}
     .home-news-tab-dash{display:block;width:18px;height:1px;background:var(--ink-soft);flex:0 0 auto;}
     @media (max-width:768px){
-      .home-tabs-layout{flex-direction:column;gap:16px;}
-      .home-tabs-heading{width:auto;flex-direction:row;align-items:baseline;gap:12px;padding-top:0;}
       .home-news-tab-title{font-size:32px;}
     }
   </style>
@@ -999,6 +1000,7 @@
       display:block;
       width:100%;
       height:auto;
+      transform:translateX(20px);
     }
     @media (max-width:760px){
       .home-partners-banner-grid{grid-template-columns:1fr;gap:20px;}
@@ -1070,6 +1072,7 @@
             <li><a href="/ja/help-request/">助け合い<small>HELP BOARD</small></a></li>
             <li><a href="/ja/restaurant-list/">店舗一覧<small>SHOP GUIDE</small></a></li>
             <li><a href="/ja/kurashi-services/">暮らしのサービス<small>LIFESTYLE SERVICES</small></a></li>
+            <li><a href="/ja/partners/">専門家リスト<small>PROFESSIONALS</small></a></li>
           </ul>
         </div>
         <div class="home-category-card">
@@ -1082,7 +1085,6 @@
             <li><a href="/ja/overseas-shipping/">海外発送ガイド<small>SHIPPING</small></a></li>
             <li><a href="/ja/holidays/">国民の祝日<small>HOLIDAYS</small></a></li>
             <li><a href="/ja/era/">元号・年齢早見表<small>ERA CONVERTER</small></a></li>
-            <li><a href="/ja/partners/">専門家リスト<small>PROFESSIONALS</small></a></li>
           </ul>
         </div>
       </div>
