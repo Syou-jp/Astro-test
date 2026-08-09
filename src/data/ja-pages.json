@@ -180,13 +180,19 @@
     "id": "page-restaurant-list",
     "slug": "restaurant-list",
     "file": "restaurant-list.html",
-    "title": "お店リスト｜飲食店・美容・物産店"
+    "title": "店舗一覧｜飲食店・美容・物産店"
   },
   {
     "id": "page-partners",
     "slug": "partners",
     "file": "partners.html",
-    "title": "厳選パートナー"
+    "title": "専門家リスト"
+  },
+  {
+    "id": "page-kurashi-services",
+    "slug": "kurashi-services",
+    "file": "kurashi-services.html",
+    "title": "暮らしのサービス"
   },
   {
     "id": "page-tax-personal",

@@ -264,8 +264,15 @@
         "id": "page-restaurant-list",
         "slug": "restaurant-list",
         "glyph": "食",
-        "text": "お店リスト",
+        "text": "店舗一覧",
         "small": "SHOP &amp; SERVICE GUIDE"
+      },
+      {
+        "id": "page-kurashi-services",
+        "slug": "kurashi-services",
+        "glyph": "暮",
+        "text": "暮らしのサービス",
+        "small": "LIFESTYLE SERVICES"
       }
     ]
   },
@@ -325,8 +332,8 @@
         "id": "page-partners",
         "slug": "partners",
         "glyph": "夥",
-        "text": "厳選パートナー",
-        "small": "PARTNERS &amp; LOCAL SERVICES"
+        "text": "専門家リスト",
+        "small": "PROFESSIONALS DIRECTORY"
       }
     ]
   }

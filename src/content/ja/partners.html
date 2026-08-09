@@ -1,6 +1,6 @@
 <div id="page-partners" class="page-view active theme-route">
-  <div class="eyebrow">厳選パートナー</div>
-  <p class="partners-lead">税理士・行政書士・社労士から、引っ越し、不動産、ホテル、人材派遣、車修理、エアコン工事、廃品回収、中古家電、日本語教師、パソコン修理、美容室、整骨院まで。外国人の生活をサポートしてくれる、地域の専門家・お店をまとめています。</p>
+  <div class="eyebrow">専門家リスト</div>
+  <p class="partners-lead">税理士・行政書士・社労士から、不動産、ホテル、人材派遣、中古家電、日本語教師、パソコン修理、美容室、整骨院まで。外国人の生活をサポートしてくれる、地域の専門家・お店をまとめています。引っ越し・車修理・エアコン工事・廃品回収は<a href="/ja/kurashi-services/">暮らしのサービス</a>をご覧ください。</p>
   <div class="portal-alert"><strong>掲載について：</strong>現在表示している事業者情報はすべて「掲載イメージ」のサンプルです。実際の連絡先・料金・対応言語は、必ず各事業者へ直接ご確認ください。この一覧への掲載を希望する事業者様は、画面右下の「広告掲載・提携」ボタンからお問い合わせください。</div>
 
   <div class="card" style="margin-bottom:15px;">
@@ -12,13 +12,9 @@
         <option value="tax">税理士</option>
         <option value="gyosei">行政書士</option>
         <option value="labor">社会保険労務士</option>
-        <option value="moving">引っ越し会社</option>
         <option value="realestate">不動産会社</option>
         <option value="hotel">ホテル・宿泊</option>
         <option value="staffing">人材派遣会社</option>
-        <option value="car">車修理・車検</option>
-        <option value="aircon">エアコン工事・クリーニング</option>
-        <option value="recycle">廃品回収</option>
         <option value="appliance">中古家電販売</option>
         <option value="japanese">日本語教師</option>
         <option value="pc">パソコン組立・修理</option>
@@ -57,15 +53,14 @@
 <script>
   (() => {
     const PARTNER_CATEGORY = {
-      tax: "税理士", gyosei: "行政書士", labor: "社会保険労務士", moving: "引っ越し会社",
-      realestate: "不動産会社", hotel: "ホテル・宿泊", staffing: "人材派遣会社", car: "車修理・車検",
-      aircon: "エアコン工事・クリーニング", recycle: "廃品回収", appliance: "中古家電販売",
+      tax: "税理士", gyosei: "行政書士", labor: "社会保険労務士",
+      realestate: "不動産会社", hotel: "ホテル・宿泊", staffing: "人材派遣会社", appliance: "中古家電販売",
       japanese: "日本語教師", pc: "パソコン組立・修理", hair: "美容室・理髪", beauty: "美容・ネイル",
       chiro: "整骨院・整体"
     };
     const PARTNER_GLYPH = {
-      tax: "税", gyosei: "行", labor: "社", moving: "引", realestate: "不", hotel: "宿",
-      staffing: "派", car: "車", aircon: "冷", recycle: "廃", appliance: "電", japanese: "語",
+      tax: "税", gyosei: "行", labor: "社", realestate: "不", hotel: "宿",
+      staffing: "派", appliance: "電", japanese: "語",
       pc: "P", hair: "髪", beauty: "美", chiro: "整"
     };
     const PARTNER_LANG = {
@@ -80,13 +75,9 @@
       { n: "はなみずき税理士事務所（掲載例）", c: "tax", area: "tokyo", l: ["ja", "en", "zh-tw"], desc: "個人事業主・外国人経営者の確定申告、会社設立後の記帳代行、消費税インボイス対応を中心にサポート。", addr: "東京都新宿区（最寄駅：新宿）", tel: "0300000001", site: "#" },
       { n: "ひかり行政書士事務所（掲載例）", c: "gyosei", area: "tokyo", l: ["ja", "zh-tw", "zh-cn", "vi"], desc: "在留資格の変更・更新、永住許可、帰化申請の書類作成と申請取次を行っています。初回相談は無料。", addr: "東京都豊島区（最寄駅：池袋）", tel: "0300000002", site: "#" },
       { n: "そよかぜ社会保険労務士法人（掲載例）", c: "labor", area: "kanagawa", l: ["ja", "en"], desc: "外国人雇用に伴う社会保険・雇用保険手続き、給与計算、労務相談を企業向けに提供。", addr: "神奈川県横浜市（最寄駅：横浜）", tel: "0300000003", site: "#" },
-      { n: "やまと引越センター（掲載例）", c: "moving", area: "tokyo", l: ["ja", "en", "ko"], desc: "単身・家族向けの引っ越し、大型家具の搬出入、旧居のクリーニングまでワンストップで対応。", addr: "東京都足立区（対応エリア：東京23区）", tel: "0300000004", site: "#" },
       { n: "みらい不動産（外国人サポート窓口）（掲載例）", c: "realestate", area: "tokyo", l: ["ja", "en", "zh-tw", "zh-cn"], desc: "外国人可の賃貸物件紹介、保証会社の案内、契約書の内容説明まで多言語で対応。", addr: "東京都台東区（最寄駅：浅草）", tel: "0300000005", site: "#" },
       { n: "サクラホテル浅草（掲載例）", c: "hotel", area: "tokyo", l: ["ja", "en", "zh-tw", "ko"], desc: "短期滞在・来日直後の仮住まいにも利用しやすいビジネスホテル。週単位の割引プランあり。", addr: "東京都台東区浅草", tel: "0300000006", site: "#" },
       { n: "グローバル人材派遣（掲載例）", c: "staffing", area: "nationwide", l: ["ja", "en", "vi", "id"], desc: "特定技能・技術人文知識国際業務など、在留資格に応じた求人紹介と就労サポート。", addr: "全国対応（オンライン面談可）", tel: "0300000007", site: "#" },
-      { n: "オートサービス中村（掲載例）", c: "car", area: "saitama", l: ["ja", "en"], desc: "車検・修理・中古車販売。外国免許からの切替相談や英語での見積り説明にも対応。", addr: "埼玉県川口市", tel: "0300000008", site: "#" },
-      { n: "クールテック空調サービス（掲載例）", c: "aircon", area: "chiba", l: ["ja", "zh-cn"], desc: "エアコンの新規取付、分解洗浄クリーニング、故障診断・修理を承ります。", addr: "千葉県船橋市", tel: "0300000009", site: "#" },
-      { n: "エコクリア回収センター（掲載例）", c: "recycle", area: "tokyo", l: ["ja", "en", "zh-tw"], desc: "引っ越し・退去時の不用品回収、家電リサイクル法対象品の引き取りに対応。", addr: "東京都江戸川区（対応エリア：一都三県）", tel: "0300000010", site: "#" },
       { n: "リユース家電ステーション（掲載例）", c: "appliance", area: "tokyo", l: ["ja", "en", "vi"], desc: "冷蔵庫・洗濯機・電子レンジなど中古家電の販売とお得な生活家電セットを用意。", addr: "東京都板橋区", tel: "0300000011", site: "#" },
       { n: "にほんご教室ゆずる（掲載例）", c: "japanese", area: "nationwide", l: ["ja", "en", "zh-tw", "zh-cn", "ko"], desc: "生活日本語からJLPT対策までマンツーマン・オンラインレッスンに対応。", addr: "オンライン対応（東京都内で対面可）", tel: "0300000012", site: "#" },
       { n: "PCサポート工房（掲載例）", c: "pc", area: "tokyo", l: ["ja", "en"], desc: "自作PCの組み立て、故障修理、データ移行、日本語⇔外国語キーボード設定を代行。", addr: "東京都中野区", tel: "0300000013", site: "#" },

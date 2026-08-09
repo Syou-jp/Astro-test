@@ -1,0 +1,118 @@
+<div id="page-kurashi-services" class="page-view active theme-route">
+  <div class="eyebrow">暮らしのサービス</div>
+  <p class="partners-lead">引っ越し、車修理・車検、エアコン工事・クリーニング、廃品回収など、暮らしまわりのお困りごとに対応してくれる地域の事業者をまとめています。専門家（税理士・行政書士など）をお探しの方は<a href="/ja/partners/">専門家リスト</a>をご覧ください。</p>
+  <div class="portal-alert"><strong>掲載について：</strong>現在表示している事業者情報はすべて「掲載イメージ」のサンプルです。実際の連絡先・料金・対応言語は、必ず各事業者へ直接ご確認ください。この一覧への掲載を希望する事業者様は、画面右下の「広告掲載・提携」ボタンからお問い合わせください。</div>
+
+  <div class="card" style="margin-bottom:15px;">
+    <div class="section-title">業種・言語・地域から探す</div>
+    <div class="directory-toolbar">
+      <input id="kurashiKeyword" placeholder="事業者名・業種・地域を検索">
+      <select id="kurashiCategory">
+        <option value="all">すべての業種</option>
+        <option value="moving">引っ越し会社</option>
+        <option value="car">車修理・車検</option>
+        <option value="aircon">エアコン工事・クリーニング</option>
+        <option value="recycle">廃品回収</option>
+      </select>
+      <select id="kurashiLanguage">
+        <option value="all">すべての言語</option>
+        <option value="ja">日本語</option>
+        <option value="zh-tw">中文（繁體）</option>
+        <option value="zh-cn">中文（简体）</option>
+        <option value="en">English</option>
+        <option value="ko">한국어</option>
+        <option value="vi">Tiếng Việt</option>
+        <option value="th">ภาษาไทย</option>
+        <option value="id">Bahasa Indonesia</option>
+        <option value="other">その他</option>
+      </select>
+      <select id="kurashiArea">
+        <option value="all">すべての地域</option>
+        <option value="tokyo">東京都</option>
+        <option value="kanagawa">神奈川県</option>
+        <option value="saitama">埼玉県</option>
+        <option value="chiba">千葉県</option>
+        <option value="nationwide">全国・オンライン対応</option>
+      </select>
+    </div>
+    <div class="directory-count" id="kurashiCount">—</div>
+  </div>
+
+  <div class="partner-grid" id="kurashiDirectory"></div>
+  <div class="portal-source">掲載情報は変更される場合があります。ご利用前に事業者の公式サイトまたは電話で最新情報をご確認ください。当サイトは各事業者との取引・契約に関与しません。</div>
+</div><!-- /page-kurashi-services -->
+
+<script>
+  (() => {
+    const KURASHI_CATEGORY = {
+      moving: "引っ越し会社", car: "車修理・車検", aircon: "エアコン工事・クリーニング", recycle: "廃品回収"
+    };
+    const KURASHI_GLYPH = {
+      moving: "引", car: "車", aircon: "冷", recycle: "廃"
+    };
+    const KURASHI_LANG = {
+      ja: "日本語", "zh-tw": "中文（繁體）", "zh-cn": "中文（简体）", en: "English",
+      ko: "한국어", vi: "Tiếng Việt", th: "ภาษาไทย", id: "Bahasa Indonesia", other: "その他"
+    };
+    const KURASHI_AREA = {
+      tokyo: "東京都", kanagawa: "神奈川県", saitama: "埼玉県", chiba: "千葉県", nationwide: "全国・オンライン対応"
+    };
+
+    const KURASHI_DIRECTORY = [
+      { n: "やまと引越センター（掲載例）", c: "moving", area: "tokyo", l: ["ja", "en", "ko"], desc: "単身・家族向けの引っ越し、大型家具の搬出入、旧居のクリーニングまでワンストップで対応。", addr: "東京都足立区（対応エリア：東京23区）", tel: "0300000004", site: "#" },
+      { n: "オートサービス中村（掲載例）", c: "car", area: "saitama", l: ["ja", "en"], desc: "車検・修理・中古車販売。外国免許からの切替相談や英語での見積り説明にも対応。", addr: "埼玉県川口市", tel: "0300000008", site: "#" },
+      { n: "クールテック空調サービス（掲載例）", c: "aircon", area: "chiba", l: ["ja", "zh-cn"], desc: "エアコンの新規取付、分解洗浄クリーニング、故障診断・修理を承ります。", addr: "千葉県船橋市", tel: "0300000009", site: "#" },
+      { n: "エコクリア回収センター（掲載例）", c: "recycle", area: "tokyo", l: ["ja", "en", "zh-tw"], desc: "引っ越し・退去時の不用品回収、家電リサイクル法対象品の引き取りに対応。", addr: "東京都江戸川区（対応エリア：一都三県）", tel: "0300000010", site: "#" }
+    ];
+
+    const photoOf = (category) => `<div class="partner-photo" aria-hidden="true"><span>${KURASHI_GLYPH[category] || "暮"}</span></div>`;
+    const telHref = (tel) => `tel:${tel}`;
+    const telLabel = (tel) => tel.replace(/^(\d{2,4})(\d{2,4})(\d{4})$/, "$1-$2-$3");
+
+    const keywordEl = document.getElementById("kurashiKeyword");
+    const categoryEl = document.getElementById("kurashiCategory");
+    const languageEl = document.getElementById("kurashiLanguage");
+    const areaEl = document.getElementById("kurashiArea");
+    const countEl = document.getElementById("kurashiCount");
+    const gridEl = document.getElementById("kurashiDirectory");
+
+    function render() {
+      const keyword = keywordEl.value.trim().toLowerCase();
+      const category = categoryEl.value;
+      const language = languageEl.value;
+      const area = areaEl.value;
+      const list = KURASHI_DIRECTORY.filter((p) =>
+        (category === "all" || p.c === category) &&
+        (language === "all" || p.l.includes(language)) &&
+        (area === "all" || p.area === area) &&
+        (!keyword || `${p.n} ${p.desc} ${p.addr} ${KURASHI_CATEGORY[p.c]}`.toLowerCase().includes(keyword))
+      );
+      countEl.textContent = `${list.length}件を表示 ／ 全${KURASHI_DIRECTORY.length}件`;
+      gridEl.innerHTML = list.length
+        ? list.map((p) => `
+          <article class="partner-card">
+            ${photoOf(p.c)}
+            <div class="partner-card-body">
+              <div class="partner-card-head">
+                <span class="portal-badge">${KURASHI_CATEGORY[p.c]}</span>
+                <span class="portal-badge">${KURASHI_AREA[p.area]}</span>
+              </div>
+              <h3>${p.n}</h3>
+              <p>${p.desc}</p>
+              <div class="partner-langs">${p.l.map((code) => `<span class="partner-lang-tag">${KURASHI_LANG[code]}</span>`).join("")}</div>
+              <div class="directory-meta">📍 ${p.addr}</div>
+              <div class="portal-actions">
+                <a class="secondary-btn" href="${telHref(p.tel)}">📞 ${telLabel(p.tel)}</a>
+                <a class="secondary-btn" href="${p.site}" target="_blank" rel="noopener">サイトを見る</a>
+              </div>
+            </div>
+          </article>`).join("")
+        : `<div class="directory-empty">条件に合う事業者が見つかりませんでした。業種・言語・地域を「すべて」に戻してお試しください。</div>`;
+    }
+
+    [keywordEl, categoryEl, languageEl, areaEl].forEach((el) =>
+      el.addEventListener(el === keywordEl ? "input" : "change", render)
+    );
+    render();
+  })();
+</script>
