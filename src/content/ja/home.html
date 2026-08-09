@@ -20,10 +20,11 @@
     .home-hero-title{margin:0;font-size:30px;line-height:1.4;font-weight:700;letter-spacing:-0.01em;color:var(--ink);}
     .home-hero-lead{margin:0;font-size:14.5px;line-height:1.75;color:var(--ink-soft);}
     .home-hero-media{position:relative;min-height:100%;background:var(--paper-2);}
-    .home-hero-media img{width:100%;height:100%;object-fit:cover;display:block;}
+    .home-hero-media img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0 18px 18px 0;}
     @media (max-width:860px){
       .home-hero-grid{grid-template-columns:1fr;}
       .home-hero-media{order:-1;aspect-ratio:1076/423;}
+      .home-hero-media img{border-radius:18px 18px 0 0;}
       .home-hero-text{padding:26px 24px 30px;}
       .home-hero-title{font-size:24px;}
       .home-hero-lead-br{display:none;}
@@ -927,8 +928,12 @@
   </div>
 
   <style>
+    /* Right padding is dropped so the photo bleeds flush to the card's
+       right edge — same treatment as the hero photo above it — instead of
+       floating inset with a gap that leaves the two photos' right edges
+       out of alignment. */
     #page-home.apple-style .card.home-partners-banner{
-      padding:24px 32px !important;
+      padding:24px 0 24px 32px !important;
     }
     .home-partners-banner{
       background:linear-gradient(135deg,#FFF3E4 0%,#FDE9EF 45%,#EAF1FF 100%);
@@ -1367,7 +1372,7 @@
       border-radius:18px;
       padding:4px 0;
     }
-    #page-home.apple-style .readiness-summary{background:#F5F5F7;border:none;border-radius:14px;}
+    #page-home.apple-style .readiness-summary{background:none;border:none;padding:9px 0;color:#0071E3;}
     #page-home.apple-style .home-category-card{
       background:#F5F5F7;
       border:none;
