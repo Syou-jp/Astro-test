@@ -1293,9 +1293,12 @@
     /* The default .home-news-card--wide caps height at 300px, which shrinks
        its aspect-ratio-derived width below the tab content column and
        leaves it flush left with dead space on the right — misaligned with
-       the full-width photo grid below it. Drop the cap so it fills the
-       column like that grid does. */
-    #page-home.apple-style .home-news-card--wide{width:100%;max-height:none;}
+       the full-width photo grid below it. Drop the cap and use a wider
+       (shorter) ratio so it fills the column width without the photo
+       becoming too tall. */
+    @media (min-width:641px){
+      #page-home.apple-style .home-news-card--wide{width:100%;aspect-ratio:3.6/1;max-height:none;}
+    }
     #page-home.apple-style .home-latest-item,
     #page-home.apple-style .home-category-card{border-radius:14px;}
     #page-home.apple-style .home-food-photo{border-radius:14px;box-shadow:0 1px 6px rgba(0,0,0,.06);}
