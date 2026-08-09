@@ -165,9 +165,7 @@
       <div class="home-tabs-content">
         <section id="homeTabNews" class="util-doc-panel home-tab-panel active">
           <a class="home-news-card home-news-card--wide" href="/ja/news/" id="homeNewsCard">
-            <span class="home-news-thumb" id="homeNewsThumb">
-              <span class="home-news-tag">ニュース日報</span>
-            </span>
+            <span class="home-news-thumb" id="homeNewsThumb"></span>
             <span class="home-news-body">
               <span class="home-news-date" id="homeNewsDate">DAILY NEWS DIGEST</span>
               <strong id="homeNewsTitle">今日の時事ニュースをまとめてチェック</strong>
@@ -205,6 +203,15 @@
               <span class="home-latest-date">07/22 09:40</span>
               <span class="home-latest-arrow">詳細を見る →</span>
             </a>
+            <a class="home-latest-item" href="/ja/listings/">
+              <span class="home-latest-badge home-latest-badge--tenant">房東直租</span>
+              <span class="home-latest-item-body">
+                <strong>北区 赤羽 1K 房東直租</strong>
+                <small>月額 78,000円（管理費込み）</small>
+              </span>
+              <span class="home-latest-date">07/19 14:10</span>
+              <span class="home-latest-arrow">詳細を見る →</span>
+            </a>
           </div>
           <a class="secondary-btn home-tab-cta" href="/ja/listings/"><span>入居募集をもっと見る</span><span class="home-tab-cta-arrow" aria-hidden="true">→</span></a>
         </section>
@@ -236,6 +243,15 @@
                 <small>¥8,000 ・ 蒲田駅から徒歩8分</small>
               </span>
               <span class="home-latest-date">07/21 13:20</span>
+              <span class="home-latest-arrow">詳細を見る →</span>
+            </a>
+            <a class="home-latest-item" href="/ja/used-market/">
+              <span class="home-latest-badge home-latest-badge--market">中古市場</span>
+              <span class="home-latest-item-body">
+                <strong>自転車（26インチ）</strong>
+                <small>¥5,000 ・ 大井町駅から徒歩5分</small>
+              </span>
+              <span class="home-latest-date">07/19 10:45</span>
               <span class="home-latest-arrow">詳細を見る →</span>
             </a>
           </div>
@@ -271,6 +287,15 @@
               <span class="home-latest-date">07/21 20:00</span>
               <span class="home-latest-arrow">詳細を見る →</span>
             </a>
+            <a class="home-latest-item" href="/ja/jobs/">
+              <span class="home-latest-badge home-latest-badge--jobs">求人</span>
+              <span class="home-latest-item-body">
+                <strong>スーパー品出しスタッフ募集</strong>
+                <small>江戸川区 ・ 時給1,150円〜 ・ 土日のみ可</small>
+              </span>
+              <span class="home-latest-date">07/19 09:00</span>
+              <span class="home-latest-arrow">詳細を見る →</span>
+            </a>
           </div>
           <a class="secondary-btn home-tab-cta" href="/ja/jobs/"><span>求人をもっと見る</span><span class="home-tab-cta-arrow" aria-hidden="true">→</span></a>
         </section>
@@ -304,6 +329,15 @@
               <span class="home-latest-date">07/20 13:00</span>
               <span class="home-latest-arrow">詳細を見る →</span>
             </a>
+            <a class="home-latest-item" href="/ja/events/">
+              <span class="home-latest-badge home-latest-badge--event">イベント</span>
+              <span class="home-latest-item-body">
+                <strong>多文化交流ランチ会</strong>
+                <small>新宿区 国際交流プラザ ・ 参加費500円</small>
+              </span>
+              <span class="home-latest-date">07/18 11:30</span>
+              <span class="home-latest-arrow">詳細を見る →</span>
+            </a>
           </div>
           <a class="secondary-btn home-tab-cta" href="/ja/events/"><span>イベントをもっと見る</span><span class="home-tab-cta-arrow" aria-hidden="true">→</span></a>
         </section>
@@ -335,6 +369,15 @@
                 <small>板橋区 ・ 謝礼 5,000円 ・ 8/2希望</small>
               </span>
               <span class="home-latest-date">07/23 17:20</span>
+              <span class="home-latest-arrow">詳細を見る →</span>
+            </a>
+            <a class="home-latest-item" href="/ja/help-request/">
+              <span class="home-latest-badge home-latest-badge--help">助け合い</span>
+              <span class="home-latest-item-body">
+                <strong>本棚の組み立てを手伝ってほしいです</strong>
+                <small>世田谷区 ・ 謝礼 2,000円</small>
+              </span>
+              <span class="home-latest-date">07/20 15:00</span>
               <span class="home-latest-arrow">詳細を見る →</span>
             </a>
           </div>
@@ -402,13 +445,13 @@
     .home-tabs-layout{display:flex;align-items:flex-start;gap:clamp(24px,3vw,48px);}
     .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;width:clamp(180px,17vw,260px);padding-top:6px;}
     .home-tabs-content{flex:1 1 auto;min-width:0;}
-    .home-news-tab-title{font-size:clamp(46px,5.4vw,84px);font-weight:800;letter-spacing:.06em;line-height:1;}
+    .home-news-tab-title{font-size:clamp(26px,2.6vw,40px);font-weight:800;letter-spacing:.06em;line-height:1;}
     .home-news-tab-sub{display:flex;align-items:center;gap:8px;font-size:clamp(12px,1vw,14px);letter-spacing:.04em;color:var(--ink-soft);}
     .home-news-tab-dash{display:block;width:18px;height:1px;background:var(--ink-soft);flex:0 0 auto;}
     @media (max-width:768px){
       .home-tabs-layout{flex-direction:column;gap:16px;}
       .home-tabs-heading{width:auto;flex-direction:column;align-items:flex-start;gap:8px;padding-top:0;}
-      .home-news-tab-title{font-size:32px;}
+      .home-news-tab-title{font-size:24px;}
     }
   </style>
 
