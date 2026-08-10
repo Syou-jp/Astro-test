@@ -26,6 +26,13 @@
               </div>
               <div class="section-title" style="margin-top:18px;">本文・備考</div>
               <div class="apply-field full"><textarea id="businessBody" style="min-height:100px;" placeholder="取引条件、振込先、契約条項、目的、経緯、原因、再発防止策などを入力"></textarea></div>
+              <div id="businessSignatureField" class="apply-field full" style="display:none;">
+                <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" id="businessSignature" checked> 署名・捺印欄を追加する（契約書・覚書・NDA等、双方の署名が必要な書類向け）</label>
+                <div class="apply-fields" id="businessSignatureNames" style="margin-top:10px;">
+                  <div class="apply-field"><label>甲（発行者側）の肩書・氏名</label><input id="businessSigA" placeholder="例：株式会社△△ 代表取締役 山田太郎"></div>
+                  <div class="apply-field"><label>乙（相手方）の肩書・氏名</label><input id="businessSigB" placeholder="例：株式会社○○ 代表取締役 佐藤花子"></div>
+                </div>
+              </div>
             </div>
             <div>
               <div class="business-preview" id="businessDocPreview"></div>
@@ -48,6 +55,7 @@ const toolYen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
 const toolNum = id => Math.max(0,Number(document.getElementById(id)?.value) || 0);
 const BUSINESS_NAMES={invoice:"請求書",receipt:"領収書",delivery:"納品書",order:"注文書",purchase:"発注書",payment:"支払明細書",contract:"業務委託契約書",memorandum:"覚書",nda:"秘密保持契約書",ringi:"稟議書",proposal:"企画書",suggestion:"提案書",incident:"顛末書",apology:"始末書","viewing-request":"内見申込書","move-in-application":"入居申込書","purchase-offer":"買付証明書"};
 const BUSINESS_FINANCE=new Set(["invoice","receipt","delivery","order","purchase","payment"]);
+const BUSINESS_SIGNATURE=new Set(["contract","memorandum","nda"]);
 const BUSINESS_TEMPLATES={
  contract:"第1条（目的）\n甲は乙に対し、下記業務を委託し、乙はこれを受託する。\n\n第2条（業務内容）\n\n第3条（委託料・支払条件）\n\n第4条（契約期間・解除）\n\n第5条（秘密保持・成果物・協議）",
  memorandum:"甲及び乙は、既存契約に関する下記事項について合意する。\n\n1. 変更・確認事項\n2. 適用開始日\n3. 本覚書に定めのない事項は原契約に従う。",
@@ -73,6 +81,8 @@ function businessRender(){
   const type=document.getElementById("businessDocType").value,name=BUSINESS_NAMES[type],isBroker=["viewing-request","move-in-application","purchase-offer"].includes(type),finance=BUSINESS_FINANCE.has(type),esc=routeEscape;
   if(isBroker){document.getElementById("businessDocPreview").innerHTML=`<div style="padding:20px;text-align:center;color:var(--ink-soft);">仲介用書類は別フォームで入力してください。<br><strong>${name}</strong></div>`;document.querySelector('[data-export-target="businessDocPreview"]').dataset.exportName=name;return;}
   document.getElementById("businessFinanceFields").style.display=finance?"block":"none";
+  const wantsSignature=BUSINESS_SIGNATURE.has(type);
+  document.getElementById("businessSignatureField").style.display=wantsSignature?"block":"none";
   const items=[...document.querySelectorAll("#businessItemRows tr")].map(row=>({d:row.querySelector(".biz-desc").value,q:Number(row.querySelector(".biz-qty").value)||0,u:row.querySelector(".biz-unit").value,p:Number(row.querySelector(".biz-price").value)||0,t:Number(row.querySelector(".biz-tax").value)||0})).filter(x=>x.d||x.q||x.p);
   const subtotal=items.reduce((s,x)=>s+x.q*x.p,0),itemsTax=items.reduce((s,x)=>s+Math.floor(x.q*x.p*x.t/100),0),total=subtotal+itemsTax;
   const date=document.getElementById("businessDate").value,no=document.getElementById("businessNo").value,subject=document.getElementById("businessSubject").value,recipient=document.getElementById("businessRecipient").value,issuer=document.getElementById("businessIssuer").value,issuerAddr=document.getElementById("businessIssuerAddress").value,issuerPhone=document.getElementById("businessIssuerPhone").value,issuerContact=document.getElementById("businessIssuerContact").value,issuerInfo=document.getElementById("businessIssuerInfo").value,body=document.getElementById("businessBody").value,due=document.getElementById("businessDue").value,noDue=document.getElementById("businessNoDue").checked;
@@ -82,7 +92,11 @@ function businessRender(){
   const issuerStr=esc(issuer)?`<strong>${esc(issuer)}</strong>`:"";
   const noStr=esc(no)?`No. ${esc(no)}<br>`:"";
   const table=finance?`<table><thead><tr><th>品目・内容</th><th>数量</th><th>単位</th><th>単価</th><th>税率</th><th>金額</th></tr></thead><tbody>${items.map(x=>`<tr><td>${esc(x.d)}</td><td>${x.q}</td><td>${esc(x.u)}</td><td>${toolYen(x.p)}</td><td>${x.t}%</td><td>${toolYen(x.q*x.p+Math.floor(x.q*x.p*x.t/100))}</td></tr>`).join("")||'<tr><td colspan="6">明細を入力してください</td></tr>'}</tbody><tfoot><tr><th colspan="5">合計 税込み</th><td>${toolYen(total)}</td></tr></tfoot></table>`:"";
-  document.getElementById("businessDocPreview").innerHTML=`<h2>${name}</h2><div class="business-preview-head"><div>${recipientStr}<br>${esc(subject)}${dueStr?`<br>${dueStr}`:""}</div><div>${esc(date)}<br>${noStr}${issuerStr}${issuerLines?`<br>${issuerLines}`:""}</div></div>${table}<div class="doc-body">${esc(body||"本文・備考を入力してください。")}</div>`;
+  const showSig=wantsSignature&&document.getElementById("businessSignature").checked;
+  const sigA=esc(document.getElementById("businessSigA").value)||issuerStr||"（甲）";
+  const sigB=esc(document.getElementById("businessSigB").value)||recipientStr||"（乙）";
+  const sigBlock=showSig?`<div class="doc-signature"><div class="doc-signature-col"><span class="doc-signature-label">甲</span><div class="doc-signature-name">${sigA}</div><div class="doc-signature-line">署名・捺印</div></div><div class="doc-signature-col"><span class="doc-signature-label">乙</span><div class="doc-signature-name">${sigB}</div><div class="doc-signature-line">署名・捺印</div></div></div>`:"";
+  document.getElementById("businessDocPreview").innerHTML=`<h2>${name}</h2><div class="business-preview-head"><div>${recipientStr}<br>${esc(subject)}${dueStr?`<br>${dueStr}`:""}</div><div>${esc(date)}<br>${noStr}${issuerStr}${issuerLines?`<br>${issuerLines}`:""}</div></div>${table}<div class="doc-body">${esc(body||"本文・備考を入力してください。")}</div>${sigBlock}`;
   document.querySelector('[data-export-target="businessDocPreview"]').dataset.exportName=name;
 }
 function setBusinessTemplate(){const type=document.getElementById("businessDocType").value;document.getElementById("businessBody").value=BUSINESS_TEMPLATES[type]||"下記のとおりご案内いたします。\n\n振込先：\n備考：";}
