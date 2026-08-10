@@ -16,7 +16,7 @@
                 <div class="apply-field"><label>電話番号</label><input id="businessIssuerPhone" placeholder="000-0000-0000"></div>
                 <div class="apply-field"><label>担当名</label><input id="businessIssuerContact" placeholder="山田太郎"></div>
                 <div class="apply-field full"><label>登録番号・その他</label><input id="businessIssuerInfo" placeholder="インボイス登録番号"></div>
-                <div class="apply-field"><label>支払・有効期限 Due date</label><input type="date" id="businessDue"><label style="display:inline-flex;align-items:center;margin-left:20px;"><input type="checkbox" id="businessNoDue"> 期限なし</label></div>
+                <div class="apply-field"><label>支払・有効期限 Due date</label><div class="due-date-row"><input type="date" id="businessDue"><label class="due-date-nolabel"><input type="checkbox" id="businessNoDue"> 期限なし</label></div></div>
                 <div class="apply-field"><label>デフォルト消費税 Default tax rate</label><select id="businessTaxRate" style="width:100%;"><option value="10">10%</option><option value="8">8%</option><option value="0">非課税・0%</option></select></div>
               </div>
               <div id="businessFinanceFields">
