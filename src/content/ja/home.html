@@ -423,6 +423,27 @@
     .home-tab-panel{padding-top:22px;}
     .home-tab-panel .home-latest-list{display:block;}
     .home-tab-panel .home-latest-list.home-latest-list--grid{display:grid;}
+
+    /* Stack every tab panel in the same grid cell instead of swapping
+       display:none/block. Grid auto-sizing counts the tallest panel even
+       while the others sit invisible underneath it, so the section keeps
+       one fixed height and switching tabs no longer resizes/jumps the
+       page. */
+    #page-home .home-tabs-content{position:relative;display:grid;}
+    #page-home .home-tabs-content .util-doc-panel{
+      display:block;
+      grid-column:1;
+      grid-row:1;
+      visibility:hidden;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .15s ease;
+    }
+    #page-home .home-tabs-content .util-doc-panel.active{
+      visibility:visible;
+      opacity:1;
+      pointer-events:auto;
+    }
     .home-tab-cta{
       display:inline-flex;
       align-items:center;
