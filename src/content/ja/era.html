@@ -4,11 +4,11 @@
   <div class="era-columns">
     <div class="era-col">
       <div class="card" style="margin-bottom:12px;">
-        <div class="section-title">日付から元号・紀年を調べる</div>
+        <div class="section-title">西暦から元号・紀年を調べる</div>
         <div class="apply-fields">
           <div class="apply-field full">
-            <label for="eraDateInput">基準日 Date</label>
-            <input type="date" id="eraDateInput">
+            <label for="eraDateInput">西暦年 Year</label>
+            <select id="eraDateInput"></select>
           </div>
         </div>
         <div id="eraDateResults" style="margin-top:14px;"></div>
@@ -80,7 +80,7 @@
   </div>
 
   <div class="area-note">
-    ※ 元号が切り替わる年（改元の年）は月日によって元号が異なります。01の早見表は入力した日付をもとに正確な元号へ換算しますが、02の「元号→西暦」は年のみの簡易換算です。改元日は下記のとおりです。<br>
+    ※ 元号が切り替わる年（改元の年）は、月日によって実際の元号が異なります。01・02とも年のみの簡易換算のため、改元の年は新しい元号の年として表示されます。正確な元号は下記の改元日を基準にご確認ください。<br>
     明治→大正：1912年7月30日／大正→昭和：1926年12月25日／昭和→平成：1989年1月8日／平成→令和：2019年5月1日。
   </div>
 
@@ -139,8 +139,8 @@
         var d = new Date();
         return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
       }
-      function jpEraFor(iso) {
-        for (var i = 0; i < JP_ERAS.length; i++) { if (iso >= JP_ERAS[i].start) return JP_ERAS[i]; }
+      function jpEraForYear(year) {
+        for (var i = 0; i < JP_ERAS.length; i++) { if (year >= JP_ERAS[i].startYear) return JP_ERAS[i]; }
         return null;
       }
       function eraYearLabel(era, year) {
@@ -152,19 +152,17 @@
       }
 
       function renderDateCard() {
-        var iso = dateInput.value || todayIso();
-        var year = Number(iso.slice(0, 4));
-        var era = jpEraFor(iso);
+        var year = Number(dateInput.value) || new Date().getFullYear();
+        var era = jpEraForYear(year);
         var rows = '';
         rows += resultRow('日本 元号', 'Japanese era', era ? eraYearLabel(era, year) : '対象外（明治より前）');
         rows += resultRow('台湾 民国紀年', 'Taiwan Minguo', '民国' + (year - 1911) + '年');
         rows += resultRow('タイ 仏暦', 'Thai Buddhist Era', 'พ.ศ. ' + (year + 543) + '年');
         rows += resultRow('北朝鮮 主体暦', 'DPRK Juche era', '主体' + (year - 1911) + '年');
-        document.getElementById('eraDateResults').innerHTML =
-          '<div class="area-region-card"><div class="area-region-head"><strong>' + iso + ' の紀年一覧</strong><span>西暦' + year + '年</span></div>' + rows + '</div>';
+        document.getElementById('eraDateResults').innerHTML = '<div class="area-region-card">' + rows + '</div>';
       }
-      dateInput.value = todayIso();
-      dateInput.addEventListener('input', renderDateCard);
+      fillSelect(dateInput, range(1868, new Date().getFullYear() + 5), function (y) { return y + '年'; }, new Date().getFullYear());
+      dateInput.addEventListener('change', renderDateCard);
       renderDateCard();
 
       function fillSelect(select, values, formatLabel, selectedValue) {
