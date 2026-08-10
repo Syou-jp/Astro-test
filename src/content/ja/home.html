@@ -3,9 +3,6 @@
     <div class="home-hero-head">
       <h2 class="home-hero-title">国から日本へ。<br class="home-hero-title-br">ともに生きるコミュニティ。</h2>
     </div>
-    <svg class="home-hero-line" viewBox="0 0 1200 460" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M0,230 C160,238 260,120 420,120 C500,120 520,190 600,190 C700,190 740,70 900,58 C1000,50 1060,80 1200,40" />
-    </svg>
     <div class="home-hero-media">
       <picture>
         <source srcset="/hero-photo.webp" type="image/webp">
@@ -20,13 +17,10 @@
     .home-hero-title{margin:0;max-width:480px;font-size:28px;line-height:1.55;font-weight:700;letter-spacing:.01em;color:var(--ink);}
     .home-hero-media{position:relative;margin:22px 24px 24px;overflow:hidden;border-radius:14px;aspect-ratio:1076/360;background:var(--paper-2);}
     .home-hero-media img{width:100%;height:100%;object-fit:cover;display:block;}
-    .home-hero-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;}
-    .home-hero-line path{fill:none;stroke:var(--accent);stroke-width:1.4;opacity:.8;}
     @media (max-width:860px){
       .home-hero-head{padding:30px 26px 4px;}
       .home-hero-title{font-size:23px;max-width:none;}
       .home-hero-media{margin:18px 18px 20px;aspect-ratio:1076/560;}
-      .home-hero-line{display:none;}
     }
     @media (max-width:520px){
       .home-hero-title{font-size:20px;}
