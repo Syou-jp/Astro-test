@@ -79,7 +79,7 @@ function businessRender(){
   const subtotal=items.reduce((s,x)=>s+x.q*x.p,0),itemsTax=items.reduce((s,x)=>s+Math.floor(x.q*x.p*x.t/100),0),total=subtotal+itemsTax;
   const date=document.getElementById("businessDate").value,no=document.getElementById("businessNo").value,subject=document.getElementById("businessSubject").value,recipient=document.getElementById("businessRecipient").value,issuer=document.getElementById("businessIssuer").value,issuerAddr=document.getElementById("businessIssuerAddress").value,issuerPhone=document.getElementById("businessIssuerPhone").value,issuerContact=document.getElementById("businessIssuerContact").value,issuerInfo=document.getElementById("businessIssuerInfo").value,body=document.getElementById("businessBody").value,due=document.getElementById("businessDue").value,noDue=document.getElementById("businessNoDue").checked;
   const issuerLines=[esc(issuerAddr),esc(issuerPhone),esc(issuerContact),esc(issuerInfo)].filter(x=>x).join("<br>");
-  const dueStr=noDue?"":"期限："+esc(due);
+  const dueStr=(finance&&!noDue)?"期限："+esc(due):"";
   const recipientStr=esc(recipient)?`<strong>${esc(recipient)}</strong>`:"";
   const issuerStr=esc(issuer)?`<strong>${esc(issuer)}</strong>`:"";
   const noStr=esc(no)?`No. ${esc(no)}<br>`:"";
