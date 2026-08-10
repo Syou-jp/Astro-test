@@ -11,6 +11,12 @@
     "file": "00-about.html"
   },
   {
+    "id": "page-privacy",
+    "slug": "privacy",
+    "file": "00-privacy.html",
+    "title": "プライバシーポリシー"
+  },
+  {
     "id": "page-news",
     "slug": "news",
     "file": "news.html",
