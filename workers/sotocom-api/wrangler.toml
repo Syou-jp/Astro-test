@@ -1,0 +1,11 @@
+name = "sotocom-api"
+main = "src/index.ts"
+compatibility_date = "2026-08-11"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sotocom-submissions"
+database_id = "5df108b3-7c2c-439b-8421-02c031c6f035"
+
+[vars]
+ALLOWED_ORIGIN = "https://astro-test-01m.pages.dev"

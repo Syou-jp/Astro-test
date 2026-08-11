@@ -1,0 +1,122 @@
+---
+export function getStaticPaths() {
+  return [{ params: { locale: 'ja' } }];
+}
+
+const { locale = 'ja' } = Astro.params;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Sotocom 投稿</title>
+  </head>
+  <body>
+    <main class="liff-shell" id="liff-app" hidden>
+      <header class="liff-header">
+        <p class="liff-kicker">SOTOCOM COMMUNITY</p>
+        <h1 id="page-title">投稿する</h1>
+        <p id="page-intro">LINEから投稿内容を送信できます。確認後に掲載します。</p>
+      </header>
+
+      <form id="community-form" novalidate>
+        <div id="dynamic-fields"></div>
+        <label>表示名 <em>必須</em><input name="displayName" type="text" placeholder="サイトに表示する名前" required /></label>
+        <label class="agreement"><input name="agreement" type="checkbox" required /><span>投稿内容が確認後に公開されることに同意します。</span></label>
+        <button type="submit" id="submit-button">投稿内容を送信する</button>
+        <p class="form-status" id="form-status" aria-live="polite"></p>
+      </form>
+    </main>
+
+    <section class="liff-error" id="liff-error" hidden>
+      <p class="liff-kicker">SOTOCOM COMMUNITY</p>
+      <h1>LINEから開いてください</h1>
+      <p>この投稿フォームは、Sotocom LINE公式アカウントの投稿メニューからのみ利用できます。</p>
+    </section>
+
+    <script>
+      const LIFF_ID = '2011054732-exitzB6m';
+      const API_URL = 'https://sotocom-api.syouboc.workers.dev/api/submissions';
+      const OFFICIAL_ACCOUNT_URL = 'https://line.me/R/ti/p/%40721khrrb';
+      const configs = {
+        listings: { title: '入居募集を投稿する', intro: '入居者募集やルームシェア情報を送信できます。', fields: [['title', '募集タイトル', '例：駅から徒歩5分の1LDK', 'text'], ['location', '場所', '都道府県・市区町村・最寄り駅', 'text'], ['details', '募集内容', '家賃、間取り、入居時期、条件など', 'textarea']] },
+        'used-market': { title: '中古市場に投稿する', intro: '家具・家電・生活用品などの売買情報を送信できます。', fields: [['title', '商品名', '例：冷蔵庫・電子レンジ・家具セット', 'text'], ['price', '価格', '例：5,000円（無料の場合は「無料」）', 'text'], ['details', '商品の説明', '状態、受け渡し場所、希望日時など', 'textarea']] },
+        jobs: { title: '求人を投稿する', intro: '会社・店舗の求人情報を送信できます。', fields: [['title', '募集職種', '例：ホテルスタッフ、飲食店スタッフ', 'text'], ['company', '会社・店舗名', '会社名または店舗名', 'text'], ['details', '求人内容', '仕事内容、給与、勤務時間、応募方法など', 'textarea']] },
+        events: { title: 'イベントを投稿する', intro: '交流会、講座、文化イベントなどの情報を送信できます。', fields: [['title', 'イベント名', '例：多文化交流会', 'text'], ['date', '開催日時', '例：2026年9月1日 18:00〜', 'text'], ['details', 'イベント内容', '場所、参加費、参加方法、問い合わせ先など', 'textarea']] },
+        help: { title: '助け合いを投稿する', intro: '翻訳、引っ越し、ペットのお世話などの依頼を送信できます。', fields: [['title', '投稿タイトル', '例：引っ越しを手伝ってくれる方を探しています', 'text'], ['location', '場所・日時', '例：東京都中野区・9月1日午後', 'text'], ['details', '詳しい内容', '何を手伝ってほしいか、謝礼、連絡方法など', 'textarea']] }
+      };
+      const params = new URLSearchParams(location.search);
+      const type = params.get('type') || 'events';
+      const config = configs[type] || configs.events;
+      const app = document.querySelector('#liff-app');
+      const error = document.querySelector('#liff-error');
+      const status = document.querySelector('#form-status');
+      const form = document.querySelector('#community-form');
+      const fields = document.querySelector('#dynamic-fields');
+      document.querySelector('#page-title').textContent = config.title;
+      document.querySelector('#page-intro').textContent = config.intro;
+      fields.innerHTML = config.fields.map(([name, label, placeholder, kind]) => `<label>${label} <em>必須</em>${kind === 'textarea' ? `<textarea name="${name}" rows="6" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${kind}" placeholder="${placeholder}" required />`}</label>`).join('');
+
+      const loadLiff = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://static.line-scdn.net/liff/edge/2/sdk.js';
+        script.onload = () => resolve(window.liff);
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+
+      async function boot() {
+        try {
+          const liff = await loadLiff;
+          await liff.init({ liffId: LIFF_ID });
+          if (!liff.isInClient()) throw new Error('not-in-line');
+          if (!liff.isLoggedIn()) { liff.login(); return; }
+          app.hidden = false;
+        } catch (e) {
+          error.hidden = false;
+        }
+      }
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        const liff = await loadLiff;
+        const idToken = liff.getIDToken();
+        if (!idToken) { status.textContent = 'LINEの認証を確認できませんでした。'; status.classList.add('visible'); return; }
+        status.textContent = 'LINE認証を確認しました。投稿送信APIの接続後に正式受付となります。';
+        status.classList.add('visible');
+      });
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        const liff = await loadLiff;
+        const idToken = liff.getIDToken();
+        if (!idToken) { status.textContent = 'LINE認証を確認できませんでした。'; status.classList.add('visible'); return; }
+        status.textContent = '送信中…';
+        status.classList.add('visible');
+        const data = Object.fromEntries(new FormData(form).entries());
+        delete data.agreement;
+        delete data.displayName;
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', authorization: `Bearer ${idToken}` },
+            body: JSON.stringify({ type, displayName: String(form.elements.displayName.value), payload: data }),
+          });
+          if (!response.ok) throw new Error('submission-failed');
+          status.textContent = '投稿を受け付けました。確認後に掲載します。';
+          form.reset();
+        } catch {
+          status.textContent = '送信に失敗しました。時間を置いて再度お試しください。';
+        }
+      });
+      boot();
+    </script>
+  </body>
+</html>
+
+<style>
+  :global(*){box-sizing:border-box} :global(html),:global(body){margin:0;min-height:100%;background:#f4f6f8;color:#172033;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif} :global(body){padding:0}
+  .liff-shell,.liff-error{width:min(100%,620px);min-height:100vh;margin:0 auto;padding:28px 20px 40px;background:#fff}.liff-error{display:grid;place-content:center;min-height:100vh;text-align:center}.liff-error[hidden],.liff-shell[hidden]{display:none}.liff-header{padding:8px 0 24px;border-bottom:1px solid #e1e6ec}.liff-kicker{margin:0 0 8px;color:#1e5b82;font:700 10px/1.2 ui-monospace,monospace;letter-spacing:.14em}.liff-header h1,.liff-error h1{margin:0;font-size:26px;line-height:1.45;letter-spacing:.02em}.liff-header p:last-child,.liff-error p:last-child{margin:9px 0 0;color:#64748b;font-size:13px;line-height:1.8}#community-form{padding-top:22px}label{display:grid;gap:7px;margin:0 0 18px;color:#253248;font-size:13px;font-weight:700}em{color:#b4533c;font-size:10px;font-style:normal;margin-left:4px}input:not([type=checkbox]),textarea{width:100%;padding:13px 14px;border:1px solid #d7dee7;border-radius:10px;background:#fbfcfd;color:#172033;font:inherit;font-size:14px;font-weight:400;outline:none}textarea{resize:vertical;line-height:1.75}input:focus,textarea:focus{border-color:#1e5b82;box-shadow:0 0 0 3px #1e5b8220}.agreement{display:flex;grid-template-columns:none;align-items:flex-start;gap:8px;color:#64748b;font-size:12px;font-weight:400;line-height:1.7}.agreement input{margin-top:4px;accent-color:#1e5b82}button{width:100%;padding:15px 18px;border:0;border-radius:10px;background:#1e5b82;color:#fff;font:700 14px inherit;cursor:pointer}button:active{transform:translateY(1px)}.form-status{display:none;margin:14px 0 0;color:#26704b;font-size:12px;line-height:1.7}.form-status.visible{display:block}
+</style>
