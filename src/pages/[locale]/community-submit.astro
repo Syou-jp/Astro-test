@@ -70,6 +70,7 @@ const { locale = 'ja' } = Astro.params;
       const photoFiles = [];
       let photoDragTimer = 0;
       let draggedPhotoItem = null;
+      let photoDragPointerId = null;
       let photoDragStartX = 0;
       let photoDragStartY = 0;
       function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item" data-photo-index="${index}"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}" draggable="false"><div><b>${index === 0 ? '一覧の主画像' : `写真 ${index + 1}`}</b><small class="photo-sort-hint">長押しして上下に並べ替え</small><div class="photo-actions"><button type="button" data-photo-remove="${index}">削除</button></div></div></article>`).join(''); }
@@ -79,35 +80,42 @@ const { locale = 'ja' } = Astro.params;
         if (event.target.closest('button') || event.button !== 0) return;
         const item = event.target.closest('.photo-item');
         if (!item || photoFiles.length < 2) return;
+        event.preventDefault();
         photoDragStartX = event.clientX;
         photoDragStartY = event.clientY;
         window.clearTimeout(photoDragTimer);
         photoDragTimer = window.setTimeout(() => {
           draggedPhotoItem = item;
+          photoDragPointerId = event.pointerId;
+          try { draggedPhotoItem.setPointerCapture(photoDragPointerId); } catch {}
           draggedPhotoItem.classList.add('is-dragging');
           photoList.classList.add('is-sorting');
           navigator.vibrate?.(18);
-        }, 260);
+        }, 200);
       });
       document.addEventListener('pointermove', (event) => {
         if (!draggedPhotoItem) {
-          if (Math.hypot(event.clientX - photoDragStartX, event.clientY - photoDragStartY) > 10) window.clearTimeout(photoDragTimer);
+          if (Math.hypot(event.clientX - photoDragStartX, event.clientY - photoDragStartY) > 18) window.clearTimeout(photoDragTimer);
           return;
         }
+        if (event.pointerId !== photoDragPointerId) return;
         event.preventDefault();
         const target = document.elementFromPoint(event.clientX, event.clientY)?.closest('.photo-item');
         if (!target || target === draggedPhotoItem || target.parentElement !== photoList) return;
         const targetRect = target.getBoundingClientRect();
         photoList.insertBefore(draggedPhotoItem, event.clientY < targetRect.top + targetRect.height / 2 ? target : target.nextSibling);
       }, { passive: false });
-      function finishPhotoDrag() {
+      function finishPhotoDrag(event) {
         window.clearTimeout(photoDragTimer);
         if (!draggedPhotoItem) return;
+        if (event.pointerId !== photoDragPointerId) return;
         const reordered = Array.from(photoList.querySelectorAll('.photo-item')).map((item) => photoFiles[Number(item.dataset.photoIndex)]);
         photoFiles.splice(0, photoFiles.length, ...reordered);
+        try { draggedPhotoItem.releasePointerCapture(photoDragPointerId); } catch {}
         draggedPhotoItem.classList.remove('is-dragging');
         photoList.classList.remove('is-sorting');
         draggedPhotoItem = null;
+        photoDragPointerId = null;
         renderPhotos();
       }
       document.addEventListener('pointerup', finishPhotoDrag);
@@ -244,7 +252,8 @@ const { locale = 'ja' } = Astro.params;
     border: 1px solid #e1e8e8;
     border-radius: 11px;
     background: #fbfcfb;
-    touch-action: pan-y;
+    cursor: grab;
+    touch-action: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
@@ -264,6 +273,7 @@ const { locale = 'ja' } = Astro.params;
     box-shadow: 0 12px 28px #1730442b;
     transform: scale(.985);
     opacity: .94;
+    cursor: grabbing;
   }
 
   #photo-list .photo-item img {
