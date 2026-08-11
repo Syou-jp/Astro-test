@@ -42,6 +42,29 @@ const { locale = 'ja' } = Astro.params;
       <p>この投稿フォームは、Sotocom LINE公式アカウントの投稿メニューからのみ利用できます。</p>
     </section>
 
+    <section class="photo-editor" id="photo-editor" hidden aria-modal="true" role="dialog" aria-labelledby="photo-editor-title">
+      <header class="photo-editor-header">
+        <button type="button" id="photo-editor-cancel">キャンセル</button>
+        <h2 id="photo-editor-title">写真を編集</h2>
+        <button type="button" id="photo-editor-save">保存</button>
+      </header>
+      <div class="photo-editor-stage">
+        <canvas id="photo-editor-canvas"></canvas>
+      </div>
+      <div class="photo-editor-tools">
+        <div class="photo-editor-tabs" role="group" aria-label="編集ツール">
+          <button type="button" class="is-active" data-editor-tool="crop">切り抜き</button>
+          <button type="button" data-editor-tool="mosaic">モザイク</button>
+        </div>
+        <p id="photo-editor-guide">残したい範囲を指で囲んでください。</p>
+        <div class="photo-editor-actions">
+          <button type="button" id="photo-editor-apply-crop">切り抜く</button>
+          <button type="button" id="photo-editor-undo">元に戻す</button>
+          <button type="button" id="photo-editor-reset">リセット</button>
+        </div>
+      </div>
+    </section>
+
     <script>
       const LIFF_ID = '2011054732-exitzB6m';
       const API_URL = 'https://sotocom-api.syouboc.workers.dev/api/submissions';
@@ -89,7 +112,8 @@ const { locale = 'ja' } = Astro.params;
       let photoDragPointerId = null;
       let photoDragStartX = 0;
       let photoDragStartY = 0;
-      function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item" data-photo-index="${index}"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}" draggable="false"><span class="photo-main-badge" ${index === 0 ? '' : 'hidden'}>主画像</span><button class="photo-remove" type="button" data-photo-remove="${index}" aria-label="写真を削除">×</button><button class="photo-drag-handle" type="button" aria-label="写真を並べ替える">⠿</button></article>`).join(''); }
+      let suppressPhotoClick = false;
+      function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item" data-photo-index="${index}"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}" draggable="false"><span class="photo-main-badge" ${index === 0 ? '' : 'hidden'}>主画像</span><button class="photo-remove" type="button" data-photo-remove="${index}" aria-label="写真を削除">×</button></article>`).join(''); }
       function syncPhotoRows() {
         Array.from(photoList.querySelectorAll('.photo-item')).forEach((item, index) => {
           item.dataset.photoIndex = String(index);
@@ -99,11 +123,15 @@ const { locale = 'ja' } = Astro.params;
         });
       }
       photoInput.addEventListener('change', () => { const incoming = Array.from(photoInput.files || []).filter((file) => file.type.startsWith('image/')); photoFiles.push(...incoming.slice(0, Math.max(0, 8 - photoFiles.length))); photoInput.value = ''; renderPhotos(); });
-      photoList.addEventListener('click', (event) => { const button = event.target.closest('button[data-photo-remove]'); if (!button) return; const item = button.closest('.photo-item'); photoFiles.splice(Number(button.dataset.photoRemove), 1); URL.revokeObjectURL(item.querySelector('img').src); item.remove(); syncPhotoRows(); });
+      photoList.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-photo-remove]');
+        if (button) { const item = button.closest('.photo-item'); photoFiles.splice(Number(button.dataset.photoRemove), 1); URL.revokeObjectURL(item.querySelector('img').src); item.remove(); syncPhotoRows(); return; }
+        const item = event.target.closest('.photo-item');
+        if (item && !suppressPhotoClick) openPhotoEditor(Number(item.dataset.photoIndex));
+      });
       photoList.addEventListener('pointerdown', (event) => {
-        const handle = event.target.closest('.photo-drag-handle');
-        if (!handle || event.button !== 0) return;
-        const item = handle.closest('.photo-item');
+        if (event.target.closest('button') || event.button !== 0) return;
+        const item = event.target.closest('.photo-item');
         if (!item || photoFiles.length < 2) return;
         event.preventDefault();
         pressedPhotoItem = item;
@@ -129,10 +157,12 @@ const { locale = 'ja' } = Astro.params;
       });
       document.addEventListener('pointermove', (event) => {
         if (!draggedPhotoItem) {
-          if (Math.hypot(event.clientX - photoDragStartX, event.clientY - photoDragStartY) > 18) {
+          if (pressedPhotoItem && Math.hypot(event.clientX - photoDragStartX, event.clientY - photoDragStartY) > 18) {
             window.clearTimeout(photoDragTimer);
             pressedPhotoItem?.classList.remove('is-pressing');
             pressedPhotoItem = null;
+            suppressPhotoClick = true;
+            window.setTimeout(() => { suppressPhotoClick = false; }, 260);
           }
           return;
         }
@@ -173,10 +203,185 @@ const { locale = 'ja' } = Astro.params;
         photoDragPointerId = null;
         navigator.vibrate?.(10);
         syncPhotoRows();
+        suppressPhotoClick = true;
+        window.setTimeout(() => { suppressPhotoClick = false; }, 260);
       }
       document.addEventListener('pointerup', finishPhotoDrag);
       document.addEventListener('pointercancel', finishPhotoDrag);
       photoList.addEventListener('contextmenu', (event) => { if (event.target.closest('.photo-item')) event.preventDefault(); });
+
+      const photoEditor = document.querySelector('#photo-editor');
+      const editorCanvas = document.querySelector('#photo-editor-canvas');
+      const editorGuide = document.querySelector('#photo-editor-guide');
+      const editorApplyCrop = document.querySelector('#photo-editor-apply-crop');
+      const editorUndo = document.querySelector('#photo-editor-undo');
+      let editorWorkCanvas = document.createElement('canvas');
+      let editorOriginalCanvas = document.createElement('canvas');
+      let editorPhotoIndex = -1;
+      let editorTool = 'crop';
+      let editorIsDrawing = false;
+      let editorCropSelection = null;
+      let editorPointerStart = null;
+      let editorHistory = [];
+
+      function copyCanvas(source) {
+        const copy = document.createElement('canvas');
+        copy.width = source.width;
+        copy.height = source.height;
+        copy.getContext('2d').drawImage(source, 0, 0);
+        return copy;
+      }
+
+      function pushEditorHistory() {
+        editorHistory.push(copyCanvas(editorWorkCanvas));
+        if (editorHistory.length > 6) editorHistory.shift();
+        editorUndo.disabled = editorHistory.length === 0;
+      }
+
+      function drawEditor() {
+        editorCanvas.width = editorWorkCanvas.width;
+        editorCanvas.height = editorWorkCanvas.height;
+        const context = editorCanvas.getContext('2d');
+        context.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
+        context.drawImage(editorWorkCanvas, 0, 0);
+        if (editorTool === 'crop' && editorCropSelection) {
+          const { x, y, width, height } = editorCropSelection;
+          context.fillStyle = '#08131ab8';
+          context.fillRect(0, 0, editorCanvas.width, editorCanvas.height);
+          context.drawImage(editorWorkCanvas, x, y, width, height, x, y, width, height);
+          context.strokeStyle = '#b8d86a';
+          context.lineWidth = Math.max(3, editorCanvas.width / 350);
+          context.setLineDash([Math.max(8, editorCanvas.width / 120), Math.max(5, editorCanvas.width / 180)]);
+          context.strokeRect(x, y, width, height);
+        }
+        editorUndo.disabled = editorHistory.length === 0;
+      }
+
+      function editorPoint(event) {
+        const rect = editorCanvas.getBoundingClientRect();
+        return {
+          x: Math.max(0, Math.min(editorCanvas.width, (event.clientX - rect.left) * editorCanvas.width / rect.width)),
+          y: Math.max(0, Math.min(editorCanvas.height, (event.clientY - rect.top) * editorCanvas.height / rect.height))
+        };
+      }
+
+      async function loadEditorImage(file) {
+        const url = URL.createObjectURL(file);
+        try {
+          const image = await new Promise((resolve, reject) => { const element = new Image(); element.onload = () => resolve(element); element.onerror = reject; element.src = url; });
+          const scale = Math.min(1, 1600 / Math.max(image.naturalWidth, image.naturalHeight));
+          editorWorkCanvas = document.createElement('canvas');
+          editorWorkCanvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+          editorWorkCanvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+          editorWorkCanvas.getContext('2d').drawImage(image, 0, 0, editorWorkCanvas.width, editorWorkCanvas.height);
+          editorOriginalCanvas = copyCanvas(editorWorkCanvas);
+        } finally { URL.revokeObjectURL(url); }
+      }
+
+      function setEditorTool(tool) {
+        editorTool = tool;
+        editorCropSelection = null;
+        document.querySelectorAll('[data-editor-tool]').forEach((button) => button.classList.toggle('is-active', button.dataset.editorTool === tool));
+        editorGuide.textContent = tool === 'crop' ? '残したい範囲を指で囲んでください。' : '隠したい部分を指でなぞってください。';
+        editorApplyCrop.hidden = tool !== 'crop';
+        drawEditor();
+      }
+
+      async function openPhotoEditor(index) {
+        if (!photoFiles[index]) return;
+        editorPhotoIndex = index;
+        editorHistory = [];
+        editorCropSelection = null;
+        await loadEditorImage(photoFiles[index]);
+        photoEditor.hidden = false;
+        app.setAttribute('aria-hidden', 'true');
+        setEditorTool('crop');
+      }
+
+      function closePhotoEditor() {
+        photoEditor.hidden = true;
+        app.removeAttribute('aria-hidden');
+        editorPhotoIndex = -1;
+        editorHistory = [];
+        editorCropSelection = null;
+      }
+
+      function applyEditorCrop() {
+        if (!editorCropSelection || editorCropSelection.width < 20 || editorCropSelection.height < 20) return false;
+        pushEditorHistory();
+        const { x, y, width, height } = editorCropSelection;
+        const cropped = document.createElement('canvas');
+        cropped.width = Math.round(width);
+        cropped.height = Math.round(height);
+        cropped.getContext('2d').drawImage(editorWorkCanvas, x, y, width, height, 0, 0, cropped.width, cropped.height);
+        editorWorkCanvas = cropped;
+        editorCropSelection = null;
+        drawEditor();
+        return true;
+      }
+
+      function applyMosaic(point) {
+        const context = editorWorkCanvas.getContext('2d', { willReadFrequently: true });
+        const displayWidth = Math.max(1, editorCanvas.getBoundingClientRect().width);
+        const displayScale = editorWorkCanvas.width / displayWidth;
+        const block = Math.max(10, Math.round(9 * displayScale));
+        const radius = Math.max(block * 2, Math.round(28 * displayScale));
+        for (let y = point.y - radius; y <= point.y + radius; y += block) {
+          for (let x = point.x - radius; x <= point.x + radius; x += block) {
+            if ((x - point.x) ** 2 + (y - point.y) ** 2 > radius ** 2) continue;
+            const sampleX = Math.max(0, Math.min(editorWorkCanvas.width - 1, Math.round(x + block / 2)));
+            const sampleY = Math.max(0, Math.min(editorWorkCanvas.height - 1, Math.round(y + block / 2)));
+            const color = context.getImageData(sampleX, sampleY, 1, 1).data;
+            context.fillStyle = `rgb(${color[0]} ${color[1]} ${color[2]})`;
+            context.fillRect(Math.round(x), Math.round(y), block + 1, block + 1);
+          }
+        }
+        drawEditor();
+      }
+
+      editorCanvas.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        editorCanvas.setPointerCapture(event.pointerId);
+        editorIsDrawing = true;
+        editorPointerStart = editorPoint(event);
+        if (editorTool === 'mosaic') { pushEditorHistory(); applyMosaic(editorPointerStart); }
+      });
+      editorCanvas.addEventListener('pointermove', (event) => {
+        if (!editorIsDrawing) return;
+        event.preventDefault();
+        const point = editorPoint(event);
+        if (editorTool === 'mosaic') { applyMosaic(point); return; }
+        editorCropSelection = { x: Math.min(editorPointerStart.x, point.x), y: Math.min(editorPointerStart.y, point.y), width: Math.abs(point.x - editorPointerStart.x), height: Math.abs(point.y - editorPointerStart.y) };
+        drawEditor();
+      });
+      function finishEditorPointer(event) { if (!editorIsDrawing) return; editorIsDrawing = false; try { editorCanvas.releasePointerCapture(event.pointerId); } catch {} }
+      editorCanvas.addEventListener('pointerup', finishEditorPointer);
+      editorCanvas.addEventListener('pointercancel', finishEditorPointer);
+      document.querySelectorAll('[data-editor-tool]').forEach((button) => button.addEventListener('click', () => setEditorTool(button.dataset.editorTool)));
+      editorApplyCrop.addEventListener('click', applyEditorCrop);
+      editorUndo.addEventListener('click', () => { const previous = editorHistory.pop(); if (!previous) return; editorWorkCanvas = previous; editorCropSelection = null; drawEditor(); });
+      document.querySelector('#photo-editor-reset').addEventListener('click', () => { pushEditorHistory(); editorWorkCanvas = copyCanvas(editorOriginalCanvas); editorCropSelection = null; drawEditor(); });
+      document.querySelector('#photo-editor-cancel').addEventListener('click', closePhotoEditor);
+      document.querySelector('#photo-editor-save').addEventListener('click', async (event) => {
+        if (editorTool === 'crop' && editorCropSelection) applyEditorCrop();
+        const saveButton = event.currentTarget;
+        saveButton.disabled = true;
+        try {
+          const oldFile = photoFiles[editorPhotoIndex];
+          const outputType = oldFile.type === 'image/png' ? 'image/png' : 'image/jpeg';
+          const blob = await new Promise((resolve) => editorWorkCanvas.toBlob(resolve, outputType, .9));
+          if (!blob) throw new Error('image-export-failed');
+          const extension = outputType === 'image/png' ? 'png' : 'jpg';
+          const editedFile = new File([blob], `${oldFile.name.replace(/\.[^.]+$/, '')}-edited.${extension}`, { type: outputType, lastModified: Date.now() });
+          photoFiles[editorPhotoIndex] = editedFile;
+          const item = photoList.querySelector(`.photo-item[data-photo-index="${editorPhotoIndex}"]`);
+          const image = item?.querySelector('img');
+          if (image) { URL.revokeObjectURL(image.src); image.src = URL.createObjectURL(editedFile); }
+          closePhotoEditor();
+        } catch {
+          editorGuide.textContent = '保存できませんでした。もう一度お試しください。';
+        } finally { saveButton.disabled = false; }
+      });
 
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -481,7 +686,7 @@ const { locale = 'ja' } = Astro.params;
 <style is:global>
   #photo-list.photo-list {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     max-width: 100%;
     margin-top: 12px;
     padding: 4px 2px 10px;
@@ -504,17 +709,18 @@ const { locale = 'ja' } = Astro.params;
   #photo-list.photo-list .photo-item {
     position: relative;
     display: block;
-    flex: 0 0 112px;
-    width: 112px;
-    min-width: 112px;
+    flex: 0 0 calc((100% - 24px) / 4);
+    width: calc((100% - 24px) / 4);
+    min-width: calc((100% - 24px) / 4);
     max-width: none;
-    height: 112px;
+    height: auto;
+    aspect-ratio: 1;
     padding: 0;
     overflow: hidden;
     border: 1px solid #dce5e6;
-    border-radius: 14px;
+    border-radius: 11px;
     background: #edf1f1;
-    cursor: default;
+    cursor: grab;
     scroll-snap-align: start;
     touch-action: pan-x pan-y;
   }
@@ -528,18 +734,18 @@ const { locale = 'ja' } = Astro.params;
     min-height: 0 !important;
     max-height: none !important;
     object-fit: cover !important;
-    border-radius: 13px;
+    border-radius: 10px;
   }
 
   #photo-list .photo-main-badge {
     position: absolute;
-    bottom: 7px;
-    left: 7px;
-    padding: 4px 7px;
+    bottom: 4px;
+    left: 4px;
+    padding: 3px 5px;
     border-radius: 999px;
     background: #173044e8;
     color: #fff;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 700;
     line-height: 1;
     letter-spacing: .03em;
@@ -553,15 +759,15 @@ const { locale = 'ja' } = Astro.params;
   #photo-list .photo-remove,
   #photo-list .photo-drag-handle {
     position: absolute;
-    top: 6px;
+    top: 4px;
     display: grid;
     place-items: center;
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: 9px;
+    border-radius: 7px;
     color: #fff;
     font-family: inherit;
     line-height: 1;
@@ -569,9 +775,9 @@ const { locale = 'ja' } = Astro.params;
   }
 
   #photo-list .photo-remove {
-    left: 6px;
+    left: 4px;
     background: #173044c7;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 400;
   }
 
@@ -631,6 +837,135 @@ const { locale = 'ja' } = Astro.params;
 
   .photo-drag-ghost .photo-main-badge[hidden] {
     display: none;
+  }
+
+  #photo-editor[hidden],
+  #photo-editor [hidden] {
+    display: none !important;
+  }
+
+  #photo-editor {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background: #0f202a;
+    color: #f9fbfa;
+  }
+
+  #photo-editor .photo-editor-header {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr) 88px;
+    align-items: center;
+    gap: 8px;
+    padding: max(12px, env(safe-area-inset-top)) 14px 11px;
+    border-bottom: 1px solid #ffffff17;
+    background: #173044;
+  }
+
+  #photo-editor .photo-editor-header h2 {
+    margin: 0;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  #photo-editor .photo-editor-header button {
+    width: auto;
+    margin: 0;
+    padding: 9px 10px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #d7e2e5;
+    font-size: 12px;
+    box-shadow: none;
+  }
+
+  #photo-editor #photo-editor-save {
+    background: #b8d86a;
+    color: #173044;
+  }
+
+  #photo-editor .photo-editor-stage {
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    padding: 12px;
+    overflow: hidden;
+    background-color: #0b171e;
+    background-image: linear-gradient(45deg, #ffffff08 25%, transparent 25%), linear-gradient(-45deg, #ffffff08 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ffffff08 75%), linear-gradient(-45deg, transparent 75%, #ffffff08 75%);
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    background-size: 16px 16px;
+  }
+
+  #photo-editor-canvas {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    border-radius: 4px;
+    box-shadow: 0 16px 44px #0008;
+    touch-action: none;
+  }
+
+  #photo-editor .photo-editor-tools {
+    padding: 12px 14px max(14px, env(safe-area-inset-bottom));
+    border-top: 1px solid #ffffff17;
+    background: #173044;
+  }
+
+  #photo-editor .photo-editor-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+  }
+
+  #photo-editor .photo-editor-tabs button,
+  #photo-editor .photo-editor-actions button {
+    width: 100%;
+    margin: 0;
+    padding: 11px 8px;
+    border: 1px solid #ffffff24;
+    border-radius: 10px;
+    background: #ffffff0d;
+    color: #d7e2e5;
+    font-size: 12px;
+    box-shadow: none;
+  }
+
+  #photo-editor .photo-editor-tabs button.is-active {
+    border-color: #b8d86a;
+    background: #b8d86a;
+    color: #173044;
+  }
+
+  #photo-editor-guide {
+    margin: 9px 2px;
+    color: #aebdc1;
+    font-size: 10px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  #photo-editor .photo-editor-actions {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr 1fr;
+    gap: 7px;
+  }
+
+  #photo-editor #photo-editor-apply-crop {
+    border-color: #8eaf41;
+    color: #ddecba;
+  }
+
+  #photo-editor button:disabled {
+    opacity: .4;
   }
 </style>
 
