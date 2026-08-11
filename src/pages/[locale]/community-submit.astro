@@ -105,14 +105,12 @@ const { locale = 'ja' } = Astro.params;
       const photoInput = document.querySelector('#photo-input');
       const photoList = document.querySelector('#photo-list');
       const photoFiles = [];
-      let photoDragTimer = 0;
       let draggedPhotoItem = null;
       let pressedPhotoItem = null;
       let photoDragGhost = null;
       let photoDragPointerId = null;
       let photoDragStartX = 0;
       let photoDragStartY = 0;
-      let suppressPhotoClick = false;
       function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item" data-photo-index="${index}"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}" draggable="false"><span class="photo-main-badge" ${index === 0 ? '' : 'hidden'}>主画像</span><button class="photo-remove" type="button" data-photo-remove="${index}" aria-label="写真を削除">×</button></article>`).join(''); }
       function syncPhotoRows() {
         Array.from(photoList.querySelectorAll('.photo-item')).forEach((item, index) => {
@@ -126,22 +124,27 @@ const { locale = 'ja' } = Astro.params;
       photoList.addEventListener('click', (event) => {
         const button = event.target.closest('button[data-photo-remove]');
         if (button) { const item = button.closest('.photo-item'); photoFiles.splice(Number(button.dataset.photoRemove), 1); URL.revokeObjectURL(item.querySelector('img').src); item.remove(); syncPhotoRows(); return; }
-        const item = event.target.closest('.photo-item');
-        if (item && !suppressPhotoClick) openPhotoEditor(Number(item.dataset.photoIndex));
       });
       photoList.addEventListener('pointerdown', (event) => {
         if (event.target.closest('button') || event.button !== 0) return;
         const item = event.target.closest('.photo-item');
-        if (!item || photoFiles.length < 2) return;
+        if (!item) return;
+        event.preventDefault();
         pressedPhotoItem = item;
+        photoDragPointerId = event.pointerId;
         pressedPhotoItem.classList.add('is-pressing');
         photoDragStartX = event.clientX;
         photoDragStartY = event.clientY;
-        window.clearTimeout(photoDragTimer);
-        photoDragTimer = window.setTimeout(() => {
-          draggedPhotoItem = item;
-          photoDragPointerId = event.pointerId;
-          try { draggedPhotoItem.setPointerCapture(photoDragPointerId); } catch {}
+        try { pressedPhotoItem.setPointerCapture(photoDragPointerId); } catch {}
+      });
+      document.addEventListener('pointermove', (event) => {
+        if (!pressedPhotoItem || event.pointerId !== photoDragPointerId) return;
+        const moved = Math.hypot(event.clientX - photoDragStartX, event.clientY - photoDragStartY);
+        if (!draggedPhotoItem && moved < 6) return;
+        event.preventDefault();
+        if (!draggedPhotoItem) {
+          if (photoFiles.length < 2) return;
+          draggedPhotoItem = pressedPhotoItem;
           const rect = draggedPhotoItem.getBoundingClientRect();
           photoDragGhost = draggedPhotoItem.cloneNode(true);
           photoDragGhost.classList.remove('photo-item', 'is-pressing');
@@ -152,58 +155,48 @@ const { locale = 'ja' } = Astro.params;
           draggedPhotoItem.classList.add('is-drag-source');
           photoList.classList.add('is-sorting');
           navigator.vibrate?.(22);
-        }, 300);
-      });
-      document.addEventListener('pointermove', (event) => {
-        if (!draggedPhotoItem) {
-          if (pressedPhotoItem && Math.hypot(event.clientX - photoDragStartX, event.clientY - photoDragStartY) > 8) {
-            window.clearTimeout(photoDragTimer);
-            pressedPhotoItem?.classList.remove('is-pressing');
-            pressedPhotoItem = null;
-            suppressPhotoClick = true;
-            window.setTimeout(() => { suppressPhotoClick = false; }, 260);
-          }
-          return;
         }
-        if (event.pointerId !== photoDragPointerId) return;
-        event.preventDefault();
-        photoDragGhost.style.transform = `translate3d(${event.clientX - photoDragStartX}px, 0, 0) scale(1.025)`;
+        photoDragGhost.style.transform = `translate3d(${event.clientX - photoDragStartX}px, ${event.clientY - photoDragStartY}px, 0) scale(1.025)`;
         const listRect = photoList.getBoundingClientRect();
-        if (event.clientX < listRect.left + 44) photoList.scrollLeft -= 8;
-        if (event.clientX > listRect.right - 44) photoList.scrollLeft += 8;
+        const gap = Number.parseFloat(getComputedStyle(photoList).columnGap) || 8;
+        const cellSize = (listRect.width - gap * 3) / 4;
+        const column = Math.max(0, Math.min(3, Math.floor((event.clientX - listRect.left) / (cellSize + gap))));
+        const row = Math.max(0, Math.floor((event.clientY - listRect.top) / (cellSize + gap)));
+        const desiredIndex = Math.min(photoFiles.length - 1, row * 4 + column);
         const siblings = Array.from(photoList.querySelectorAll('.photo-item:not(.is-drag-source)'));
-        const nextItem = siblings.find((item) => event.clientX < item.getBoundingClientRect().left + item.getBoundingClientRect().width / 2);
+        const nextItem = siblings[desiredIndex] || null;
         const isSamePosition = nextItem ? draggedPhotoItem.nextElementSibling === nextItem : draggedPhotoItem === photoList.lastElementChild;
         if (isSamePosition) return;
-        const previousLefts = new Map(siblings.map((item) => [item, item.getBoundingClientRect().left]));
+        const previousPositions = new Map(siblings.map((item) => { const rect = item.getBoundingClientRect(); return [item, { left: rect.left, top: rect.top }]; }));
         if (nextItem) photoList.insertBefore(draggedPhotoItem, nextItem); else photoList.appendChild(draggedPhotoItem);
         siblings.forEach((item) => {
-          const offset = previousLefts.get(item) - item.getBoundingClientRect().left;
-          if (offset) item.animate?.([{ transform: `translateX(${offset}px)` }, { transform: 'translateX(0)' }], { duration: 160, easing: 'cubic-bezier(.2,.8,.2,1)' });
+          const current = item.getBoundingClientRect();
+          const previous = previousPositions.get(item);
+          const offsetX = previous.left - current.left;
+          const offsetY = previous.top - current.top;
+          if (offsetX || offsetY) item.animate?.([{ transform: `translate(${offsetX}px, ${offsetY}px)` }, { transform: 'translate(0, 0)' }], { duration: 160, easing: 'cubic-bezier(.2,.8,.2,1)' });
         });
       }, { passive: false });
       function finishPhotoDrag(event) {
-        window.clearTimeout(photoDragTimer);
-        if (!draggedPhotoItem) {
-          pressedPhotoItem?.classList.remove('is-pressing');
-          pressedPhotoItem = null;
-          return;
+        if (!pressedPhotoItem || event.pointerId !== photoDragPointerId) return;
+        const tappedItem = pressedPhotoItem;
+        const wasDragging = Boolean(draggedPhotoItem);
+        try { pressedPhotoItem.releasePointerCapture(photoDragPointerId); } catch {}
+        if (wasDragging) {
+          const reordered = Array.from(photoList.querySelectorAll('.photo-item')).map((item) => photoFiles[Number(item.dataset.photoIndex)]);
+          photoFiles.splice(0, photoFiles.length, ...reordered);
+          draggedPhotoItem.classList.remove('is-drag-source');
+          photoList.classList.remove('is-sorting');
+          photoDragGhost?.remove();
+          navigator.vibrate?.(10);
+          syncPhotoRows();
         }
-        if (event.pointerId !== photoDragPointerId) return;
-        const reordered = Array.from(photoList.querySelectorAll('.photo-item')).map((item) => photoFiles[Number(item.dataset.photoIndex)]);
-        photoFiles.splice(0, photoFiles.length, ...reordered);
-        try { draggedPhotoItem.releasePointerCapture(photoDragPointerId); } catch {}
-        draggedPhotoItem.classList.remove('is-drag-source');
-        photoList.classList.remove('is-sorting');
-        photoDragGhost?.remove();
+        tappedItem.classList.remove('is-pressing');
         draggedPhotoItem = null;
         pressedPhotoItem = null;
         photoDragGhost = null;
         photoDragPointerId = null;
-        navigator.vibrate?.(10);
-        syncPhotoRows();
-        suppressPhotoClick = true;
-        window.setTimeout(() => { suppressPhotoClick = false; }, 260);
+        if (!wasDragging && event.type !== 'pointercancel') openPhotoEditor(Number(tappedItem.dataset.photoIndex));
       }
       document.addEventListener('pointerup', finishPhotoDrag);
       document.addEventListener('pointercancel', finishPhotoDrag);
@@ -686,17 +679,14 @@ const { locale = 'ja' } = Astro.params;
 
 <style is:global>
   #photo-list.photo-list {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
     max-width: 100%;
     margin-top: 12px;
-    padding: 4px 2px 10px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-    touch-action: pan-x pan-y;
+    padding: 4px 2px;
+    overflow: visible;
+    touch-action: pan-y;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
@@ -719,10 +709,9 @@ const { locale = 'ja' } = Astro.params;
   #photo-list.photo-list .photo-item {
     position: relative;
     display: block;
-    flex: 0 0 calc((100% - 24px) / 4);
-    width: calc((100% - 24px) / 4);
-    min-width: calc((100% - 24px) / 4);
-    max-width: none;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
     height: auto;
     aspect-ratio: 1;
     padding: 0;
@@ -731,8 +720,7 @@ const { locale = 'ja' } = Astro.params;
     border-radius: 11px;
     background: #edf1f1;
     cursor: grab;
-    scroll-snap-align: start;
-    touch-action: pan-x pan-y;
+    touch-action: none;
   }
 
   #photo-list.photo-list .photo-item img {
