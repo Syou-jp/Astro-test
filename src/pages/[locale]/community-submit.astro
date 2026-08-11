@@ -29,7 +29,7 @@ const { locale = 'ja' } = Astro.params;
           <div id="photo-list" class="photo-list" aria-live="polite"></div>
         </section>
         <fieldset class="identity-card">
-          <legend>表示名 <em>必須</em></legend>
+          <legend>表示名 <em aria-label="必須">*</em></legend>
           <p class="line-profile-name">LINEの表示名：<strong id="line-display-name">取得中…</strong></p>
           <div class="identity-options">
             <label><input type="radio" name="publishNameMode" value="line" checked /><span>LINEの表示名を公開</span></label>
@@ -111,12 +111,12 @@ const { locale = 'ja' } = Astro.params;
       }, { passive: false });
       document.querySelector('#page-title').textContent = config.title;
       document.querySelector('#page-intro').textContent = config.intro;
-      fields.innerHTML = config.fields.map(([name, label, placeholder, kind]) => `<label>${label} <em>必須</em>${kind === 'textarea' ? `<textarea name="${name}" rows="6" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${kind}" placeholder="${placeholder}" required />`}</label>`).join('');
+      fields.innerHTML = config.fields.map(([name, label, placeholder, kind]) => `<label><span class="field-label">${label}<em aria-label="必須">*</em></span>${kind === 'textarea' ? `<textarea name="${name}" rows="6" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${kind}" placeholder="${placeholder}" required />`}</label>`).join('');
       if (type === 'events') {
         ['applicationUrl', 'notes', 'other'].forEach((name) => {
           const control = fields.querySelector(`[name="${name}"]`);
           control.required = false;
-          control.closest('label').querySelector('em').textContent = '任意';
+          control.closest('label').querySelector('em').remove();
         });
         const startsAt = fields.querySelector('[name="startsAt"]');
         const endsAt = fields.querySelector('[name="endsAt"]');
@@ -508,7 +508,7 @@ const { locale = 'ja' } = Astro.params;
 </html>
 
 <style>
-  :global(*){box-sizing:border-box} :global(html),:global(body){margin:0;min-height:100%;background:#f4f6f8;color:#172033;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif} :global(body){padding:0}
+  :global(*){box-sizing:border-box} :global(html),:global(body){margin:0;min-height:100%;background:#f1f4f3;color:#172d32;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",sans-serif} :global(body){padding:0}
   .liff-shell,.liff-error{width:min(100%,620px);min-height:100vh;margin:0 auto;padding:28px 20px 40px;background:#fff}.liff-error{display:grid;place-content:center;min-height:100vh;text-align:center}.liff-error[hidden],.liff-shell[hidden]{display:none}.liff-header{padding:8px 0 24px;border-bottom:1px solid #e1e6ec}.liff-kicker{margin:0 0 8px;color:#1e5b82;font:700 10px/1.2 ui-monospace,monospace;letter-spacing:.14em}.liff-header h1,.liff-error h1{margin:0;font-size:26px;line-height:1.45;letter-spacing:.02em}.liff-header p:last-child,.liff-error p:last-child{margin:9px 0 0;color:#64748b;font-size:13px;line-height:1.8}#community-form{padding-top:22px}label{display:grid;gap:7px;margin:0 0 18px;color:#253248;font-size:13px;font-weight:700}em{color:#b4533c;font-size:10px;font-style:normal;margin-left:4px}input:not([type=checkbox]),textarea{width:100%;padding:13px 14px;border:1px solid #d7dee7;border-radius:10px;background:#fbfcfd;color:#172033;font:inherit;font-size:14px;font-weight:400;outline:none}textarea{resize:vertical;line-height:1.75}input:focus,textarea:focus{border-color:#1e5b82;box-shadow:0 0 0 3px #1e5b8220}.agreement{display:flex;grid-template-columns:none;align-items:flex-start;gap:8px;color:#64748b;font-size:12px;font-weight:400;line-height:1.7}.agreement input{margin-top:4px;accent-color:#1e5b82}button{width:100%;padding:15px 18px;border:0;border-radius:10px;background:#1e5b82;color:#fff;font:700 14px inherit;cursor:pointer}button:active{transform:translateY(1px)}.form-status{display:none;margin:14px 0 0;color:#26704b;font-size:12px;line-height:1.7}.form-status.visible{display:block}
 </style>
 
@@ -997,7 +997,7 @@ const { locale = 'ja' } = Astro.params;
 </style>
 
 <style>
-  :global(body){background:#e9eef0;color:#173044;letter-spacing:.01em}
+  :global(body){background:#e9eeec;color:#173044;letter-spacing:.005em}
   .liff-shell{position:relative;width:min(100%,680px);height:100vh;height:100dvh;min-height:0;padding:0 22px 42px;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;background:#f9fbfa;box-shadow:0 18px 60px #17304418}
   .liff-header{margin:0 -22px 0;padding:34px 22px 28px;background:#173044;color:#f9fbfa;border:0;border-radius:0 0 28px 28px;position:relative;overflow:hidden}
   .liff-header:after{content:"";position:absolute;width:180px;height:180px;right:-56px;top:-74px;border:1px solid #b8d86a66;border-radius:50%;box-shadow:0 0 0 16px #b8d86a12,0 0 0 34px #b8d86a08}
@@ -1005,14 +1005,17 @@ const { locale = 'ja' } = Astro.params;
   .liff-header h1{position:relative;z-index:1;margin:0;max-width:520px;font-size:30px;line-height:1.3;letter-spacing:-.035em}
   .liff-header p:last-child{position:relative;z-index:1;max-width:520px;margin:13px 0 0;color:#d7e2e5;font-size:13px;line-height:1.85}
   #community-form{padding-top:26px}
-  #dynamic-fields{display:grid;gap:14px}
-  #community-form>label{display:grid;gap:8px;margin:0;padding:17px 17px 16px;background:#fff;border:1px solid #dce5e6;border-radius:16px;box-shadow:0 5px 16px #17304408;font-size:12px}
-  #community-form>label:focus-within{border-color:#8eaf41;box-shadow:0 0 0 4px #b8d86a33,0 8px 20px #1730440d}
-  #dynamic-fields label{display:grid;gap:8px;padding:17px 17px 16px;background:#fff;border:1px solid #dce5e6;border-radius:16px;box-shadow:0 5px 16px #17304408;font-size:12px}
-  #dynamic-fields label:focus-within{border-color:#8eaf41;box-shadow:0 0 0 4px #b8d86a33,0 8px 20px #1730440d}
-  #community-form em{color:#c46a49;font-size:10px;font-weight:600}
-  #community-form input:not([type=checkbox]),#community-form textarea,#community-form select{margin-top:2px;padding:14px 13px;border:1px solid #d7e1e2;border-radius:10px;background:#f8faf9;color:#173044;font-size:16px;line-height:1.5}
-  #community-form input::placeholder,#community-form textarea::placeholder{color:#9aa9ad}
+  #dynamic-fields{display:grid;gap:0;overflow:hidden;border:1px solid #d9e2df;border-radius:14px;background:#fff}
+  #community-form>label{display:grid;gap:8px;margin:0;padding:17px 17px 16px;background:#fff;border:1px solid #d9e2df;border-radius:14px;font-size:13px}
+  #community-form>label:focus-within{border-color:#789e35}
+  #dynamic-fields label{display:grid;gap:9px;margin:0;padding:17px 16px 18px;background:#fff;border:0;border-bottom:1px solid #e8edeb;border-radius:0;box-shadow:none;font-size:13px;transition:background .18s ease}
+  #dynamic-fields label:last-child{border-bottom:0}
+  #dynamic-fields label:focus-within{background:#fbfcf9;border-color:#e8edeb;box-shadow:none}
+  .field-label{display:flex;align-items:baseline;gap:4px;color:#263c40;font-size:13px;font-weight:700;line-height:1.45;letter-spacing:.015em}
+  #community-form em{margin:0;color:#d43f36;font-size:15px;font-weight:800;font-style:normal;line-height:1}
+  #community-form input:not([type=checkbox]),#community-form textarea,#community-form select{width:100%;min-height:49px;margin:0;padding:12px 13px;border:1px solid #cfdad7;border-radius:9px;background:#f6f8f7;color:#173044;font-family:inherit;font-size:16px;font-weight:500;line-height:1.5;outline:none;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease}
+  #community-form input::placeholder,#community-form textarea::placeholder{color:#94a19e;font-weight:400}
+  #community-form input:focus,#community-form textarea:focus,#community-form select:focus{border-color:#789e35;background:#fff;box-shadow:0 0 0 3px #8eaf4126}
   #community-form textarea{min-height:132px}
   .agreement{display:flex!important;align-items:flex-start;gap:9px!important;margin:20px 2px 18px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;color:#65777b!important;font-size:11px!important;line-height:1.7}
   .agreement input{flex:0 0 auto;margin-top:3px;accent-color:#8eaf41}
@@ -1030,16 +1033,16 @@ const { locale = 'ja' } = Astro.params;
   #dynamic-fields textarea[name="summary"]{min-height:108px;max-height:220px;resize:none;line-height:1.7}
   #dynamic-fields textarea[name="notes"],#dynamic-fields textarea[name="other"]{min-height:82px;max-height:180px;resize:none;line-height:1.65}
   #dynamic-fields input[name="applicationUrl"]{min-height:48px}
-  .identity-card{display:grid;gap:13px;margin:16px 0 0;padding:17px;border:1px solid #dce5e6;border-radius:16px;background:#fff;box-shadow:0 5px 16px #17304408}
-  .identity-card legend{padding:0 5px;color:#253248;font-size:12px;font-weight:700}
-  .line-profile-name{margin:0;padding:11px 12px;border-radius:10px;background:#edf5df;color:#52666a;font-size:12px;line-height:1.5}
+  .identity-card{display:grid;gap:13px;margin:16px 0 0;padding:17px;border:1px solid #d9e2df;border-radius:14px;background:#fff}
+  .identity-card legend{padding:0 5px;color:#263c40;font-size:13px;font-weight:700}
+  .line-profile-name{margin:0;padding:11px 12px;border-radius:9px;background:#f1f5e9;color:#52666a;font-size:12px;line-height:1.5}
   .line-profile-name strong{color:#173044;font-size:13px}
   .identity-options{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
-  .identity-options label{display:flex;align-items:center;justify-content:center;min-height:48px;margin:0;padding:8px 6px;border:1px solid #d7e1e2;border-radius:10px;background:#f8faf9;color:#52666a;font-size:11px;font-weight:700;line-height:1.35;text-align:center;cursor:pointer}
-  .identity-options label:has(input:checked){border-color:#8eaf41;background:#edf5df;color:#35521c;box-shadow:0 0 0 2px #b8d86a2e}
+  .identity-options label{display:flex;align-items:center;justify-content:center;min-height:46px;margin:0;padding:8px 6px;border:1px solid #d7e1de;border-radius:8px;background:#f7f9f8;color:#52666a;font-size:11px;font-weight:700;line-height:1.35;text-align:center;cursor:pointer}
+  .identity-options label:has(input:checked){border-color:#789e35;background:#edf4df;color:#35521c;box-shadow:0 0 0 2px #8eaf411c}
   .identity-options input[type="radio"]{position:absolute;width:1px!important;height:1px;margin:0;padding:0;opacity:0}
   #custom-display-name{margin:0!important}
-  .photo-uploader{padding:14px 17px}
+  .photo-uploader{padding:14px 17px;border-color:#d9e2df;border-radius:14px;box-shadow:none}
   .photo-uploader .photo-input{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0);white-space:nowrap;border:0!important}
   #community-form .photo-upload-button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;margin:0;padding:12px;border:1px dashed #8eaf41;border-radius:11px;background:#f4f8eb;color:#476322;font-size:13px;font-weight:800;cursor:pointer}
   #community-form .photo-upload-button span{font-size:20px;font-weight:400;line-height:1}
