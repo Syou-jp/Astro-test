@@ -61,6 +61,15 @@ const { locale = 'ja' } = Astro.params;
       const status = document.querySelector('#form-status');
       const form = document.querySelector('#community-form');
       const fields = document.querySelector('#dynamic-fields');
+      let shellTouchStartY = 0;
+      app.addEventListener('touchstart', (event) => { shellTouchStartY = event.touches[0]?.clientY || 0; }, { passive: true });
+      app.addEventListener('touchmove', (event) => {
+        if (event.target.closest('.photo-drag-handle')) return;
+        const currentY = event.touches[0]?.clientY || 0;
+        const pullingPastTop = app.scrollTop <= 0 && currentY > shellTouchStartY;
+        const pullingPastBottom = Math.ceil(app.scrollTop + app.clientHeight) >= app.scrollHeight && currentY < shellTouchStartY;
+        if (pullingPastTop || pullingPastBottom) event.preventDefault();
+      }, { passive: false });
       document.querySelector('#page-title').textContent = config.title;
       document.querySelector('#page-intro').textContent = config.intro;
       fields.innerHTML = config.fields.map(([name, label, placeholder, kind]) => `<label>${label} <em>必須</em>${kind === 'textarea' ? `<textarea name="${name}" rows="6" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${kind}" placeholder="${placeholder}" required />`}</label>`).join('');
@@ -272,6 +281,14 @@ const { locale = 'ja' } = Astro.params;
 </style>
 
 <style is:global>
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
   #photo-list {
     display: grid;
     gap: 9px;
@@ -457,7 +474,7 @@ const { locale = 'ja' } = Astro.params;
 
 <style>
   :global(body){background:#e9eef0;color:#173044;letter-spacing:.01em}
-  .liff-shell{position:relative;width:min(100%,680px);padding:0 22px 42px;background:#f9fbfa;box-shadow:0 18px 60px #17304418}
+  .liff-shell{position:relative;width:min(100%,680px);height:100vh;height:100dvh;min-height:0;padding:0 22px 42px;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;background:#f9fbfa;box-shadow:0 18px 60px #17304418}
   .liff-header{margin:0 -22px 0;padding:34px 22px 28px;background:#173044;color:#f9fbfa;border:0;border-radius:0 0 28px 28px;position:relative;overflow:hidden}
   .liff-header:after{content:"";position:absolute;width:180px;height:180px;right:-56px;top:-74px;border:1px solid #b8d86a66;border-radius:50%;box-shadow:0 0 0 16px #b8d86a12,0 0 0 34px #b8d86a08}
   .liff-kicker{position:relative;z-index:1;margin:0 0 18px;color:#b8d86a;font-size:10px;letter-spacing:.18em}
