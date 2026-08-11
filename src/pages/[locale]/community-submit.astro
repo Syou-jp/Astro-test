@@ -111,7 +111,10 @@ const { locale = 'ja' } = Astro.params;
       }, { passive: false });
       document.querySelector('#page-title').textContent = config.title;
       document.querySelector('#page-intro').textContent = config.intro;
-      fields.innerHTML = config.fields.map(([name, label, placeholder, kind]) => `<label><span class="field-label">${label}<em aria-label="必須">*</em></span>${kind === 'textarea' ? `<textarea name="${name}" rows="6" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${kind}" placeholder="${placeholder}" required />`}</label>`).join('');
+      fields.innerHTML = config.fields.map(([name, label, placeholder, kind]) => {
+        const rows = name === 'summary' ? 4 : ['notes', 'other'].includes(name) ? 3 : 4;
+        return `<label><span class="field-label">${label}<em aria-label="必須">*</em></span>${kind === 'textarea' ? `<textarea name="${name}" rows="${rows}" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${kind}" placeholder="${placeholder}" required />`}</label>`;
+      }).join('');
       if (type === 'events') {
         ['applicationUrl', 'notes', 'other'].forEach((name) => {
           const control = fields.querySelector(`[name="${name}"]`);
@@ -1008,15 +1011,15 @@ const { locale = 'ja' } = Astro.params;
   #dynamic-fields{display:grid;gap:0;overflow:hidden;border:1px solid #d9e2df;border-radius:14px;background:#fff}
   #community-form>label{display:grid;gap:8px;margin:0;padding:17px 17px 16px;background:#fff;border:1px solid #d9e2df;border-radius:14px;font-size:13px}
   #community-form>label:focus-within{border-color:#789e35}
-  #dynamic-fields label{display:grid;gap:9px;margin:0;padding:17px 16px 18px;background:#fff;border:0;border-bottom:1px solid #e8edeb;border-radius:0;box-shadow:none;font-size:13px;transition:background .18s ease}
+  #dynamic-fields label{display:grid;gap:7px;margin:0;padding:15px 14px 16px;background:#fff;border:0;border-bottom:1px solid #e8edeb;border-radius:0;box-shadow:none;font-size:13px;transition:background .18s ease}
   #dynamic-fields label:last-child{border-bottom:0}
   #dynamic-fields label:focus-within{background:#fbfcf9;border-color:#e8edeb;box-shadow:none}
-  .field-label{display:flex;align-items:baseline;gap:4px;color:#263c40;font-size:13px;font-weight:700;line-height:1.45;letter-spacing:.015em}
+  .field-label{display:flex;align-items:center;gap:4px;min-height:18px;color:#263c40;font-size:13px;font-weight:700;line-height:1.35;letter-spacing:.015em}
   #community-form em{margin:0;color:#d43f36;font-size:15px;font-weight:800;font-style:normal;line-height:1}
-  #community-form input:not([type=checkbox]),#community-form textarea,#community-form select{width:100%;min-height:49px;margin:0;padding:12px 13px;border:1px solid #cfdad7;border-radius:9px;background:#f6f8f7;color:#173044;font-family:inherit;font-size:16px;font-weight:500;line-height:1.5;outline:none;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease}
+  #community-form input:not([type=checkbox]),#community-form textarea,#community-form select{width:100%;min-height:47px;margin:0;padding:11px 12px;border:1px solid #cfdad7;border-radius:9px;background:#f6f8f7;color:#173044;font-family:inherit;font-size:16px;font-weight:500;line-height:1.5;outline:none;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease}
   #community-form input::placeholder,#community-form textarea::placeholder{color:#94a19e;font-weight:400}
   #community-form input:focus,#community-form textarea:focus,#community-form select:focus{border-color:#789e35;background:#fff;box-shadow:0 0 0 3px #8eaf4126}
-  #community-form textarea{min-height:132px}
+  #community-form textarea{height:108px;min-height:108px;max-height:108px;resize:none;line-height:1.55}
   .agreement{display:flex!important;align-items:flex-start;gap:9px!important;margin:20px 2px 18px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;color:#65777b!important;font-size:11px!important;line-height:1.7}
   .agreement input{flex:0 0 auto;margin-top:3px;accent-color:#8eaf41}
   #submit-button{position:relative;overflow:hidden;margin-top:4px;padding:16px 20px;border:0;border-radius:13px;background:#8eaf41;color:#173044;font-size:14px;box-shadow:0 10px 22px #8eaf4140;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
@@ -1030,8 +1033,8 @@ const { locale = 'ja' } = Astro.params;
   @media (prefers-reduced-motion:reduce){#submit-button{transition:none}}
   .photo-uploader{margin-top:16px;padding:18px 17px;border:1px solid #dce5e6;border-radius:16px;background:#fff;box-shadow:0 5px 16px #17304408}.photo-uploader-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.photo-uploader-head h2{margin:2px 0 0;font-size:16px}.photo-uploader-head>span{padding:5px 9px;border-radius:99px;background:#edf5df;color:#587328;font-size:10px;font-weight:700}.photo-eyebrow{margin:0;color:#8eaf41;font:700 9px ui-monospace,monospace;letter-spacing:.14em}.photo-help{margin:9px 0 13px;color:#728286;font-size:11px;line-height:1.7}.photo-uploader input[type=file]{display:block;width:100%;max-width:100%;padding:12px;border:1px dashed #aebfc0;border-radius:10px;background:#f8faf9;color:#52666a;font-size:12px}.photo-list{display:grid;gap:9px;margin-top:12px;max-width:100%;overflow:hidden}.photo-item{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:center;min-width:0;max-width:100%;overflow:hidden;padding:8px;border:1px solid #e1e8e8;border-radius:11px;background:#fbfcfb}.photo-item img{display:block;width:64px!important;height:64px!important;max-width:64px!important;object-fit:cover;border-radius:8px}.photo-item>div{min-width:0}.photo-item b{display:block;overflow:hidden;color:#35525b;font-size:11px;text-overflow:ellipsis;white-space:nowrap}.photo-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.photo-actions button{width:auto;margin:0;padding:5px 7px;border:1px solid #d5e0df;border-radius:6px;background:#fff;color:#52666a;font-size:10px;box-shadow:none}.photo-actions button:disabled{opacity:.35}.photo-actions button:hover{background:#edf5df;transform:none}
   #dynamic-fields label[hidden],#custom-display-name[hidden]{display:none!important}
-  #dynamic-fields textarea[name="summary"]{min-height:108px;max-height:220px;resize:none;line-height:1.7}
-  #dynamic-fields textarea[name="notes"],#dynamic-fields textarea[name="other"]{min-height:82px;max-height:180px;resize:none;line-height:1.65}
+  #dynamic-fields textarea[name="summary"]{height:96px;min-height:96px;max-height:96px;line-height:1.6}
+  #dynamic-fields textarea[name="notes"],#dynamic-fields textarea[name="other"]{height:76px;min-height:76px;max-height:76px;line-height:1.55}
   #dynamic-fields input[name="applicationUrl"]{min-height:48px}
   .identity-card{display:grid;gap:13px;margin:16px 0 0;padding:17px;border:1px solid #d9e2df;border-radius:14px;background:#fff}
   .identity-card legend{padding:0 5px;color:#263c40;font-size:13px;font-weight:700}
