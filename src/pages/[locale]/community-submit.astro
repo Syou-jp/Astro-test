@@ -133,7 +133,6 @@ const { locale = 'ja' } = Astro.params;
         if (event.target.closest('button') || event.button !== 0) return;
         const item = event.target.closest('.photo-item');
         if (!item || photoFiles.length < 2) return;
-        event.preventDefault();
         pressedPhotoItem = item;
         pressedPhotoItem.classList.add('is-pressing');
         photoDragStartX = event.clientX;
@@ -153,11 +152,11 @@ const { locale = 'ja' } = Astro.params;
           draggedPhotoItem.classList.add('is-drag-source');
           photoList.classList.add('is-sorting');
           navigator.vibrate?.(22);
-        }, 140);
+        }, 300);
       });
       document.addEventListener('pointermove', (event) => {
         if (!draggedPhotoItem) {
-          if (pressedPhotoItem && Math.hypot(event.clientX - photoDragStartX, event.clientY - photoDragStartY) > 18) {
+          if (pressedPhotoItem && Math.hypot(event.clientX - photoDragStartX, event.clientY - photoDragStartY) > 8) {
             window.clearTimeout(photoDragTimer);
             pressedPhotoItem?.classList.remove('is-pressing');
             pressedPhotoItem = null;
@@ -209,6 +208,8 @@ const { locale = 'ja' } = Astro.params;
       document.addEventListener('pointerup', finishPhotoDrag);
       document.addEventListener('pointercancel', finishPhotoDrag);
       photoList.addEventListener('contextmenu', (event) => { if (event.target.closest('.photo-item')) event.preventDefault(); });
+      photoList.addEventListener('selectstart', (event) => event.preventDefault());
+      photoList.addEventListener('dragstart', (event) => event.preventDefault());
 
       const photoEditor = document.querySelector('#photo-editor');
       const editorCanvas = document.querySelector('#photo-editor-canvas');
@@ -696,6 +697,15 @@ const { locale = 'ja' } = Astro.params;
     scroll-snap-type: x proximity;
     scrollbar-width: none;
     touch-action: pan-x pan-y;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  #photo-list.photo-list * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   #photo-list::-webkit-scrollbar {
@@ -735,6 +745,8 @@ const { locale = 'ja' } = Astro.params;
     max-height: none !important;
     object-fit: cover !important;
     border-radius: 10px;
+    pointer-events: none;
+    -webkit-user-drag: none;
   }
 
   #photo-list .photo-main-badge {
