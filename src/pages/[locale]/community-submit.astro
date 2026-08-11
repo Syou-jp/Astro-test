@@ -23,13 +23,21 @@ const { locale = 'ja' } = Astro.params;
 
       <form id="community-form" novalidate>
         <div id="dynamic-fields"></div>
-        <section class="photo-uploader" aria-labelledby="photo-title">
-          <div class="photo-uploader-head"><div><p class="photo-eyebrow">OPTIONAL</p><h2 id="photo-title">写真を追加</h2></div><span>最大8枚</span></div>
-          <p class="photo-help">写真は審査が完了するまで非公開です。先頭の写真が一覧カードの主画像になります。</p>
-          <input id="photo-input" type="file" accept="image/*" multiple />
+        <section class="photo-uploader" aria-label="写真">
+          <input id="photo-input" class="photo-input" type="file" accept="image/*" multiple />
+          <label class="photo-upload-button" for="photo-input"><span aria-hidden="true">＋</span> 写真を追加</label>
           <div id="photo-list" class="photo-list" aria-live="polite"></div>
         </section>
-        <label>表示名 <em>必須</em><input name="displayName" type="text" placeholder="サイトに表示する名前" required /></label>
+        <fieldset class="identity-card">
+          <legend>表示名 <em>必須</em></legend>
+          <p class="line-profile-name">LINEの表示名：<strong id="line-display-name">取得中…</strong></p>
+          <div class="identity-options">
+            <label><input type="radio" name="publishNameMode" value="line" checked /><span>LINEの表示名を公開</span></label>
+            <label><input type="radio" name="publishNameMode" value="custom" /><span>別の名前を使う</span></label>
+            <label><input type="radio" name="publishNameMode" value="private" /><span>非公開</span></label>
+          </div>
+          <input id="custom-display-name" name="customDisplayName" type="text" maxlength="30" placeholder="表示したい名前を入力" hidden disabled />
+        </fieldset>
         <label class="agreement"><input name="agreement" type="checkbox" required /><span>投稿内容が確認後に公開されることに同意します。</span></label>
         <button type="submit" id="submit-button">投稿内容を送信する</button>
         <p class="form-status" id="form-status" aria-live="polite"></p>
@@ -73,7 +81,7 @@ const { locale = 'ja' } = Astro.params;
         listings: { title: '入居募集を投稿する', intro: '物件カードに必要な情報を順番に入力してください。確認後、掲載用に整えます。', fields: [['listingType', '募集タイプ', '', 'select', [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']]], ['title', '募集タイトル', '例：駅から徒歩5分の1LDK', 'text'], ['prefecture', '都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['area', '区・市町村', '', 'select', []], ['station', '最寄り駅', '例：中野駅 徒歩5分', 'text'], ['rent', '家賃（月額・円）', '例：90000', 'number'], ['managementFee', '管理費（月額・円）', '例：5000', 'number'], ['layout', '間取り・広さ', '', 'select', []], ['moveIn', '入居可能時期', '', 'select', []], ['furnished', '家具・家電', '', 'select', [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']]], ['details', '条件・補足', '初期費用、契約期間、性別条件、同居人など', 'textarea']] },
         'used-market': { title: '中古市場に投稿する', intro: '中古市場のカードに必要な商品情報を入力してください。写真は後から追加できます。', fields: [['category', 'カテゴリー', '', 'select', [['furniture', '家具'], ['appliance', '家電・ガジェット'], ['daily-goods', '生活雑貨・キッチン'], ['fashion', 'ファッション・美容'], ['kids', '子供用品・おもちゃ'], ['hobby', '本・趣味・スポーツ'], ['other', 'その他']]], ['title', '商品名', '例：冷蔵庫（168L）', 'text'], ['condition', '商品の状態', '', 'select', [['new', '新品・未使用'], ['good', '目立つ傷なし'], ['used', '使用感あり'], ['repair', '要確認・難あり']]], ['price', '価格（円）', '無料の場合は0', 'number'], ['prefecture', '受け渡し都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['pickupArea', '受け渡し場所', '例：中野駅・杉並区', 'text'], ['availableUntil', '受け渡し可能日', '', 'select', []], ['delivery', '受け渡し方法', '', 'select', [['pickup', '現地受け取り'], ['station', '駅で受け渡し'], ['delivery', '配送相談'], ['other', 'その他']]], ['details', '商品説明', '購入時期、サイズ、動作確認、傷、付属品など', 'textarea']] },
         jobs: { title: '求人を投稿する', intro: '求人カードに必要な募集条件を入力してください。応募者が比較しやすい形に整えます。', fields: [['jobCategory', '職種カテゴリー', '', 'select', [['hotel', 'ホテル・宿泊'], ['restaurant', '飲食'], ['cleaning', '清掃'], ['office', '事務・オフィス'], ['care', '介護・福祉'], ['other', 'その他']]], ['title', '募集職種', '例：ホテルフロントスタッフ', 'text'], ['company', '会社・店舗名', '掲載名として表示します', 'text'], ['employmentType', '雇用形態', '', 'select', [['part-time', 'アルバイト・パート'], ['full-time', '正社員'], ['contract', '契約社員'], ['freelance', '業務委託'], ['other', 'その他']]], ['workplace', '勤務地', '', 'select', []], ['salary', '給与・報酬', '例：時給1,300円〜／月給25万円〜', 'text'], ['hours', '勤務時間', '', 'select', []], ['japaneseLevel', '日本語レベル', '', 'select', [['none', '不問'], ['basic', '日常会話'], ['business', 'ビジネスレベル'], ['native', 'ネイティブ相当']]], ['benefits', '待遇・条件', '交通費、まかない、寮、資格、経験など', 'textarea'], ['application', '応募方法', '担当者、連絡先、応募時に伝える内容など', 'textarea']] },
-        events: { title: 'イベントを投稿する', intro: 'イベントページに表示する開催情報と参加方法を入力してください。', fields: [['eventCategory', 'イベントカテゴリー', '', 'select', [['exchange', '交流会・言語交換'], ['culture', '文化・コミュニティ'], ['workshop', '講座・ワークショップ'], ['market', 'マーケット・フェス'], ['other', 'その他']]], ['title', 'イベント名', '例：多文化交流会', 'text'], ['date', '開催日', '例：2026年9月1日', 'text'], ['startTime', '開始時刻', '例：18:00', 'time'], ['endTime', '終了時刻', '例：20:00', 'time'], ['venue', '会場名', '例：渋谷カフェアリス', 'text'], ['area', '開催エリア', '例：渋谷区・渋谷駅徒歩5分', 'text'], ['summary', '紹介文', 'カードに表示する短い紹介（1〜2文）', 'textarea'], ['fee', '参加費', '', 'select', []], ['capacity', '定員', '', 'select', []], ['participationType', '参加方法', '', 'select', []], ['participation', '申込方法・URL', '予約URL、問い合わせ先など', 'textarea'], ['notes', '注意事項', '雨天時、対象年齢、持ち物など', 'textarea']] },
+        events: { title: 'イベントを投稿する', intro: 'イベントページに表示する開催情報と参加方法を入力してください。', fields: [['title', 'タイトル', '例：多文化交流会', 'text'], ['startsAt', '開始', '', 'datetime-local'], ['endsAt', '終了', '', 'datetime-local'], ['venue', '場所・住所', '例：東京都渋谷区〇〇／渋谷カフェ', 'text'], ['eventPrefecture', '都道府県', '', 'select'], ['summary', '紹介文', 'イベントの内容や、どんな人におすすめかを書いてください', 'textarea'], ['fee', '参加費', '', 'select'], ['feeAmount', '参加費の金額', '', 'select'], ['capacity', '定員', '', 'select'], ['participationType', '参加方法', '', 'select'], ['applicationUrl', '申込方法・URL', '例：https://example.com または「当日受付」', 'text'], ['notes', '注意事項', '持ち物、対象年齢、雨天時の対応など', 'textarea'], ['other', 'その他', '補足があれば入力してください', 'textarea']] },
         help: { title: '助け合いを投稿する', intro: '助けを求める人と協力できる人が判断しやすい情報を入力してください。', fields: [['category', '依頼カテゴリー', '', 'select', [['translate', '通訳・翻訳'], ['pet', 'ペット・留守番'], ['labor', '力仕事・引越し'], ['other', 'その他']]], ['title', '投稿タイトル', '例：引っ越しを手伝ってくれる方を探しています', 'text'], ['requestDate', '希望日時', '', 'select', []], ['area', '場所', '例：杉並区・高円寺エリア', 'text'], ['reward', '謝礼', '', 'select', []], ['urgent', '急募', '', 'select', [['no', '通常'], ['yes', '急募']]], ['details', '依頼内容', 'いつ、どこで、何を手伝ってほしいかを具体的に書いてください', 'textarea'], ['contact', '連絡方法', 'LINE ID、メール、その他の希望連絡方法', 'text']] }
       };
       const params = new URLSearchParams(location.search);
@@ -84,6 +92,9 @@ const { locale = 'ja' } = Astro.params;
       const status = document.querySelector('#form-status');
       const form = document.querySelector('#community-form');
       const fields = document.querySelector('#dynamic-fields');
+      const lineDisplayName = document.querySelector('#line-display-name');
+      const customDisplayName = document.querySelector('#custom-display-name');
+      let profileDisplayName = '';
       let shellTouchStartX = 0;
       let shellTouchStartY = 0;
       app.addEventListener('touchstart', (event) => { shellTouchStartX = event.touches[0]?.clientX || 0; shellTouchStartY = event.touches[0]?.clientY || 0; }, { passive: true });
@@ -101,6 +112,34 @@ const { locale = 'ja' } = Astro.params;
       document.querySelector('#page-title').textContent = config.title;
       document.querySelector('#page-intro').textContent = config.intro;
       fields.innerHTML = config.fields.map(([name, label, placeholder, kind]) => `<label>${label} <em>必須</em>${kind === 'textarea' ? `<textarea name="${name}" rows="6" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${kind}" placeholder="${placeholder}" required />`}</label>`).join('');
+      if (type === 'events') {
+        ['applicationUrl', 'notes', 'other'].forEach((name) => {
+          const control = fields.querySelector(`[name="${name}"]`);
+          control.required = false;
+          control.closest('label').querySelector('em').textContent = '任意';
+        });
+        const startsAt = fields.querySelector('[name="startsAt"]');
+        const endsAt = fields.querySelector('[name="endsAt"]');
+        const validateEventPeriod = () => {
+          endsAt.setCustomValidity(startsAt.value && endsAt.value && endsAt.value <= startsAt.value ? '終了は開始より後の日時を選択してください。' : '');
+        };
+        startsAt.addEventListener('change', validateEventPeriod);
+        endsAt.addEventListener('change', validateEventPeriod);
+      }
+      form.querySelectorAll('[name="publishNameMode"]').forEach((radio) => radio.addEventListener('change', () => {
+        const useCustomName = radio.checked && radio.value === 'custom';
+        if (!radio.checked) return;
+        customDisplayName.hidden = !useCustomName;
+        customDisplayName.disabled = !useCustomName;
+        customDisplayName.required = useCustomName;
+        if (useCustomName) customDisplayName.focus();
+      }));
+      function getPublishDisplayName() {
+        const mode = form.elements.publishNameMode.value;
+        if (mode === 'private') return '非公開';
+        if (mode === 'custom') return customDisplayName.value.trim();
+        return profileDisplayName || 'LINEユーザー';
+      }
 
       const photoInput = document.querySelector('#photo-input');
       const photoList = document.querySelector('#photo-list');
@@ -386,14 +425,14 @@ const { locale = 'ja' } = Astro.params;
         if (!idToken) { status.textContent = 'LINE認証を確認できませんでした。'; status.classList.add('visible'); return; }
         status.textContent = '写真と投稿内容を送信中…'; status.classList.add('visible');
         const values = Object.fromEntries(new FormData(form).entries());
-        delete values.agreement; delete values.displayName; delete values.photos;
+        delete values.agreement; delete values.publishNameMode; delete values.customDisplayName; delete values.photos;
         const upload = new FormData();
-        upload.append('submission', JSON.stringify({ type, displayName: String(form.elements.displayName.value), payload: values }));
+        upload.append('submission', JSON.stringify({ type, displayName: getPublishDisplayName(), payload: values }));
         photoFiles.forEach((file) => upload.append('photos', file, file.name));
         try {
           const response = await fetch(API_URL, { method: 'POST', headers: { authorization: `Bearer ${idToken}` }, body: upload });
           if (!response.ok) throw new Error('submission-failed');
-          status.textContent = '投稿を受け付けました。写真を含めて確認後に掲載します。'; form.reset(); photoFiles.length = 0; renderPhotos();
+          status.textContent = '投稿を受け付けました。写真を含めて確認後に掲載します。'; form.reset(); customDisplayName.hidden = true; customDisplayName.disabled = true; photoFiles.length = 0; renderPhotos();
         } catch { status.textContent = '送信に失敗しました。時間を置いて再度お試しください。'; }
       }, true);
 
@@ -413,8 +452,9 @@ const { locale = 'ja' } = Astro.params;
         workplace: [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['群馬県', '群馬県'], ['その他', 'その他']],
         hours: [['day', '日中（9:00〜18:00前後）'], ['morning', '早朝・午前'], ['evening', '夕方・夜'], ['shift', 'シフト制'], ['flexible', '応相談']],
         japaneseLevel: [['none', '不問'], ['basic', '日常会話'], ['business', 'ビジネスレベル'], ['native', 'ネイティブ相当']],
-        eventCategory: [['exchange', '交流会・言語交換'], ['culture', '文化・コミュニティ'], ['workshop', '講座・ワークショップ'], ['market', 'マーケット・フェス'], ['other', 'その他']],
-        fee: [['free', '無料'], ['paid', '有料'], ['donation', '投げ銭・任意'], ['reservation', '要問い合わせ']],
+        eventPrefecture: ['北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県','滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'].map((name) => [name, name]),
+        fee: [['free', '無料'], ['paid', '有料']],
+        feeAmount: [['500', '500円'], ['1000', '1,000円'], ['1500', '1,500円'], ['2000', '2,000円'], ['3000', '3,000円'], ['5000', '5,000円'], ['10000', '10,000円'], ['other', 'その他（「その他」に記入）']],
         capacity: [['small', '10名未満'], ['medium', '10〜30名'], ['large', '30名以上'], ['unlimited', '定員なし'], ['unknown', '未定']],
         participationType: [['reservation', '事前予約'], ['walk-in', '当日参加'], ['both', '予約・当日参加'], ['contact', '主催者へ問い合わせ']],
         requestDate: [['today', 'できるだけ早く'], ['this-week', '今週中'], ['this-month', '今月中'], ['flexible', '日程相談可'], ['other', '指定日あり']],
@@ -422,6 +462,19 @@ const { locale = 'ja' } = Astro.params;
         urgent: [['no', '通常'], ['yes', '急募']],
       };
       Object.entries(selectOptions).forEach(([name, options]) => { const old = fields.querySelector(`[name="${name}"]`); if (!old || !options.length) return; const select = document.createElement('select'); select.name = name; select.required = true; select.innerHTML = `<option value="">選択してください</option>${options.map(([value, text]) => `<option value="${value}">${text}</option>`).join('')}`; old.replaceWith(select); });
+      const feeSelect = fields.querySelector('[name="fee"]');
+      const feeAmountSelect = fields.querySelector('[name="feeAmount"]');
+      const feeAmountField = feeAmountSelect?.closest('label');
+      function syncFeeAmount() {
+        if (!feeAmountSelect || !feeAmountField) return;
+        const isPaid = feeSelect?.value === 'paid';
+        feeAmountField.hidden = !isPaid;
+        feeAmountSelect.disabled = !isPaid;
+        feeAmountSelect.required = isPaid;
+        if (!isPaid) feeAmountSelect.value = '';
+      }
+      feeSelect?.addEventListener('change', syncFeeAmount);
+      syncFeeAmount();
 
       const loadLiff = new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -437,44 +490,18 @@ const { locale = 'ja' } = Astro.params;
           await liff.init({ liffId: LIFF_ID });
           if (!liff.isInClient()) throw new Error('not-in-line');
           if (!liff.isLoggedIn()) { liff.login(); return; }
+          try {
+            const profile = await liff.getProfile();
+            profileDisplayName = profile.displayName || '';
+            lineDisplayName.textContent = profileDisplayName || '取得できませんでした';
+          } catch {
+            lineDisplayName.textContent = '取得できませんでした';
+          }
           app.hidden = false;
         } catch (e) {
           error.hidden = false;
         }
       }
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        if (!form.checkValidity()) { form.reportValidity(); return; }
-        const liff = await loadLiff;
-        const idToken = liff.getIDToken();
-        if (!idToken) { status.textContent = 'LINEの認証を確認できませんでした。'; status.classList.add('visible'); return; }
-        status.textContent = 'LINE認証を確認しました。投稿送信APIの接続後に正式受付となります。';
-        status.classList.add('visible');
-      });
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        if (!form.checkValidity()) { form.reportValidity(); return; }
-        const liff = await loadLiff;
-        const idToken = liff.getIDToken();
-        if (!idToken) { status.textContent = 'LINE認証を確認できませんでした。'; status.classList.add('visible'); return; }
-        status.textContent = '送信中…';
-        status.classList.add('visible');
-        const data = Object.fromEntries(new FormData(form).entries());
-        delete data.agreement;
-        delete data.displayName;
-        try {
-          const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'content-type': 'application/json', authorization: `Bearer ${idToken}` },
-            body: JSON.stringify({ type, displayName: String(form.elements.displayName.value), payload: data }),
-          });
-          if (!response.ok) throw new Error('submission-failed');
-          status.textContent = '投稿を受け付けました。確認後に掲載します。';
-          form.reset();
-        } catch {
-          status.textContent = '送信に失敗しました。時間を置いて再度お試しください。';
-        }
-      });
       boot();
     </script>
   </body>
@@ -999,4 +1026,22 @@ const { locale = 'ja' } = Astro.params;
   @media (max-width:520px){.liff-shell{padding-left:16px;padding-right:16px}.liff-header{margin-left:-16px;margin-right:-16px;padding-left:20px;padding-right:20px;border-radius:0 0 24px 24px}.liff-header h1{font-size:26px}#community-form{padding-top:20px}}
   @media (prefers-reduced-motion:reduce){#submit-button{transition:none}}
   .photo-uploader{margin-top:16px;padding:18px 17px;border:1px solid #dce5e6;border-radius:16px;background:#fff;box-shadow:0 5px 16px #17304408}.photo-uploader-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.photo-uploader-head h2{margin:2px 0 0;font-size:16px}.photo-uploader-head>span{padding:5px 9px;border-radius:99px;background:#edf5df;color:#587328;font-size:10px;font-weight:700}.photo-eyebrow{margin:0;color:#8eaf41;font:700 9px ui-monospace,monospace;letter-spacing:.14em}.photo-help{margin:9px 0 13px;color:#728286;font-size:11px;line-height:1.7}.photo-uploader input[type=file]{display:block;width:100%;max-width:100%;padding:12px;border:1px dashed #aebfc0;border-radius:10px;background:#f8faf9;color:#52666a;font-size:12px}.photo-list{display:grid;gap:9px;margin-top:12px;max-width:100%;overflow:hidden}.photo-item{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:center;min-width:0;max-width:100%;overflow:hidden;padding:8px;border:1px solid #e1e8e8;border-radius:11px;background:#fbfcfb}.photo-item img{display:block;width:64px!important;height:64px!important;max-width:64px!important;object-fit:cover;border-radius:8px}.photo-item>div{min-width:0}.photo-item b{display:block;overflow:hidden;color:#35525b;font-size:11px;text-overflow:ellipsis;white-space:nowrap}.photo-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.photo-actions button{width:auto;margin:0;padding:5px 7px;border:1px solid #d5e0df;border-radius:6px;background:#fff;color:#52666a;font-size:10px;box-shadow:none}.photo-actions button:disabled{opacity:.35}.photo-actions button:hover{background:#edf5df;transform:none}
+  #dynamic-fields label[hidden],#custom-display-name[hidden]{display:none!important}
+  #dynamic-fields textarea[name="summary"]{min-height:108px;max-height:220px;resize:none;line-height:1.7}
+  #dynamic-fields textarea[name="notes"],#dynamic-fields textarea[name="other"]{min-height:82px;max-height:180px;resize:none;line-height:1.65}
+  #dynamic-fields input[name="applicationUrl"]{min-height:48px}
+  .identity-card{display:grid;gap:13px;margin:16px 0 0;padding:17px;border:1px solid #dce5e6;border-radius:16px;background:#fff;box-shadow:0 5px 16px #17304408}
+  .identity-card legend{padding:0 5px;color:#253248;font-size:12px;font-weight:700}
+  .line-profile-name{margin:0;padding:11px 12px;border-radius:10px;background:#edf5df;color:#52666a;font-size:12px;line-height:1.5}
+  .line-profile-name strong{color:#173044;font-size:13px}
+  .identity-options{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+  .identity-options label{display:flex;align-items:center;justify-content:center;min-height:48px;margin:0;padding:8px 6px;border:1px solid #d7e1e2;border-radius:10px;background:#f8faf9;color:#52666a;font-size:11px;font-weight:700;line-height:1.35;text-align:center;cursor:pointer}
+  .identity-options label:has(input:checked){border-color:#8eaf41;background:#edf5df;color:#35521c;box-shadow:0 0 0 2px #b8d86a2e}
+  .identity-options input[type="radio"]{position:absolute;width:1px!important;height:1px;margin:0;padding:0;opacity:0}
+  #custom-display-name{margin:0!important}
+  .photo-uploader{padding:14px 17px}
+  .photo-uploader .photo-input{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0);white-space:nowrap;border:0!important}
+  #community-form .photo-upload-button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;margin:0;padding:12px;border:1px dashed #8eaf41;border-radius:11px;background:#f4f8eb;color:#476322;font-size:13px;font-weight:800;cursor:pointer}
+  #community-form .photo-upload-button span{font-size:20px;font-weight:400;line-height:1}
+  @media (max-width:420px){.identity-options{grid-template-columns:1fr}.identity-options label{justify-content:flex-start;min-height:42px;padding:9px 12px;text-align:left}}
 </style>
