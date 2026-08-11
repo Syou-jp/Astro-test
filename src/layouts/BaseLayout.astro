@@ -1691,5 +1691,109 @@ siteSetLanguage(siteInitialLanguage,false);
         });
       })();
     </script>
+
+    <script>
+      (() => {
+        const pageMap = {
+          'page-listings': {
+            title: '入居募集を投稿する',
+            intro: '入居者募集やルームシェア情報を投稿できます。投稿内容は確認後に掲載します。',
+            fields: [['title', '募集タイトル', '例：駅から徒歩5分の1LDK', 'text'], ['location', '場所', '都道府県・市区町村・最寄り駅', 'text'], ['details', '募集内容', '家賃、間取り、入居時期、条件など', 'textarea']]
+          },
+          'page-used-market': {
+            title: '中古市場に投稿する',
+            intro: '家具・家電・生活用品などの売買情報を投稿できます。',
+            fields: [['title', '商品名', '例：冷蔵庫・電子レンジ・家具セット', 'text'], ['price', '価格', '例：5,000円（無料の場合は「無料」）', 'text'], ['details', '商品の説明', '状態、受け渡し場所、希望日時など', 'textarea']]
+          },
+          'page-jobs': {
+            title: '求人を投稿する',
+            intro: '会社・店舗の求人情報を投稿できます。労働条件を明確に記入してください。',
+            fields: [['title', '募集職種', '例：ホテルスタッフ、飲食店スタッフ', 'text'], ['company', '会社・店舗名', '会社名または店舗名', 'text'], ['details', '求人内容', '仕事内容、給与、勤務時間、応募方法など', 'textarea']]
+          },
+          'page-events': {
+            title: 'イベントを投稿する',
+            intro: '交流会、講座、文化イベントなどの情報を投稿できます。',
+            fields: [['title', 'イベント名', '例：多文化交流会', 'text'], ['date', '開催日時', '例：2026年9月1日 18:00〜', 'text'], ['details', 'イベント内容', '場所、参加費、参加方法、問い合わせ先など', 'textarea']]
+          },
+          'page-help-request': {
+            title: '助け合いを投稿する',
+            intro: '翻訳、引っ越し、ペットのお世話など、助けてほしいことを投稿できます。',
+            fields: [['title', '投稿タイトル', '例：引っ越しを手伝ってくれる方を探しています', 'text'], ['location', '場所・日時', '例：東京都中野区・9月1日午後', 'text'], ['details', '詳しい内容', '何を手伝ってほしいか、謝礼、連絡方法など', 'textarea']]
+          }
+        };
+
+        const LIFF_ID = '2011054732-exitzB6m';
+        const OFFICIAL_ACCOUNT_URL = 'https://line.me/R/ti/p/%40721khrrb';
+        const liffReady = new Promise((resolve, reject) => {
+          if (window.liff) { resolve(window.liff); return; }
+          const script = document.createElement('script');
+          script.src = 'https://static.line-scdn.net/liff/edge/2/sdk.js';
+          script.onload = () => window.liff ? resolve(window.liff) : reject(new Error('LIFF SDK unavailable'));
+          script.onerror = () => reject(new Error('LIFF SDK failed to load'));
+          document.head.appendChild(script);
+        });
+        const page = Object.keys(pageMap).find((id) => document.querySelector(`#${id}`));
+        const host = page ? document.querySelector(`#${page}`) : null;
+        if (!page || host?.querySelector('.community-post-trigger')) return;
+        const config = pageMap[page];
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = 'community-post-trigger';
+        trigger.innerHTML = `<span>LINEから投稿する</span><b>＋</b>`;
+        const form = document.createElement('section');
+        form.className = 'community-post-form';
+        form.hidden = true;
+        form.innerHTML = `<div class="community-post-form__head"><span>POST YOUR INFORMATION</span><h3>${config.title}</h3><p>${config.intro}</p></div><form novalidate>${config.fields.map(([name, label, placeholder, type]) => `<label>${label}<em>必須</em>${type === 'textarea' ? `<textarea name="${name}" rows="5" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${type}" placeholder="${placeholder}" required>`}</label>`).join('')}<label>表示名<em>必須</em><input name="displayName" type="text" placeholder="サイトに表示する名前" required></label><label class="community-post-form__check"><input name="agree" type="checkbox" required><span>投稿内容が確認後に公開されることに同意します。</span></label><button type="submit">入力内容を確認する <span>→</span></button><p class="community-post-form__status" aria-live="polite"></p></form>`;
+        host.append(trigger, form);
+        trigger.addEventListener('click', async () => {
+          try {
+            const liff = await liffReady;
+            await liff.init({ liffId: LIFF_ID });
+            if (!liff.isInClient()) {
+              window.location.href = OFFICIAL_ACCOUNT_URL;
+              return;
+            }
+          } catch (error) {
+            window.location.href = OFFICIAL_ACCOUNT_URL;
+            return;
+          }
+          const open = form.hidden;
+          form.hidden = !open;
+          trigger.setAttribute('aria-expanded', String(open));
+          trigger.classList.toggle('is-open', open);
+          if (open) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        const innerForm = form.querySelector('form');
+        const status = form.querySelector('.community-post-form__status');
+        innerForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          if (!innerForm.checkValidity()) { innerForm.reportValidity(); return; }
+          status.textContent = 'LINEの認証を確認しています…';
+          status.classList.add('is-visible');
+          try {
+            const liff = await liffReady;
+            await liff.init({ liffId: LIFF_ID });
+            if (!liff.isLoggedIn()) { liff.login(); return; }
+            const idToken = liff.getIDToken();
+            if (!idToken) throw new Error('LINE ID token unavailable');
+            window.__sotocomLiff = { idToken, page };
+          } catch (error) {
+            status.textContent = 'LINEアプリ内で開いて、もう一度お試しください。';
+            return;
+          }
+          status.textContent = 'LINE認証を確認しました。投稿送信APIの接続後に正式受付となります。';
+          innerForm.reset();
+        });
+      })();
+    </script>
+    <style>
+      .community-post-trigger{display:flex;align-items:center;justify-content:space-between;width:100%;margin:30px 0 8px;padding:17px 20px;border:1px solid var(--accent,#254391);border-radius:var(--radius-md,12px);background:var(--accent,#254391);color:#fff;font:700 13px inherit;cursor:pointer}.community-post-trigger b{font-size:22px;font-weight:400;line-height:1;transition:transform .2s ease}.community-post-trigger.is-open b{transform:rotate(45deg)}
+      .community-post-trigger.is-blocked{background:var(--paper-2,#f5f4ef);border-color:var(--line,#ddd8cc);color:var(--ink-soft,#6b665a);cursor:not-allowed}.community-post-trigger.is-blocked b{display:none}.community-post-form__hint{margin:0 0 14px;padding:11px 14px;border-left:3px solid var(--accent,#254391);background:var(--paper-2,#f5f4ef);color:var(--ink-soft,#6b665a);font-size:11px;line-height:1.7}
+      .community-post-form{margin:14px 0 8px;padding:26px;background:var(--paper-2,#f5f4ef);border:1px solid var(--line,#ddd8cc);border-radius:var(--radius-md,12px)}
+      .community-post-form__head>span{font:700 9px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--accent,#254391)}
+      .community-post-form__head h3{margin:5px 0 7px;font-family:"Shippori Mincho",serif;font-size:23px;line-height:1.45}
+      .community-post-form__head p{margin:0;color:var(--ink-soft,#6b665a);font-size:12px;line-height:1.8}
+      .community-post-form form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px;margin-top:18px}.community-post-form label{display:grid;gap:6px;margin:0 0 14px;color:var(--ink,#2b2b26);font-size:11px;font-weight:700}.community-post-form label:nth-last-of-type(2),.community-post-form label:nth-last-of-type(3){grid-column:1/-1}.community-post-form input:not([type=checkbox]),.community-post-form textarea{width:100%;border:1px solid var(--line,#ddd8cc);border-radius:8px;background:#fff;color:inherit;font:inherit;font-size:12px;padding:11px 12px;outline:0}.community-post-form textarea{resize:vertical;line-height:1.7}.community-post-form input:focus,.community-post-form textarea:focus{border-color:var(--accent,#254391);box-shadow:0 0 0 3px rgba(37,67,145,.08)}.community-post-form em{color:#a8482f;font-size:9px;font-style:normal;margin-left:5px}.community-post-form__check{display:flex!important;grid-column:1/-1;grid-template-columns:auto 1fr!important;align-items:flex-start;gap:7px;color:var(--ink-soft,#6b665a)!important;font-size:10px!important;font-weight:400!important;line-height:1.6}.community-post-form__check input{margin-top:2px;accent-color:var(--accent,#254391)}.community-post-form button{grid-column:1/-1;border:0;border-radius:8px;background:var(--accent,#254391);color:#fff;padding:13px 16px;font:700 12px inherit;cursor:pointer}.community-post-form button span{margin-left:8px;font-size:17px}.community-post-form__status{display:none;grid-column:1/-1;margin:12px 0 0;color:#2d6a45;font-size:11px;line-height:1.7}.community-post-form__status.is-visible{display:block}@media(max-width:700px){.community-post-form{padding:20px 16px}.community-post-form form{grid-template-columns:1fr}.community-post-form label:nth-last-of-type(2),.community-post-form label:nth-last-of-type(3){grid-column:auto}.community-post-form__check,.community-post-form button,.community-post-form__status{grid-column:auto}}
+    </style>
   </body>
 </html>
