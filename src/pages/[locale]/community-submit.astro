@@ -68,9 +68,51 @@ const { locale = 'ja' } = Astro.params;
       const photoInput = document.querySelector('#photo-input');
       const photoList = document.querySelector('#photo-list');
       const photoFiles = [];
-      function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}"><div><b>${index === 0 ? '一覧の主画像' : `写真 ${index + 1}`}</b><div class="photo-actions"><button type="button" data-photo-up="${index}" ${index === 0 ? 'disabled' : ''}>←前へ</button><button type="button" data-photo-down="${index}" ${index === photoFiles.length - 1 ? 'disabled' : ''}>次へ→</button><button type="button" data-photo-remove="${index}">削除</button></div></div></article>`).join(''); }
+      let photoDragTimer = 0;
+      let draggedPhotoItem = null;
+      let photoDragStartX = 0;
+      let photoDragStartY = 0;
+      function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item" data-photo-index="${index}"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}" draggable="false"><div><b>${index === 0 ? '一覧の主画像' : `写真 ${index + 1}`}</b><small class="photo-sort-hint">長押しして上下に並べ替え</small><div class="photo-actions"><button type="button" data-photo-remove="${index}">削除</button></div></div></article>`).join(''); }
       photoInput.addEventListener('change', () => { const incoming = Array.from(photoInput.files || []).filter((file) => file.type.startsWith('image/')); photoFiles.push(...incoming.slice(0, Math.max(0, 8 - photoFiles.length))); photoInput.value = ''; renderPhotos(); });
-      photoList.addEventListener('click', (event) => { const button = event.target.closest('button'); if (!button) return; const index = Number(button.dataset.photoUp ?? button.dataset.photoDown ?? button.dataset.photoRemove); if (button.dataset.photoRemove !== undefined) photoFiles.splice(index, 1); if (button.dataset.photoUp !== undefined && index > 0) [photoFiles[index - 1], photoFiles[index]] = [photoFiles[index], photoFiles[index - 1]]; if (button.dataset.photoDown !== undefined && index < photoFiles.length - 1) [photoFiles[index + 1], photoFiles[index]] = [photoFiles[index], photoFiles[index + 1]]; renderPhotos(); });
+      photoList.addEventListener('click', (event) => { const button = event.target.closest('button[data-photo-remove]'); if (!button) return; photoFiles.splice(Number(button.dataset.photoRemove), 1); renderPhotos(); });
+      photoList.addEventListener('pointerdown', (event) => {
+        if (event.target.closest('button') || event.button !== 0) return;
+        const item = event.target.closest('.photo-item');
+        if (!item || photoFiles.length < 2) return;
+        photoDragStartX = event.clientX;
+        photoDragStartY = event.clientY;
+        window.clearTimeout(photoDragTimer);
+        photoDragTimer = window.setTimeout(() => {
+          draggedPhotoItem = item;
+          draggedPhotoItem.classList.add('is-dragging');
+          photoList.classList.add('is-sorting');
+          navigator.vibrate?.(18);
+        }, 260);
+      });
+      document.addEventListener('pointermove', (event) => {
+        if (!draggedPhotoItem) {
+          if (Math.hypot(event.clientX - photoDragStartX, event.clientY - photoDragStartY) > 10) window.clearTimeout(photoDragTimer);
+          return;
+        }
+        event.preventDefault();
+        const target = document.elementFromPoint(event.clientX, event.clientY)?.closest('.photo-item');
+        if (!target || target === draggedPhotoItem || target.parentElement !== photoList) return;
+        const targetRect = target.getBoundingClientRect();
+        photoList.insertBefore(draggedPhotoItem, event.clientY < targetRect.top + targetRect.height / 2 ? target : target.nextSibling);
+      }, { passive: false });
+      function finishPhotoDrag() {
+        window.clearTimeout(photoDragTimer);
+        if (!draggedPhotoItem) return;
+        const reordered = Array.from(photoList.querySelectorAll('.photo-item')).map((item) => photoFiles[Number(item.dataset.photoIndex)]);
+        photoFiles.splice(0, photoFiles.length, ...reordered);
+        draggedPhotoItem.classList.remove('is-dragging');
+        photoList.classList.remove('is-sorting');
+        draggedPhotoItem = null;
+        renderPhotos();
+      }
+      document.addEventListener('pointerup', finishPhotoDrag);
+      document.addEventListener('pointercancel', finishPhotoDrag);
+      photoList.addEventListener('contextmenu', (event) => { if (event.target.closest('.photo-item')) event.preventDefault(); });
 
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -202,6 +244,26 @@ const { locale = 'ja' } = Astro.params;
     border: 1px solid #e1e8e8;
     border-radius: 11px;
     background: #fbfcfb;
+    touch-action: pan-y;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, opacity .16s ease;
+  }
+
+  #photo-list.is-sorting,
+  #photo-list.is-sorting .photo-item {
+    touch-action: none;
+  }
+
+  #photo-list .photo-item.is-dragging {
+    position: relative;
+    z-index: 2;
+    border-color: #8eaf41;
+    background: #f7faef;
+    box-shadow: 0 12px 28px #1730442b;
+    transform: scale(.985);
+    opacity: .94;
   }
 
   #photo-list .photo-item img {
@@ -229,6 +291,14 @@ const { locale = 'ja' } = Astro.params;
     white-space: nowrap;
   }
 
+  #photo-list .photo-sort-hint {
+    display: block;
+    margin-top: 3px;
+    color: #7c8c90;
+    font-size: 9px;
+    line-height: 1.4;
+  }
+
   #photo-list .photo-actions {
     display: flex;
     flex-wrap: wrap;
@@ -250,6 +320,12 @@ const { locale = 'ja' } = Astro.params;
 
   #photo-list .photo-actions button:disabled {
     opacity: .35;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #photo-list .photo-item {
+      transition: none;
+    }
   }
 </style>
 
