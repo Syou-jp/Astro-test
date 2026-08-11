@@ -479,7 +479,7 @@ const { locale = 'ja' } = Astro.params;
 </style>
 
 <style is:global>
-  #photo-list {
+  #photo-list.photo-list {
     display: flex;
     gap: 10px;
     max-width: 100%;
@@ -501,7 +501,7 @@ const { locale = 'ja' } = Astro.params;
     scroll-snap-type: none;
   }
 
-  #photo-list .photo-item {
+  #photo-list.photo-list .photo-item {
     position: relative;
     display: block;
     flex: 0 0 112px;
@@ -519,7 +519,7 @@ const { locale = 'ja' } = Astro.params;
     touch-action: pan-x pan-y;
   }
 
-  #photo-list .photo-item img {
+  #photo-list.photo-list .photo-item img {
     display: block;
     width: 100% !important;
     min-width: 0 !important;
@@ -575,7 +575,7 @@ const { locale = 'ja' } = Astro.params;
     font-weight: 400;
   }
 
-  #photo-list .photo-drag-handle {
+  #photo-list.photo-list .photo-drag-handle {
     right: 6px;
     background: #9fbe55ed;
     color: #173044;
