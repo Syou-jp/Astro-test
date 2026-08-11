@@ -7,5 +7,9 @@ binding = "DB"
 database_name = "sotocom-submissions"
 database_id = "5df108b3-7c2c-439b-8421-02c031c6f035"
 
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "sotocom-submission-photos"
+
 [vars]
 ALLOWED_ORIGIN = "https://astro-test-01m.pages.dev"

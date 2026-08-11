@@ -1,5 +1,6 @@
 export interface Env {
   DB: D1Database;
+  PHOTOS: R2Bucket;
   ALLOWED_ORIGIN: string;
   LINE_CHANNEL_SECRET: string;
   LINE_CHANNEL_ACCESS_TOKEN: string;
@@ -116,7 +117,8 @@ export default {
       return json({ ok: true, service: 'sotocom-api' }, 200, allowedOrigin);
     }
     try {
-      const body = await request.json() as Record<string, unknown>;
+      const formData = await request.formData();
+      const body = JSON.parse(String(formData.get('submission') || '{}')) as Record<string, any>;
       const type = typeof body.type === 'string' ? body.type : '';
       const payload = body.payload && typeof body.payload === 'object' ? body.payload : null;
       const displayName = typeof body.displayName === 'string' ? body.displayName.trim() : '';
@@ -125,8 +127,17 @@ export default {
       }
       const auth = request.headers.get('authorization') || '';
       const lineUserId = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+      const photoKeys: string[] = [];
+      for (const entry of formData.getAll('photos')) {
+        if (!(entry instanceof File) || !entry.size) continue;
+        if (!entry.type.startsWith('image/') || entry.size > 8 * 1024 * 1024 || photoKeys.length >= 8) return json({ ok: false, error: 'invalid_photo' }, 400, allowedOrigin);
+        const key = `submissions/${crypto.randomUUID()}-${entry.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+        await env.PHOTOS.put(key, entry.stream(), { httpMetadata: { contentType: entry.type } });
+        photoKeys.push(key);
+      }
+      const storedPayload = { ...payload, photoKeys };
       await env.DB.prepare(`INSERT INTO submissions (type, payload, line_user_id, display_name) VALUES (?, ?, ?, ?)`)
-        .bind(type, JSON.stringify(payload), lineUserId, displayName).run();
+        .bind(type, JSON.stringify(storedPayload), lineUserId, displayName).run();
       return json({ ok: true, status: 'pending' }, 201, allowedOrigin);
     } catch {
       return json({ ok: false, error: 'invalid_request' }, 400, allowedOrigin);
