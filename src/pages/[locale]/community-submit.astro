@@ -75,12 +75,21 @@ const { locale = 'ja' } = Astro.params;
       let photoDragPointerId = null;
       let photoDragStartX = 0;
       let photoDragStartY = 0;
-      function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item" data-photo-index="${index}"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}" draggable="false"><div><b>${index === 0 ? '一覧の主画像' : `写真 ${index + 1}`}</b><small class="photo-sort-hint">長押しして上下に移動</small><div class="photo-actions"><button type="button" data-photo-remove="${index}">削除</button></div></div><span class="photo-drag-handle" aria-hidden="true">⠿</span></article>`).join(''); }
+      function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item" data-photo-index="${index}"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}" draggable="false"><div><b>${index === 0 ? '一覧の主画像' : `写真 ${index + 1}`}</b><small class="photo-sort-hint">右のハンドルを長押しして移動</small><div class="photo-actions"><button type="button" data-photo-remove="${index}">削除</button></div></div><span class="photo-drag-handle" aria-hidden="true">⠿</span></article>`).join(''); }
+      function syncPhotoRows() {
+        Array.from(photoList.querySelectorAll('.photo-item')).forEach((item, index) => {
+          item.dataset.photoIndex = String(index);
+          item.querySelector('img').alt = `選択した写真 ${index + 1}`;
+          item.querySelector('b').textContent = index === 0 ? '一覧の主画像' : `写真 ${index + 1}`;
+          item.querySelector('[data-photo-remove]').dataset.photoRemove = String(index);
+        });
+      }
       photoInput.addEventListener('change', () => { const incoming = Array.from(photoInput.files || []).filter((file) => file.type.startsWith('image/')); photoFiles.push(...incoming.slice(0, Math.max(0, 8 - photoFiles.length))); photoInput.value = ''; renderPhotos(); });
-      photoList.addEventListener('click', (event) => { const button = event.target.closest('button[data-photo-remove]'); if (!button) return; photoFiles.splice(Number(button.dataset.photoRemove), 1); renderPhotos(); });
+      photoList.addEventListener('click', (event) => { const button = event.target.closest('button[data-photo-remove]'); if (!button) return; const item = button.closest('.photo-item'); photoFiles.splice(Number(button.dataset.photoRemove), 1); URL.revokeObjectURL(item.querySelector('img').src); item.remove(); syncPhotoRows(); });
       photoList.addEventListener('pointerdown', (event) => {
-        if (event.target.closest('button') || event.button !== 0) return;
-        const item = event.target.closest('.photo-item');
+        const handle = event.target.closest('.photo-drag-handle');
+        if (!handle || event.button !== 0) return;
+        const item = handle.closest('.photo-item');
         if (!item || photoFiles.length < 2) return;
         event.preventDefault();
         pressedPhotoItem = item;
@@ -148,7 +157,7 @@ const { locale = 'ja' } = Astro.params;
         photoDragGhost = null;
         photoDragPointerId = null;
         navigator.vibrate?.(10);
-        renderPhotos();
+        syncPhotoRows();
       }
       document.addEventListener('pointerup', finishPhotoDrag);
       document.addEventListener('pointercancel', finishPhotoDrag);
@@ -284,8 +293,8 @@ const { locale = 'ja' } = Astro.params;
     border: 1px solid #e1e8e8;
     border-radius: 11px;
     background: #fbfcfb;
-    cursor: grab;
-    touch-action: none;
+    cursor: default;
+    touch-action: pan-y;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
@@ -374,6 +383,9 @@ const { locale = 'ja' } = Astro.params;
 
   #photo-list .photo-drag-handle {
     cursor: grab;
+    touch-action: none;
+    border-radius: 8px;
+    background: #edf5df;
   }
 
   .photo-drag-ghost .photo-drag-handle {
