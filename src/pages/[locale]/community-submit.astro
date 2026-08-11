@@ -61,13 +61,18 @@ const { locale = 'ja' } = Astro.params;
       const status = document.querySelector('#form-status');
       const form = document.querySelector('#community-form');
       const fields = document.querySelector('#dynamic-fields');
+      let shellTouchStartX = 0;
       let shellTouchStartY = 0;
-      app.addEventListener('touchstart', (event) => { shellTouchStartY = event.touches[0]?.clientY || 0; }, { passive: true });
+      app.addEventListener('touchstart', (event) => { shellTouchStartX = event.touches[0]?.clientX || 0; shellTouchStartY = event.touches[0]?.clientY || 0; }, { passive: true });
       app.addEventListener('touchmove', (event) => {
         if (event.target.closest('.photo-drag-handle')) return;
+        const currentX = event.touches[0]?.clientX || 0;
         const currentY = event.touches[0]?.clientY || 0;
-        const pullingPastTop = app.scrollTop <= 0 && currentY > shellTouchStartY;
-        const pullingPastBottom = Math.ceil(app.scrollTop + app.clientHeight) >= app.scrollHeight && currentY < shellTouchStartY;
+        const deltaX = currentX - shellTouchStartX;
+        const deltaY = currentY - shellTouchStartY;
+        const isVerticalPull = Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 4;
+        const pullingPastTop = isVerticalPull && app.scrollTop <= 0 && deltaY > 0;
+        const pullingPastBottom = isVerticalPull && Math.ceil(app.scrollTop + app.clientHeight) >= app.scrollHeight && deltaY < 0;
         if (pullingPastTop || pullingPastBottom) event.preventDefault();
       }, { passive: false });
       document.querySelector('#page-title').textContent = config.title;
@@ -84,12 +89,12 @@ const { locale = 'ja' } = Astro.params;
       let photoDragPointerId = null;
       let photoDragStartX = 0;
       let photoDragStartY = 0;
-      function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item" data-photo-index="${index}"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}" draggable="false"><div><b>${index === 0 ? '一覧の主画像' : `写真 ${index + 1}`}</b><small class="photo-sort-hint">右のハンドルを長押しして移動</small><div class="photo-actions"><button type="button" data-photo-remove="${index}">削除</button></div></div><span class="photo-drag-handle" aria-hidden="true">⠿</span></article>`).join(''); }
+      function renderPhotos() { photoList.innerHTML = photoFiles.map((file, index) => `<article class="photo-item" data-photo-index="${index}"><img src="${URL.createObjectURL(file)}" alt="選択した写真 ${index + 1}" draggable="false"><span class="photo-main-badge" ${index === 0 ? '' : 'hidden'}>主画像</span><button class="photo-remove" type="button" data-photo-remove="${index}" aria-label="写真を削除">×</button><button class="photo-drag-handle" type="button" aria-label="写真を並べ替える">⠿</button></article>`).join(''); }
       function syncPhotoRows() {
         Array.from(photoList.querySelectorAll('.photo-item')).forEach((item, index) => {
           item.dataset.photoIndex = String(index);
           item.querySelector('img').alt = `選択した写真 ${index + 1}`;
-          item.querySelector('b').textContent = index === 0 ? '一覧の主画像' : `写真 ${index + 1}`;
+          item.querySelector('.photo-main-badge').hidden = index !== 0;
           item.querySelector('[data-photo-remove]').dataset.photoRemove = String(index);
         });
       }
@@ -133,18 +138,19 @@ const { locale = 'ja' } = Astro.params;
         }
         if (event.pointerId !== photoDragPointerId) return;
         event.preventDefault();
-        photoDragGhost.style.transform = `translate3d(0, ${event.clientY - photoDragStartY}px, 0) scale(1.015)`;
-        if (event.clientY < 72) window.scrollBy(0, -8);
-        if (event.clientY > window.innerHeight - 72) window.scrollBy(0, 8);
+        photoDragGhost.style.transform = `translate3d(${event.clientX - photoDragStartX}px, 0, 0) scale(1.025)`;
+        const listRect = photoList.getBoundingClientRect();
+        if (event.clientX < listRect.left + 44) photoList.scrollLeft -= 8;
+        if (event.clientX > listRect.right - 44) photoList.scrollLeft += 8;
         const siblings = Array.from(photoList.querySelectorAll('.photo-item:not(.is-drag-source)'));
-        const nextItem = siblings.find((item) => event.clientY < item.getBoundingClientRect().top + item.getBoundingClientRect().height / 2);
+        const nextItem = siblings.find((item) => event.clientX < item.getBoundingClientRect().left + item.getBoundingClientRect().width / 2);
         const isSamePosition = nextItem ? draggedPhotoItem.nextElementSibling === nextItem : draggedPhotoItem === photoList.lastElementChild;
         if (isSamePosition) return;
-        const previousTops = new Map(siblings.map((item) => [item, item.getBoundingClientRect().top]));
+        const previousLefts = new Map(siblings.map((item) => [item, item.getBoundingClientRect().left]));
         if (nextItem) photoList.insertBefore(draggedPhotoItem, nextItem); else photoList.appendChild(draggedPhotoItem);
         siblings.forEach((item) => {
-          const offset = previousTops.get(item) - item.getBoundingClientRect().top;
-          if (offset) item.animate?.([{ transform: `translateY(${offset}px)` }, { transform: 'translateY(0)' }], { duration: 160, easing: 'cubic-bezier(.2,.8,.2,1)' });
+          const offset = previousLefts.get(item) - item.getBoundingClientRect().left;
+          if (offset) item.animate?.([{ transform: `translateX(${offset}px)` }, { transform: 'translateX(0)' }], { duration: 160, easing: 'cubic-bezier(.2,.8,.2,1)' });
         });
       }, { passive: false });
       function finishPhotoDrag(event) {
@@ -469,6 +475,162 @@ const { locale = 'ja' } = Astro.params;
     #photo-list .photo-item {
       transition: none;
     }
+  }
+</style>
+
+<style is:global>
+  #photo-list {
+    display: flex;
+    gap: 10px;
+    max-width: 100%;
+    margin-top: 12px;
+    padding: 4px 2px 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    touch-action: pan-x pan-y;
+  }
+
+  #photo-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  #photo-list.is-sorting {
+    scroll-snap-type: none;
+  }
+
+  #photo-list .photo-item {
+    position: relative;
+    display: block;
+    flex: 0 0 112px;
+    width: 112px;
+    min-width: 112px;
+    max-width: none;
+    height: 112px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #dce5e6;
+    border-radius: 14px;
+    background: #edf1f1;
+    cursor: default;
+    scroll-snap-align: start;
+    touch-action: pan-x pan-y;
+  }
+
+  #photo-list .photo-item img {
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    border-radius: 13px;
+  }
+
+  #photo-list .photo-main-badge {
+    position: absolute;
+    bottom: 7px;
+    left: 7px;
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: #173044e8;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: .03em;
+    pointer-events: none;
+  }
+
+  #photo-list .photo-main-badge[hidden] {
+    display: none;
+  }
+
+  #photo-list .photo-remove,
+  #photo-list .photo-drag-handle {
+    position: absolute;
+    top: 6px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 9px;
+    color: #fff;
+    font-family: inherit;
+    line-height: 1;
+    box-shadow: 0 4px 12px #17304430;
+  }
+
+  #photo-list .photo-remove {
+    left: 6px;
+    background: #173044c7;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  #photo-list .photo-drag-handle {
+    right: 6px;
+    background: #9fbe55ed;
+    color: #173044;
+    font-size: 20px;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  #photo-list .photo-item.is-pressing {
+    border-color: #8eaf41;
+    box-shadow: 0 8px 20px #17304428;
+    transform: scale(.965);
+  }
+
+  #photo-list .photo-item.is-drag-source {
+    visibility: hidden;
+  }
+
+  .photo-drag-ghost {
+    display: block;
+    overflow: hidden;
+    padding: 0;
+    border: 2px solid #a6c85a;
+    border-radius: 15px;
+    background: #edf1f1;
+    box-shadow: 0 18px 38px #17304442;
+  }
+
+  .photo-drag-ghost img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 13px;
+  }
+
+  .photo-drag-ghost .photo-remove,
+  .photo-drag-ghost .photo-drag-handle {
+    display: none;
+  }
+
+  .photo-drag-ghost .photo-main-badge {
+    position: absolute;
+    bottom: 7px;
+    left: 7px;
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: #173044e8;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  .photo-drag-ghost .photo-main-badge[hidden] {
+    display: none;
   }
 </style>
 
