@@ -50,18 +50,15 @@ const { locale = 'ja' } = Astro.params;
         </section>
         <fieldset class="identity-card">
           <legend>表示名 <em aria-label="必須">*</em></legend>
-          <p class="line-profile-name"><img id="line-profile-avatar" alt="" hidden />LINEの表示名：<strong id="line-display-name">取得中…</strong><span id="line-nationality-flag" aria-label="国籍"></span></p>
+          <p class="line-profile-name"><img id="line-profile-avatar" alt="" hidden /><strong id="line-display-name">取得中…</strong><span id="line-nationality-flag" aria-label="国籍"></span></p>
           <div class="identity-options">
-            <label><input type="radio" name="publishNameMode" value="line" checked /><span>LINEの表示名を公開</span></label>
+            <label><input type="radio" name="publishNameMode" value="line" checked /><span>LINEの名前・画像を公開</span></label>
             <label><input type="radio" name="publishNameMode" value="custom" /><span>別の名前を使う</span></label>
             <label><input type="radio" name="publishNameMode" value="private" /><span>非公開</span></label>
           </div>
           <input id="custom-display-name" name="customDisplayName" type="text" maxlength="30" placeholder="表示したい名前を入力" hidden disabled />
-          <div class="avatar-options">
-            <p>プロフィール画像</p>
-            <label><input type="radio" name="publishAvatarMode" value="line" checked /><span>LINEのプロフィール画像を公開</span></label>
-            <label><input type="radio" name="publishAvatarMode" value="private" /><span>非公開</span></label>
-            <button type="button" class="avatar-picker-toggle" id="avatar-picker-toggle" aria-expanded="false">用意したアイコンから選ぶ</button>
+          <div class="avatar-picker-panel">
+            <button type="button" class="avatar-picker-toggle" id="avatar-picker-toggle" aria-expanded="false">非公開用アイコンを選ぶ</button>
             <div class="avatar-picker" id="avatar-picker" hidden aria-label="使用するアイコンを選択">
               {Array.from({ length: 10 }, (_, index) => {
                 const number = String(index + 1).padStart(2, '0');
@@ -69,6 +66,7 @@ const { locale = 'ja' } = Astro.params;
               })}
             </div>
             <input type="hidden" id="selected-avatar-url" name="selectedAvatarUrl" value="" />
+            <input type="hidden" id="publish-avatar-mode" name="publishAvatarMode" value="line" />
           </div>
         </fieldset>
         <label class="agreement"><input name="agreement" type="checkbox" required /><span>投稿内容が確認後に公開されることに同意します。</span></label>
@@ -136,6 +134,7 @@ const { locale = 'ja' } = Astro.params;
       const avatarPickerToggle = document.querySelector('#avatar-picker-toggle');
       const avatarPicker = document.querySelector('#avatar-picker');
       const selectedAvatarUrl = document.querySelector('#selected-avatar-url');
+      const publishAvatarMode = document.querySelector('#publish-avatar-mode');
       let profileDisplayName = '';
       let shellTouchStartX = 0;
       let shellTouchStartY = 0;
@@ -211,6 +210,9 @@ const { locale = 'ja' } = Astro.params;
           : mode === 'custom'
             ? (customDisplayName.value.trim() || '入力してください')
             : (profileDisplayName || '取得できませんでした');
+        const useLineAvatar = mode === 'line' && lineProfileAvatar.dataset.lineAvatarUrl;
+        lineProfileAvatar.src = useLineAvatar ? lineProfileAvatar.dataset.lineAvatarUrl : (selectedAvatarUrl.value || '/images/avatars/avatar-01.webp');
+        lineProfileAvatar.hidden = false;
       }
       form.querySelectorAll('[name="publishNameMode"]').forEach((radio) => radio.addEventListener('change', () => {
         const useCustomName = radio.checked && radio.value === 'custom';
@@ -218,16 +220,11 @@ const { locale = 'ja' } = Astro.params;
         customDisplayName.hidden = !useCustomName;
         customDisplayName.disabled = !useCustomName;
         customDisplayName.required = useCustomName;
+        publishAvatarMode.value = radio.value === 'line' ? 'line' : 'private';
         if (useCustomName) customDisplayName.focus();
         updateDisplayNamePreview();
       }));
       customDisplayName.addEventListener('input', updateDisplayNamePreview);
-      form.querySelectorAll('[name="publishAvatarMode"]').forEach((radio) => radio.addEventListener('change', () => {
-        if (radio.checked && radio.value === 'line') {
-          selectedAvatarUrl.value = '';
-          form.querySelectorAll('.avatar-choice').forEach((choice) => choice.classList.remove('is-selected'));
-        }
-      }));
       avatarPickerToggle.addEventListener('click', () => {
         const willOpen = avatarPicker.hidden;
         avatarPicker.hidden = !willOpen;
@@ -237,7 +234,12 @@ const { locale = 'ja' } = Astro.params;
         selectedAvatarUrl.value = choice.dataset.avatarUrl || '';
         choice.closest('.avatar-picker').querySelectorAll('.avatar-choice').forEach((item) => item.classList.remove('is-selected'));
         choice.classList.add('is-selected');
-        form.querySelector('[name="publishAvatarMode"][value="private"]').checked = true;
+        publishAvatarMode.value = 'private';
+        form.querySelector('[name="publishNameMode"][value="private"]').checked = true;
+        customDisplayName.hidden = true;
+        customDisplayName.disabled = true;
+        customDisplayName.required = false;
+        updateDisplayNamePreview();
       }));
       function getPublishDisplayName() {
         const mode = form.elements.publishNameMode.value;
@@ -625,7 +627,7 @@ const { locale = 'ja' } = Astro.params;
             const profile = await liff.getProfile();
             profileDisplayName = profile.displayName || '';
             updateDisplayNamePreview();
-            if (profile.pictureUrl) { lineProfileAvatar.src = profile.pictureUrl; lineProfileAvatar.hidden = false; }
+            if (profile.pictureUrl) lineProfileAvatar.dataset.lineAvatarUrl = profile.pictureUrl;
           } catch {
             updateDisplayNamePreview();
           }
@@ -1191,14 +1193,8 @@ const { locale = 'ja' } = Astro.params;
   .identity-options label span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .identity-options label:has(input:checked){border-color:#789e35;background:#edf4df;color:#35521c;box-shadow:0 0 0 2px #8eaf411c}
   .identity-options input[type="radio"]{position:absolute;width:1px!important;height:1px;margin:0;padding:0;opacity:0}
-  .avatar-options{display:grid;gap:7px;padding-top:13px;border-top:1px solid #dfe7e4}
-  .avatar-options p{margin:0;color:#52666a;font-size:12px;font-weight:700}
-  .avatar-options label{display:flex;align-items:center;gap:8px;min-width:0;min-height:38px;margin:0;padding:8px 10px;border:1px solid #d9e2df;border-radius:9px;font-size:12px;font-weight:500;line-height:1;white-space:nowrap}
-  .avatar-options label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .avatar-options input[type="radio"]{appearance:none;flex:0 0 18px!important;width:18px!important;min-width:18px!important;height:18px!important;min-height:18px!important;margin:0!important;padding:0!important;border:2px solid #9aacab!important;border-radius:50%!important;background:#fff!important;box-shadow:none!important;cursor:pointer}
-  .avatar-options input[type="radio"]:checked{border:5px solid #789e35!important;background:#fff!important}
-  .avatar-options label:has(input:checked){border-color:#789e35;background:#edf4df;color:#35521c}
-  .avatar-picker-toggle{width:auto;margin:2px 0 0;justify-self:start;padding:7px 11px;border:1px solid #b8d18d;border-radius:8px;background:#f4f8eb;color:#476322;font-size:11px;font-weight:700;line-height:1;white-space:nowrap;box-shadow:none}
+  .avatar-picker-panel{display:grid;gap:7px;padding-top:13px;border-top:1px solid #dfe7e4}
+  .avatar-picker-toggle{width:auto;margin:0;justify-self:start;padding:7px 11px;border:1px solid #b8d18d;border-radius:8px;background:#f4f8eb;color:#476322;font-size:11px;font-weight:700;line-height:1;white-space:nowrap;box-shadow:none}
   .avatar-picker-toggle:hover{background:#edf4df;transform:none;box-shadow:none}
   .avatar-picker{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding-top:3px}
   .avatar-picker[hidden]{display:none}
