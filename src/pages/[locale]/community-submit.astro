@@ -204,6 +204,14 @@ const { locale = 'ja' } = Astro.params;
         startsAt.addEventListener('change', validateEventPeriod);
         endsAt.addEventListener('change', validateEventPeriod);
       }
+      function updateDisplayNamePreview() {
+        const mode = form.elements.publishNameMode.value;
+        lineDisplayName.textContent = mode === 'private'
+          ? '非公開'
+          : mode === 'custom'
+            ? (customDisplayName.value.trim() || '入力してください')
+            : (profileDisplayName || '取得できませんでした');
+      }
       form.querySelectorAll('[name="publishNameMode"]').forEach((radio) => radio.addEventListener('change', () => {
         const useCustomName = radio.checked && radio.value === 'custom';
         if (!radio.checked) return;
@@ -211,7 +219,9 @@ const { locale = 'ja' } = Astro.params;
         customDisplayName.disabled = !useCustomName;
         customDisplayName.required = useCustomName;
         if (useCustomName) customDisplayName.focus();
+        updateDisplayNamePreview();
       }));
+      customDisplayName.addEventListener('input', updateDisplayNamePreview);
       form.querySelectorAll('[name="publishAvatarMode"]').forEach((radio) => radio.addEventListener('change', () => {
         if (radio.checked && radio.value === 'line') {
           selectedAvatarUrl.value = '';
@@ -614,10 +624,10 @@ const { locale = 'ja' } = Astro.params;
           try {
             const profile = await liff.getProfile();
             profileDisplayName = profile.displayName || '';
-            lineDisplayName.textContent = profileDisplayName || '取得できませんでした';
+            updateDisplayNamePreview();
             if (profile.pictureUrl) { lineProfileAvatar.src = profile.pictureUrl; lineProfileAvatar.hidden = false; }
           } catch {
-            lineDisplayName.textContent = '取得できませんでした';
+            updateDisplayNamePreview();
           }
           try {
             const idToken = liff.getIDToken();
@@ -1185,6 +1195,8 @@ const { locale = 'ja' } = Astro.params;
   .avatar-options p{margin:0;color:#52666a;font-size:12px;font-weight:700}
   .avatar-options label{display:flex;align-items:center;gap:8px;min-width:0;min-height:38px;margin:0;padding:8px 10px;border:1px solid #d9e2df;border-radius:9px;font-size:12px;font-weight:500;line-height:1;white-space:nowrap}
   .avatar-options label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .avatar-options input[type="radio"]{appearance:none;flex:0 0 18px!important;width:18px!important;min-width:18px!important;height:18px!important;min-height:18px!important;margin:0!important;padding:0!important;border:2px solid #9aacab!important;border-radius:50%!important;background:#fff!important;box-shadow:none!important;cursor:pointer}
+  .avatar-options input[type="radio"]:checked{border:5px solid #789e35!important;background:#fff!important}
   .avatar-options label:has(input:checked){border-color:#789e35;background:#edf4df;color:#35521c}
   .avatar-picker-toggle{width:auto;margin:2px 0 0;justify-self:start;padding:7px 11px;border:1px solid #b8d18d;border-radius:8px;background:#f4f8eb;color:#476322;font-size:11px;font-weight:700;line-height:1;white-space:nowrap;box-shadow:none}
   .avatar-picker-toggle:hover{background:#edf4df;transform:none;box-shadow:none}
