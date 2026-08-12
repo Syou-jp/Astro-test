@@ -586,21 +586,26 @@ const { locale = 'ja' } = Astro.params;
         select.className = 'choice-native';
         const choiceField = document.createElement('div');
         choiceField.className = 'choice-field';
-        choiceField.innerHTML = `<label class="field-label" for="${selectId}">${fieldLabel}</label><div class="choice-options" data-count="${options.length}" role="group" aria-label="${oldField.querySelector('.field-label').textContent.trim()}">${options.map(([value, text]) => `<button type="button" class="choice-option" data-choice-value="${value}">${text}</button>`).join('')}</div>`;
+        choiceField.innerHTML = `<label class="field-label" for="${selectId}">${fieldLabel}</label><div class="choice-options" data-count="${options.length}" role="group" aria-label="${oldField.querySelector('.field-label').textContent.trim()}">${options.map(([value, text]) => `<button type="button" class="choice-option" data-choice-value="${value}" aria-pressed="false">${text}</button>`).join('')}</div>`;
         choiceField.querySelector('.field-label').after(select);
         choiceField.querySelectorAll('.choice-option').forEach((button) => button.addEventListener('click', () => {
           select.value = button.dataset.choiceValue;
           select.dispatchEvent(new Event('change', { bubbles: true }));
         }));
         select.addEventListener('change', () => {
+          choiceField.classList.remove('is-invalid');
           choiceField.querySelectorAll('.choice-option').forEach((button) => {
             const selected = button.dataset.choiceValue === select.value;
             button.classList.toggle('is-selected', selected);
             button.setAttribute('aria-pressed', String(selected));
           });
         });
+        select.addEventListener('invalid', () => choiceField.classList.add('is-invalid'));
         oldField.replaceWith(choiceField);
       });
+      form.addEventListener('reset', () => window.setTimeout(() => {
+        fields.querySelectorAll('.choice-native').forEach((select) => select.dispatchEvent(new Event('change')));
+      }, 0));
       const feeSelect = fields.querySelector('[name="fee"]');
       const feeAmountSelect = fields.querySelector('[name="feeAmount"]');
       const feeAmountField = feeAmountSelect?.closest('label');
@@ -1184,20 +1189,24 @@ const { locale = 'ja' } = Astro.params;
   .liff-header:after,.liff-kicker,.liff-header #page-intro{display:none!important}
   .liff-header h1{margin:0;color:#173044;font-size:22px;line-height:1.35;letter-spacing:-.025em}
   #community-form{padding-top:26px}
-  #dynamic-fields{display:grid;gap:18px;overflow:visible;border:0;border-radius:0;background:transparent}
+  #dynamic-fields{display:grid;gap:21px;overflow:visible;border:0;border-radius:0;background:transparent}
   #community-form>label{display:grid;gap:8px;margin:0;padding:17px 17px 16px;background:#fff;border:1px solid #d9e2df;border-radius:14px;font-size:13px}
   #community-form>label:focus-within{border-color:#789e35}
-  #dynamic-fields>label,#dynamic-fields>.choice-field{display:grid;gap:10px;min-width:0;margin:0;padding:0;background:transparent;border:0;box-shadow:none;font-size:13px}
-  .field-label{display:flex;align-items:center;gap:5px;min-height:22px;margin:0;color:#263c40;font-size:13px;font-weight:700;line-height:1.45;letter-spacing:.015em}
+  #dynamic-fields>label,#dynamic-fields>.choice-field{display:grid;gap:11px;min-width:0;margin:0;padding:0;background:transparent;border:0;box-shadow:none;font-size:13px}
+  .field-label{display:flex;align-items:center;gap:6px;min-height:22px;margin:0;color:#243c3c;font-size:13px;font-weight:700;line-height:1.45;letter-spacing:.01em}
+  #dynamic-fields .field-label:before{content:"";display:block;flex:0 0 3px;width:3px;height:15px;border-radius:99px;background:#8eaf41}
   #community-form em{margin:0;color:#d43f36;font-size:15px;font-weight:800;font-style:normal;line-height:1}
-  #community-form input:not([type=checkbox]),#community-form textarea,#community-form select{width:100%;min-height:52px;margin:0;padding:13px 14px;border:1px solid #cfdad7;border-radius:10px;background:#f8faf9;color:#173044;font-family:inherit;font-size:16px;font-weight:500;line-height:1.5;outline:none;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease}
-  #community-form input::placeholder,#community-form textarea::placeholder{color:#94a19e;font-weight:400}
+  #community-form input:not([type=checkbox]),#community-form textarea,#community-form select{width:100%;min-height:52px;margin:0;padding:13px 14px;border:1px solid #c8d9cf;border-radius:11px;background:#fff;color:#173044;font-family:inherit;font-size:16px;font-weight:500;line-height:1.5;outline:none;box-shadow:0 3px 12px rgba(45,83,67,.055);transition:border-color .18s ease,background .18s ease,box-shadow .18s ease}
+  #community-form input::placeholder,#community-form textarea::placeholder{color:#9aa9a2;font-weight:400}
   #community-form input:focus,#community-form textarea:focus,#community-form select:focus{border-color:#789e35;background:#fff;box-shadow:0 0 0 3px #8eaf4126}
   #community-form .choice-native{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0);white-space:nowrap;border:0!important}
-  .choice-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .choice-option{display:flex;align-items:center;justify-content:center;min-height:50px;margin:0;padding:10px 9px;border:1px solid #cfdad7;border-radius:10px;background:#f8faf9;color:#52666a;font-family:inherit;font-size:12px;font-weight:700;line-height:1.4;text-align:center;cursor:pointer;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,color .18s ease}
-  .choice-option:hover{border-color:#9db47b;background:#f1f7e7;color:#35521c}
-  .choice-option.is-selected{border-color:#789e35;background:#eaf4db;color:#35521c;box-shadow:0 2px 7px #8eaf4124}
+  .choice-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .choice-options[data-count="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .choice-option{display:flex;align-items:center;justify-content:center;min-width:0;min-height:50px;margin:0;padding:10px 8px;border:1px solid #bdd1c2;border-radius:11px;background:#fff;color:#425c56;font-family:inherit;font-size:clamp(10px,3vw,12px);font-weight:700;line-height:1.35;text-align:center;white-space:nowrap;cursor:pointer;box-shadow:0 3px 10px rgba(45,83,67,.045);transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,color .18s ease,transform .18s ease}
+  .choice-option:hover{border-color:#8eaf41;background:#f7faef;color:#35521c}
+  .choice-option.is-selected{border-color:#789e35;background:#e8f4d2;color:#2f5019;box-shadow:inset 0 0 0 1px rgba(120,158,53,.18),0 4px 12px rgba(94,128,40,.12)}
+  .choice-field.is-invalid .choice-option{border-color:#d98b83}
+  .choice-option:active{transform:translateY(1px)}
   .choice-option:focus-visible{outline:3px solid #8eaf4140;outline-offset:2px}
   #community-form textarea{height:108px;min-height:108px;max-height:108px;resize:none;line-height:1.55}
   .agreement{display:flex!important;align-items:flex-start;gap:9px!important;margin:20px 2px 18px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;color:#65777b!important;font-size:11px!important;line-height:1.7}
@@ -1245,5 +1254,5 @@ const { locale = 'ja' } = Astro.params;
   .photo-uploader .photo-input{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0);white-space:nowrap;border:0!important}
   #community-form .photo-upload-button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;margin:0;padding:12px;border:1px dashed #8eaf41;border-radius:11px;background:#f4f8eb;color:#476322;font-size:13px;font-weight:800;cursor:pointer}
   #community-form .photo-upload-button span{font-size:20px;font-weight:400;line-height:1}
-  @media (max-width:360px){.identity-options{gap:4px}.identity-options label{padding-left:2px;padding-right:2px;font-size:8px}.avatar-picker{gap:5px}}
+  @media (max-width:360px){.choice-options{gap:7px}.choice-option{padding-left:5px;padding-right:5px}.identity-options{gap:4px}.identity-options label{padding-left:2px;padding-right:2px;font-size:8px}.avatar-picker{gap:5px}}
 </style>
