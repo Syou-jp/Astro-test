@@ -593,6 +593,9 @@
               var list = panel && panel.querySelector(".home-latest-list");
               if (!list || list.querySelector('[data-live-submission="' + submission.id + '"]')) return;
               list.insertBefore(makeItem(submission, config), list.firstElementChild);
+              if (submission.type === "listings") {
+                while (list.children.length > 4) list.removeChild(list.lastElementChild);
+              }
             });
           })
           .catch(function (error) { console.warn("Sotocom home submissions could not be loaded", error); });
