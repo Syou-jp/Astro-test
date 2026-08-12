@@ -58,7 +58,11 @@ const { locale = 'ja' } = Astro.params;
           </div>
           <input id="custom-display-name" name="customDisplayName" type="text" maxlength="30" placeholder="表示したい名前を入力" hidden disabled />
           <div class="avatar-picker-panel">
-            <button type="button" class="avatar-picker-toggle" id="avatar-picker-toggle" aria-expanded="false">非公開用アイコンを選ぶ</button>
+            <div class="avatar-mode-options" aria-label="プロフィール画像の公開方法">
+              <label><input type="radio" name="publishAvatarMode" value="line" checked /><img id="line-avatar-choice" class="avatar-mode-icon" alt="" hidden /><span>自分のLINE ICONを使う</span></label>
+              <label><input type="radio" name="publishAvatarMode" value="private" /><img id="private-avatar-choice" class="avatar-mode-icon" src="/images/avatars/avatar-01.webp" alt="" /><span>用意したICONを使う</span></label>
+            </div>
+            <button type="button" class="avatar-picker-toggle" id="avatar-picker-toggle" aria-expanded="false">用意したICONを選ぶ</button>
             <div class="avatar-picker" id="avatar-picker" hidden aria-label="使用するアイコンを選択">
               {Array.from({ length: 10 }, (_, index) => {
                 const number = String(index + 1).padStart(2, '0');
@@ -66,7 +70,6 @@ const { locale = 'ja' } = Astro.params;
               })}
             </div>
             <input type="hidden" id="selected-avatar-url" name="selectedAvatarUrl" value="" />
-            <input type="hidden" id="publish-avatar-mode" name="publishAvatarMode" value="line" />
           </div>
         </fieldset>
         <label class="agreement"><input name="agreement" type="checkbox" required /><span>投稿内容が確認後に公開されることに同意します。</span></label>
@@ -134,7 +137,8 @@ const { locale = 'ja' } = Astro.params;
       const avatarPickerToggle = document.querySelector('#avatar-picker-toggle');
       const avatarPicker = document.querySelector('#avatar-picker');
       const selectedAvatarUrl = document.querySelector('#selected-avatar-url');
-      const publishAvatarMode = document.querySelector('#publish-avatar-mode');
+      const lineAvatarChoice = document.querySelector('#line-avatar-choice');
+      const privateAvatarChoice = document.querySelector('#private-avatar-choice');
       let profileDisplayName = '';
       let shellTouchStartX = 0;
       let shellTouchStartY = 0;
@@ -210,7 +214,7 @@ const { locale = 'ja' } = Astro.params;
           : mode === 'custom'
             ? (customDisplayName.value.trim() || '入力してください')
             : (profileDisplayName || '取得できませんでした');
-        const useLineAvatar = mode === 'line' && lineProfileAvatar.dataset.lineAvatarUrl;
+        const useLineAvatar = form.elements.publishAvatarMode.value === 'line' && lineProfileAvatar.dataset.lineAvatarUrl;
         lineProfileAvatar.src = useLineAvatar ? lineProfileAvatar.dataset.lineAvatarUrl : (selectedAvatarUrl.value || '/images/avatars/avatar-01.webp');
         lineProfileAvatar.hidden = false;
       }
@@ -220,11 +224,11 @@ const { locale = 'ja' } = Astro.params;
         customDisplayName.hidden = !useCustomName;
         customDisplayName.disabled = !useCustomName;
         customDisplayName.required = useCustomName;
-        publishAvatarMode.value = radio.value === 'line' ? 'line' : 'private';
         if (useCustomName) customDisplayName.focus();
         updateDisplayNamePreview();
       }));
       customDisplayName.addEventListener('input', updateDisplayNamePreview);
+      form.querySelectorAll('[name="publishAvatarMode"]').forEach((radio) => radio.addEventListener('change', updateDisplayNamePreview));
       avatarPickerToggle.addEventListener('click', () => {
         const willOpen = avatarPicker.hidden;
         avatarPicker.hidden = !willOpen;
@@ -234,11 +238,8 @@ const { locale = 'ja' } = Astro.params;
         selectedAvatarUrl.value = choice.dataset.avatarUrl || '';
         choice.closest('.avatar-picker').querySelectorAll('.avatar-choice').forEach((item) => item.classList.remove('is-selected'));
         choice.classList.add('is-selected');
-        publishAvatarMode.value = 'private';
-        form.querySelector('[name="publishNameMode"][value="private"]').checked = true;
-        customDisplayName.hidden = true;
-        customDisplayName.disabled = true;
-        customDisplayName.required = false;
+        privateAvatarChoice.src = selectedAvatarUrl.value || '/images/avatars/avatar-01.webp';
+        form.querySelector('[name="publishAvatarMode"][value="private"]').checked = true;
         updateDisplayNamePreview();
       }));
       function getPublishDisplayName() {
@@ -626,8 +627,8 @@ const { locale = 'ja' } = Astro.params;
           try {
             const profile = await liff.getProfile();
             profileDisplayName = profile.displayName || '';
+            if (profile.pictureUrl) { lineProfileAvatar.dataset.lineAvatarUrl = profile.pictureUrl; lineAvatarChoice.src = profile.pictureUrl; lineAvatarChoice.hidden = false; }
             updateDisplayNamePreview();
-            if (profile.pictureUrl) lineProfileAvatar.dataset.lineAvatarUrl = profile.pictureUrl;
           } catch {
             updateDisplayNamePreview();
           }
@@ -1194,6 +1195,13 @@ const { locale = 'ja' } = Astro.params;
   .identity-options label:has(input:checked){border-color:#789e35;background:#edf4df;color:#35521c;box-shadow:0 0 0 2px #8eaf411c}
   .identity-options input[type="radio"]{position:absolute;width:1px!important;height:1px;margin:0;padding:0;opacity:0}
   .avatar-picker-panel{display:grid;gap:7px;padding-top:13px;border-top:1px solid #dfe7e4}
+  .avatar-mode-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .avatar-mode-options label{display:flex;align-items:center;gap:7px;min-width:0;min-height:50px;margin:0;padding:7px 8px;border:1px solid #d7e1de;border-radius:9px;background:#f7f9f8;color:#52666a;font-size:10px;font-weight:700;line-height:1.25;cursor:pointer}
+  .avatar-mode-options input[type="radio"]{position:static!important;appearance:none;flex:0 0 16px!important;width:16px!important;min-width:16px!important;height:16px!important;min-height:16px!important;margin:0!important;padding:0!important;border:2px solid #9aacab!important;border-radius:50%!important;background:#fff!important;opacity:1!important}
+  .avatar-mode-options input[type="radio"]:checked{border:5px solid #789e35!important}
+  .avatar-mode-options label:has(input:checked){border-color:#789e35;background:#edf4df;color:#35521c;box-shadow:0 0 0 2px #8eaf411c}
+  .avatar-mode-options span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .avatar-mode-icon{display:block;flex:0 0 28px;width:28px;height:28px;border-radius:50%;object-fit:cover;background:#dfe7e4}
   .avatar-picker-toggle{width:auto;margin:0;justify-self:start;padding:7px 11px;border:1px solid #b8d18d;border-radius:8px;background:#f4f8eb;color:#476322;font-size:11px;font-weight:700;line-height:1;white-space:nowrap;box-shadow:none}
   .avatar-picker-toggle:hover{background:#edf4df;transform:none;box-shadow:none}
   .avatar-picker{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding-top:3px}
