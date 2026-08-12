@@ -2,6 +2,7 @@
 export function getStaticPaths() {
   return [{ params: { locale: 'ja' } }];
 }
+import profileOptions from '../../data/profile-options.json';
 
 const { locale = 'ja' } = Astro.params;
 ---
@@ -21,6 +22,25 @@ const { locale = 'ja' } = Astro.params;
         <p id="page-intro">LINEから投稿内容を送信できます。確認後に掲載します。</p>
       </header>
 
+      <form id="profile-form" class="profile-form" hidden>
+        <div class="profile-field" id="profile-language-field">
+          <label for="profile-language">使用する言語 <em aria-label="必須">*</em></label>
+          <select id="profile-language" name="languageCode" required>
+            <option value="">言語を選択してください</option>
+            {profileOptions.languages.filter((language) => ['ja', 'en', 'zh-CN', 'zh-TW', 'ko', 'vi', 'ne', 'tl', 'id', 'pt', 'th'].includes(language.code)).map((language) => <option value={language.code}>{language.name}</option>)}
+          </select>
+        </div>
+        <div class="profile-field" id="profile-nationality-field">
+          <label for="profile-nationality">国籍 <em aria-label="必須">*</em></label>
+          <select id="profile-nationality" name="nationalityCode" required>
+            <option value="">国籍を選択してください</option>
+            {profileOptions.countries.map((country) => <option value={country.code}>{country.code.replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)))} {country.name}</option>)}
+          </select>
+        </div>
+        <button type="submit" id="profile-save-button">設定を保存する</button>
+        <p class="form-status" id="profile-status" aria-live="polite"></p>
+      </form>
+
       <form id="community-form" novalidate>
         <div id="dynamic-fields"></div>
         <section class="photo-uploader" aria-label="写真">
@@ -30,13 +50,26 @@ const { locale = 'ja' } = Astro.params;
         </section>
         <fieldset class="identity-card">
           <legend>表示名 <em aria-label="必須">*</em></legend>
-          <p class="line-profile-name">LINEの表示名：<strong id="line-display-name">取得中…</strong></p>
+          <p class="line-profile-name"><img id="line-profile-avatar" alt="" hidden />LINEの表示名：<strong id="line-display-name">取得中…</strong><span id="line-nationality-flag" aria-label="国籍"></span></p>
           <div class="identity-options">
             <label><input type="radio" name="publishNameMode" value="line" checked /><span>LINEの表示名を公開</span></label>
             <label><input type="radio" name="publishNameMode" value="custom" /><span>別の名前を使う</span></label>
             <label><input type="radio" name="publishNameMode" value="private" /><span>非公開</span></label>
           </div>
           <input id="custom-display-name" name="customDisplayName" type="text" maxlength="30" placeholder="表示したい名前を入力" hidden disabled />
+          <div class="avatar-options">
+            <p>プロフィール画像</p>
+            <label><input type="radio" name="publishAvatarMode" value="line" checked /><span>LINEのプロフィール画像を公開</span></label>
+            <label><input type="radio" name="publishAvatarMode" value="private" /><span>非公開</span></label>
+            <button type="button" class="avatar-picker-toggle" id="avatar-picker-toggle" aria-expanded="false">用意したアイコンから選ぶ</button>
+            <div class="avatar-picker" id="avatar-picker" hidden aria-label="使用するアイコンを選択">
+              {Array.from({ length: 10 }, (_, index) => {
+                const number = String(index + 1).padStart(2, '0');
+                return <button type="button" class="avatar-choice" data-avatar-url={`/images/avatars/avatar-${number}.webp`} aria-label={`アイコン${index + 1}`}><img src={`/images/avatars/avatar-${number}.webp`} alt="" /></button>;
+              })}
+            </div>
+            <input type="hidden" id="selected-avatar-url" name="selectedAvatarUrl" value="" />
+          </div>
         </fieldset>
         <label class="agreement"><input name="agreement" type="checkbox" required /><span>投稿内容が確認後に公開されることに同意します。</span></label>
         <button type="submit" id="submit-button">投稿内容を送信する</button>
@@ -85,15 +118,24 @@ const { locale = 'ja' } = Astro.params;
         help: { title: '助け合いを投稿する', intro: '助けを求める人と協力できる人が判断しやすい情報を入力してください。', fields: [['category', '依頼カテゴリー', '', 'select', [['translate', '通訳・翻訳'], ['pet', 'ペット・留守番'], ['labor', '力仕事・引越し'], ['other', 'その他']]], ['title', '投稿タイトル', '例：引っ越しを手伝ってくれる方を探しています', 'text'], ['requestDate', '希望日時', '', 'select', []], ['area', '場所', '例：杉並区・高円寺エリア', 'text'], ['reward', '謝礼', '', 'select', []], ['urgent', '急募', '', 'select', [['no', '通常'], ['yes', '急募']]], ['details', '依頼内容', 'いつ、どこで、何を手伝ってほしいかを具体的に書いてください', 'textarea'], ['contact', '連絡方法', 'LINE ID、メール、その他の希望連絡方法', 'text']] }
       };
       const params = new URLSearchParams(location.search);
+      const profileMode = params.get('mode') === 'profile';
+      const languageMode = params.get('mode') === 'language';
       const type = params.get('type') || 'events';
       const config = configs[type] || configs.events;
       const app = document.querySelector('#liff-app');
       const error = document.querySelector('#liff-error');
       const status = document.querySelector('#form-status');
       const form = document.querySelector('#community-form');
+      const profileForm = document.querySelector('#profile-form');
+      const profileStatus = document.querySelector('#profile-status');
       const fields = document.querySelector('#dynamic-fields');
       const lineDisplayName = document.querySelector('#line-display-name');
+      const lineProfileAvatar = document.querySelector('#line-profile-avatar');
+      const lineNationalityFlag = document.querySelector('#line-nationality-flag');
       const customDisplayName = document.querySelector('#custom-display-name');
+      const avatarPickerToggle = document.querySelector('#avatar-picker-toggle');
+      const avatarPicker = document.querySelector('#avatar-picker');
+      const selectedAvatarUrl = document.querySelector('#selected-avatar-url');
       let profileDisplayName = '';
       let shellTouchStartX = 0;
       let shellTouchStartY = 0;
@@ -111,10 +153,43 @@ const { locale = 'ja' } = Astro.params;
       }, { passive: false });
       document.querySelector('#page-title').textContent = config.title;
       document.querySelector('#page-intro').textContent = config.intro;
+      if (profileMode) {
+        document.querySelector('#page-title').textContent = '国籍・言語の設定';
+        document.querySelector('#page-intro').textContent = '投稿者名の横に表示する国旗と、Sotocomで使用する言語を設定してください。';
+        form.hidden = true;
+        profileForm.hidden = false;
+      }
+      if (languageMode) {
+        document.querySelector('#page-title').textContent = '言語設定';
+        document.querySelector('#page-intro').textContent = '表示する言語を選択してください。国籍は変更できません。';
+        document.querySelector('#profile-nationality-field').hidden = true;
+        document.querySelector('#profile-nationality').disabled = true;
+        form.hidden = true;
+        profileForm.hidden = false;
+      }
       fields.innerHTML = config.fields.map(([name, label, placeholder, kind]) => {
         const rows = name === 'summary' ? 4 : ['notes', 'other'].includes(name) ? 3 : 4;
         return `<label><span class="field-label">${label}<em aria-label="必須">*</em></span>${kind === 'textarea' ? `<textarea name="${name}" rows="${rows}" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${kind}" placeholder="${placeholder}" required />`}</label>`;
       }).join('');
+      if (type === 'listings') {
+        const areaInput = fields.querySelector('[name="area"]');
+        if (areaInput) {
+          areaInput.type = 'text';
+          areaInput.placeholder = '例：新宿区・杉並区';
+        }
+        const stationLabel = fields.querySelector('[name="station"]')?.closest('label');
+        if (stationLabel && !fields.querySelector('[name="floorArea"]')) {
+          const label = document.createElement('label');
+          label.innerHTML = '<span class="field-label">面積（㎡）<em aria-label="必須">*</em></span><input name="floorArea" type="text" placeholder="例：40㎡" required />';
+          stationLabel.after(label);
+        }
+        const floorAreaLabel = fields.querySelector('[name="floorArea"]')?.closest('label');
+        if (floorAreaLabel && !fields.querySelector('[name="contact"]')) {
+          const label = document.createElement('label');
+          label.innerHTML = '<span class="field-label">連絡方法<em aria-label="必須">*</em></span><input name="contact" type="text" placeholder="例：LINE ID／メールアドレス" required />';
+          floorAreaLabel.after(label);
+        }
+      }
       if (type === 'events') {
         ['applicationUrl', 'notes', 'other'].forEach((name) => {
           const control = fields.querySelector(`[name="${name}"]`);
@@ -136,6 +211,23 @@ const { locale = 'ja' } = Astro.params;
         customDisplayName.disabled = !useCustomName;
         customDisplayName.required = useCustomName;
         if (useCustomName) customDisplayName.focus();
+      }));
+      form.querySelectorAll('[name="publishAvatarMode"]').forEach((radio) => radio.addEventListener('change', () => {
+        if (radio.checked && radio.value === 'line') {
+          selectedAvatarUrl.value = '';
+          form.querySelectorAll('.avatar-choice').forEach((choice) => choice.classList.remove('is-selected'));
+        }
+      }));
+      avatarPickerToggle.addEventListener('click', () => {
+        const willOpen = avatarPicker.hidden;
+        avatarPicker.hidden = !willOpen;
+        avatarPickerToggle.setAttribute('aria-expanded', String(willOpen));
+      });
+      form.querySelectorAll('.avatar-choice').forEach((choice) => choice.addEventListener('click', () => {
+        selectedAvatarUrl.value = choice.dataset.avatarUrl || '';
+        choice.closest('.avatar-picker').querySelectorAll('.avatar-choice').forEach((item) => item.classList.remove('is-selected'));
+        choice.classList.add('is-selected');
+        form.querySelector('[name="publishAvatarMode"][value="private"]').checked = true;
       }));
       function getPublishDisplayName() {
         const mode = form.elements.publishNameMode.value;
@@ -430,7 +522,7 @@ const { locale = 'ja' } = Astro.params;
         const values = Object.fromEntries(new FormData(form).entries());
         delete values.agreement; delete values.publishNameMode; delete values.customDisplayName; delete values.photos;
         const upload = new FormData();
-        upload.append('submission', JSON.stringify({ type, displayName: getPublishDisplayName(), payload: values }));
+        upload.append('submission', JSON.stringify({ type, displayName: getPublishDisplayName(), publishNameMode: form.elements.publishNameMode.value, publishAvatarMode: form.elements.publishAvatarMode.value, avatarUrl: selectedAvatarUrl.value, payload: values }));
         photoFiles.forEach((file) => upload.append('photos', file, file.name));
         try {
           const response = await fetch(API_URL, { method: 'POST', headers: { authorization: `Bearer ${idToken}` }, body: upload });
@@ -464,7 +556,7 @@ const { locale = 'ja' } = Astro.params;
         reward: [['paid', '謝礼あり'], ['consult', '応相談'], ['none', '無償'], ['exchange', '物品・サービス交換']],
         urgent: [['no', '通常'], ['yes', '急募']],
       };
-      Object.entries(selectOptions).forEach(([name, options]) => { const old = fields.querySelector(`[name="${name}"]`); if (!old || !options.length) return; const select = document.createElement('select'); select.name = name; select.required = true; select.innerHTML = `<option value="">選択してください</option>${options.map(([value, text]) => `<option value="${value}">${text}</option>`).join('')}`; old.replaceWith(select); });
+      Object.entries(selectOptions).forEach(([name, options]) => { if (type === 'listings' && name === 'area') return; const old = fields.querySelector(`[name="${name}"]`); if (!old || !options.length) return; const select = document.createElement('select'); select.name = name; select.required = true; select.innerHTML = `<option value="">選択してください</option>${options.map(([value, text]) => `<option value="${value}">${text}</option>`).join('')}`; old.replaceWith(select); });
       const feeSelect = fields.querySelector('[name="fee"]');
       const feeAmountSelect = fields.querySelector('[name="feeAmount"]');
       const feeAmountField = feeAmountSelect?.closest('label');
@@ -487,6 +579,32 @@ const { locale = 'ja' } = Astro.params;
         document.head.appendChild(script);
       });
 
+      profileForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!profileForm.checkValidity()) { profileForm.reportValidity(); return; }
+        const saveButton = document.querySelector('#profile-save-button');
+        saveButton.disabled = true;
+        profileStatus.textContent = '保存しています…';
+        profileStatus.classList.add('visible');
+        try {
+          const liff = await loadLiff;
+          const idToken = liff.getIDToken();
+          const values = Object.fromEntries(new FormData(profileForm).entries());
+          if (languageMode) delete values.nationalityCode;
+          const response = await fetch(API_URL.replace('/api/submissions', '/api/profile'), { method: 'POST', headers: { authorization: `Bearer ${idToken}`, 'content-type': 'application/json' }, body: JSON.stringify(values) });
+          if (!response.ok) {
+            const detail = await response.json().catch(() => null);
+            throw new Error(detail?.error || `profile-save-failed-${response.status}`);
+          }
+          profileStatus.textContent = '設定を保存しました。LINEに戻って投稿できます。';
+          if (liff.isInClient()) window.setTimeout(() => liff.closeWindow(), 1000);
+        } catch (error) {
+          const message = error instanceof Error ? error.message : '';
+          profileStatus.textContent = message === 'nationality_required' ? '国籍を選択してください。' : message === 'invalid_profile_options' ? '言語または国籍をもう一度選択してください。' : `保存できませんでした。もう一度お試しください。${message ? ` (${message})` : ''}`;
+          saveButton.disabled = false;
+        }
+      });
+
       async function boot() {
         try {
           const liff = await loadLiff;
@@ -497,9 +615,24 @@ const { locale = 'ja' } = Astro.params;
             const profile = await liff.getProfile();
             profileDisplayName = profile.displayName || '';
             lineDisplayName.textContent = profileDisplayName || '取得できませんでした';
+            if (profile.pictureUrl) { lineProfileAvatar.src = profile.pictureUrl; lineProfileAvatar.hidden = false; }
           } catch {
             lineDisplayName.textContent = '取得できませんでした';
           }
+          try {
+            const idToken = liff.getIDToken();
+            const response = await fetch(API_URL.replace('/api/submissions', '/api/profile'), { headers: { authorization: `Bearer ${idToken}` } });
+            const result = response.ok ? await response.json() : null;
+            const code = result?.profile?.nationality_code;
+            if (code && code !== 'OTHER') lineNationalityFlag.textContent = code.replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
+            if (profileMode || languageMode) {
+              document.querySelector('#profile-language').value = result?.profile?.language || '';
+              document.querySelector('#profile-nationality').value = code || '';
+            } else if (!code) {
+              location.replace(`${LIFF_URL}?mode=profile`);
+              return;
+            }
+          } catch {}
           app.hidden = false;
         } catch (e) {
           error.hidden = false;
@@ -513,6 +646,7 @@ const { locale = 'ja' } = Astro.params;
 <style>
   :global(*){box-sizing:border-box} :global(html),:global(body){margin:0;min-height:100%;background:#f1f4f3;color:#172d32;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",sans-serif} :global(body){padding:0}
   .liff-shell,.liff-error{width:min(100%,620px);min-height:100vh;margin:0 auto;padding:28px 20px 40px;background:#fff}.liff-error{display:grid;place-content:center;min-height:100vh;text-align:center}.liff-error[hidden],.liff-shell[hidden]{display:none}.liff-header{padding:8px 0 24px;border-bottom:1px solid #e1e6ec}.liff-kicker{margin:0 0 8px;color:#1e5b82;font:700 10px/1.2 ui-monospace,monospace;letter-spacing:.14em}.liff-header h1,.liff-error h1{margin:0;font-size:26px;line-height:1.45;letter-spacing:.02em}.liff-header p:last-child,.liff-error p:last-child{margin:9px 0 0;color:#64748b;font-size:13px;line-height:1.8}#community-form{padding-top:22px}label{display:grid;gap:7px;margin:0 0 18px;color:#253248;font-size:13px;font-weight:700}em{color:#b4533c;font-size:10px;font-style:normal;margin-left:4px}input:not([type=checkbox]),textarea{width:100%;padding:13px 14px;border:1px solid #d7dee7;border-radius:10px;background:#fbfcfd;color:#172033;font:inherit;font-size:14px;font-weight:400;outline:none}textarea{resize:vertical;line-height:1.75}input:focus,textarea:focus{border-color:#1e5b82;box-shadow:0 0 0 3px #1e5b8220}.agreement{display:flex;grid-template-columns:none;align-items:flex-start;gap:8px;color:#64748b;font-size:12px;font-weight:400;line-height:1.7}.agreement input{margin-top:4px;accent-color:#1e5b82}button{width:100%;padding:15px 18px;border:0;border-radius:10px;background:#1e5b82;color:#fff;font:700 14px inherit;cursor:pointer}button:active{transform:translateY(1px)}.form-status{display:none;margin:14px 0 0;color:#26704b;font-size:12px;line-height:1.7}.form-status.visible{display:block}
+  .profile-form{padding-top:22px}.profile-form[hidden]{display:none}.profile-field{display:grid;gap:7px;margin-bottom:18px}.profile-field label{margin:0}.profile-field select{width:100%;min-height:50px;padding:12px 42px 12px 14px;border:1px solid #d7dee7;border-radius:10px;background:#fbfcfd;color:#172033;font:inherit;font-size:14px;outline:none}.profile-field select:focus{border-color:#1e5b82;box-shadow:0 0 0 3px #1e5b8220}
 </style>
 
 <style is:global>
@@ -1038,12 +1172,25 @@ const { locale = 'ja' } = Astro.params;
   #dynamic-fields input[name="applicationUrl"]{min-height:48px}
   .identity-card{display:grid;gap:13px;margin:16px 0 0;padding:17px;border:1px solid #d9e2df;border-radius:14px;background:#fff}
   .identity-card legend{padding:0 5px;color:#263c40;font-size:13px;font-weight:700}
-  .line-profile-name{margin:0;padding:11px 12px;border-radius:9px;background:#f1f5e9;color:#52666a;font-size:12px;line-height:1.5}
+  .line-profile-name{display:flex;align-items:center;gap:7px;margin:0;padding:11px 12px;border-radius:9px;background:#f1f5e9;color:#52666a;font-size:12px;line-height:1.5}
   .line-profile-name strong{color:#173044;font-size:13px}
+  .line-profile-name img{width:34px;height:34px;border-radius:50%;object-fit:cover}
+  #line-nationality-flag{font-size:18px}
   .identity-options{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
   .identity-options label{display:flex;align-items:center;justify-content:center;min-height:46px;margin:0;padding:8px 6px;border:1px solid #d7e1de;border-radius:8px;background:#f7f9f8;color:#52666a;font-size:11px;font-weight:700;line-height:1.35;text-align:center;cursor:pointer}
   .identity-options label:has(input:checked){border-color:#789e35;background:#edf4df;color:#35521c;box-shadow:0 0 0 2px #8eaf411c}
   .identity-options input[type="radio"]{position:absolute;width:1px!important;height:1px;margin:0;padding:0;opacity:0}
+  .avatar-options{display:grid;gap:7px;padding-top:13px;border-top:1px solid #dfe7e4}
+  .avatar-options p{margin:0;color:#52666a;font-size:12px;font-weight:700}
+  .avatar-options label{display:flex;align-items:center;gap:8px;min-height:38px;margin:0;padding:8px 10px;border:1px solid #d9e2df;border-radius:9px;font-size:12px;font-weight:500;line-height:1.35}
+  .avatar-options label:has(input:checked){border-color:#789e35;background:#edf4df;color:#35521c}
+  .avatar-picker-toggle{width:auto;margin:2px 0 0;justify-self:start;padding:7px 11px;border:1px solid #b8d18d;border-radius:8px;background:#f4f8eb;color:#476322;font-size:11px;font-weight:700;box-shadow:none}
+  .avatar-picker-toggle:hover{background:#edf4df;transform:none;box-shadow:none}
+  .avatar-picker{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding-top:3px}
+  .avatar-picker[hidden]{display:none}
+  .avatar-choice{display:grid;place-items:center;width:100%;aspect-ratio:1;margin:0;padding:3px;border:2px solid transparent;border-radius:50%;background:#f4f7f5;box-shadow:none;cursor:pointer}
+  .avatar-choice:hover,.avatar-choice.is-selected{border-color:#789e35;transform:none;box-shadow:0 0 0 2px #8eaf4124}
+  .avatar-choice img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
   #custom-display-name{margin:0!important}
   .photo-uploader{padding:14px 17px;border-color:#d9e2df;border-radius:14px;box-shadow:none}
   .photo-uploader .photo-input{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0);white-space:nowrap;border:0!important}

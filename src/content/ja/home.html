@@ -510,6 +510,100 @@
 
   <script>
     (function () {
+      var API_URL = "https://sotocom-api.syouboc.workers.dev/api/submissions";
+      var panelMap = {
+        listings: { panel: "homeTabListings", href: "/ja/listings/", badge: "home-latest-badge--tenant", label: "直貸し" },
+        "used-market": { panel: "homeTabUsedMarket", href: "/ja/used-market/", badge: "", label: "中古市場" },
+        jobs: { panel: "homeTabJobs", href: "/ja/jobs/", badge: "home-latest-badge--jobs", label: "求人" },
+        events: { panel: "homeTabEvents", href: "/ja/events/", badge: "home-latest-badge--event", label: "イベント" },
+        help: { panel: "homeTabHelp", href: "/ja/help-request/", badge: "home-latest-badge--help", label: "助け合い" }
+      };
+
+      function text(parent, tag, value, className) {
+        var element = document.createElement(tag);
+        if (className) element.className = className;
+        element.textContent = value || "";
+        parent.appendChild(element);
+        return element;
+      }
+
+      function formatDate(value) {
+        var date = new Date(String(value || "").replace(" ", "T") + "Z");
+        if (Number.isNaN(date.getTime())) return "最新";
+        return String(date.getMonth() + 1).padStart(2, "0") + "/" + String(date.getDate()).padStart(2, "0") + " " + String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0");
+      }
+
+      function payloadSummary(type, payload) {
+        if (type === "listings") return [payload.prefecture, payload.area, payload.station].filter(Boolean).join("・") + (payload.rent ? "／" + Number(payload.rent).toLocaleString("ja-JP") + "円" : "");
+        if (type === "used-market") return payload.price ? Number(payload.price).toLocaleString("ja-JP") + "円" : "投稿内容を確認";
+        if (type === "jobs") return [payload.company, payload.salary].filter(Boolean).join("／");
+        if (type === "events") return [payload.venue, payload.startsAt].filter(Boolean).join("／");
+        return [payload.area, payload.reward].filter(Boolean).join("／");
+      }
+
+      function makeItem(submission, config) {
+        var payload = submission.payload || {};
+        var item = document.createElement("a");
+        item.className = "home-latest-item" + ((payload.photoKeys || []).length ? " home-latest-item--photo" : "");
+        item.href = config.href;
+        item.dataset.liveSubmission = String(submission.id);
+        if ((payload.photoKeys || []).length) {
+          var thumb = document.createElement("span");
+          thumb.className = "home-latest-thumb";
+          var image = document.createElement("img");
+          image.src = API_URL.replace("/api/submissions", "/api/photos") + "?key=" + encodeURIComponent(payload.photoKeys[0]);
+          image.alt = payload.title || "投稿写真";
+          image.loading = "lazy";
+          thumb.appendChild(image);
+          if (config.badge) text(thumb, "span", config.label, "home-latest-badge " + config.badge);
+          item.appendChild(thumb);
+        } else {
+          text(item, "span", config.label, "home-latest-badge " + config.badge);
+        }
+        var body = document.createElement("span");
+        body.className = "home-latest-item-body";
+        text(body, "strong", payload.title || payload.company || "新しい投稿");
+        text(body, "small", payloadSummary(submission.type, payload));
+        if (submission.avatar_url) {
+          var author = document.createElement("small");
+          author.className = "home-live-author";
+          var avatar = document.createElement("img");
+          avatar.src = submission.avatar_url;
+          avatar.alt = "";
+          author.appendChild(avatar);
+          var code = submission.author_nationality_code || "";
+          var flag = /^[A-Z]{2}$/.test(code) ? code.replace(/./g, function(char){ return String.fromCodePoint(127397 + char.charCodeAt(0)); }) : "";
+          author.appendChild(document.createTextNode((submission.display_name || "投稿者") + (flag ? " " + flag : "")));
+          body.appendChild(author);
+        }
+        item.appendChild(body);
+        text(item, "span", formatDate(submission.created_at), "home-latest-date");
+        if (!item.classList.contains("home-latest-item--photo")) text(item, "span", "詳細を見る →", "home-latest-arrow");
+        return item;
+      }
+
+      function loadLiveSubmissions() {
+        fetch(API_URL + "?=" + Date.now())
+          .then(function (response) { if (!response.ok) throw new Error("home-submissions-failed"); return response.json(); })
+          .then(function (data) {
+            (data.submissions || []).forEach(function (submission) {
+              var config = panelMap[submission.type];
+              if (!config) return;
+              var panel = document.getElementById(config.panel);
+              var list = panel && panel.querySelector(".home-latest-list");
+              if (!list || list.querySelector('[data-live-submission="' + submission.id + '"]')) return;
+              list.insertBefore(makeItem(submission, config), list.firstElementChild);
+            });
+          })
+          .catch(function (error) { console.warn("Sotocom home submissions could not be loaded", error); });
+      }
+      loadLiveSubmissions();
+      window.setInterval(loadLiveSubmissions, 60000);
+    })();
+  </script>
+
+  <script>
+    (function () {
       var CURRENCIES = [
         { code: "USD", cc: "us", label: "アメリカ" },
         { code: "EUR", cc: "eu", label: "ユーロ圏" },
@@ -1162,6 +1256,8 @@
     .home-latest-item-body{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;}
     .home-latest-item-body strong{font-size:12.5px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .home-latest-item-body small{font-size:11px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .home-latest-item-body .home-live-author{display:flex;align-items:center;gap:5px;color:var(--ink);font-weight:700}
+    .home-live-author img{width:22px;height:22px;border-radius:50%;object-fit:cover;background:var(--paper-2,#f4f1e8)}
     .home-latest-date{flex:none;font:600 10.5px "JetBrains Mono",monospace;color:var(--ink-soft);}
 
     /* Photo-card variant: unified thumbnail cards for Listings / UsedMarket

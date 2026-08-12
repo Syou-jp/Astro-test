@@ -77,6 +77,7 @@
       .rl-price{font-size:15px;font-weight:700;color:var(--accent);}
       .rl-desc{font-size:12.5px;line-height:1.6;color:var(--ink,#2b2b26);}
       .rl-footer{margin-top:auto;padding-top:8px;border-top:1px dashed var(--line,#ddd6c5);font-size:11.5px;color:var(--ink-soft,#6b665a);display:flex;justify-content:space-between;align-items:center;}
+      .rl-author{display:inline-flex;align-items:center;gap:6px;min-width:0}.rl-author-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:#eef1ec}.rl-author-flag{font-size:15px}
       .rl-contact{font-size:12px;font-weight:700;color:var(--accent);text-decoration:none;}
       .rl-empty{padding:30px;text-align:center;color:var(--ink-soft,#6b665a);font-size:13px;}
       .rl-modal[hidden]{display:none;}
@@ -92,7 +93,7 @@
       .rl-gallery-arrow.prev{left:18px;}.rl-gallery-arrow.next{right:18px;}
       .rl-gallery-count{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);padding:4px 10px;border-radius:99px;background:rgba(0,0,0,.62);color:#fff;font-size:12px;}
       .rl-modal-content{padding:34px 30px 30px;min-width:0;}.rl-modal-content h2{margin:3px 0 18px;padding-right:24px;font-size:clamp(20px,3vw,30px);}
-      .rl-detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}.rl-detail-item{margin:0;padding:10px 8px;border:1px solid var(--line,#ddd6c5);background:#fff;border-radius:10px;min-width:0;}.rl-detail-item:nth-child(-n+4){grid-column:span 4;}.rl-detail-item:nth-child(n+5){grid-column:span 2;}.rl-detail-item.rl-detail-wide{grid-column:span 4;}.rl-detail-item dt{font-size:10px;color:var(--ink-soft,#6b665a);font-weight:700;}.rl-detail-item dd{margin:4px 0 0;font-size:12px;line-height:1.45;overflow-wrap:anywhere;}.rl-thumbs{display:grid;grid-template-columns:repeat(9,1fr);gap:7px;margin:12px 0 0;}.rl-thumb{padding:0;border:2px solid transparent;background:none;aspect-ratio:1;overflow:hidden;cursor:pointer;border-radius:6px;}.rl-thumb.active{border-color:var(--accent);}.rl-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .rl-detail-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;}.rl-detail-item{margin:0;padding:10px 8px;border:1px solid var(--line,#ddd6c5);background:#fff;border-radius:10px;min-width:0;}.rl-detail-item:nth-child(-n+4){grid-column:span 4;}.rl-detail-item:nth-child(n+5){grid-column:span 2;}.rl-detail-item.rl-detail-wide{grid-column:span 6;}.rl-detail-item.rl-detail-triple{grid-column:span 2;}.rl-detail-item.rl-detail-pair{grid-column:span 3;}.rl-detail-grid .rl-detail-item.rl-detail-triple,.rl-detail-grid .rl-detail-item.rl-detail-pair{grid-row:auto;}.rl-detail-item dt{font-size:10px;color:var(--ink-soft,#6b665a);font-weight:700;}.rl-detail-item dd{margin:4px 0 0;font-size:12px;line-height:1.45;overflow-wrap:anywhere;}.rl-thumbs{display:grid;grid-template-columns:repeat(9,1fr);gap:7px;margin:12px 0 0;}.rl-thumb{padding:0;border:2px solid transparent;background:none;aspect-ratio:1;overflow:hidden;cursor:pointer;border-radius:6px;}.rl-thumb.active{border-color:var(--accent);}.rl-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
       .rl-modal-open{overflow:hidden;}
       @media(max-width:640px){
         .rl-grid{grid-template-columns:1fr;}
@@ -102,7 +103,7 @@
         .rl-desc{font-size:13.5px;}
         .rl-footer{font-size:12.5px;}
         .rl-contact{font-size:13px;}
-        .rl-feature-filters{grid-template-columns:repeat(2,minmax(0,1fr));}.rl-feature-filter{font-size:11.5px;}.rl-list-controls{grid-template-columns:1fr;}.rl-modal{padding:0;}.rl-modal-panel{display:block;width:100%;max-height:100vh;border-radius:0;}.rl-modal-media{padding:0;}.rl-modal-gallery{min-height:280px;height:42vh;}#rlModalImage{height:calc(42vh - 20px)!important;max-width:calc(100% - 20px)!important;}.rl-gallery-arrow{width:38px;height:38px;font-size:31px;}.rl-gallery-arrow.prev{left:10px;}.rl-gallery-arrow.next{right:10px;}.rl-modal-content{padding:18px 16px 20px;}.rl-detail-grid{grid-template-columns:1fr;gap:8px;}.rl-detail-item:nth-child(-n+4),.rl-detail-item:nth-child(n+5),.rl-detail-item.rl-detail-wide{grid-column:auto;}.rl-thumbs{grid-template-columns:repeat(5,1fr);gap:5px;margin:8px 16px 0;}
+        .rl-feature-filters{grid-template-columns:repeat(2,minmax(0,1fr));}.rl-feature-filter{font-size:11.5px;}.rl-list-controls{grid-template-columns:1fr;}.rl-modal{padding:0;}.rl-modal-panel{display:block;width:100%;max-height:100vh;border-radius:0;}.rl-modal-media{padding:0;}.rl-modal-gallery{min-height:280px;height:42vh;}#rlModalImage{height:calc(42vh - 20px)!important;max-width:calc(100% - 20px)!important;}.rl-gallery-arrow{width:38px;height:38px;font-size:31px;}.rl-gallery-arrow.prev{left:10px;}.rl-gallery-arrow.next{right:10px;}.rl-modal-content{padding:18px 16px 20px;}.rl-detail-grid{grid-template-columns:1fr;gap:8px;}.rl-detail-item:nth-child(-n+4),.rl-detail-item:nth-child(n+5),.rl-detail-item.rl-detail-wide,.rl-detail-grid .rl-detail-item.rl-detail-triple,.rl-detail-grid .rl-detail-item.rl-detail-pair{grid-column:auto;}.rl-thumbs{grid-template-columns:repeat(5,1fr);gap:5px;margin:8px 16px 0;}
       }
     </style>
 
@@ -194,6 +195,23 @@
       var currentPage = 1;
       var pageSize = 8;
 
+      // Keep the two built-in examples aligned with submitted listing details.
+      RL_LISTINGS.filter(function(item){ return item.sample; }).forEach(function(item, index){
+        item.details = [
+          ["物件所在地", item.address || "TEST", "wide"],
+          ["家賃", item.price || "TEST", "wide"],
+          ["間取り・広さ", index === 0 ? "1LDK／40㎡" : "2LDK／TEST", "triple"],
+          ["家具・家電", "TEST", "triple"],
+          ["入居可能時期", "TEST", "triple"],
+          ["物件紹介", item.desc || "TEST", "wide"],
+          ["条件", "TEST", "wide"],
+          ["国籍", "TEST", "pair"],
+          ["ペット", "TEST", "pair"],
+          ["投稿者", "TEST", "pair"],
+          ["連絡方法", item.contact || "TEST", "pair"]
+        ];
+      });
+
       function esc(s){
         var d = document.createElement("div");
         d.textContent = s || "";
@@ -254,6 +272,7 @@
                 '<div class="rl-price">' + esc(item.price) + '</div>' +
                 '<div class="rl-footer">' +
                   '<span>更新：' + esc(item.updated) + '</span>' +
+                  (item.avatar ? '<span class="rl-author"><img class="rl-author-avatar" src="' + esc(item.avatar) + '" alt=""><span>' + esc(item.origin) + '</span><span class="rl-author-flag">' + esc(item.flag) + '</span></span>' : '') +
                 '</div>' +
               '</div>' +
             '</div>';
@@ -315,6 +334,67 @@
 
       render();
 
+      function rlSubmissionPhotoUrl(key){
+        return "https://sotocom-api.syouboc.workers.dev/api/photos?key=" + encodeURIComponent(key);
+      }
+
+      function rlCountryFlag(code){
+        return /^[A-Z]{2}$/.test(code || "") ? code.replace(/./g, function(char){ return String.fromCodePoint(127397 + char.charCodeAt(0)); }) : "";
+      }
+
+      function rlSubmissionToListing(submission){
+        var payload = submission.payload || {};
+        var photos = (payload.photoKeys || []).map(rlSubmissionPhotoUrl);
+        var rent = Number(payload.rent || 0).toLocaleString("ja-JP");
+        var fee = Number(payload.managementFee || 0).toLocaleString("ja-JP");
+        var location = [payload.prefecture, payload.area, payload.station].filter(Boolean).join("・");
+        var price = "家賃 " + rent + "円" + (Number(payload.managementFee || 0) ? "／管理費 " + fee + "円" : "");
+        var furnished = payload.furnished === "あり" ? "家具・家電付き" : payload.furnished === "一部" ? "一部あり" : "なし";
+        var moveInLabels = { immediate: "即入居可", "next-month": "来月から", date: "日付を相談", other: "その他" };
+        return {
+          type: payload.listingType === "share" ? "share" : "tenant",
+          region: payload.prefecture || "その他",
+          image: photos[0] || "",
+          title: payload.title || "入居募集",
+          address: location,
+          price: price,
+          origin: submission.display_name || "投稿者",
+          avatar: submission.avatar_url || "",
+          flag: rlCountryFlag(submission.author_nationality_code),
+          desc: payload.details || "",
+          features: payload.furnished && payload.furnished !== "なし" ? ["furnished"] : [],
+          minMonths: 0,
+          sample: false,
+          contact: "",
+          updated: String(submission.created_at || "").replace(/-/g, "/").slice(0, 16),
+          photos: photos,
+          details: [
+            ["物件所在地", location || "未入力", "wide"],
+            ["家賃", price, "wide"],
+            ["間取り・広さ", [payload.layout, payload.floorArea].filter(Boolean).join("／") || "未入力", "triple"],
+            ["家具・家電", furnished, "triple"],
+            ["入居可能時期", moveInLabels[payload.moveIn] || payload.moveIn || "未入力", "triple"],
+            ["物件紹介", payload.title || "未入力", "wide"],
+            ["条件", payload.details || "未入力", "wide"],
+            ["国籍", submission.author_nationality_label || payload.nationality || "未設定", "pair"],
+            ["ペット", payload.pet || "未入力", "pair"],
+            ["投稿者", [submission.display_name || "未入力", rlCountryFlag(submission.author_nationality_code), "（国籍：" + (submission.author_nationality_label || "未設定") + "）"].filter(Boolean).join(" "), "pair"],
+            ["連絡方法", payload.contact || "未入力", "pair"]
+          ]
+        };
+      }
+
+      fetch("https://sotocom-api.syouboc.workers.dev/api/submissions?type=listings&_=" + Date.now())
+        .then(function(response){ if (!response.ok) throw new Error("submission-fetch-failed"); return response.json(); })
+        .then(function(data){
+          var published = (data.submissions || []).map(rlSubmissionToListing);
+          if (!published.length) return;
+          RL_LISTINGS.unshift.apply(RL_LISTINGS, published);
+          currentPage = 1;
+          render();
+        })
+        .catch(function(error){ console.warn("Sotocom listings could not be loaded", error); });
+
       var modal = document.getElementById("rlModal");
       var modalImage = document.getElementById("rlModalImage");
       var modalBadge = document.getElementById("rlModalBadge");
@@ -356,7 +436,7 @@
         currentPhotos = item.photos;
         modalBadge.textContent = badgeLabel(item.type) + (item.sample ? "・例示（実在しない物件）" : "");
         modalTitle.textContent = item.title;
-        modalDetails.innerHTML = item.details.map(function(detail){ return '<div class="rl-detail-item' + (detail[0] === "物件紹介" || detail[0] === "条件" ? ' rl-detail-wide' : '') + '"><dt>' + esc(detail[0]) + '</dt><dd>' + esc(detail[1]) + '</dd></div>'; }).join("");
+        modalDetails.innerHTML = item.details.map(function(detail, detailIndex){ var detailClass = detail[2] || (item.sample ? (detailIndex < 4 ? 'wide' : 'pair') : 'wide'); return '<div class="rl-detail-item rl-detail-' + detailClass + '"><dt>' + esc(detail[0]) + '</dt><dd>' + esc(detail[1]) + '</dd></div>'; }).join("");
         modalThumbs.innerHTML = item.photos.map(function(photo, i){ return '<button type="button" class="rl-thumb" data-rl-photo="' + i + '"><img src="' + photo + '" alt="写真' + (i + 1) + '"></button>'; }).join("");
         modal.hidden = false;
         modal.setAttribute("aria-hidden", "false");

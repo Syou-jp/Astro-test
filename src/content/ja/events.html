@@ -95,15 +95,50 @@
         "multicultural-autumn-festival": "さまざまな国や地域のコミュニティが集まり、料理、音楽、ダンス、工芸品を紹介する多文化交流イベントです。会場を歩きながら複数の文化にふれられるため、東京に住む外国人同士や日本人との新しい出会いのきっかけにもなります。家族連れでも参加しやすい内容を予定していますが、入場ルールや体験プログラムの受付方法は催しごとに異なる場合があります。参加前には主催者の最新案内をご確認ください。",
         "roppongi-language-cafe": "カフェのテーブルを囲み、日本語と英語を中心に会話を楽しむ小規模な交流会です。テーマカードや自己紹介をきっかけに進めるため、会話に自信がない人も無理なく参加できます。文法を勉強する場というより、実際の会話を通して表現を試したい人、東京で気軽に友人をつくりたい人に向いた雰囲気です。ドリンク代、予約の有無、参加できる言語レベルは開催回ごとに確認してください。"
       };
+      var API_URL = "https://sotocom-api.syouboc.workers.dev/api/submissions";
+      function formatLiveDate(value) {
+        var date = new Date(value);
+        if (Number.isNaN(date.getTime())) return { date: "日時未入力", time: "" };
+        var weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+        return {
+          date: date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日（" + weekdays[date.getDay()] + "）",
+          time: String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0")
+        };
+      }
+      function makeLiveEvent(submission) {
+        var payload = submission.payload || {};
+        var start = formatLiveDate(payload.startsAt);
+        var end = payload.endsAt ? formatLiveDate(payload.endsAt) : null;
+        var date = start.date;
+        if (end && end.date !== start.date) date += "〜" + end.date;
+        return {
+          slug: "submission-" + submission.id,
+          category: "cultural",
+          categoryLabel: "COMMUNITY EVENT",
+          popular: false,
+          liveSubmission: true,
+          title: payload.title || "新しいイベント",
+          date: date,
+          time: end && end.time !== start.time ? start.time + "〜" + end.time : start.time,
+          area: [payload.eventPrefecture, payload.venue].filter(Boolean).join("・") || "会場未入力",
+          description: payload.summary || "投稿者から寄せられたイベントです。",
+          url: payload.applicationUrl || "",
+          image: payload.photoKeys && payload.photoKeys[0] ? API_URL.replace("/api/submissions", "/api/photos") + "?key=" + encodeURIComponent(payload.photoKeys[0]) : "/sotocom_hero_photo.jpg",
+          author: submission.display_name || "投稿者"
+        };
+      }
       function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value; return el.innerHTML; }
       function openModal(item) {
         var modal = document.getElementById("evModal");
         document.getElementById("evModalTitle").textContent = item.title;
-        document.getElementById("evModalIntro").textContent = eventDescriptions[item.slug];
+        document.getElementById("evModalIntro").textContent = item.description || eventDescriptions[item.slug] || "";
         var image = document.getElementById("evModalImage");
-        image.src = eventImages[item.slug];
+        image.src = item.image || eventImages[item.slug] || "/sotocom_hero_photo.jpg";
         image.alt = item.title + "のイメージ";
-        document.getElementById("evModalDetails").innerHTML = [["日時", item.date + " " + item.time], ["場所", item.area], ["参考URL", '<a class="ev-modal-link" href="' + ((/^https?:\/\//i.test(item.url)) ? item.url : "https://" + item.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.url) + '</a>']].map(function (detail) { return '<div class="ev-modal-detail"><b>' + escapeHtml(detail[0]) + '</b><span>' + detail[1] + '</span></div>'; }).join("");
+        var details = [["日時", item.date + " " + item.time], ["場所", item.area]];
+        if (item.author) details.push(["投稿者", item.author]);
+        if (item.url) details.push(["参考URL", '<a class="ev-modal-link" href="' + ((/^https?:\/\//i.test(item.url)) ? item.url : "https://" + item.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.url) + '</a>']);
+        document.getElementById("evModalDetails").innerHTML = details.map(function (detail) { return '<div class="ev-modal-detail"><b>' + escapeHtml(detail[0]) + '</b><span>' + detail[1] + '</span></div>'; }).join("");
         modal.hidden = false;
         modal.setAttribute("aria-hidden", "false");
         document.body.classList.add("ev-modal-open");
@@ -122,7 +157,7 @@
           return;
         }
         grid.innerHTML = visible.map(function (item) {
-          return '<button type="button" class="ev-card" data-event-slug="' + item.slug + '"><div class="ev-card-top">' + (item.popular ? '<span class="ev-popular">人気</span>' : '') + '</div><h4>' + escapeHtml(item.title) + '</h4><p class="ev-card-note">' + escapeHtml(item.description) + '</p><div class="ev-meta"><div><b>日時</b><span>' + escapeHtml(item.date) + ' ' + escapeHtml(item.time) + '</span></div><div><b>場所</b><span>' + escapeHtml(item.area) + '</span></div></div></button>';
+          return '<button type="button" class="ev-card" data-event-slug="' + item.slug + '"><div class="ev-card-top"><span class="ev-card-category">' + escapeHtml(item.categoryLabel || "EVENT") + '</span>' + (item.popular ? '<span class="ev-popular">人気</span>' : '') + '</div><h4>' + escapeHtml(item.title) + '</h4><p class="ev-card-note">' + escapeHtml(item.description) + '</p><div class="ev-meta"><div><b>日時</b><span>' + escapeHtml(item.date) + ' ' + escapeHtml(item.time) + '</span></div><div><b>場所</b><span>' + escapeHtml(item.area) + '</span></div></div></button>';
         }).join("");
         grid.querySelectorAll("[data-event-slug]").forEach(function (card) { card.addEventListener("click", function () { var item = events.find(function (event) { return event.slug === card.dataset.eventSlug; }); if (item) openModal(item); }); });
       }
@@ -130,6 +165,15 @@
       document.querySelectorAll("[data-ev-close]").forEach(function (button) { button.addEventListener("click", closeModal); });
       document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !document.getElementById("evModal").hidden) closeModal(); });
       render();
+      fetch(API_URL + "?=" + Date.now())
+        .then(function (response) { if (!response.ok) throw new Error("events-submissions-failed"); return response.json(); })
+        .then(function (data) {
+          (data.submissions || []).filter(function (submission) { return submission.type === "events"; }).forEach(function (submission) {
+            if (!events.some(function (item) { return item.slug === "submission-" + submission.id; })) events.unshift(makeLiveEvent(submission));
+          });
+          render();
+        })
+        .catch(function () {});
     })();
   </script>
 </div>
