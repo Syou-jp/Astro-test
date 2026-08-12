@@ -567,7 +567,40 @@ const { locale = 'ja' } = Astro.params;
         reward: [['paid', '謝礼あり'], ['consult', '応相談'], ['none', '無償'], ['exchange', '物品・サービス交換']],
         urgent: [['no', '通常'], ['yes', '急募']],
       };
-      Object.entries(selectOptions).forEach(([name, options]) => { if (type === 'listings' && name === 'area') return; const old = fields.querySelector(`[name="${name}"]`); if (!old || !options.length) return; const select = document.createElement('select'); select.name = name; select.required = true; select.innerHTML = `<option value="">選択してください</option>${options.map(([value, text]) => `<option value="${value}">${text}</option>`).join('')}`; old.replaceWith(select); });
+      Object.entries(selectOptions).forEach(([name, options]) => {
+        if (type === 'listings' && name === 'area') return;
+        const old = fields.querySelector(`[name="${name}"]`);
+        if (!old || !options.length) return;
+        const select = document.createElement('select');
+        select.name = name;
+        select.required = true;
+        select.innerHTML = `<option value="">選択してください</option>${options.map(([value, text]) => `<option value="${value}">${text}</option>`).join('')}`;
+        if (options.length > 4) {
+          old.replaceWith(select);
+          return;
+        }
+        const oldField = old.closest('label');
+        const fieldLabel = oldField.querySelector('.field-label').innerHTML;
+        const selectId = `choice-${name}`;
+        select.id = selectId;
+        select.className = 'choice-native';
+        const choiceField = document.createElement('div');
+        choiceField.className = 'choice-field';
+        choiceField.innerHTML = `<label class="field-label" for="${selectId}">${fieldLabel}</label><div class="choice-options" data-count="${options.length}" role="group" aria-label="${oldField.querySelector('.field-label').textContent.trim()}">${options.map(([value, text]) => `<button type="button" class="choice-option" data-choice-value="${value}">${text}</button>`).join('')}</div>`;
+        choiceField.querySelector('.field-label').after(select);
+        choiceField.querySelectorAll('.choice-option').forEach((button) => button.addEventListener('click', () => {
+          select.value = button.dataset.choiceValue;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+        }));
+        select.addEventListener('change', () => {
+          choiceField.querySelectorAll('.choice-option').forEach((button) => {
+            const selected = button.dataset.choiceValue === select.value;
+            button.classList.toggle('is-selected', selected);
+            button.setAttribute('aria-pressed', String(selected));
+          });
+        });
+        oldField.replaceWith(choiceField);
+      });
       const feeSelect = fields.querySelector('[name="fee"]');
       const feeAmountSelect = fields.querySelector('[name="feeAmount"]');
       const feeAmountField = feeAmountSelect?.closest('label');
@@ -1154,14 +1187,20 @@ const { locale = 'ja' } = Astro.params;
   #dynamic-fields{display:grid;gap:0;overflow:hidden;border:1px solid #d9e2df;border-radius:14px;background:#fff}
   #community-form>label{display:grid;gap:8px;margin:0;padding:17px 17px 16px;background:#fff;border:1px solid #d9e2df;border-radius:14px;font-size:13px}
   #community-form>label:focus-within{border-color:#789e35}
-  #dynamic-fields label{display:grid;gap:7px;margin:0;padding:15px 14px 16px;background:#fff;border:0;border-bottom:1px solid #e8edeb;border-radius:0;box-shadow:none;font-size:13px;transition:background .18s ease}
-  #dynamic-fields label:last-child{border-bottom:0}
-  #dynamic-fields label:focus-within{background:#fbfcf9;border-color:#e8edeb;box-shadow:none}
-  .field-label{display:flex;align-items:center;gap:4px;min-height:18px;color:#263c40;font-size:13px;font-weight:700;line-height:1.35;letter-spacing:.015em}
+  #dynamic-fields>label,#dynamic-fields>.choice-field{display:grid;gap:8px;min-width:0;margin:0;padding:16px 14px;background:#fff;border:0;border-bottom:1px solid #e8edeb;border-radius:0;box-shadow:none;font-size:13px;transition:background .18s ease}
+  #dynamic-fields>label:last-child,#dynamic-fields>.choice-field:last-child{border-bottom:0}
+  #dynamic-fields>label:focus-within,#dynamic-fields>.choice-field:focus-within{background:#fbfcf9;border-color:#e8edeb;box-shadow:none}
+  .field-label{display:flex;align-items:center;gap:4px;min-height:20px;margin:0;color:#263c40;font-size:13px;font-weight:700;line-height:1.35;letter-spacing:.015em}
   #community-form em{margin:0;color:#d43f36;font-size:15px;font-weight:800;font-style:normal;line-height:1}
   #community-form input:not([type=checkbox]),#community-form textarea,#community-form select{width:100%;min-height:47px;margin:0;padding:11px 12px;border:1px solid #cfdad7;border-radius:9px;background:#f6f8f7;color:#173044;font-family:inherit;font-size:16px;font-weight:500;line-height:1.5;outline:none;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease}
   #community-form input::placeholder,#community-form textarea::placeholder{color:#94a19e;font-weight:400}
   #community-form input:focus,#community-form textarea:focus,#community-form select:focus{border-color:#789e35;background:#fff;box-shadow:0 0 0 3px #8eaf4126}
+  #community-form .choice-native{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0);white-space:nowrap;border:0!important}
+  .choice-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .choice-option{display:flex;align-items:center;justify-content:center;min-height:45px;margin:0;padding:9px 8px;border:1px solid #cfdad7;border-radius:9px;background:#f6f8f7;color:#52666a;font-family:inherit;font-size:12px;font-weight:700;line-height:1.35;text-align:center;cursor:pointer;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,color .18s ease}
+  .choice-option:hover{border-color:#9db47b;background:#f1f7e7;color:#35521c}
+  .choice-option.is-selected{border-color:#789e35;background:#eaf4db;color:#35521c;box-shadow:0 2px 7px #8eaf4124}
+  .choice-option:focus-visible{outline:3px solid #8eaf4140;outline-offset:2px}
   #community-form textarea{height:108px;min-height:108px;max-height:108px;resize:none;line-height:1.55}
   .agreement{display:flex!important;align-items:flex-start;gap:9px!important;margin:20px 2px 18px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;color:#65777b!important;font-size:11px!important;line-height:1.7}
   .agreement input{flex:0 0 auto;margin-top:3px;accent-color:#8eaf41}
