@@ -266,7 +266,7 @@
               '<div class="rl-body">' +
                 '<h3>' + esc(item.title) + '</h3>' +
                 '<div class="rl-meta">' +
-                  (item.station ? item.station.split(" / ").map(function(line){ return '<span>📍 ' + esc(line) + '</span>'; }).join("") : '<span>📍 ' + esc(item.address) + '</span>') +
+                  (item.station ? item.station.split(" / ").map(function(line){ return '<span>' + esc(line.replace(/\s*徒歩\d+(?:\.\d+)?分$/, "")) + '</span>'; }).join("") : '<span>' + esc(item.address) + '</span>') +
                 '</div>' +
                 '<div class="rl-price">' + esc(item.price) + '</div>' +
                 '<div class="rl-footer">' +
@@ -372,7 +372,11 @@
         var occupationParts = [];
         if (payload.studentOk === "yes") occupationParts.push("学生可");
         if (payload.unemployedOk === "yes") occupationParts.push("無職可");
-        var occupationDisplay = occupationParts.length ? occupationParts.join("・") : "指定なし";
+        var conditionParts = [];
+        if (payload.genderRestriction && payload.genderRestriction !== "none") conditionParts.push("性別：" + (genderLabels[payload.genderRestriction] || payload.genderRestriction));
+        if (payload.tenantNationalityHasCondition === "yes" && payload.tenantNationalityNote) conditionParts.push("国籍・言語：" + payload.tenantNationalityNote);
+        if (occupationParts.length) conditionParts.push("職業：" + occupationParts.join("・"));
+        var conditionDisplay = conditionParts.length ? conditionParts.join("　") : "指定なし";
         return {
           type: payload.listingType === "share" ? "share" : "tenant",
           region: payload.prefecture || "その他",
@@ -401,10 +405,8 @@
             ["入居可能日", moveInDisplay, "pair"],
             ["家具・家電", furnished, "pair"],
             ["ペット", petLabels[payload.pet] || "未入力", "pair"],
-            ["性別限定", genderLabels[payload.genderRestriction] || "未入力", "pair"],
-            ["国籍・言語条件", payload.tenantNationalityNote || "指定なし", "pair"],
-            ["職業条件", occupationDisplay, "wide"],
-            ["物件紹介", autoTitle, "wide"],
+            ["入居条件", conditionDisplay, "wide"],
+            ["物件紹介", payload.propertyIntro || "未入力", "wide"],
             ["条件", payload.details || "未入力", "wide"],
             ["投稿者", [submission.display_name || "未入力", rlCountryFlag(submission.author_nationality_code), submission.author_nationality_label ? "（" + submission.author_nationality_label + "）" : ""].filter(Boolean).join(" "), "pair"],
             ["連絡方法", payload.contact || "未入力", "pair"]
