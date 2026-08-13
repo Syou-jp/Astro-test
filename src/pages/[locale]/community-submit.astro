@@ -130,7 +130,7 @@ const { locale = 'ja' } = Astro.params;
       const OFFICIAL_ACCOUNT_URL = 'https://line.me/R/ti/p/%40721khrrb';
       const LINE_AVATAR_PLACEHOLDER_URL = '/images/avatars/line-avatar-placeholder.svg';
       const configs = {
-        listings: { title: '入居募集を投稿する', intro: '物件カードに必要な情報を順番に入力してください。確認後、掲載用に整えます。', fields: [['listingType', '募集タイプ', '', 'select', [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']]], ['prefecture', '都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['area', '区・市町村', '例：新宿区', 'text'], ['station', '最寄り駅', '例：中野駅 徒歩5分', 'text'], ['floorArea', '面積（㎡）', '例：40', 'number'], ['rent', '家賃（月額・円）', '例：90000', 'number'], ['managementFee', '管理費（月額・円）', '例：5000', 'number'], ['depositMonths', '敷金', '', 'select', []], ['keyMoneyMonths', '礼金', '', 'select', []], ['cleaningFee', '清掃費', '', 'select', [['', 'なし'], ['30000', '30,000円'], ['40000', '40,000円'], ['50000', '50,000円'], ['60000', '60,000円'], ['other', 'その他']]], ['layout', '間取り・広さ', '', 'select', []], ['moveIn', '入居可能日', '', 'select', []], ['moveInDate', '入居可能日（日付）', '', 'date'], ['contractPeriod', '契約期間', '', 'select', []], ['furnished', '家具・家電', '', 'select', [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']]], ['pet', 'ペット', '', 'select', []], ['genderRestriction', '性別限定', '', 'select', []], ['tenantNationalityHasCondition', '国籍・言語条件', '', 'select', []], ['tenantNationalityNote', '国籍・言語の内容', '例：中国語が話せる方', 'text'], ['propertyIntro', '物件紹介', '例：〇〇線〇〇駅から徒歩5分の明るいお部屋です。', 'textarea'], ['conditionChecks', '条件備註', '', 'select', [['fireInsurance', '🔥 火災保険加入必要'], ['utilities', '💧 光熱費折半'], ['quiet', '🤐 静かな環境を優先'], ['non-smoker', '🚭 禁煙']]], ['details', '条件・補足', '同居人など、その他の条件', 'textarea']] },
+        listings: { title: '入居募集を投稿する', intro: '物件カードに必要な情報を順番に入力してください。確認後、掲載用に整えます。', fields: [['listingType', '募集タイプ', '', 'select', [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']]], ['prefecture', '都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['area', '区・市町村', '例：新宿区', 'text'], ['station', '最寄り駅', '例：中野駅 徒歩5分', 'text'], ['floorArea', '面積（㎡）', '例：40', 'number'], ['rent', '家賃（月額・円）', '例：90000', 'number'], ['managementFee', '管理費（月額・円）', '例：5000', 'number'], ['depositMonths', '敷金', '', 'select', []], ['keyMoneyMonths', '礼金', '', 'select', []], ['cleaningFeeHasFee', '清掃費', '', 'select', [['none', 'なし'], ['yes', 'あり']]], ['cleaningFee', '清掃費の金額', '例：30,000円', 'text'], ['layout', '間取り・広さ', '', 'select', []], ['moveIn', '入居可能日', '', 'select', []], ['moveInDate', '入居可能日（日付）', '', 'date'], ['contractPeriod', '契約期間', '', 'select', []], ['furnished', '家具・家電', '', 'select', [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']]], ['pet', 'ペット', '', 'select', []], ['genderRestriction', '性別限定', '', 'select', []], ['tenantNationalityHasCondition', '国籍・言語条件', '', 'select', []], ['tenantNationalityNote', '国籍・言語の内容', '例：中国語が話せる方', 'text'], ['propertyIntro', '物件紹介', '例：〇〇線〇〇駅から徒歩5分の明るいお部屋です。', 'textarea'], ['conditionChecks', '条件備註', '', 'select', [['fireInsurance', '🔥 火災保険加入必要'], ['utilities', '💧 光熱費割り勘'], ['quiet', '🤐 静かな環境を優先'], ['non-smoker', '🚭 禁煙']]], ['details', '条件・補足', '同居人など、その他の条件', 'textarea']] },
         'used-market': { title: '中古市場に投稿する', intro: '中古市場のカードに必要な商品情報を入力してください。写真は後から追加できます。', fields: [['category', 'カテゴリー', '', 'select', [['furniture', '家具'], ['appliance', '家電・ガジェット'], ['daily-goods', '生活雑貨・キッチン'], ['fashion', 'ファッション・美容'], ['kids', '子供用品・おもちゃ'], ['hobby', '本・趣味・スポーツ'], ['other', 'その他']]], ['title', '商品名', '例：冷蔵庫（168L）', 'text'], ['condition', '商品の状態', '', 'select', [['new', '新品・未使用'], ['good', '目立つ傷なし'], ['used', '使用感あり'], ['repair', '要確認・難あり']]], ['price', '価格（円）', '無料の場合は0', 'number'], ['prefecture', '受け渡し都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['pickupArea', '受け渡し場所', '例：中野駅・杉並区', 'text'], ['availableUntil', '受け渡し可能日', '', 'select', []], ['delivery', '受け渡し方法', '', 'select', [['pickup', '現地受け取り'], ['station', '駅で受け渡し'], ['delivery', '配送相談'], ['other', 'その他']]], ['details', '商品説明', '購入時期、サイズ、動作確認、傷、付属品など', 'textarea']] },
         jobs: { title: '求人を投稿する', intro: '求人カードに必要な募集条件を入力してください。応募者が比較しやすい形に整えます。', fields: [['jobCategory', '職種カテゴリー', '', 'select', [['hotel', 'ホテル・宿泊'], ['restaurant', '飲食'], ['cleaning', '清掃'], ['office', '事務・オフィス'], ['care', '介護・福祉'], ['other', 'その他']]], ['title', '募集職種', '例：ホテルフロントスタッフ', 'text'], ['company', '会社・店舗名', '掲載名として表示します', 'text'], ['employmentType', '雇用形態', '', 'select', [['part-time', 'アルバイト・パート'], ['full-time', '正社員'], ['contract', '契約社員'], ['freelance', '業務委託'], ['other', 'その他']]], ['workplace', '勤務地', '', 'select', []], ['salary', '給与・報酬', '例：時給1,300円〜／月給25万円〜', 'text'], ['hours', '勤務時間', '', 'select', []], ['japaneseLevel', '日本語レベル', '', 'select', [['none', '不問'], ['basic', '日常会話'], ['business', 'ビジネスレベル'], ['native', 'ネイティブ相当']]], ['benefits', '待遇・条件', '交通費、まかない、寮、資格、経験など', 'textarea'], ['application', '応募方法', '担当者、連絡先、応募時に伝える内容など', 'textarea']] },
         events: { title: 'イベントを投稿する', intro: 'イベントページに表示する開催情報と参加方法を入力してください。', fields: [['title', 'タイトル', '例：多文化交流会', 'text'], ['startsAt', '開始', '', 'datetime-local'], ['endsAt', '終了', '', 'datetime-local'], ['venue', '場所・住所', '例：東京都渋谷区〇〇／渋谷カフェ', 'text'], ['eventPrefecture', '都道府県', '', 'select'], ['summary', '紹介文', 'イベントの内容や、どんな人におすすめかを書いてください', 'textarea'], ['fee', '参加費', '', 'select'], ['feeAmount', '参加費の金額', '', 'select'], ['capacity', '定員', '', 'select'], ['participationType', '参加方法', '', 'select'], ['applicationUrl', '申込方法・URL', '例：https://example.com または「当日受付」', 'text'], ['notes', '注意事項', '持ち物、対象年齢、雨天時の対応など', 'textarea'], ['other', 'その他', '補足があれば入力してください', 'textarea']] },
@@ -221,12 +221,34 @@ const { locale = 'ja' } = Astro.params;
           checkboxField.className = 'chip-toggle-field';
           checkboxField.innerHTML = '<span class="field-label">条件備註</span><div class="chip-toggle-options">' +
             '<label class="chip-toggle"><input type="checkbox" name="conditionChecks" value="fireInsurance" /><span>🔥 火災保険加入必要</span></label>' +
-            '<label class="chip-toggle"><input type="checkbox" name="conditionChecks" value="utilities" /><span>💧 光熱費折半</span></label>' +
-            '<label class="chip-toggle"><input type="checkbox" name="conditionChecks" value="quiet" /><span>🤐 静かな環境を優先</span></label>' +
+            '<label class="chip-toggle share-only" hidden><input type="checkbox" name="conditionChecks" value="utilities" /><span>💧 光熱費割り勘</span></label>' +
+            '<label class="chip-toggle share-only" hidden><input type="checkbox" name="conditionChecks" value="quiet" /><span>🤐 静かな環境を優先</span></label>' +
             '<label class="chip-toggle"><input type="checkbox" name="conditionChecks" value="non-smoker" /><span>🚭 禁煙</span></label>' +
             '</div>';
           conditionChecksSelect.closest('label').replaceWith(checkboxField);
         }
+        const cleaningFeeAmountLabel = fields.querySelector('[name="cleaningFee"]')?.closest('label');
+        function syncCleaningFee() {
+          const hasFeeSelect = fields.querySelector('[name="cleaningFeeHasFee"]');
+          const amountInput = fields.querySelector('[name="cleaningFee"]');
+          if (!hasFeeSelect || !amountInput || !cleaningFeeAmountLabel) return;
+          const showAmount = hasFeeSelect.value === 'yes';
+          cleaningFeeAmountLabel.hidden = !showAmount;
+          amountInput.required = showAmount;
+          amountInput.disabled = !showAmount;
+        }
+        document.addEventListener('change', (event) => { if (event.target.name === 'cleaningFeeHasFee') syncCleaningFee(); });
+        syncCleaningFee();
+        function syncShareOnlyChecks(listingTypeValue) {
+          const isShare = listingTypeValue === 'share';
+          fields.querySelectorAll('.chip-toggle.share-only').forEach((label) => {
+            label.hidden = !isShare;
+            const input = label.querySelector('input');
+            if (input && !isShare) input.checked = false;
+          });
+        }
+        syncShareOnlyChecks(fields.querySelector('[name="listingType"]')?.value || '');
+        document.addEventListener('change', (event) => { if (event.target.name === 'listingType') syncShareOnlyChecks(event.target.value); });
       }
       const tokyoAreaGeo = JSON.parse(document.querySelector('#tokyo-area-geo-data').textContent);
       const MAJOR_PREFECTURES = ['東京都', '神奈川県', '埼玉県', '千葉県'];
@@ -877,7 +899,7 @@ const { locale = 'ja' } = Astro.params;
       const previewBuilders = { listings: buildListingsPreview, 'used-market': buildUsedMarketPreview, jobs: buildJobsPreview, events: buildEventsPreview, help: buildHelpPreview };
 
       function buildPreviewDetail(values) {
-        const rows = Array.from(fields.querySelectorAll('input[name], textarea[name], select[name]'))
+        let rows = Array.from(fields.querySelectorAll('input[name], textarea[name], select[name]'))
           .filter((el) => !el.disabled && el.name !== 'title' && el.name !== 'conditionChecks' && (el.type === 'checkbox' ? el.checked : el.value))
           .map((el) => {
             const labelHost = el.closest('label') || el.closest('.choice-field');
@@ -893,7 +915,7 @@ const { locale = 'ja' } = Astro.params;
             return `<div class="pv-detail-item"><dt>${escapeHtml(labelText)}</dt><dd>${displayValue.replace(/\n/g, '<br>')}</dd></div>`;
           })
           .join('');
-        const conditionChecksLabels = { fireInsurance: '火災保険加入必要', utilities: '光熱費折半', quiet: '静かな環境を優先', 'non-smoker': '禁煙' };
+        const conditionChecksLabels = { fireInsurance: '火災保険加入必要', utilities: '光熱費割り勘', quiet: '静かな環境を優先', 'non-smoker': '禁煙' };
         const conditionChecksValues = Array.from(fields.querySelectorAll('[name="conditionChecks"]:checked')).map(c => conditionChecksLabels[c.value] || c.value);
         if (conditionChecksValues.length > 0) {
           rows += `<div class="pv-detail-item"><dt>条件備註</dt><dd>${escapeHtml(conditionChecksValues.join('・'))}</dd></div>`;
