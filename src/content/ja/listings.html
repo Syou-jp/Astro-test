@@ -117,8 +117,9 @@
           type: "tenant",
           region: "東京都",
           image: "",
-          title: "足立区 千住 1LDK",
+          title: "足立区 千住 1LDK・約40㎡",
           address: "東京都足立区（北千住駅から徒歩8分）",
+          station: "北千住駅 徒歩8分",
           price: "家賃 90,000円（管理費 5,000円込み）",
           origin: "大家さん：台湾人",
           desc: "1LDK、北千住駅から徒歩8分。猫の飼育可、外国人の申込可。保証人または保証会社が必要です。",
@@ -154,6 +155,7 @@
           image: "",
           title: "台東区 上野 1室",
           address: "東京都台東区（上野駅から徒歩8分）",
+          station: "上野駅 徒歩8分",
           price: "家賃 58,000円",
           origin: "現在の入居者：静かな会社員",
           desc: "家具・家電付きの個室です。現在の同居人は静かな会社員で、共用スペースもきれいに使っています。落ち着いて暮らせる方を募集しています。",
@@ -264,12 +266,12 @@
               '<div class="rl-body">' +
                 '<h3>' + esc(item.title) + '</h3>' +
                 '<div class="rl-meta">' +
-                  '<span>📍 ' + esc(item.address) + '</span>' +
+                  (item.station ? item.station.split(" / ").map(function(line){ return '<span>📍 ' + esc(line) + '</span>'; }).join("") : '<span>📍 ' + esc(item.address) + '</span>') +
                 '</div>' +
                 '<div class="rl-price">' + esc(item.price) + '</div>' +
                 '<div class="rl-footer">' +
+                  (item.avatar ? '<span class="rl-author"><img class="rl-author-avatar" src="' + esc(item.avatar) + '" alt=""><span>' + esc(item.origin) + '</span><span class="rl-author-flag">' + esc(item.flag) + '</span></span>' : '<span></span>') +
                   '<span>更新：' + esc(item.updated) + '</span>' +
-                  (item.avatar ? '<span class="rl-author"><img class="rl-author-avatar" src="' + esc(item.avatar) + '" alt=""><span>' + esc(item.origin) + '</span><span class="rl-author-flag">' + esc(item.flag) + '</span></span>' : '') +
                 '</div>' +
               '</div>' +
             '</div>';
@@ -359,7 +361,8 @@
         var petLabels = { ok: "可（相談）", ng: "不可" };
         var genderLabels = { none: "なし", male: "男性限定", female: "女性限定" };
         var floorArea = payload.floorArea && !/㎡/.test(payload.floorArea) ? payload.floorArea + "㎡" : payload.floorArea;
-        var autoTitle = [place, payload.layout].filter(Boolean).join(" ・ ") || "入居募集";
+        var layoutWithArea = [payload.layout, floorArea].filter(Boolean).join("・");
+        var autoTitle = [place, layoutWithArea].filter(Boolean).join(" ・ ") || "入居募集";
         var stationDisplay = payload.station || "未入力";
         var initialCostParts = [];
         if (payload.depositMonths) initialCostParts.push("敷金" + (monthsLabels[payload.depositMonths] || payload.depositMonths));
@@ -376,6 +379,7 @@
           image: photos[0] || "",
           title: autoTitle,
           address: location,
+          station: payload.station || "",
           price: price,
           origin: submission.display_name || "投稿者",
           avatar: submission.avatar_url || "",
