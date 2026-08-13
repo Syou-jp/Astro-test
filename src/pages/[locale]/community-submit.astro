@@ -70,11 +70,27 @@ const { locale = 'ja' } = Astro.params;
             <input type="hidden" id="selected-avatar-url" name="selectedAvatarUrl" value="" />
           </div>
         </fieldset>
+        <button type="button" id="preview-button" class="preview-trigger"><span aria-hidden="true">👁</span> プレビューを見る</button>
         <label class="agreement"><input name="agreement" type="checkbox" required /><span>投稿内容が確認後に公開されることに同意します。</span></label>
         <button type="submit" id="submit-button">投稿内容を送信する</button>
         <p class="form-status" id="form-status" aria-live="polite"></p>
       </form>
     </main>
+
+    <section class="preview-overlay" id="preview-overlay" hidden aria-modal="true" role="dialog" aria-labelledby="preview-overlay-title">
+      <header class="preview-overlay-header">
+        <button type="button" id="preview-overlay-close">閉じる</button>
+        <h2 id="preview-overlay-title">プレビュー</h2>
+        <span aria-hidden="true"></span>
+      </header>
+      <div class="preview-overlay-body">
+        <p class="preview-overlay-note">実際の掲載イメージです。文言や写真の配置は、確認・調整により多少異なる場合があります。</p>
+        <div class="preview-overlay-label">一覧に表示されるカード</div>
+        <div id="preview-card-slot"></div>
+        <div class="preview-overlay-label">カードをタップすると開く詳細</div>
+        <div id="preview-detail-slot"></div>
+      </div>
+    </section>
 
     <section class="liff-error" id="liff-error" hidden>
       <p class="liff-kicker">SOTOCOM COMMUNITY</p>
@@ -619,6 +635,111 @@ const { locale = 'ja' } = Astro.params;
       }
       feeSelect?.addEventListener('change', syncFeeAmount);
       syncFeeAmount();
+
+      function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+      }
+      function optionLabel(name, value) {
+        if (!value) return '';
+        const match = (selectOptions[name] || []).find(([optionValue]) => optionValue === value);
+        return escapeHtml(match ? match[1] : value);
+      }
+      function previewAvatarSrc() {
+        const useLineAvatar = form.elements.publishAvatarMode.value === 'line';
+        return useLineAvatar
+          ? (lineProfileAvatar.dataset.lineAvatarUrl || LINE_AVATAR_PLACEHOLDER_URL)
+          : (selectedAvatarUrl.value || '/images/avatars/avatar-01.webp');
+      }
+      function previewPhotoSrc(index) {
+        return photoFiles[index] ? URL.createObjectURL(photoFiles[index]) : '';
+      }
+      function yen(value) {
+        const number = Number(String(value ?? '').replace(/[^0-9.]/g, ''));
+        return Number.isFinite(number) && String(value ?? '').trim() !== '' ? `${number.toLocaleString('ja-JP')}円` : '';
+      }
+      function formatDateTime(value) {
+        if (!value) return '';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return escapeHtml(value);
+        return date.toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      }
+
+      function buildListingsPreview(values) {
+        const badgeIsTenant = values.listingType !== 'share';
+        const photo = previewPhotoSrc(0);
+        const address = [values.prefecture, values.area, values.station].filter(Boolean).map(escapeHtml).join(' ');
+        const priceParts = [yen(values.rent)];
+        if (values.managementFee && Number(values.managementFee) > 0) priceParts.push(`＋管理費${yen(values.managementFee)}`);
+        const card = `<article class="pv-card pv-listings"><div class="pv-card-image">${photo ? `<img src="${photo}" alt="">` : '<span>写真準備中</span>'}<span class="pv-badge ${badgeIsTenant ? 'pv-badge-tenant' : 'pv-badge-share'}">${badgeIsTenant ? 'オーナー直貸し' : 'ルームシェア募集'}</span></div><div class="pv-card-body"><h3>${escapeHtml(values.title) || '（タイトル未入力）'}</h3><div class="pv-meta-line">${address ? `📍 ${address}` : '（場所未入力）'}</div><div class="pv-price">${priceParts.filter(Boolean).join(' ') || '（家賃未入力）'}</div><div class="pv-footer"><span>更新：たった今</span><span class="pv-author"><img src="${previewAvatarSrc()}" alt=""><span>${escapeHtml(getPublishDisplayName())}</span><span class="pv-flag">${lineNationalityFlag.textContent}</span></span></div></div></article>`;
+        return card;
+      }
+
+      function buildUsedMarketPreview(values) {
+        const photo = previewPhotoSrc(0);
+        const price = Number(values.price) === 0 ? '無料' : yen(values.price);
+        const card = `<article class="pv-card pv-used-market"><div class="pv-card-image">${photo ? `<img src="${photo}" alt="">` : '<span>写真準備中</span>'}</div><div class="pv-card-body"><h3>${escapeHtml(values.title) || '（商品名未入力）'}</h3><div class="pv-price pv-price-um">${price || '（価格未入力）'}</div><div class="pv-meta-rows"><div><b>受け渡し</b><span>${optionLabel('delivery', values.delivery) || '未設定'}</span></div><div><b>場所</b><span>${escapeHtml([values.prefecture, values.pickupArea].filter(Boolean).join(' ')) || '未設定'}</span></div></div></div></article>`;
+        return card;
+      }
+
+      function buildJobsPreview(values) {
+        const metaLine = [escapeHtml(values.company), escapeHtml(values.workplace), escapeHtml(values.salary)].filter(Boolean).join('｜');
+        const tags = [optionLabel('jobCategory', values.jobCategory), optionLabel('employmentType', values.employmentType), optionLabel('japaneseLevel', values.japaneseLevel)].filter(Boolean);
+        const card = `<article class="pv-card pv-jobs"><div class="pv-card-body"><h3>${escapeHtml(values.title) || '（募集職種未入力）'}</h3><div class="pv-meta-line">${metaLine || '（会社・勤務地・給与未入力）'}</div><p class="pv-desc">${escapeHtml(values.benefits) || ''}</p><div class="pv-tags">${tags.map((tag) => `<span class="pv-tag">${tag}</span>`).join('')}</div></div></article>`;
+        return card;
+      }
+
+      function buildEventsPreview(values) {
+        const dateRange = [formatDateTime(values.startsAt), formatDateTime(values.endsAt)].filter(Boolean).join('〜');
+        const card = `<article class="pv-card pv-events"><div class="pv-card-body"><h3>${escapeHtml(values.title) || '（タイトル未入力）'}</h3><p class="pv-desc">${escapeHtml(values.summary) || ''}</p><div class="pv-meta-rows"><div><b>日時</b><span>${dateRange || '未設定'}</span></div><div><b>場所</b><span>${escapeHtml(values.venue) || '未設定'}</span></div></div></div></article>`;
+        return card;
+      }
+
+      function buildHelpPreview(values) {
+        const urgent = values.urgent === 'yes';
+        const card = `<article class="pv-card pv-help"><div class="pv-card-body"><div class="pv-title-row"><h3>${escapeHtml(values.title) || '（タイトル未入力）'}</h3>${urgent ? '<span class="pv-urgent">急募</span>' : ''}</div><div class="pv-meta-rows"><div><b>タイプ</b><span>${optionLabel('category', values.category) || '未設定'}</span></div><div><b>日時</b><span>${optionLabel('requestDate', values.requestDate) || '未設定'}</span></div><div><b>場所</b><span>${escapeHtml(values.area) || '未設定'}</span></div><div><b>謝礼</b><span>${optionLabel('reward', values.reward) || '未設定'}</span></div></div></div></article>`;
+        return card;
+      }
+
+      const previewBuilders = { listings: buildListingsPreview, 'used-market': buildUsedMarketPreview, jobs: buildJobsPreview, events: buildEventsPreview, help: buildHelpPreview };
+
+      function buildPreviewDetail(values) {
+        const rows = Array.from(fields.querySelectorAll('input[name], textarea[name], select[name]'))
+          .filter((el) => !el.disabled && el.value && el.name !== 'title')
+          .map((el) => {
+            const labelHost = el.closest('label') || el.closest('.choice-field');
+            const labelText = (labelHost?.querySelector('.field-label')?.textContent || el.name).replace(/\*$/, '').trim();
+            const displayValue = el.tagName === 'SELECT'
+              ? escapeHtml(el.options[el.selectedIndex]?.text || el.value)
+              : escapeHtml(el.value);
+            return `<div class="pv-detail-item"><dt>${escapeHtml(labelText)}</dt><dd>${displayValue.replace(/\n/g, '<br>')}</dd></div>`;
+          })
+          .join('');
+        const photosHtml = photoFiles.length
+          ? `<div class="pv-detail-photos">${photoFiles.map((_, index) => `<img src="${previewPhotoSrc(index)}" alt="写真${index + 1}">`).join('')}</div>`
+          : '';
+        const authorHtml = type === 'listings'
+          ? `<div class="pv-detail-author"><img src="${previewAvatarSrc()}" alt=""><span>${escapeHtml(getPublishDisplayName())}</span><span class="pv-flag">${lineNationalityFlag.textContent}</span></div>`
+          : '';
+        return `<article class="pv-detail-card">${photosHtml}<h2>${escapeHtml(values.title) || '（タイトル未入力）'}</h2>${authorHtml}<div class="pv-detail-grid">${rows || '<p class="pv-detail-empty">入力された項目がここに表示されます。</p>'}</div></article>`;
+      }
+
+      const previewOverlay = document.querySelector('#preview-overlay');
+      const previewCardSlot = document.querySelector('#preview-card-slot');
+      const previewDetailSlot = document.querySelector('#preview-detail-slot');
+      function openPreview() {
+        const values = Object.fromEntries(new FormData(form).entries());
+        const builder = previewBuilders[type] || buildEventsPreview;
+        previewCardSlot.innerHTML = `<div class="pv-card-frame pv-theme-${type}">${builder(values)}</div>`;
+        previewDetailSlot.innerHTML = `<div class="pv-theme-${type}">${buildPreviewDetail(values)}</div>`;
+        previewOverlay.hidden = false;
+        app.setAttribute('aria-hidden', 'true');
+      }
+      function closePreview() {
+        previewOverlay.hidden = true;
+        app.removeAttribute('aria-hidden');
+      }
+      document.querySelector('#preview-button').addEventListener('click', openPreview);
+      document.querySelector('#preview-overlay-close').addEventListener('click', closePreview);
 
       const loadLiff = new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -1255,4 +1376,62 @@ const { locale = 'ja' } = Astro.params;
   #community-form .photo-upload-button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;margin:0;padding:12px;border:1px dashed #8eaf41;border-radius:11px;background:#f4f8eb;color:#476322;font-size:13px;font-weight:800;cursor:pointer}
   #community-form .photo-upload-button span{font-size:20px;font-weight:400;line-height:1}
   @media (max-width:360px){.choice-options{gap:7px}.choice-option{padding-left:5px;padding-right:5px}.identity-options{gap:4px}.identity-options label{padding-left:2px;padding-right:2px;font-size:8px}.avatar-picker{gap:5px}}
+</style>
+
+<style is:global>
+  .preview-trigger{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin:22px 0 0;padding:14px 16px;border:1px solid #173044;border-radius:13px;background:#fff;color:#173044;font:700 14px inherit;box-shadow:none}
+  .preview-trigger:hover{background:#f4f6f5}
+  .preview-trigger span{font-size:15px}
+  .preview-overlay[hidden]{display:none!important}
+  .preview-overlay{position:fixed;inset:0;z-index:10000;display:grid;grid-template-rows:auto minmax(0,1fr);width:100%;height:100vh;height:100dvh;overflow:hidden;background:#eef1ef}
+  .preview-overlay-header{display:grid;grid-template-columns:64px minmax(0,1fr) 64px;align-items:center;gap:8px;padding:max(12px,env(safe-area-inset-top)) 14px 11px;border-bottom:1px solid #dfe6e2;background:#fff}
+  .preview-overlay-header h2{margin:0;font-size:15px;text-align:center;color:#173044}
+  .preview-overlay-header button{width:auto;margin:0;padding:9px 10px;border:0;border-radius:9px;background:transparent;color:#476322;font:700 13px inherit;box-shadow:none;cursor:pointer}
+  .preview-overlay-body{min-height:0;padding:16px 16px max(24px,env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .preview-overlay-note{margin:0 0 16px;padding:11px 13px;border-radius:10px;background:#fff8e6;color:#7a5c14;font-size:11.5px;line-height:1.7}
+  .preview-overlay-label{margin:0 0 8px;color:#5b6a68;font:700 11px inherit;letter-spacing:.02em}
+  #preview-card-slot{margin-bottom:24px}
+  #preview-detail-slot{margin-bottom:8px}
+  .pv-card-frame{max-width:340px;margin:0 auto}
+  .pv-card{border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column;box-shadow:0 8px 20px rgba(15,23,42,.06)}
+  .pv-card-image{position:relative;aspect-ratio:4/3;background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;overflow:hidden}
+  .pv-card-image img{width:100%;height:100%;object-fit:cover}
+  .pv-badge{position:absolute;top:8px;left:8px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;color:#fff}
+  .pv-badge-tenant{background:#1e3a8a}
+  .pv-badge-share{background:#447c89}
+  .pv-card-body{padding:13px 15px 15px;display:flex;flex-direction:column;gap:6px}
+  .pv-card-body h3{margin:0;font-size:14.5px;color:#0f172a}
+  .pv-meta-line{font-size:12px;color:#64748b}
+  .pv-desc{margin:0;font-size:12px;line-height:1.6;color:#475569}
+  .pv-price{font-size:15px;font-weight:700}
+  .pv-theme-listings .pv-price{color:#1e3a8a}
+  .pv-price-um{font-family:"JetBrains Mono",monospace}
+  .pv-theme-used-market .pv-price{color:#203b30}
+  .pv-footer{margin-top:4px;padding-top:8px;border-top:1px dashed #e2e8f0;font-size:11px;color:#64748b;display:flex;justify-content:space-between;align-items:center}
+  .pv-author{display:inline-flex;align-items:center;gap:5px;min-width:0}
+  .pv-author img{width:22px;height:22px;border-radius:50%;object-fit:cover;background:#eef1ec}
+  .pv-flag{font-size:14px}
+  .pv-meta-rows{display:grid;gap:5px;margin-top:2px;padding-top:9px;border-top:1px dashed #e2e8f0}
+  .pv-meta-rows div{display:flex;gap:7px;font-size:11px;line-height:1.5}
+  .pv-meta-rows b{min-width:44px;color:#94a3b8;font-size:9.5px;letter-spacing:.03em}
+  .pv-meta-rows span{color:#0f172a}
+  .pv-theme-jobs .pv-card{padding:15px}
+  .pv-theme-jobs .pv-card-body{padding:0}
+  .pv-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+  .pv-tag{font-size:9.5px;border:1px solid #b9d4c8;background:#eff8f4;color:#285c4a;border-radius:999px;padding:3px 9px}
+  .pv-theme-events .pv-card-body h3{color:#1a3d5c}
+  .pv-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .pv-urgent{flex:none;background:#0066cc;color:#fff;font-size:9.5px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:999px}
+  .pv-detail-card{padding:18px 16px;border:1px solid #e2e8f0;border-radius:14px;background:#fff}
+  .pv-detail-photos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+  .pv-detail-photos img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}
+  .pv-detail-card h2{margin:0 0 10px;font-size:18px;color:#0f172a}
+  .pv-detail-author{display:flex;align-items:center;gap:7px;margin:0 0 14px;color:#64748b;font-size:12px}
+  .pv-detail-author img{width:26px;height:26px;border-radius:50%;object-fit:cover;background:#eef1ec}
+  .pv-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .pv-detail-item{margin:0;padding:10px;border:1px solid #e2e8f0;border-radius:10px;background:#fafbfc}
+  .pv-detail-item dt{font-size:10px;color:#94a3b8;font-weight:700}
+  .pv-detail-item dd{margin:4px 0 0;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+  .pv-detail-empty{grid-column:1/-1;margin:0;color:#94a3b8;font-size:12px}
+  @media (max-width:400px){.pv-detail-grid{grid-template-columns:1fr}}
 </style>
