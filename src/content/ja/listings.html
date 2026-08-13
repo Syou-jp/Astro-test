@@ -372,10 +372,15 @@
         var occupationParts = [];
         if (payload.studentOk === "yes") occupationParts.push("学生可");
         if (payload.unemployedOk === "yes") occupationParts.push("無職可");
+        var conditionChecksLabels = { fireInsurance: "火災保険加入必要", utilities: "水電費均攤", quiet: "静かな環境を優先", "early-bird": "朝型生活", "non-smoker": "禁煙" };
         var conditionParts = [];
         if (payload.genderRestriction && payload.genderRestriction !== "none") conditionParts.push("性別：" + (genderLabels[payload.genderRestriction] || payload.genderRestriction));
         if (payload.tenantNationalityHasCondition === "yes" && payload.tenantNationalityNote) conditionParts.push("国籍・言語：" + payload.tenantNationalityNote);
         if (occupationParts.length) conditionParts.push("職業：" + occupationParts.join("・"));
+        if (payload.conditionChecks) {
+          var checkItems = payload.conditionChecks.split(" / ").map(function(k){ return conditionChecksLabels[k] || k; });
+          if (checkItems.length) conditionParts.push("その他：" + checkItems.join("・"));
+        }
         var conditionDisplay = conditionParts.length ? conditionParts.join("　") : "指定なし";
         return {
           type: payload.listingType === "share" ? "share" : "tenant",
