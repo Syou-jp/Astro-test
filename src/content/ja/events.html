@@ -96,6 +96,15 @@
         "roppongi-language-cafe": "カフェのテーブルを囲み、日本語と英語を中心に会話を楽しむ小規模な交流会です。テーマカードや自己紹介をきっかけに進めるため、会話に自信がない人も無理なく参加できます。文法を勉強する場というより、実際の会話を通して表現を試したい人、東京で気軽に友人をつくりたい人に向いた雰囲気です。ドリンク代、予約の有無、参加できる言語レベルは開催回ごとに確認してください。"
       };
       var API_URL = "https://sotocom-api.syouboc.workers.dev/api/submissions";
+      var feeLabels = { free: "無料", paid: "有料" };
+      var feeAmountLabels = { "500": "500円", "1000": "1,000円", "1500": "1,500円", "2000": "2,000円", "3000": "3,000円", "5000": "5,000円", "10000": "10,000円", other: "その他" };
+      var capacityLabels = { small: "10名未満", medium: "10〜30名", large: "30名以上", unlimited: "定員なし", unknown: "未定" };
+      var participationLabels = { reservation: "事前予約", "walk-in": "当日参加", both: "予約・当日参加", contact: "主催者へ問い合わせ" };
+      function feeText(payload) {
+        if (payload.fee === "free") return feeLabels.free;
+        if (payload.fee === "paid") return feeAmountLabels[payload.feeAmount] || feeLabels.paid;
+        return "";
+      }
       function formatLiveDate(value) {
         var date = new Date(value);
         if (Number.isNaN(date.getTime())) return { date: "日時未入力", time: "" };
@@ -124,7 +133,12 @@
           description: payload.summary || "投稿者から寄せられたイベントです。",
           url: payload.applicationUrl || "",
           image: payload.photoKeys && payload.photoKeys[0] ? API_URL.replace("/api/submissions", "/api/photos") + "?key=" + encodeURIComponent(payload.photoKeys[0]) : "/sotocom_hero_photo.jpg",
-          author: submission.display_name || "投稿者"
+          author: submission.display_name || "投稿者",
+          fee: feeText(payload),
+          capacity: capacityLabels[payload.capacity] || "",
+          participation: participationLabels[payload.participationType] || "",
+          notes: payload.notes || "",
+          other: payload.other || ""
         };
       }
       function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value; return el.innerHTML; }
@@ -136,8 +150,13 @@
         image.src = item.image || eventImages[item.slug] || "/sotocom_hero_photo.jpg";
         image.alt = item.title + "のイメージ";
         var details = [["日時", item.date + " " + item.time], ["場所", item.area]];
+        if (item.fee) details.push(["参加費", item.fee]);
+        if (item.capacity) details.push(["定員", item.capacity]);
+        if (item.participation) details.push(["参加方法", item.participation]);
         if (item.author) details.push(["投稿者", item.author]);
         if (item.url) details.push(["参考URL", '<a class="ev-modal-link" href="' + ((/^https?:\/\//i.test(item.url)) ? item.url : "https://" + item.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.url) + '</a>']);
+        if (item.notes) details.push(["注意事項", escapeHtml(item.notes).replace(/\n/g, "<br>")]);
+        if (item.other) details.push(["その他", escapeHtml(item.other).replace(/\n/g, "<br>")]);
         document.getElementById("evModalDetails").innerHTML = details.map(function (detail) { return '<div class="ev-modal-detail"><b>' + escapeHtml(detail[0]) + '</b><span>' + detail[1] + '</span></div>'; }).join("");
         modal.hidden = false;
         modal.setAttribute("aria-hidden", "false");
