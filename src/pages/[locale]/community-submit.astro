@@ -236,24 +236,56 @@ const { locale = 'ja' } = Astro.params;
         }
         old.replaceWith(control);
       }
+      const WALK_MINUTES_OPTIONS = ['1', '3', '5', '7', '10', '15', '20', '25', '30'];
       function buildStationField(prefectureValue) {
-        const old = fields.querySelector('.station-picker') || fields.querySelector('[name="station"]');
+        const old = fields.querySelector('.station-multi') || fields.querySelector('[name="station"]');
         if (!old) return;
         const isMajor = MAJOR_PREFECTURES.includes(prefectureValue);
         if (isMajor) {
           const lines = Object.keys(tokyoAreaGeo.railwayLines);
-          const picker = document.createElement('div');
-          picker.className = 'station-picker';
-          picker.innerHTML = `<select name="stationLine" required><option value="">路線を選択</option>${lines.map((line) => `<option value="${line}">${line}</option>`).join('')}</select><select name="station" required disabled><option value="">先に路線を選択</option></select>`;
-          old.replaceWith(picker);
-          const lineSelect = picker.querySelector('[name="stationLine"]');
-          const stationSelect = picker.querySelector('[name="station"]');
-          lineSelect.addEventListener('change', () => {
-            const stations = tokyoAreaGeo.railwayLines[lineSelect.value] || [];
-            stationSelect.disabled = !stations.length;
-            stationSelect.innerHTML = stations.length
+          const multi = document.createElement('div');
+          multi.className = 'station-multi';
+          multi.innerHTML = `<div class="station-add-row"><select class="station-line-input"><option value="">路線を選択</option>${lines.map((line) => `<option value="${line}">${line}</option>`).join('')}</select><select class="station-name-input" disabled><option value="">先に路線を選択</option></select><select class="station-walk-input"><option value="">徒歩</option>${WALK_MINUTES_OPTIONS.map((m) => `<option value="${m}">徒歩${m}分</option>`).join('')}</select><button type="button" class="station-add-btn" disabled>＋ 追加</button></div><div class="station-list"></div><input type="text" name="station" class="station-hidden-input" readonly required />`;
+          old.replaceWith(multi);
+          const lineInput = multi.querySelector('.station-line-input');
+          const nameInput = multi.querySelector('.station-name-input');
+          const walkInput = multi.querySelector('.station-walk-input');
+          const addBtn = multi.querySelector('.station-add-btn');
+          const list = multi.querySelector('.station-list');
+          const hiddenInput = multi.querySelector('[name="station"]');
+          const entries = [];
+          function syncAddBtn() { addBtn.disabled = !(lineInput.value && nameInput.value && walkInput.value); }
+          function syncHidden() {
+            hiddenInput.value = entries.map((entry) => `${entry.line} ${entry.name}駅 徒歩${entry.walk}分`).join(' / ');
+          }
+          function renderList() {
+            list.innerHTML = entries.map((entry, index) => `<div class="station-row"><span>${entry.line} ・ ${entry.name}駅 徒歩${entry.walk}分</span><button type="button" class="station-remove" data-index="${index}" aria-label="削除">×</button></div>`).join('');
+            syncHidden();
+          }
+          lineInput.addEventListener('change', () => {
+            const stations = tokyoAreaGeo.railwayLines[lineInput.value] || [];
+            nameInput.disabled = !stations.length;
+            nameInput.innerHTML = stations.length
               ? `<option value="">駅を選択</option>${stations.map((name) => `<option value="${name}">${name}</option>`).join('')}`
               : '<option value="">先に路線を選択</option>';
+            syncAddBtn();
+          });
+          nameInput.addEventListener('change', syncAddBtn);
+          walkInput.addEventListener('change', syncAddBtn);
+          addBtn.addEventListener('click', () => {
+            entries.push({ line: lineInput.value, name: nameInput.value, walk: walkInput.value });
+            lineInput.value = '';
+            nameInput.innerHTML = '<option value="">先に路線を選択</option>';
+            nameInput.disabled = true;
+            walkInput.value = '';
+            syncAddBtn();
+            renderList();
+          });
+          list.addEventListener('click', (event) => {
+            const button = event.target.closest('[data-index]');
+            if (!button) return;
+            entries.splice(Number(button.dataset.index), 1);
+            renderList();
           });
         } else {
           const control = document.createElement('input');
@@ -800,16 +832,13 @@ const { locale = 'ja' } = Astro.params;
 
       function buildPreviewDetail(values) {
         const rows = Array.from(fields.querySelectorAll('input[name], textarea[name], select[name]'))
-          .filter((el) => !el.disabled && el.name !== 'title' && el.name !== 'stationLine' && (el.type === 'checkbox' ? el.checked : el.value))
+          .filter((el) => !el.disabled && el.name !== 'title' && (el.type === 'checkbox' ? el.checked : el.value))
           .map((el) => {
             const labelHost = el.closest('label') || el.closest('.choice-field');
             const labelText = (labelHost?.querySelector('.field-label')?.textContent || labelHost?.querySelector('span')?.textContent || el.name).replace(/\*$/, '').trim();
             let displayValue;
             if (el.type === 'checkbox') {
               displayValue = '可';
-            } else if (el.name === 'station') {
-              const line = fields.querySelector('[name="stationLine"]')?.value;
-              displayValue = escapeHtml([line, el.value].filter(Boolean).join(' ・ '));
             } else if (el.tagName === 'SELECT') {
               displayValue = escapeHtml(el.options[el.selectedIndex]?.text || el.value);
             } else {
@@ -1481,9 +1510,17 @@ const { locale = 'ja' } = Astro.params;
   #community-form .photo-upload-button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;margin:0;padding:12px;border:1px dashed #8eaf41;border-radius:11px;background:#f4f8eb;color:#476322;font-size:13px;font-weight:800;cursor:pointer}
   #community-form .photo-upload-button span{font-size:20px;font-weight:400;line-height:1}
   .photo-limit-hint{margin:8px 2px 0;color:#7c8c90;font-size:10.5px;line-height:1.6}
-  .station-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .station-picker select{width:100%;min-height:52px;margin:0;padding:13px 14px;border:1px solid #c8d9cf;border-radius:11px;background:#fff;color:#173044;font-family:inherit;font-size:14px;font-weight:500;outline:none}
-  .station-picker select:disabled{color:#9aa9a2;background:#f4f6f5}
+  .station-multi{display:grid;gap:9px;position:relative}
+  .station-add-row{display:grid;grid-template-columns:1fr 1fr auto auto;gap:6px}
+  .station-add-row select{width:100%;min-height:48px;margin:0;padding:11px 10px;border:1px solid #c8d9cf;border-radius:11px;background:#fff;color:#173044;font-family:inherit;font-size:12.5px;font-weight:500;outline:none;min-width:0}
+  .station-add-row select:disabled{color:#9aa9a2;background:#f4f6f5}
+  .station-add-btn{min-height:48px;padding:0 12px;border:1px solid #789e35;border-radius:11px;background:#eaf4d8;color:#3a5c1e;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap}
+  .station-add-btn:disabled{opacity:.4;cursor:not-allowed}
+  .station-list{display:grid;gap:6px}
+  .station-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;border:1px solid #dde6e0;border-radius:10px;background:#f7faf5;font-size:12.5px;color:#2b2b26}
+  .station-remove{width:24px;height:24px;flex:0 0 auto;border:0;border-radius:50%;background:#e8ece6;color:#5a625c;font-size:15px;line-height:1;cursor:pointer}
+  .station-hidden-input{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0);white-space:nowrap;border:0!important}
+  @media (max-width:480px){.station-add-row{grid-template-columns:1fr 1fr;grid-template-areas:"line name" "walk add";}.station-add-row select:nth-child(1){grid-area:line}.station-add-row select:nth-child(2){grid-area:name}.station-add-row select:nth-child(3){grid-area:walk}.station-add-btn{grid-area:add}}
   .chip-toggle-field{display:grid;gap:11px;min-width:0;margin:0}
   .chip-toggle-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
   .chip-toggle{display:flex;align-items:center;justify-content:center;min-height:50px;margin:0;padding:10px 8px;border:1px solid #bdd1c2;border-radius:11px;background:#fff;color:#425c56;font-size:13px;font-weight:700;cursor:pointer;transition:border-color .18s ease,background .18s ease,color .18s ease}

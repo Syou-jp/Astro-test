@@ -360,7 +360,7 @@
         var genderLabels = { none: "なし", male: "男性限定", female: "女性限定" };
         var floorArea = payload.floorArea && !/㎡/.test(payload.floorArea) ? payload.floorArea + "㎡" : payload.floorArea;
         var autoTitle = [place, payload.layout].filter(Boolean).join(" ・ ") || "入居募集";
-        var stationDisplay = [payload.stationLine, payload.station].filter(Boolean).join(" ・ ") || "未入力";
+        var stationDisplay = payload.station || "未入力";
         var initialCostParts = [];
         if (payload.depositMonths) initialCostParts.push("敷金" + (monthsLabels[payload.depositMonths] || payload.depositMonths));
         if (payload.keyMoneyMonths) initialCostParts.push("礼金" + (monthsLabels[payload.keyMoneyMonths] || payload.keyMoneyMonths));
