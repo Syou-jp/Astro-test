@@ -3,6 +3,7 @@ export function getStaticPaths() {
   return [{ params: { locale: 'ja' } }];
 }
 import profileOptions from '../../data/profile-options.json';
+import tokyoAreaGeo from '../../data/tokyo-area-geo.json';
 
 const { locale = 'ja' } = Astro.params;
 ---
@@ -15,6 +16,7 @@ const { locale = 'ja' } = Astro.params;
     <title>Sotocom 投稿</title>
   </head>
   <body>
+    <script type="application/json" id="tokyo-area-geo-data" set:html={JSON.stringify(tokyoAreaGeo)} />
     <main class="liff-shell" id="liff-app" hidden>
       <header class="liff-header">
         <h1 id="page-title">投稿する</h1>
@@ -128,7 +130,7 @@ const { locale = 'ja' } = Astro.params;
       const OFFICIAL_ACCOUNT_URL = 'https://line.me/R/ti/p/%40721khrrb';
       const LINE_AVATAR_PLACEHOLDER_URL = '/images/avatars/line-avatar-placeholder.svg';
       const configs = {
-        listings: { title: '入居募集を投稿する', intro: '物件カードに必要な情報を順番に入力してください。確認後、掲載用に整えます。', fields: [['listingType', '募集タイプ', '', 'select', [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']]], ['prefecture', '都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['area', '区・市町村', '', 'select', []], ['station', '最寄り駅', '例：中野駅 徒歩5分', 'text'], ['rent', '家賃（月額・円）', '例：90000', 'number'], ['managementFee', '管理費（月額・円）', '例：5000', 'number'], ['initialCost', '初期費用', '例：敷金1か月・礼金1か月・清掃費55,000円', 'text'], ['layout', '間取り・広さ', '', 'select', []], ['moveIn', '入居可能日', '', 'select', []], ['contractPeriod', '契約期間', '', 'select', []], ['furnished', '家具・家電', '', 'select', [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']]], ['details', '条件・補足', '性別条件、同居人など', 'textarea']] },
+        listings: { title: '入居募集を投稿する', intro: '物件カードに必要な情報を順番に入力してください。確認後、掲載用に整えます。', fields: [['listingType', '募集タイプ', '', 'select', [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']]], ['prefecture', '都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['area', '区・市町村', '例：新宿区', 'text'], ['station', '最寄り駅', '例：中野駅 徒歩5分', 'text'], ['rent', '家賃（月額・円）', '例：90000', 'number'], ['managementFee', '管理費（月額・円）', '例：5000', 'number'], ['depositMonths', '敷金', '', 'select', []], ['keyMoneyMonths', '礼金', '', 'select', []], ['cleaningFee', '清掃費', '例：30,000円', 'text'], ['layout', '間取り・広さ', '', 'select', []], ['moveIn', '入居可能日', '', 'select', []], ['moveInDate', '入居可能日（日付）', '', 'date'], ['contractPeriod', '契約期間', '', 'select', []], ['furnished', '家具・家電', '', 'select', [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']]], ['pet', 'ペット', '', 'select', []], ['genderRestriction', '性別限定', '', 'select', []], ['tenantNationalityNote', '国籍・言語条件', '例：中国語が話せる方 / 国籍不問', 'text'], ['details', '条件・補足', '同居人など、その他の条件', 'textarea']] },
         'used-market': { title: '中古市場に投稿する', intro: '中古市場のカードに必要な商品情報を入力してください。写真は後から追加できます。', fields: [['category', 'カテゴリー', '', 'select', [['furniture', '家具'], ['appliance', '家電・ガジェット'], ['daily-goods', '生活雑貨・キッチン'], ['fashion', 'ファッション・美容'], ['kids', '子供用品・おもちゃ'], ['hobby', '本・趣味・スポーツ'], ['other', 'その他']]], ['title', '商品名', '例：冷蔵庫（168L）', 'text'], ['condition', '商品の状態', '', 'select', [['new', '新品・未使用'], ['good', '目立つ傷なし'], ['used', '使用感あり'], ['repair', '要確認・難あり']]], ['price', '価格（円）', '無料の場合は0', 'number'], ['prefecture', '受け渡し都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['pickupArea', '受け渡し場所', '例：中野駅・杉並区', 'text'], ['availableUntil', '受け渡し可能日', '', 'select', []], ['delivery', '受け渡し方法', '', 'select', [['pickup', '現地受け取り'], ['station', '駅で受け渡し'], ['delivery', '配送相談'], ['other', 'その他']]], ['details', '商品説明', '購入時期、サイズ、動作確認、傷、付属品など', 'textarea']] },
         jobs: { title: '求人を投稿する', intro: '求人カードに必要な募集条件を入力してください。応募者が比較しやすい形に整えます。', fields: [['jobCategory', '職種カテゴリー', '', 'select', [['hotel', 'ホテル・宿泊'], ['restaurant', '飲食'], ['cleaning', '清掃'], ['office', '事務・オフィス'], ['care', '介護・福祉'], ['other', 'その他']]], ['title', '募集職種', '例：ホテルフロントスタッフ', 'text'], ['company', '会社・店舗名', '掲載名として表示します', 'text'], ['employmentType', '雇用形態', '', 'select', [['part-time', 'アルバイト・パート'], ['full-time', '正社員'], ['contract', '契約社員'], ['freelance', '業務委託'], ['other', 'その他']]], ['workplace', '勤務地', '', 'select', []], ['salary', '給与・報酬', '例：時給1,300円〜／月給25万円〜', 'text'], ['hours', '勤務時間', '', 'select', []], ['japaneseLevel', '日本語レベル', '', 'select', [['none', '不問'], ['basic', '日常会話'], ['business', 'ビジネスレベル'], ['native', 'ネイティブ相当']]], ['benefits', '待遇・条件', '交通費、まかない、寮、資格、経験など', 'textarea'], ['application', '応募方法', '担当者、連絡先、応募時に伝える内容など', 'textarea']] },
         events: { title: 'イベントを投稿する', intro: 'イベントページに表示する開催情報と参加方法を入力してください。', fields: [['title', 'タイトル', '例：多文化交流会', 'text'], ['startsAt', '開始', '', 'datetime-local'], ['endsAt', '終了', '', 'datetime-local'], ['venue', '場所・住所', '例：東京都渋谷区〇〇／渋谷カフェ', 'text'], ['eventPrefecture', '都道府県', '', 'select'], ['summary', '紹介文', 'イベントの内容や、どんな人におすすめかを書いてください', 'textarea'], ['fee', '参加費', '', 'select'], ['feeAmount', '参加費の金額', '', 'select'], ['capacity', '定員', '', 'select'], ['participationType', '参加方法', '', 'select'], ['applicationUrl', '申込方法・URL', '例：https://example.com または「当日受付」', 'text'], ['notes', '注意事項', '持ち物、対象年齢、雨天時の対応など', 'textarea'], ['other', 'その他', '補足があれば入力してください', 'textarea']] },
@@ -192,11 +194,6 @@ const { locale = 'ja' } = Astro.params;
         return `<label><span class="field-label">${label}<em aria-label="必須">*</em></span>${kind === 'textarea' ? `<textarea name="${name}" rows="${rows}" placeholder="${placeholder}" required></textarea>` : `<input name="${name}" type="${kind}" placeholder="${placeholder}" required />`}</label>`;
       }).join('');
       if (type === 'listings') {
-        const areaInput = fields.querySelector('[name="area"]');
-        if (areaInput) {
-          areaInput.type = 'text';
-          areaInput.placeholder = '例：新宿区・杉並区';
-        }
         const stationLabel = fields.querySelector('[name="station"]')?.closest('label');
         if (stationLabel && !fields.querySelector('[name="floorArea"]')) {
           const label = document.createElement('label');
@@ -209,6 +206,84 @@ const { locale = 'ja' } = Astro.params;
           label.innerHTML = '<span class="field-label">連絡方法<em aria-label="必須">*</em></span><input name="contact" type="text" placeholder="例：LINE ID／メールアドレス" required />';
           floorAreaLabel.after(label);
         }
+        const detailsLabel = fields.querySelector('[name="details"]')?.closest('label');
+        if (detailsLabel && !fields.querySelector('[name="studentOk"]')) {
+          const chipField = document.createElement('div');
+          chipField.className = 'chip-toggle-field';
+          chipField.innerHTML = '<span class="field-label">職業条件</span><div class="chip-toggle-options"><label class="chip-toggle"><input type="checkbox" name="studentOk" value="yes" /><span>学生可</span></label><label class="chip-toggle"><input type="checkbox" name="unemployedOk" value="yes" /><span>無職可</span></label></div>';
+          detailsLabel.before(chipField);
+        }
+      }
+      const tokyoAreaGeo = JSON.parse(document.querySelector('#tokyo-area-geo-data').textContent);
+      const MAJOR_PREFECTURES = ['東京都', '神奈川県', '埼玉県', '千葉県'];
+      function buildAreaField(prefectureValue) {
+        const old = fields.querySelector('[name="area"]');
+        if (!old) return;
+        const isMajor = MAJOR_PREFECTURES.includes(prefectureValue);
+        const municipalities = isMajor ? (tokyoAreaGeo.municipalities[prefectureValue] || []) : [];
+        let control;
+        if (isMajor) {
+          control = document.createElement('select');
+          control.name = 'area';
+          control.required = true;
+          control.innerHTML = `<option value="">選択してください</option>${municipalities.map((name) => `<option value="${name}">${name}</option>`).join('')}<option value="その他">その他</option>`;
+        } else {
+          control = document.createElement('input');
+          control.name = 'area';
+          control.type = 'text';
+          control.required = true;
+          control.placeholder = '例：新宿区・杉並区';
+        }
+        old.replaceWith(control);
+      }
+      function buildStationField(prefectureValue) {
+        const old = fields.querySelector('.station-picker') || fields.querySelector('[name="station"]');
+        if (!old) return;
+        const isMajor = MAJOR_PREFECTURES.includes(prefectureValue);
+        if (isMajor) {
+          const lines = Object.keys(tokyoAreaGeo.railwayLines);
+          const picker = document.createElement('div');
+          picker.className = 'station-picker';
+          picker.innerHTML = `<select name="stationLine" required><option value="">路線を選択</option>${lines.map((line) => `<option value="${line}">${line}</option>`).join('')}</select><select name="station" required disabled><option value="">先に路線を選択</option></select>`;
+          old.replaceWith(picker);
+          const lineSelect = picker.querySelector('[name="stationLine"]');
+          const stationSelect = picker.querySelector('[name="station"]');
+          lineSelect.addEventListener('change', () => {
+            const stations = tokyoAreaGeo.railwayLines[lineSelect.value] || [];
+            stationSelect.disabled = !stations.length;
+            stationSelect.innerHTML = stations.length
+              ? `<option value="">駅を選択</option>${stations.map((name) => `<option value="${name}">${name}</option>`).join('')}`
+              : '<option value="">先に路線を選択</option>';
+          });
+        } else {
+          const control = document.createElement('input');
+          control.name = 'station';
+          control.type = 'text';
+          control.required = true;
+          control.placeholder = '例：中野駅 徒歩5分';
+          old.replaceWith(control);
+        }
+      }
+      if (type === 'listings') {
+        buildAreaField('');
+        buildStationField('');
+        document.addEventListener('change', (event) => {
+          if (event.target.name !== 'prefecture') return;
+          buildAreaField(event.target.value);
+          buildStationField(event.target.value);
+        });
+        const moveInDateField = fields.querySelector('[name="moveInDate"]')?.closest('label');
+        function syncMoveInDate() {
+          const moveInSelect = fields.querySelector('[name="moveIn"]');
+          const moveInDateInput = fields.querySelector('[name="moveInDate"]');
+          if (!moveInSelect || !moveInDateInput || !moveInDateField) return;
+          const showDate = moveInSelect.value === 'date';
+          moveInDateField.hidden = !showDate;
+          moveInDateInput.required = showDate;
+          moveInDateInput.disabled = !showDate;
+        }
+        document.addEventListener('change', (event) => { if (event.target.name === 'moveIn') syncMoveInDate(); });
+        syncMoveInDate();
       }
       if (type === 'events') {
         ['applicationUrl', 'notes', 'other'].forEach((name) => {
@@ -573,11 +648,14 @@ const { locale = 'ja' } = Astro.params;
       const selectOptions = {
         listingType: [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']],
         prefecture: [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']],
-        area: type === 'listings' ? [['新宿区', '新宿区'], ['渋谷区', '渋谷区'], ['中野区', '中野区'], ['杉並区', '杉並区'], ['世田谷区', '世田谷区'], ['豊島区', '豊島区'], ['港区', '港区'], ['台東区', '台東区'], ['その他', 'その他']] : [],
-        layout: [['1R', '1R'], ['1K', '1K'], ['1DK', '1DK'], ['1LDK', '1LDK'], ['2DK', '2DK'], ['2LDK', '2LDK'], ['3LDK以上', '3LDK以上'], ['その他', 'その他']],
-        moveIn: [['immediate', '即入居可'], ['next-month', '翌月から'], ['相談', '時期相談'], ['other', 'その他']],
+        layout: [['1R', '1R'], ['1K', '1K'], ['1DK', '1DK'], ['1LDK', '1LDK'], ['2K', '2K'], ['2DK', '2DK'], ['2LDK', '2LDK'], ['3K', '3K'], ['3DK', '3DK'], ['3LDK', '3LDK'], ['4K', '4K'], ['4DK', '4DK'], ['4LDK', '4LDK'], ['5K', '5K'], ['5DK', '5DK'], ['5LDK', '5LDK'], ['その他', 'その他']],
+        moveIn: [['immediate', '即入居可'], ['consult', '相談'], ['date', '日付を選択']],
         contractPeriod: [['1m', '1ヶ月以上'], ['3m', '3ヶ月以上'], ['6m', '半年以上'], ['1y', '1年以上'], ['2y', '2年'], ['consult', '相談']],
         furnished: [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']],
+        depositMonths: [['none', 'なし'], ['0.5', '0.5ヶ月'], ['1', '1ヶ月'], ['1.5', '1.5ヶ月'], ['2', '2ヶ月'], ['3', '3ヶ月']],
+        keyMoneyMonths: [['none', 'なし'], ['0.5', '0.5ヶ月'], ['1', '1ヶ月'], ['1.5', '1.5ヶ月'], ['2', '2ヶ月'], ['3', '3ヶ月']],
+        pet: [['ok', '可（相談）'], ['ng', '不可']],
+        genderRestriction: [['none', 'なし'], ['male', '男性限定'], ['female', '女性限定']],
         category: type === 'help' ? [['translate', '通訳・翻訳'], ['pet', 'ペット・留守番'], ['labor', '力仕事・引越し'], ['other', 'その他']] : [['furniture', '家具'], ['appliance', '家電・ガジェット'], ['daily-goods', '生活雑貨・キッチン'], ['fashion', 'ファッション・美容'], ['kids', '子供用品・おもちゃ'], ['hobby', '本・趣味・スポーツ'], ['other', 'その他']],
         condition: [['new', '新品・未使用'], ['good', '目立つ傷なし'], ['used', '使用感あり'], ['repair', '要確認・難あり']],
         delivery: [['pickup', '現地受け取り'], ['station', '駅で受け渡し'], ['delivery', '配送相談'], ['other', 'その他']],
@@ -597,7 +675,7 @@ const { locale = 'ja' } = Astro.params;
         urgent: [['no', '通常'], ['yes', '急募']],
       };
       Object.entries(selectOptions).forEach(([name, options]) => {
-        if (type === 'listings' && name === 'area') return;
+        if (type === 'listings' && (name === 'area' || name === 'station')) return;
         const old = fields.querySelector(`[name="${name}"]`);
         if (!old || !options.length) return;
         const select = document.createElement('select');
@@ -722,13 +800,21 @@ const { locale = 'ja' } = Astro.params;
 
       function buildPreviewDetail(values) {
         const rows = Array.from(fields.querySelectorAll('input[name], textarea[name], select[name]'))
-          .filter((el) => !el.disabled && el.value && el.name !== 'title')
+          .filter((el) => !el.disabled && el.name !== 'title' && el.name !== 'stationLine' && (el.type === 'checkbox' ? el.checked : el.value))
           .map((el) => {
             const labelHost = el.closest('label') || el.closest('.choice-field');
-            const labelText = (labelHost?.querySelector('.field-label')?.textContent || el.name).replace(/\*$/, '').trim();
-            const displayValue = el.tagName === 'SELECT'
-              ? escapeHtml(el.options[el.selectedIndex]?.text || el.value)
-              : escapeHtml(el.value);
+            const labelText = (labelHost?.querySelector('.field-label')?.textContent || labelHost?.querySelector('span')?.textContent || el.name).replace(/\*$/, '').trim();
+            let displayValue;
+            if (el.type === 'checkbox') {
+              displayValue = '可';
+            } else if (el.name === 'station') {
+              const line = fields.querySelector('[name="stationLine"]')?.value;
+              displayValue = escapeHtml([line, el.value].filter(Boolean).join(' ・ '));
+            } else if (el.tagName === 'SELECT') {
+              displayValue = escapeHtml(el.options[el.selectedIndex]?.text || el.value);
+            } else {
+              displayValue = escapeHtml(el.value);
+            }
             return `<div class="pv-detail-item"><dt>${escapeHtml(labelText)}</dt><dd>${displayValue.replace(/\n/g, '<br>')}</dd></div>`;
           })
           .join('');
@@ -1395,6 +1481,14 @@ const { locale = 'ja' } = Astro.params;
   #community-form .photo-upload-button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;margin:0;padding:12px;border:1px dashed #8eaf41;border-radius:11px;background:#f4f8eb;color:#476322;font-size:13px;font-weight:800;cursor:pointer}
   #community-form .photo-upload-button span{font-size:20px;font-weight:400;line-height:1}
   .photo-limit-hint{margin:8px 2px 0;color:#7c8c90;font-size:10.5px;line-height:1.6}
+  .station-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .station-picker select{width:100%;min-height:52px;margin:0;padding:13px 14px;border:1px solid #c8d9cf;border-radius:11px;background:#fff;color:#173044;font-family:inherit;font-size:14px;font-weight:500;outline:none}
+  .station-picker select:disabled{color:#9aa9a2;background:#f4f6f5}
+  .chip-toggle-field{display:grid;gap:11px;min-width:0;margin:0}
+  .chip-toggle-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .chip-toggle{display:flex;align-items:center;justify-content:center;min-height:50px;margin:0;padding:10px 8px;border:1px solid #bdd1c2;border-radius:11px;background:#fff;color:#425c56;font-size:13px;font-weight:700;cursor:pointer;transition:border-color .18s ease,background .18s ease,color .18s ease}
+  .chip-toggle input{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  .chip-toggle:has(input:checked){border-color:#789e35;background:#e8f4d2;color:#2f5019}
   @media (max-width:360px){.choice-options{gap:7px}.choice-option{padding-left:5px;padding-right:5px}.identity-options{gap:4px}.identity-options label{padding-left:2px;padding-right:2px;font-size:8px}.avatar-picker{gap:5px}}
 </style>
 

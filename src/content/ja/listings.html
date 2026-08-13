@@ -348,10 +348,28 @@
         var location = [payload.prefecture, payload.area, payload.station].filter(Boolean).join("・");
         var price = "家賃 " + rent + "円" + (Number(payload.managementFee || 0) ? "／管理費 " + fee + "円" : "");
         var furnished = payload.furnished === "あり" ? "家具・家電付き" : payload.furnished === "一部" ? "一部あり" : "なし";
-        var moveInLabels = { immediate: "即入居可", "next-month": "来月から", date: "日付を相談", other: "その他" };
+        var moveInLabels = { immediate: "即入居可", consult: "相談" };
+        var moveInDisplay = moveInLabels[payload.moveIn] || "未入力";
+        if (payload.moveIn === "date" && payload.moveInDate) {
+          var moveInDateObj = new Date(payload.moveInDate);
+          moveInDisplay = isNaN(moveInDateObj.getTime()) ? payload.moveInDate : (moveInDateObj.getFullYear() + "年" + (moveInDateObj.getMonth() + 1) + "月" + moveInDateObj.getDate() + "日");
+        }
         var contractPeriodLabels = { "1m": "1ヶ月以上", "3m": "3ヶ月以上", "6m": "半年以上", "1y": "1年以上", "2y": "2年", consult: "相談" };
+        var monthsLabels = { none: "なし", "0.5": "0.5ヶ月", "1": "1ヶ月", "1.5": "1.5ヶ月", "2": "2ヶ月", "3": "3ヶ月" };
+        var petLabels = { ok: "可（相談）", ng: "不可" };
+        var genderLabels = { none: "なし", male: "男性限定", female: "女性限定" };
         var floorArea = payload.floorArea && !/㎡/.test(payload.floorArea) ? payload.floorArea + "㎡" : payload.floorArea;
         var autoTitle = [place, payload.layout].filter(Boolean).join(" ・ ") || "入居募集";
+        var stationDisplay = [payload.stationLine, payload.station].filter(Boolean).join(" ・ ") || "未入力";
+        var initialCostParts = [];
+        if (payload.depositMonths) initialCostParts.push("敷金" + (monthsLabels[payload.depositMonths] || payload.depositMonths));
+        if (payload.keyMoneyMonths) initialCostParts.push("礼金" + (monthsLabels[payload.keyMoneyMonths] || payload.keyMoneyMonths));
+        if (payload.cleaningFee) initialCostParts.push("清掃費" + payload.cleaningFee);
+        var initialCostDisplay = initialCostParts.length ? initialCostParts.join("・") : "未入力";
+        var occupationParts = [];
+        if (payload.studentOk === "yes") occupationParts.push("学生可");
+        if (payload.unemployedOk === "yes") occupationParts.push("無職可");
+        var occupationDisplay = occupationParts.length ? occupationParts.join("・") : "指定なし";
         return {
           type: payload.listingType === "share" ? "share" : "tenant",
           region: payload.prefecture || "その他",
@@ -372,13 +390,16 @@
           details: [
             ["物件所在地", place || "未入力", "pair"],
             ["間取り・広さ", [payload.layout, floorArea].filter(Boolean).join("／") || "未入力", "pair"],
-            ["最寄り駅", payload.station || "未入力", "wide"],
+            ["最寄り駅", stationDisplay, "wide"],
             ["家賃", price, "wide"],
-            ["初期費用", payload.initialCost || "未入力", "wide"],
+            ["初期費用", initialCostDisplay, "wide"],
             ["契約期間", contractPeriodLabels[payload.contractPeriod] || payload.contractPeriod || "未入力", "pair"],
-            ["入居可能日", moveInLabels[payload.moveIn] || payload.moveIn || "未入力", "pair"],
+            ["入居可能日", moveInDisplay, "pair"],
             ["家具・家電", furnished, "pair"],
-            ["ペット", payload.pet || "未入力", "pair"],
+            ["ペット", petLabels[payload.pet] || "未入力", "pair"],
+            ["性別限定", genderLabels[payload.genderRestriction] || "未入力", "pair"],
+            ["国籍・言語条件", payload.tenantNationalityNote || "指定なし", "pair"],
+            ["職業条件", occupationDisplay, "wide"],
             ["物件紹介", autoTitle, "wide"],
             ["条件", payload.details || "未入力", "wide"],
             ["投稿者", [submission.display_name || "未入力", rlCountryFlag(submission.author_nationality_code), submission.author_nationality_label ? "（" + submission.author_nationality_label + "）" : ""].filter(Boolean).join(" "), "pair"],
