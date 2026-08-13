@@ -145,7 +145,6 @@
             ["条件", "保証人または保証会社が必要です。"],
             ["間取り", "1LDK・約40㎡"],
             ["契約期間", "半年以上"],
-            ["国籍", "不限"],
             ["ペット", "猫1匹まで相談可"]
           ]
         },
@@ -179,7 +178,6 @@
             ["条件", "3室ある物件で、現在空いているのは1室です。トイレ・浴室は1か所のみ。掃除は住人で順番に行います。ペットを怖がらない方・大きな音を出さない方・きれい好きな方"],
             ["間取り", "2LDK・個室1室"],
             ["契約期間", "半年以上"],
-            ["国籍", "不限"],
             ["ペット", "相談可"]
           ]
         }
@@ -350,6 +348,7 @@
         var price = "家賃 " + rent + "円" + (Number(payload.managementFee || 0) ? "／管理費 " + fee + "円" : "");
         var furnished = payload.furnished === "あり" ? "家具・家電付き" : payload.furnished === "一部" ? "一部あり" : "なし";
         var moveInLabels = { immediate: "即入居可", "next-month": "来月から", date: "日付を相談", other: "その他" };
+        var contractPeriodLabels = { "1m": "1ヶ月以上", "3m": "3ヶ月以上", "6m": "半年以上", "1y": "1年以上", "2y": "2年", consult: "相談" };
         var floorArea = payload.floorArea && !/㎡/.test(payload.floorArea) ? payload.floorArea + "㎡" : payload.floorArea;
         return {
           type: payload.listingType === "share" ? "share" : "tenant",
@@ -370,15 +369,15 @@
           photos: photos,
           details: [
             ["物件所在地", location || "未入力", "wide"],
-            ["家賃", price, "wide"],
-            ["間取り・広さ", [payload.layout, floorArea].filter(Boolean).join("／") || "未入力", "triple"],
-            ["家具・家電", furnished, "triple"],
-            ["入居可能時期", moveInLabels[payload.moveIn] || payload.moveIn || "未入力", "triple"],
+            ["家賃", price, "pair"],
+            ["間取り・広さ", [payload.layout, floorArea].filter(Boolean).join("／") || "未入力", "pair"],
+            ["家具・家電", furnished, "pair"],
+            ["ペット", payload.pet || "未入力", "pair"],
+            ["契約期間", contractPeriodLabels[payload.contractPeriod] || payload.contractPeriod || "未入力", "pair"],
+            ["入居可能日", moveInLabels[payload.moveIn] || payload.moveIn || "未入力", "pair"],
             ["物件紹介", payload.title || "未入力", "wide"],
             ["条件", payload.details || "未入力", "wide"],
-            ["国籍", submission.author_nationality_label || payload.nationality || "未設定", "pair"],
-            ["ペット", payload.pet || "未入力", "pair"],
-            ["投稿者", [submission.display_name || "未入力", rlCountryFlag(submission.author_nationality_code), "（国籍：" + (submission.author_nationality_label || "未設定") + "）"].filter(Boolean).join(" "), "pair"],
+            ["投稿者", [submission.display_name || "未入力", rlCountryFlag(submission.author_nationality_code), submission.author_nationality_label ? "（" + submission.author_nationality_label + "）" : ""].filter(Boolean).join(" "), "pair"],
             ["連絡方法", payload.contact || "未入力", "pair"]
           ]
         };
