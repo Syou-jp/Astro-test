@@ -103,7 +103,7 @@
         .rl-desc{font-size:13.5px;}
         .rl-footer{font-size:12.5px;}
         .rl-contact{font-size:13px;}
-        .rl-feature-filters{grid-template-columns:repeat(2,minmax(0,1fr));}.rl-feature-filter{font-size:11.5px;}.rl-list-controls{grid-template-columns:1fr;}.rl-modal{padding:0;}.rl-modal-panel{display:block;width:100%;max-height:100vh;border-radius:0;}.rl-modal-media{padding:0;}.rl-modal-gallery{min-height:280px;height:42vh;}#rlModalImage{height:calc(42vh - 20px)!important;max-width:calc(100% - 20px)!important;}.rl-gallery-arrow{width:38px;height:38px;font-size:31px;}.rl-gallery-arrow.prev{left:10px;}.rl-gallery-arrow.next{right:10px;}.rl-modal-content{padding:18px 16px 20px;}.rl-detail-grid{grid-template-columns:1fr;gap:8px;}.rl-detail-item:nth-child(-n+4),.rl-detail-item:nth-child(n+5),.rl-detail-item.rl-detail-wide,.rl-detail-grid .rl-detail-item.rl-detail-triple,.rl-detail-grid .rl-detail-item.rl-detail-pair{grid-column:auto;}.rl-thumbs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 16px 0;}.rl-thumb{width:100%;height:auto;aspect-ratio:1;}
+        .rl-feature-filters{grid-template-columns:repeat(2,minmax(0,1fr));}.rl-feature-filter{font-size:11.5px;}.rl-list-controls{grid-template-columns:1fr;}.rl-modal{padding:0;}.rl-modal-panel{display:block;width:100%;max-height:100vh;border-radius:0;}.rl-modal-media{padding:0;}.rl-modal-gallery{min-height:280px;height:42vh;}#rlModalImage{height:calc(42vh - 20px)!important;max-width:calc(100% - 20px)!important;}.rl-gallery-arrow{width:38px;height:38px;font-size:31px;}.rl-gallery-arrow.prev{left:10px;}.rl-gallery-arrow.next{right:10px;}.rl-modal-content{padding:18px 16px 20px;}.rl-thumbs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 16px 0;}.rl-thumb{width:100%;height:auto;aspect-ratio:1;}
       }
     </style>
 
@@ -350,6 +350,7 @@
         var price = "家賃 " + rent + "円" + (Number(payload.managementFee || 0) ? "／管理費 " + fee + "円" : "");
         var furnished = payload.furnished === "あり" ? "家具・家電付き" : payload.furnished === "一部" ? "一部あり" : "なし";
         var moveInLabels = { immediate: "即入居可", "next-month": "来月から", date: "日付を相談", other: "その他" };
+        var floorArea = payload.floorArea && !/㎡/.test(payload.floorArea) ? payload.floorArea + "㎡" : payload.floorArea;
         return {
           type: payload.listingType === "share" ? "share" : "tenant",
           region: payload.prefecture || "その他",
@@ -370,7 +371,7 @@
           details: [
             ["物件所在地", location || "未入力", "wide"],
             ["家賃", price, "wide"],
-            ["間取り・広さ", [payload.layout, payload.floorArea].filter(Boolean).join("／") || "未入力", "triple"],
+            ["間取り・広さ", [payload.layout, floorArea].filter(Boolean).join("／") || "未入力", "triple"],
             ["家具・家電", furnished, "triple"],
             ["入居可能時期", moveInLabels[payload.moveIn] || payload.moveIn || "未入力", "triple"],
             ["物件紹介", payload.title || "未入力", "wide"],
