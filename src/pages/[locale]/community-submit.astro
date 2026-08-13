@@ -128,7 +128,7 @@ const { locale = 'ja' } = Astro.params;
       const OFFICIAL_ACCOUNT_URL = 'https://line.me/R/ti/p/%40721khrrb';
       const LINE_AVATAR_PLACEHOLDER_URL = '/images/avatars/line-avatar-placeholder.svg';
       const configs = {
-        listings: { title: '入居募集を投稿する', intro: '物件カードに必要な情報を順番に入力してください。確認後、掲載用に整えます。', fields: [['listingType', '募集タイプ', '', 'select', [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']]], ['title', '募集タイトル', '例：駅から徒歩5分の1LDK', 'text'], ['prefecture', '都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['area', '区・市町村', '', 'select', []], ['station', '最寄り駅', '例：中野駅 徒歩5分', 'text'], ['rent', '家賃（月額・円）', '例：90000', 'number'], ['managementFee', '管理費（月額・円）', '例：5000', 'number'], ['layout', '間取り・広さ', '', 'select', []], ['moveIn', '入居可能日', '', 'select', []], ['contractPeriod', '契約期間', '', 'select', []], ['furnished', '家具・家電', '', 'select', [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']]], ['details', '条件・補足', '初期費用、性別条件、同居人など', 'textarea']] },
+        listings: { title: '入居募集を投稿する', intro: '物件カードに必要な情報を順番に入力してください。確認後、掲載用に整えます。', fields: [['listingType', '募集タイプ', '', 'select', [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']]], ['prefecture', '都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['area', '区・市町村', '', 'select', []], ['station', '最寄り駅', '例：中野駅 徒歩5分', 'text'], ['rent', '家賃（月額・円）', '例：90000', 'number'], ['managementFee', '管理費（月額・円）', '例：5000', 'number'], ['initialCost', '初期費用', '例：敷金1か月・礼金1か月・清掃費55,000円', 'text'], ['layout', '間取り・広さ', '', 'select', []], ['moveIn', '入居可能日', '', 'select', []], ['contractPeriod', '契約期間', '', 'select', []], ['furnished', '家具・家電', '', 'select', [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']]], ['details', '条件・補足', '性別条件、同居人など', 'textarea']] },
         'used-market': { title: '中古市場に投稿する', intro: '中古市場のカードに必要な商品情報を入力してください。写真は後から追加できます。', fields: [['category', 'カテゴリー', '', 'select', [['furniture', '家具'], ['appliance', '家電・ガジェット'], ['daily-goods', '生活雑貨・キッチン'], ['fashion', 'ファッション・美容'], ['kids', '子供用品・おもちゃ'], ['hobby', '本・趣味・スポーツ'], ['other', 'その他']]], ['title', '商品名', '例：冷蔵庫（168L）', 'text'], ['condition', '商品の状態', '', 'select', [['new', '新品・未使用'], ['good', '目立つ傷なし'], ['used', '使用感あり'], ['repair', '要確認・難あり']]], ['price', '価格（円）', '無料の場合は0', 'number'], ['prefecture', '受け渡し都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['pickupArea', '受け渡し場所', '例：中野駅・杉並区', 'text'], ['availableUntil', '受け渡し可能日', '', 'select', []], ['delivery', '受け渡し方法', '', 'select', [['pickup', '現地受け取り'], ['station', '駅で受け渡し'], ['delivery', '配送相談'], ['other', 'その他']]], ['details', '商品説明', '購入時期、サイズ、動作確認、傷、付属品など', 'textarea']] },
         jobs: { title: '求人を投稿する', intro: '求人カードに必要な募集条件を入力してください。応募者が比較しやすい形に整えます。', fields: [['jobCategory', '職種カテゴリー', '', 'select', [['hotel', 'ホテル・宿泊'], ['restaurant', '飲食'], ['cleaning', '清掃'], ['office', '事務・オフィス'], ['care', '介護・福祉'], ['other', 'その他']]], ['title', '募集職種', '例：ホテルフロントスタッフ', 'text'], ['company', '会社・店舗名', '掲載名として表示します', 'text'], ['employmentType', '雇用形態', '', 'select', [['part-time', 'アルバイト・パート'], ['full-time', '正社員'], ['contract', '契約社員'], ['freelance', '業務委託'], ['other', 'その他']]], ['workplace', '勤務地', '', 'select', []], ['salary', '給与・報酬', '例：時給1,300円〜／月給25万円〜', 'text'], ['hours', '勤務時間', '', 'select', []], ['japaneseLevel', '日本語レベル', '', 'select', [['none', '不問'], ['basic', '日常会話'], ['business', 'ビジネスレベル'], ['native', 'ネイティブ相当']]], ['benefits', '待遇・条件', '交通費、まかない、寮、資格、経験など', 'textarea'], ['application', '応募方法', '担当者、連絡先、応募時に伝える内容など', 'textarea']] },
         events: { title: 'イベントを投稿する', intro: 'イベントページに表示する開催情報と参加方法を入力してください。', fields: [['title', 'タイトル', '例：多文化交流会', 'text'], ['startsAt', '開始', '', 'datetime-local'], ['endsAt', '終了', '', 'datetime-local'], ['venue', '場所・住所', '例：東京都渋谷区〇〇／渋谷カフェ', 'text'], ['eventPrefecture', '都道府県', '', 'select'], ['summary', '紹介文', 'イベントの内容や、どんな人におすすめかを書いてください', 'textarea'], ['fee', '参加費', '', 'select'], ['feeAmount', '参加費の金額', '', 'select'], ['capacity', '定員', '', 'select'], ['participationType', '参加方法', '', 'select'], ['applicationUrl', '申込方法・URL', '例：https://example.com または「当日受付」', 'text'], ['notes', '注意事項', '持ち物、対象年齢、雨天時の対応など', 'textarea'], ['other', 'その他', '補足があれば入力してください', 'textarea']] },
@@ -677,13 +677,18 @@ const { locale = 'ja' } = Astro.params;
         return date.toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
       }
 
+      function listingAutoTitle(values) {
+        const place = [values.prefecture, values.area].filter(Boolean).join(' ');
+        return [place, values.layout].filter(Boolean).join(' ・ ') || '入居募集';
+      }
+
       function buildListingsPreview(values) {
         const badgeIsTenant = values.listingType !== 'share';
         const photo = previewPhotoSrc(0);
         const address = [values.prefecture, values.area, values.station].filter(Boolean).map(escapeHtml).join(' ');
         const priceParts = [yen(values.rent)];
         if (values.managementFee && Number(values.managementFee) > 0) priceParts.push(`＋管理費${yen(values.managementFee)}`);
-        const card = `<article class="pv-card pv-listings"><div class="pv-card-image">${photo ? `<img src="${photo}" alt="">` : '<span>写真準備中</span>'}<span class="pv-badge ${badgeIsTenant ? 'pv-badge-tenant' : 'pv-badge-share'}">${badgeIsTenant ? 'オーナー直貸し' : 'ルームシェア募集'}</span></div><div class="pv-card-body"><h3>${escapeHtml(values.title) || '（タイトル未入力）'}</h3><div class="pv-meta-line">${address ? `📍 ${address}` : '（場所未入力）'}</div><div class="pv-price">${priceParts.filter(Boolean).join(' ') || '（家賃未入力）'}</div><div class="pv-footer"><span>更新：たった今</span><span class="pv-author"><img src="${previewAvatarSrc()}" alt=""><span>${escapeHtml(getPublishDisplayName())}</span><span class="pv-flag">${lineNationalityFlag.textContent}</span></span></div></div></article>`;
+        const card = `<article class="pv-card pv-listings"><div class="pv-card-image">${photo ? `<img src="${photo}" alt="">` : '<span>写真準備中</span>'}<span class="pv-badge ${badgeIsTenant ? 'pv-badge-tenant' : 'pv-badge-share'}">${badgeIsTenant ? 'オーナー直貸し' : 'ルームシェア募集'}</span></div><div class="pv-card-body"><h3>${escapeHtml(listingAutoTitle(values))}</h3><div class="pv-meta-line">${address ? `📍 ${address}` : '（場所未入力）'}</div><div class="pv-price">${priceParts.filter(Boolean).join(' ') || '（家賃未入力）'}</div><div class="pv-footer"><span>更新：たった今</span><span class="pv-author"><img src="${previewAvatarSrc()}" alt=""><span>${escapeHtml(getPublishDisplayName())}</span><span class="pv-flag">${lineNationalityFlag.textContent}</span></span></div></div></article>`;
         return card;
       }
 
@@ -733,7 +738,8 @@ const { locale = 'ja' } = Astro.params;
         const authorHtml = type === 'listings'
           ? `<div class="pv-detail-author"><img src="${previewAvatarSrc()}" alt=""><span>${escapeHtml(getPublishDisplayName())}</span><span class="pv-flag">${lineNationalityFlag.textContent}</span></div>`
           : '';
-        return `<article class="pv-detail-card">${photosHtml}<h2>${escapeHtml(values.title) || '（タイトル未入力）'}</h2>${authorHtml}<div class="pv-detail-grid">${rows || '<p class="pv-detail-empty">入力された項目がここに表示されます。</p>'}</div></article>`;
+        const heading = type === 'listings' ? listingAutoTitle(values) : (escapeHtml(values.title) || '（タイトル未入力）');
+        return `<article class="pv-detail-card">${photosHtml}<h2>${heading}</h2>${authorHtml}<div class="pv-detail-grid">${rows || '<p class="pv-detail-empty">入力された項目がここに表示されます。</p>'}</div></article>`;
       }
 
       const previewOverlay = document.querySelector('#preview-overlay');

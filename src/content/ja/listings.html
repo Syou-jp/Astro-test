@@ -344,17 +344,19 @@
         var photos = (payload.photoKeys || []).map(rlSubmissionPhotoUrl);
         var rent = Number(payload.rent || 0).toLocaleString("ja-JP");
         var fee = Number(payload.managementFee || 0).toLocaleString("ja-JP");
+        var place = [payload.prefecture, payload.area].filter(Boolean).join("・");
         var location = [payload.prefecture, payload.area, payload.station].filter(Boolean).join("・");
         var price = "家賃 " + rent + "円" + (Number(payload.managementFee || 0) ? "／管理費 " + fee + "円" : "");
         var furnished = payload.furnished === "あり" ? "家具・家電付き" : payload.furnished === "一部" ? "一部あり" : "なし";
         var moveInLabels = { immediate: "即入居可", "next-month": "来月から", date: "日付を相談", other: "その他" };
         var contractPeriodLabels = { "1m": "1ヶ月以上", "3m": "3ヶ月以上", "6m": "半年以上", "1y": "1年以上", "2y": "2年", consult: "相談" };
         var floorArea = payload.floorArea && !/㎡/.test(payload.floorArea) ? payload.floorArea + "㎡" : payload.floorArea;
+        var autoTitle = [place, payload.layout].filter(Boolean).join(" ・ ") || "入居募集";
         return {
           type: payload.listingType === "share" ? "share" : "tenant",
           region: payload.prefecture || "その他",
           image: photos[0] || "",
-          title: payload.title || "入居募集",
+          title: autoTitle,
           address: location,
           price: price,
           origin: submission.display_name || "投稿者",
@@ -368,14 +370,16 @@
           updated: String(submission.created_at || "").replace(/-/g, "/").slice(0, 16),
           photos: photos,
           details: [
-            ["物件所在地", location || "未入力", "wide"],
-            ["家賃", price, "pair"],
+            ["物件所在地", place || "未入力", "pair"],
             ["間取り・広さ", [payload.layout, floorArea].filter(Boolean).join("／") || "未入力", "pair"],
-            ["家具・家電", furnished, "pair"],
-            ["ペット", payload.pet || "未入力", "pair"],
+            ["最寄り駅", payload.station || "未入力", "wide"],
+            ["家賃", price, "wide"],
+            ["初期費用", payload.initialCost || "未入力", "wide"],
             ["契約期間", contractPeriodLabels[payload.contractPeriod] || payload.contractPeriod || "未入力", "pair"],
             ["入居可能日", moveInLabels[payload.moveIn] || payload.moveIn || "未入力", "pair"],
-            ["物件紹介", payload.title || "未入力", "wide"],
+            ["家具・家電", furnished, "pair"],
+            ["ペット", payload.pet || "未入力", "pair"],
+            ["物件紹介", autoTitle, "wide"],
             ["条件", payload.details || "未入力", "wide"],
             ["投稿者", [submission.display_name || "未入力", rlCountryFlag(submission.author_nationality_code), submission.author_nationality_label ? "（" + submission.author_nationality_label + "）" : ""].filter(Boolean).join(" "), "pair"],
             ["連絡方法", payload.contact || "未入力", "pair"]
