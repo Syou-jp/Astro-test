@@ -678,7 +678,7 @@ const { locale = 'ja' } = Astro.params;
               document.querySelector('#profile-language').value = result?.profile?.language || '';
               document.querySelector('#profile-nationality').value = code || '';
             } else if (!code) {
-              location.replace(`${LIFF_URL}?mode=profile`);
+              location.replace(`${location.pathname}?mode=profile&type=${type}`);
               return;
             }
           } catch {}
