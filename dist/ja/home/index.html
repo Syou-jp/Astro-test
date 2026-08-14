@@ -210,31 +210,32 @@
   <div class="card home-tabs-section" id="homeQuickNav" style="margin-bottom:18px;scroll-margin-top:100px;">
     <div class="home-tabs-layout">
       <div class="home-tabs-heading">
-        <span class="home-news-tab-title">NEWS</span>
+        <span class="home-news-tab-title" data-no-i18n>NEWS</span>
+        <span class="home-news-tab-sub">新着のおしらせ</span>
         <div class="util-doc-switch home-tabs-bar" role="tablist" aria-label="カテゴリー切替" data-no-i18n>
           <button type="button" class="util-doc-tab home-tab active" data-util-target="homeTabNews">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M7 13h5M7 16.5h8"/></svg></span>
-            <span class="home-tab-label">ニュース日報</span>
+            <span class="home-tab-label">ニュース日報</span><span class="home-tab-label-short">ニュース</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabListings">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.2V20h12v-9.8"/><path d="M10 20v-5.5h4V20"/></svg></span>
-            <span class="home-tab-label">入居募集</span>
+            <span class="home-tab-label">入居募集</span><span class="home-tab-label-short">入居募集</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabUsedMarket">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><path d="M12.6 3.6 20 11c.6.6.6 1.5 0 2.1l-6.4 6.4c-.6.6-1.5.6-2.1 0L4 12c-.3-.3-.5-.7-.5-1.1V5a1.4 1.4 0 0 1 1.4-1.4h6.6c.4 0 .8.2 1.1.5Z"/><circle cx="8.2" cy="8.2" r="1.1"/></svg></span>
-            <span class="home-tab-label">中古市場</span>
+            <span class="home-tab-label">中古市場</span><span class="home-tab-label-short">中古市場</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabJobs">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/><path d="M3 12.5h18"/></svg></span>
-            <span class="home-tab-label">求人・採用</span>
+            <span class="home-tab-label">求人・採用</span><span class="home-tab-label-short">求人</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabEvents">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v4M16 3v4"/></svg></span>
-            <span class="home-tab-label">イベント・交流会</span>
+            <span class="home-tab-label">イベント・交流会</span><span class="home-tab-label-short">イベント</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabHelp">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><path d="M3 11 7 7l4 3 4-3 4 4"/><path d="M3 11v3l4 4 3-2 2 2 3-2 4-4v-3"/></svg></span>
-            <span class="home-tab-label">助け合い掲示板</span>
+            <span class="home-tab-label">助け合い掲示板</span><span class="home-tab-label-short">助け合い</span>
           </button>
         </div>
       </div>
@@ -476,12 +477,16 @@
   </div>
 
   <style>
-    /* Vertical tab bar, stacked below the NEWS heading in the left column */
+    /* Vertical tab rail, stacked below the NEWS heading in the left column.
+       Editorial treatment: each entry is a numbered index line on a hairline
+       rule, and the active one is marked by a short vertical bar in the left
+       margin rather than a filled pill. */
     .home-tabs-bar{
       display:flex;
       flex-direction:column;
       gap:0;
-      margin-top:20px;
+      counter-reset:home-tab;
+      margin-top:22px;
       margin-bottom:0;
       overflow:visible;
     }
@@ -490,22 +495,77 @@
       flex:0 0 auto;
       display:flex;
       flex-direction:row;
-      align-items:center;
+      align-items:baseline;
       justify-content:flex-start;
-      gap:8px;
-      padding:12px 0;
+      gap:10px;
+      counter-increment:home-tab;
+      padding:11px 0 11px 16px;
       white-space:nowrap;
       position:relative;
       border-bottom:none;
     }
-    /* On mobile, switch to horizontal scrollable tabs */
-    @media (max-width:768px){
-      .home-tabs-bar{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:28px;margin-top:16px;}
-      .home-tab{flex:0 0 auto;padding:0 0 14px;}
+    /* Index numeral (01–06) in the left margin — the quiet editorial cue
+       that carries the hierarchy instead of colour or weight. */
+    .home-tab::before{
+      content:counter(home-tab,decimal-leading-zero);
+      position:absolute;
+      left:0;
+      top:50%;
+      transform:translateY(-50%);
+      font:600 9.5px "JetBrains Mono",monospace;
+      letter-spacing:.06em;
+      transition:color .18s ease;
     }
+    /* Base (desktop rail): icons and short labels are off; the media query
+       below turns them on. These have to sit *above* it — media queries add
+       no specificity, so an unconditional rule placed after would win. */
     .home-tab-icon{display:none;}
-    .home-tab-label{font-size:13.5px;line-height:1.3;font-weight:600;}
-    .home-tab-panel{padding-top:22px;padding-bottom:6px;}
+    .home-tab-label{font-size:13.5px;line-height:1.3;font-weight:500;}
+    .home-tab-label-short{display:none;}
+
+    /* On mobile the rail becomes a 3x2 grid so all six categories are
+       visible at once — a scrolling row hid half of them, and the full
+       labels can't fit three-across (イベント・交流会 alone is 108px in an
+       89px cell), so each tab shows its icon over a short label instead.
+       align-self:stretch is load-bearing: the heading column sets
+       align-items:flex-start, so without it the bar takes its fit-content
+       width and shoots straight out of the card. */
+    @media (max-width:768px){
+      .home-tabs-bar{
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        align-self:stretch;
+        min-width:0;
+        gap:0;
+        margin-top:14px;
+        overflow:visible;
+      }
+      .home-tab{
+        flex:0 0 auto;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:6px;
+        min-width:0;
+        padding:11px 4px 12px;
+        text-align:center;
+        white-space:normal;
+      }
+      .home-tab::before{display:none;}
+      .home-tab-icon{display:flex;align-items:center;justify-content:center;}
+      .home-tab-icon svg{
+        width:19px;
+        height:19px;
+        fill:none;
+        stroke:currentColor;
+        stroke-width:1.5;
+        stroke-linecap:round;
+        stroke-linejoin:round;
+      }
+      .home-tab-label{display:none;}
+      .home-tab-label-short{display:block;font-size:13px;line-height:1.25;font-weight:500;}
+    }
+    .home-tab-panel{padding-top:4px;padding-bottom:6px;}
     .home-tab-panel .home-latest-list{display:block;}
     .home-tab-panel .home-latest-list.home-latest-list--grid{display:grid;}
 
@@ -529,6 +589,21 @@
       opacity:1;
       pointer-events:auto;
     }
+    /* That shared cell is a desktop trade-off: it costs the height of the
+       tallest panel so the page never jumps. On a phone the panels differ
+       far more (News is one 16/9 image, Listings is a 2x2 photo grid), and
+       the cost lands on the default tab as ~300px of dead space right where
+       the fold is. Below 768px each panel sizes to its own content instead. */
+    @media (max-width:768px){
+      #page-home .home-tabs-content{display:block;}
+      #page-home .home-tabs-content .util-doc-panel{
+        display:none;
+        visibility:visible;
+        opacity:1;
+        pointer-events:auto;
+      }
+      #page-home .home-tabs-content .util-doc-panel.active{display:block;}
+    }
     .home-tab-cta{
       display:inline-flex;
       align-items:center;
@@ -551,15 +626,39 @@
       font-size:13px;
     }
 
-    /* NEWS heading + tabs stacked in the left column; content panel on the right */
-    .home-tabs-layout{display:flex;align-items:flex-start;gap:clamp(24px,3vw,48px);}
-    .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;width:clamp(180px,17vw,260px);padding-top:6px;}
-    .home-tabs-content{flex:1 1 auto;min-width:0;}
-    .home-news-tab-title{font-size:clamp(26px,2.6vw,40px);font-weight:800;letter-spacing:.06em;line-height:1;}
+    /* NEWS heading + tabs stacked in the left column; content panel on the
+       right, separated by a single hairline so the two columns read as one
+       ruled spread rather than two floating blocks. */
+    .home-tabs-layout{display:flex;align-items:stretch;gap:clamp(28px,3.4vw,56px);}
+    .home-tabs-heading{flex:0 0 auto;display:flex;flex-direction:column;gap:0;width:clamp(184px,17vw,252px);padding-top:2px;}
+    .home-tabs-content{flex:1 1 auto;min-width:0;padding-left:clamp(14px,1.7vw,28px);border-left:1px solid #E2E2E7;margin-left:calc(-1 * clamp(14px,1.7vw,28px));}
+    /* Mincho display type for the Latin heading — the one place the page
+       reaches for a serif, which is what gives the block its register. */
+    .home-news-tab-title{
+      display:block;
+      font-family:"Shippori Mincho",serif !important;
+      font-size:clamp(25px,2.3vw,34px);
+      font-weight:600;
+      letter-spacing:.16em;
+      line-height:1;
+    }
+    .home-news-tab-sub{
+      display:block;
+      margin-top:12px;
+      padding-top:11px;
+      border-top:1px solid #E2E2E7;
+      font-size:11.5px;
+      font-weight:400;
+      letter-spacing:.13em;
+      line-height:1.5;
+      color:#86868B;
+    }
     @media (max-width:768px){
-      .home-tabs-layout{flex-direction:column;gap:16px;}
-      .home-tabs-heading{width:auto;flex-direction:column;align-items:flex-start;gap:8px;padding-top:0;}
-      .home-news-tab-title{font-size:24px;}
+      .home-tabs-layout{flex-direction:column;gap:14px;}
+      .home-tabs-heading{width:auto;flex-direction:column;align-items:flex-start;gap:0;padding-top:0;}
+      .home-tabs-content{padding-left:0;margin-left:0;border-left:none;padding-top:18px;}
+      .home-news-tab-title{font-size:23px;}
+      .home-news-tab-sub{margin-top:9px;padding-top:8px;}
     }
   </style>
 
@@ -589,14 +688,88 @@
       var titleEl = document.getElementById("homeNewsTitle");
       if (!thumb || !dateEl || !titleEl) return;
 
+      var card = document.getElementById("homeNewsCard");
+      var panel = card && card.closest(".home-tab-panel");
+
       var img = document.createElement("img");
-      img.src = latest.coverImage;
-      img.alt = latest.coverAlt || "";
       img.loading = "lazy";
       thumb.appendChild(img);
 
-      dateEl.textContent = latest.date;
-      titleEl.textContent = latest.title;
+      function paint(digest) {
+        img.src = digest.coverImage;
+        img.alt = digest.coverAlt || "";
+        dateEl.textContent = digest.date;
+        titleEl.textContent = digest.title;
+      }
+
+      paint(latest);
+
+      // Rotate the lead card through every digest, not just the newest one.
+      if (digests.length < 2 || !card) return;
+      // An auto-advancing card is exactly what prefers-reduced-motion is for.
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      var FADE = 420;
+      var INTERVAL = 6000;
+      var current = 0;
+      var order = [];
+      var cursor = 0;
+
+      // Shuffled full passes rather than an independent random pick per tick:
+      // picking at random repeats entries and starves others. Redraw if a new
+      // pass would open on the digest already showing, so the seam between
+      // passes never looks like a stutter.
+      function reshuffle() {
+        do {
+          order = digests.map(function (_, index) { return index; });
+          for (var i = order.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var swap = order[i];
+            order[i] = order[j];
+            order[j] = swap;
+          }
+        } while (order[0] === current);
+        cursor = 0;
+      }
+      reshuffle();
+
+      function advance() {
+        if (cursor >= order.length) reshuffle();
+        current = order[cursor++];
+        var digest = digests[current];
+        // Warm the next cover before the swap so the fade-in never lands on a
+        // half-decoded image.
+        var preload = new Image();
+        preload.src = digest.coverImage;
+        card.classList.add("is-swapping");
+        window.setTimeout(function () {
+          paint(digest);
+          card.classList.remove("is-swapping");
+        }, FADE);
+      }
+
+      var hovered = false;
+      var onScreen = true;
+
+      card.addEventListener("mouseenter", function () { hovered = true; });
+      card.addEventListener("mouseleave", function () { hovered = false; });
+      card.addEventListener("focus", function () { hovered = true; });
+      card.addEventListener("blur", function () { hovered = false; });
+
+      if (window.IntersectionObserver) {
+        new IntersectionObserver(function (entries) {
+          onScreen = entries[0].isIntersecting;
+        }, { threshold: 0.25 }).observe(card);
+      }
+
+      window.setInterval(function () {
+        // Inactive panels stay in the layout on desktop (they are only
+        // visibility:hidden), so the observer alone would keep rotating a card
+        // nobody can see.
+        if (hovered || document.hidden || !onScreen) return;
+        if (panel && !panel.classList.contains("active")) return;
+        advance();
+      }, INTERVAL);
     })();
   </script>
 
@@ -607,7 +780,10 @@
         listings: { panel: "homeTabListings", href: "/ja/listings/", badge: "home-latest-badge--tenant", label: "直貸し" },
         "used-market": { panel: "homeTabUsedMarket", href: "/ja/used-market/", badge: "", label: "中古市場" },
         jobs: { panel: "homeTabJobs", href: "/ja/jobs/", badge: "home-latest-badge--jobs", label: "求人" },
-        events: { panel: "homeTabEvents", href: "/ja/events/", badge: "home-latest-badge--event", label: "イベント" },
+        // photo:false — the events panel stays a plain text list like the
+        // help board, so a submission's photo is ignored here even when it
+        // has one.
+        events: { panel: "homeTabEvents", href: "/ja/events/", badge: "home-latest-badge--event", label: "イベント", photo: false },
         help: { panel: "homeTabHelp", href: "/ja/help-request/", badge: "home-latest-badge--help", label: "助け合い" }
       };
 
@@ -636,10 +812,11 @@
       function makeItem(submission, config) {
         var payload = submission.payload || {};
         var item = document.createElement("a");
-        item.className = "home-latest-item" + ((payload.photoKeys || []).length ? " home-latest-item--photo" : "");
+        var withPhoto = config.photo !== false && (payload.photoKeys || []).length > 0;
+        item.className = "home-latest-item" + (withPhoto ? " home-latest-item--photo" : "");
         item.href = config.href;
         item.dataset.liveSubmission = String(submission.id);
-        if ((payload.photoKeys || []).length) {
+        if (withPhoto) {
           var thumb = document.createElement("span");
           thumb.className = "home-latest-thumb";
           var image = document.createElement("img");
@@ -685,9 +862,10 @@
               var list = panel && panel.querySelector(".home-latest-list");
               if (!list || list.querySelector('[data-live-submission="' + submission.id + '"]')) return;
               list.insertBefore(makeItem(submission, config), list.firstElementChild);
-              if (submission.type === "listings") {
-                while (list.children.length > 4) list.removeChild(list.lastElementChild);
-              }
+              // Every panel is capped, not just listings: all six share one
+              // grid cell, so an untrimmed list sets the height of the whole
+              // section and leaves the other tabs staring at empty space.
+              while (list.children.length > 4) list.removeChild(list.lastElementChild);
             });
           })
           .catch(function (error) { console.warn("Sotocom home submissions could not be loaded", error); });
@@ -1249,6 +1427,13 @@
       .home-partners-banner-grid{grid-template-columns:1fr;gap:20px;}
       .home-partners-banner-media{order:-1;}
       .home-partners-banner-title{font-size:20px;}
+      /* The flush-right bleed above (no right padding on the card, photo
+         nudged +20px) only makes sense while the photo sits in the right
+         column. Once the grid stacks, that same offset leaves a 20px gap
+         down the photo's left edge and clips 20px off its right, so the
+         card goes back to even padding and the nudge is dropped. */
+      #page-home.apple-style .card.home-partners-banner{padding:20px !important;}
+      .home-partners-banner-media img{transform:none;}
     }
   </style>
 
@@ -1447,36 +1632,74 @@
     }
     #page-home.apple-style .home-pros-lead{font-size:14px;}
 
-    /* Underline tab bar: plain text tabs on a hairline base rule, active
-       tab gets a blue underline instead of a filled pill. */
+    /* Vertical index rail (desktop): plain text entries divided by
+       hairlines, the active one marked by a short indigo bar in the left
+       margin and by ink-black weight — never by a filled block. */
     #page-home.apple-style .home-tabs-bar{
       border:none;
       border-radius:0;
       background:transparent;
       padding:0;
-      border-bottom:1px solid #E2E2E7;
+      border-top:1px solid #E2E2E7;
     }
     #page-home.apple-style .home-tab{
       border-right:none !important;
+      border-bottom:1px solid #EDEDF0;
       border-radius:0;
       background:transparent;
-      color:#86868B;
+      color:#6E6E73;
+      transition:color .18s ease;
     }
+    #page-home.apple-style .home-tab::before{color:#A9A5A0;}
+    #page-home.apple-style .home-tab:hover{color:#1D1D1F;}
     #page-home.apple-style .home-tab.active{
       background:transparent;
-      color:#0071E3;
+      color:#1D1D1F;
       box-shadow:none;
     }
+    #page-home.apple-style .home-tab.active .home-tab-label{font-weight:700;}
+    #page-home.apple-style .home-tab.active::before{color:#1F3A5C;}
+    /* The marker: a 2px vertical stroke sitting in the number's gutter. */
     #page-home.apple-style .home-tab.active::after{
       content:"";
       position:absolute;
-      left:0;
-      right:0;
-      bottom:-1px;
-      height:2px;
-      background:#0071E3;
-      border-radius:2px;
+      left:-10px;
+      top:11px;
+      bottom:11px;
+      width:2px;
+      background:#1F3A5C;
+      border-radius:0;
     }
+    /* Mobile 3x2 grid: cells ruled by hairlines like an index table, the
+       active one carrying an indigo underline along its own bottom edge. */
+    @media (max-width:768px){
+      #page-home.apple-style .home-tabs-bar{
+        border-top:1px solid #E2E2E7;
+        border-bottom:1px solid #E2E2E7;
+      }
+      #page-home.apple-style .home-tab{
+        border-right:1px solid #EDEDF0 !important;
+        border-bottom:1px solid #EDEDF0;
+      }
+      #page-home.apple-style .home-tab:nth-child(3n){border-right:none !important;}
+      #page-home.apple-style .home-tab:nth-child(n+4){border-bottom:none;}
+      #page-home.apple-style .home-tab.active::after{
+        left:0;
+        right:0;
+        top:auto;
+        bottom:-1px;
+        width:auto;
+        height:2px;
+        border-radius:2px;
+      }
+      #page-home.apple-style .home-tab.active .home-tab-label-short{font-weight:700;}
+    }
+    /* `#page-home.apple-style *{letter-spacing:0}` above outranks any
+       class-only tracking rule in the earlier style blocks, so the heading's
+       tracking has to be re-declared at this specificity. */
+    #page-home.apple-style .home-news-tab-title{letter-spacing:.16em;}
+    #page-home.apple-style .home-news-tab-sub{letter-spacing:.13em;}
+    #page-home.apple-style .home-tab::before{letter-spacing:.06em;}
 
     /* Quick nav / news / food tiles sit on the grey card. Apple rarely
        outlines these — a soft resting shadow plus a slightly stronger one
@@ -1500,15 +1723,16 @@
       display:flex;
       flex-wrap:wrap;
       align-items:baseline;
-      gap:1px 10px;
-      padding:10px 2px;
+      gap:3px 10px;
+      padding:14px 2px;
       border:none;
-      border-bottom:1px solid #E2E2E7;
+      border-bottom:1px solid #EDEDF0;
       border-radius:0;
       background:transparent;
       box-shadow:none;
     }
-    #page-home.apple-style .home-tab-panel .home-latest-item:last-child{border-bottom:none;}
+    #page-home.apple-style .home-tab-panel .home-latest-item:first-child{border-top:1px solid #E2E2E7;}
+    #page-home.apple-style .home-tab-panel .home-latest-item:last-child{border-bottom:1px solid #E2E2E7;}
     #page-home.apple-style .home-tab-panel .home-latest-item:hover{background:transparent;}
     #page-home.apple-style .home-tab-panel .home-latest-item:hover .home-latest-item-body strong{color:#0071E3;}
     #page-home.apple-style .home-tab-panel .home-latest-date{
@@ -1614,6 +1838,59 @@
       padding:0 10px 10px;
     }
 
+    /* Live submissions with a photo land in the plain (non-grid) lists —
+       Jobs / Events / Help — where the card variant above stretched the
+       4:3 thumbnail to the full column width, ~630px tall. Because every
+       panel shares one grid cell, that single row set the height of the
+       whole section and left a ~1000px void under every other tab. In a
+       plain list a photo row is laid out as a compact thumbnail beside
+       the text instead. */
+    #page-home.apple-style .home-tab-panel .home-latest-list:not(.home-latest-list--grid) .home-latest-item.home-latest-item--photo{
+      display:grid;
+      grid-template-columns:88px minmax(0,1fr);
+      gap:3px 14px;
+      align-items:start;
+      padding:14px 2px;
+      border:none;
+      border-bottom:1px solid #EDEDF0;
+      border-radius:0;
+      background:transparent;
+      box-shadow:none;
+      overflow:visible;
+      transform:none;
+    }
+    #page-home.apple-style .home-tab-panel .home-latest-list:not(.home-latest-list--grid) .home-latest-item.home-latest-item--photo:last-child{
+      border-bottom:1px solid #E2E2E7;
+    }
+    #page-home.apple-style .home-tab-panel .home-latest-list:not(.home-latest-list--grid) .home-latest-item--photo .home-latest-thumb{
+      grid-column:1;
+      grid-row:1 / span 2;
+      align-self:center;
+      width:88px;
+      aspect-ratio:4/3;
+      border-radius:6px;
+      overflow:hidden;
+    }
+    /* The tab itself already names the category, so the overlay chip is
+       redundant at this size and only covers the photo. */
+    #page-home.apple-style .home-tab-panel .home-latest-list:not(.home-latest-list--grid) .home-latest-item--photo .home-latest-thumb .home-latest-badge{
+      display:none;
+    }
+    #page-home.apple-style .home-tab-panel .home-latest-list:not(.home-latest-list--grid) .home-latest-item--photo .home-latest-date{
+      grid-column:2;
+      grid-row:1;
+      padding:0;
+    }
+    #page-home.apple-style .home-tab-panel .home-latest-list:not(.home-latest-list--grid) .home-latest-item--photo .home-latest-item-body{
+      grid-column:2;
+      grid-row:2;
+      padding:0;
+    }
+    #page-home.apple-style .home-tab-panel .home-latest-list:not(.home-latest-list--grid) .home-latest-item--photo .home-latest-item-body strong{
+      font-size:14px;
+      min-height:0;
+    }
+
     #page-home.apple-style .home-tab-cta{
       border:1px solid #D2D2D7;
       background:transparent;
@@ -1648,8 +1925,60 @@
        the full-width photo grid below it. Drop the cap and use a wider
        (shorter) ratio so it fills the column width without the photo
        becoming too tall. */
+    /* Ratio is also doing layout work: News is the default tab and the
+       shortest panel, so a taller lead image both reads better and closes
+       most of the gap to the tallest panel in the shared grid cell. */
     @media (min-width:641px){
-      #page-home.apple-style .home-news-card--wide{width:100%;aspect-ratio:3.6/1;max-height:none;}
+      #page-home.apple-style .home-news-card--wide{width:100%;aspect-ratio:2.7/1;max-height:none;}
+    }
+
+    /* Lead news card: Mincho headline over a softer, taller scrim. The
+       original gradient started almost opaque black at the baseline, which
+       fought the restraint of the rest of the block. */
+    #page-home.apple-style .home-news-card .home-news-body{
+      padding:18px 22px 18px;
+      background:linear-gradient(0deg,rgba(18,16,14,.90) 0%,rgba(18,16,14,.72) 42%,rgba(18,16,14,.34) 72%,rgba(18,16,14,0) 100%);
+    }
+    /* Covers rotate, and some are bright enough to swallow white text. On a
+       phone the headline wraps to three lines and reaches well up the card,
+       so the scrim has to carry higher and darker there than on desktop. */
+    @media (max-width:640px){
+      #page-home.apple-style .home-news-card .home-news-body{
+        padding:14px 16px;
+        background:linear-gradient(0deg,rgba(18,16,14,.93) 0%,rgba(18,16,14,.84) 46%,rgba(18,16,14,.62) 74%,rgba(18,16,14,.18) 100%);
+      }
+    }
+    #page-home.apple-style .home-news-card .home-news-date{
+      font:500 10.5px "JetBrains Mono",monospace !important;
+      letter-spacing:.18em;
+      opacity:.82;
+      margin-bottom:8px;
+      text-shadow:none;
+    }
+    #page-home.apple-style .home-news-card .home-news-body strong{
+      font-family:"Shippori Mincho",serif !important;
+      font-size:19px;
+      font-weight:600;
+      line-height:1.65;
+      letter-spacing:.03em;
+      text-shadow:0 1px 8px rgba(0,0,0,.35);
+    }
+    @media (max-width:640px){
+      #page-home.apple-style .home-news-card .home-news-body strong{font-size:15px;}
+    }
+
+    /* Crossfade for the rotating lead card. The image keeps its own hover
+       zoom transition, so both are declared together rather than one
+       clobbering the other. */
+    #page-home.apple-style #homeNewsCard .home-news-thumb img{
+      transition:opacity .42s ease,transform .4s ease;
+    }
+    #page-home.apple-style #homeNewsCard .home-news-body{
+      transition:opacity .42s ease;
+    }
+    #page-home.apple-style #homeNewsCard.is-swapping .home-news-thumb img,
+    #page-home.apple-style #homeNewsCard.is-swapping .home-news-body{
+      opacity:0;
     }
     #page-home.apple-style .home-latest-item,
     #page-home.apple-style .home-category-card{border-radius:14px;}

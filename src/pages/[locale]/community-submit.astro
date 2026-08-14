@@ -133,7 +133,7 @@ const { locale = 'ja' } = Astro.params;
         listings: { title: '入居募集を投稿する', intro: '物件カードに必要な情報を順番に入力してください。確認後、掲載用に整えます。', fields: [['listingType', '募集タイプ', '', 'select', [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']]], ['prefecture', '都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['area', '区・市町村', '例：新宿区', 'text'], ['station', '最寄り駅', '例：中野駅 徒歩5分', 'text'], ['floorArea', '面積（㎡）', '例：40', 'number'], ['rent', '家賃（月額・円）', '例：90000', 'number'], ['managementFee', '管理費（月額・円）', '例：5000', 'number'], ['depositMonths', '敷金', '', 'select', []], ['keyMoneyMonths', '礼金', '', 'select', []], ['cleaningFeeHasFee', '清掃費', '', 'select', [['none', 'なし'], ['yes', 'あり']]], ['cleaningFee', '清掃費の金額', '例：30,000円', 'text'], ['layout', '間取り・広さ', '', 'select', []], ['moveIn', '入居可能日', '', 'select', []], ['moveInDate', '入居可能日（日付）', '', 'date'], ['contractPeriod', '契約期間', '', 'select', []], ['furnished', '家具・家電', '', 'select', [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']]], ['pet', 'ペット', '', 'select', []], ['genderRestriction', '性別限定', '', 'select', []], ['tenantNationalityHasCondition', '国籍・言語条件', '', 'select', []], ['tenantNationalityNote', '国籍・言語の内容', '例：中国語が話せる方', 'text'], ['propertyIntro', '物件紹介', '例：〇〇線〇〇駅から徒歩5分の明るいお部屋です。', 'textarea'], ['conditionChecks', '条件備註', '', 'select', [['fireInsurance', '🔥 火災保険加入必要'], ['utilities', '💧 光熱費割り勘'], ['quiet', '🤐 静かな環境を優先'], ['non-smoker', '🚭 禁煙']]], ['details', '条件・補足', '同居人など、その他の条件', 'textarea']] },
         'used-market': { title: '中古市場に投稿する', intro: '中古市場のカードに必要な商品情報を入力してください。写真は後から追加できます。', fields: [['category', 'カテゴリー', '', 'select', [['furniture', '家具'], ['appliance', '家電・ガジェット'], ['daily-goods', '生活雑貨・キッチン'], ['fashion', 'ファッション・美容'], ['kids', '子供用品・おもちゃ'], ['hobby', '本・趣味・スポーツ'], ['other', 'その他']]], ['title', '商品名', '例：冷蔵庫（168L）', 'text'], ['condition', '商品の状態', '', 'select', [['new', '新品・未使用'], ['good', '目立つ傷なし'], ['used', '使用感あり'], ['repair', '要確認・難あり']]], ['price', '価格（円）', '無料の場合は0', 'number'], ['prefecture', '受け渡し都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['pickupArea', '受け渡し場所', '例：中野駅・杉並区', 'text'], ['availableUntil', '受け渡し可能日', '', 'select', []], ['delivery', '受け渡し方法', '', 'select', [['pickup', '現地受け取り'], ['station', '駅で受け渡し'], ['delivery', '配送相談'], ['other', 'その他']]], ['details', '商品説明', '購入時期、サイズ、動作確認、傷、付属品など', 'textarea']] },
         jobs: { title: '求人を投稿する', intro: '求人カードに必要な募集条件を入力してください。応募者が比較しやすい形に整えます。', fields: [['jobCategory', '職種カテゴリー', '', 'select', [['hotel', 'ホテル・宿泊'], ['restaurant', '飲食'], ['cleaning', '清掃'], ['office', '事務・オフィス'], ['care', '介護・福祉'], ['other', 'その他']]], ['title', '募集職種', '例：ホテルフロントスタッフ', 'text'], ['company', '会社・店舗名', '掲載名として表示します', 'text'], ['employmentType', '雇用形態', '', 'select', [['part-time', 'アルバイト・パート'], ['full-time', '正社員'], ['contract', '契約社員'], ['freelance', '業務委託'], ['other', 'その他']]], ['workplace', '勤務地', '', 'select', []], ['salary', '給与・報酬', '例：時給1,300円〜／月給25万円〜', 'text'], ['hours', '勤務時間', '', 'select', []], ['japaneseLevel', '日本語レベル', '', 'select', [['none', '不問'], ['basic', '日常会話'], ['business', 'ビジネスレベル'], ['native', 'ネイティブ相当']]], ['benefits', '待遇・条件', '交通費、まかない、寮、資格、経験など', 'textarea'], ['application', '応募方法', '担当者、連絡先、応募時に伝える内容など', 'textarea']] },
-        events: { title: 'イベントを投稿する', intro: 'イベントページに表示する開催情報と参加方法を入力してください。', fields: [['title', 'タイトル', '例：多文化交流会', 'text'], ['startsAt', '開始', '', 'datetime-local'], ['endsAt', '終了', '', 'datetime-local'], ['venue', '場所・住所', '例：東京都渋谷区〇〇／渋谷カフェ', 'text'], ['eventPrefecture', '都道府県', '', 'select'], ['summary', '紹介文', 'イベントの内容や、どんな人におすすめかを書いてください', 'textarea'], ['fee', '参加費', '', 'select'], ['feeAmount', '参加費の金額', '', 'select'], ['capacity', '定員', '', 'select'], ['participationType', '参加方法', '', 'select'], ['applicationUrl', '申込方法・URL', '例：https://example.com または「当日受付」', 'text'], ['notes', '注意事項', '持ち物、対象年齢、雨天時の対応など', 'textarea'], ['other', 'その他', '補足があれば入力してください', 'textarea']] },
+        events: { title: 'イベントを投稿する', intro: 'イベントページに表示する開催情報と参加方法を入力してください。', fields: [['title', 'タイトル', '例：多文化交流会', 'text'], ['organizer', '主催者・団体名', '例：ツナグ／個人開催の場合は空欄でOK', 'text'], ['startsAt', '開始', '', 'datetime-local'], ['endsAt', '終了', '', 'datetime-local'], ['deadline', '申込締切', '', 'date'], ['venue', '場所・住所', '例：東京都渋谷区〇〇／渋谷カフェ', 'text'], ['eventPrefecture', '都道府県', '', 'select'], ['summary', '紹介文', 'イベントの内容や、どんな人におすすめかを書いてください', 'textarea'], ['audienceTags', 'こんな人におすすめ', '', 'select', []], ['fee', '参加費', '', 'select'], ['feeAmount', '参加費の金額', '', 'select'], ['capacity', '定員', '', 'select'], ['participationType', '参加方法', '', 'select'], ['applicationUrl', '申込方法・URL', '例：https://example.com または「当日受付」', 'text'], ['officialUrl', '公式サイト・SNS', '例：https://instagram.com/...', 'text'], ['tags', 'ハッシュタグ', '例：日本就職, 台湾人, 大阪（カンマ区切り）', 'text'], ['notes', '注意事項', '持ち物、対象年齢、雨天時の対応など', 'textarea'], ['other', 'その他', '補足があれば入力してください', 'textarea']] },
         help: { title: '助け合いを投稿する', intro: '助けを求める人と協力できる人が判断しやすい情報を入力してください。', fields: [['category', '依頼カテゴリー', '', 'select', [['translate', '通訳・翻訳'], ['pet', 'ペット・留守番'], ['labor', '力仕事・引越し'], ['other', 'その他']]], ['title', '投稿タイトル', '例：引っ越しを手伝ってくれる方を探しています', 'text'], ['requestDate', '希望日時', '', 'select', []], ['area', '場所', '例：杉並区・高円寺エリア', 'text'], ['reward', '謝礼', '', 'select', []], ['urgent', '急募', '', 'select', [['no', '通常'], ['yes', '急募']]], ['details', '依頼内容', 'いつ、どこで、何を手伝ってほしいかを具体的に書いてください', 'textarea'], ['contact', '連絡方法', 'LINE ID、メール、その他の希望連絡方法', 'text']] }
       };
       const params = new URLSearchParams(location.search);
@@ -375,11 +375,25 @@ const { locale = 'ja' } = Astro.params;
         syncTenantNationalityNote();
       }
       if (type === 'events') {
-        ['applicationUrl', 'notes', 'other'].forEach((name) => {
+        ['organizer', 'deadline', 'applicationUrl', 'officialUrl', 'tags', 'notes', 'other'].forEach((name) => {
           const control = fields.querySelector(`[name="${name}"]`);
           control.required = false;
           control.closest('label').querySelector('em').remove();
         });
+        const audienceTagsSelect = fields.querySelector('[name="audienceTags"]');
+        if (audienceTagsSelect) {
+          const checkboxField = document.createElement('div');
+          checkboxField.className = 'chip-toggle-field';
+          checkboxField.innerHTML = '<span class="field-label">こんな人におすすめ</span><div class="chip-toggle-options">' +
+            '<label class="chip-toggle"><input type="checkbox" name="audienceTags" value="beginner" /><span>🔰 初心者歓迎</span></label>' +
+            '<label class="chip-toggle"><input type="checkbox" name="audienceTags" value="solo" /><span>🙋 ひとり参加OK</span></label>' +
+            '<label class="chip-toggle"><input type="checkbox" name="audienceTags" value="student" /><span>🎓 学生歓迎</span></label>' +
+            '<label class="chip-toggle"><input type="checkbox" name="audienceTags" value="business" /><span>💼 転職・キャリア目的</span></label>' +
+            '<label class="chip-toggle"><input type="checkbox" name="audienceTags" value="family" /><span>👨‍👩‍👧 家族連れOK</span></label>' +
+            '<label class="chip-toggle"><input type="checkbox" name="audienceTags" value="no-language-barrier" /><span>🗣️ 日本語レベル不問</span></label>' +
+            '</div>';
+          audienceTagsSelect.closest('label').replaceWith(checkboxField);
+        }
         const startsAt = fields.querySelector('[name="startsAt"]');
         const endsAt = fields.querySelector('[name="endsAt"]');
         const validateEventPeriod = () => {
@@ -725,14 +739,18 @@ const { locale = 'ja' } = Astro.params;
         const formData = new FormData(form);
         const values = {};
         const conditionChecksItems = [];
+        const audienceTagsItems = [];
         for (const [key, value] of formData.entries()) {
           if (key === 'conditionChecks') {
             conditionChecksItems.push(value);
+          } else if (key === 'audienceTags') {
+            audienceTagsItems.push(value);
           } else if (!(key in values)) {
             values[key] = value;
           }
         }
         if (conditionChecksItems.length > 0) values.conditionChecks = conditionChecksItems.join(' / ');
+        if (audienceTagsItems.length > 0) values.audienceTags = audienceTagsItems.join(' / ');
         delete values.agreement; delete values.publishNameMode; delete values.customDisplayName; delete values.photos;
         const upload = new FormData();
         upload.append('submission', JSON.stringify({ type, displayName: getPublishDisplayName(), publishNameMode: form.elements.publishNameMode.value, publishAvatarMode: form.elements.publishAvatarMode.value, avatarUrl: selectedAvatarUrl.value, payload: values }));
@@ -884,9 +902,15 @@ const { locale = 'ja' } = Astro.params;
         return card;
       }
 
+      const audienceTagsLabels = { beginner: '🔰 初心者歓迎', solo: '🙋 ひとり参加OK', student: '🎓 学生歓迎', business: '💼 転職・キャリア目的', family: '👨‍👩‍👧 家族連れOK', 'no-language-barrier': '🗣️ 日本語レベル不問' };
       function buildEventsPreview(values) {
         const dateRange = [formatDateTime(values.startsAt), formatDateTime(values.endsAt)].filter(Boolean).join('〜');
-        const card = `<article class="pv-card pv-events"><div class="pv-card-body"><h3>${escapeHtml(values.title) || '（タイトル未入力）'}</h3><p class="pv-desc">${escapeHtml(values.summary) || ''}</p><div class="pv-meta-rows"><div><b>日時</b><span>${dateRange || '未設定'}</span></div><div><b>場所</b><span>${escapeHtml(values.venue) || '未設定'}</span></div></div></div></article>`;
+        const audienceTagsValues = Array.from(fields.querySelectorAll('[name="audienceTags"]:checked')).map((c) => audienceTagsLabels[c.value] || c.value);
+        const hashtagList = (values.tags || '').split(/[,、\s]+/).map((tag) => tag.trim()).filter(Boolean);
+        const organizerLine = values.organizer ? `<div class="pv-organizer">主催：${escapeHtml(values.organizer)}</div>` : '';
+        const audienceHtml = audienceTagsValues.length ? `<div class="pv-checklist">${audienceTagsValues.map((tag) => `<span>✓ ${escapeHtml(tag)}</span>`).join('')}</div>` : '';
+        const hashtagHtml = hashtagList.length ? `<div class="pv-tags">${hashtagList.map((tag) => `<span class="pv-tag">#${escapeHtml(tag)}</span>`).join('')}</div>` : '';
+        const card = `<article class="pv-card pv-events"><div class="pv-card-body">${organizerLine}<h3>${escapeHtml(values.title) || '（タイトル未入力）'}</h3><p class="pv-desc">${escapeHtml(values.summary) || ''}</p>${audienceHtml}<div class="pv-meta-rows"><div><b>日時</b><span>${dateRange || '未設定'}</span></div><div><b>場所</b><span>${escapeHtml(values.venue) || '未設定'}</span></div>${values.deadline ? `<div><b>申込締切</b><span>${escapeHtml(values.deadline)}</span></div>` : ''}</div>${hashtagHtml}</div></article>`;
         return card;
       }
 
@@ -1644,6 +1668,9 @@ const { locale = 'ja' } = Astro.params;
   .pv-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
   .pv-tag{font-size:9.5px;border:1px solid #b9d4c8;background:#eff8f4;color:#285c4a;border-radius:999px;padding:3px 9px}
   .pv-theme-events .pv-card-body h3{color:#1a3d5c}
+  .pv-organizer{font-size:10.5px;font-weight:700;letter-spacing:.03em;color:#0066cc}
+  .pv-checklist{display:grid;gap:3px;margin-top:2px;padding:8px 10px;border-radius:9px;background:#e8f0f7}
+  .pv-checklist span{font-size:10.5px;line-height:1.6;color:#1a3d5c}
   .pv-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
   .pv-urgent{flex:none;background:#0066cc;color:#fff;font-size:9.5px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:999px}
   .pv-detail-card{padding:18px 16px;border:1px solid #e2e8f0;border-radius:14px;background:#fff}
