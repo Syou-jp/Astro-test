@@ -1201,6 +1201,13 @@
       .home-partners-banner-grid{grid-template-columns:1fr;gap:20px;}
       .home-partners-banner-media{order:-1;}
       .home-partners-banner-title{font-size:20px;}
+      /* The flush-right bleed above (no right padding on the card, photo
+         nudged +20px) only makes sense while the photo sits in the right
+         column. Once the grid stacks, that same offset leaves a 20px gap
+         down the photo's left edge and clips 20px off its right, so the
+         card goes back to even padding and the nudge is dropped. */
+      #page-home.apple-style .card.home-partners-banner{padding:20px !important;}
+      .home-partners-banner-media img{transform:none;}
     }
   </style>
 
