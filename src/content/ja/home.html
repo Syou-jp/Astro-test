@@ -596,14 +596,88 @@
       var titleEl = document.getElementById("homeNewsTitle");
       if (!thumb || !dateEl || !titleEl) return;
 
+      var card = document.getElementById("homeNewsCard");
+      var panel = card && card.closest(".home-tab-panel");
+
       var img = document.createElement("img");
-      img.src = latest.coverImage;
-      img.alt = latest.coverAlt || "";
       img.loading = "lazy";
       thumb.appendChild(img);
 
-      dateEl.textContent = latest.date;
-      titleEl.textContent = latest.title;
+      function paint(digest) {
+        img.src = digest.coverImage;
+        img.alt = digest.coverAlt || "";
+        dateEl.textContent = digest.date;
+        titleEl.textContent = digest.title;
+      }
+
+      paint(latest);
+
+      // Rotate the lead card through every digest, not just the newest one.
+      if (digests.length < 2 || !card) return;
+      // An auto-advancing card is exactly what prefers-reduced-motion is for.
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      var FADE = 420;
+      var INTERVAL = 6000;
+      var current = 0;
+      var order = [];
+      var cursor = 0;
+
+      // Shuffled full passes rather than an independent random pick per tick:
+      // picking at random repeats entries and starves others. Redraw if a new
+      // pass would open on the digest already showing, so the seam between
+      // passes never looks like a stutter.
+      function reshuffle() {
+        do {
+          order = digests.map(function (_, index) { return index; });
+          for (var i = order.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var swap = order[i];
+            order[i] = order[j];
+            order[j] = swap;
+          }
+        } while (order[0] === current);
+        cursor = 0;
+      }
+      reshuffle();
+
+      function advance() {
+        if (cursor >= order.length) reshuffle();
+        current = order[cursor++];
+        var digest = digests[current];
+        // Warm the next cover before the swap so the fade-in never lands on a
+        // half-decoded image.
+        var preload = new Image();
+        preload.src = digest.coverImage;
+        card.classList.add("is-swapping");
+        window.setTimeout(function () {
+          paint(digest);
+          card.classList.remove("is-swapping");
+        }, FADE);
+      }
+
+      var hovered = false;
+      var onScreen = true;
+
+      card.addEventListener("mouseenter", function () { hovered = true; });
+      card.addEventListener("mouseleave", function () { hovered = false; });
+      card.addEventListener("focus", function () { hovered = true; });
+      card.addEventListener("blur", function () { hovered = false; });
+
+      if (window.IntersectionObserver) {
+        new IntersectionObserver(function (entries) {
+          onScreen = entries[0].isIntersecting;
+        }, { threshold: 0.25 }).observe(card);
+      }
+
+      window.setInterval(function () {
+        // Inactive panels stay in the layout on desktop (they are only
+        // visibility:hidden), so the observer alone would keep rotating a card
+        // nobody can see.
+        if (hovered || document.hidden || !onScreen) return;
+        if (panel && !panel.classList.contains("active")) return;
+        advance();
+      }, INTERVAL);
     })();
   </script>
 
@@ -614,7 +688,10 @@
         listings: { panel: "homeTabListings", href: "/ja/listings/", badge: "home-latest-badge--tenant", label: "直貸し" },
         "used-market": { panel: "homeTabUsedMarket", href: "/ja/used-market/", badge: "", label: "中古市場" },
         jobs: { panel: "homeTabJobs", href: "/ja/jobs/", badge: "home-latest-badge--jobs", label: "求人" },
-        events: { panel: "homeTabEvents", href: "/ja/events/", badge: "home-latest-badge--event", label: "イベント" },
+        // photo:false — the events panel stays a plain text list like the
+        // help board, so a submission's photo is ignored here even when it
+        // has one.
+        events: { panel: "homeTabEvents", href: "/ja/events/", badge: "home-latest-badge--event", label: "イベント", photo: false },
         help: { panel: "homeTabHelp", href: "/ja/help-request/", badge: "home-latest-badge--help", label: "助け合い" }
       };
 
@@ -643,10 +720,11 @@
       function makeItem(submission, config) {
         var payload = submission.payload || {};
         var item = document.createElement("a");
-        item.className = "home-latest-item" + ((payload.photoKeys || []).length ? " home-latest-item--photo" : "");
+        var withPhoto = config.photo !== false && (payload.photoKeys || []).length > 0;
+        item.className = "home-latest-item" + (withPhoto ? " home-latest-item--photo" : "");
         item.href = config.href;
         item.dataset.liveSubmission = String(submission.id);
-        if ((payload.photoKeys || []).length) {
+        if (withPhoto) {
           var thumb = document.createElement("span");
           thumb.className = "home-latest-thumb";
           var image = document.createElement("img");
@@ -1767,7 +1845,16 @@
        fought the restraint of the rest of the block. */
     #page-home.apple-style .home-news-card .home-news-body{
       padding:18px 22px 18px;
-      background:linear-gradient(0deg,rgba(20,18,15,.86) 0%,rgba(20,18,15,.62) 38%,rgba(20,18,15,.22) 70%,rgba(20,18,15,0) 100%);
+      background:linear-gradient(0deg,rgba(18,16,14,.90) 0%,rgba(18,16,14,.72) 42%,rgba(18,16,14,.34) 72%,rgba(18,16,14,0) 100%);
+    }
+    /* Covers rotate, and some are bright enough to swallow white text. On a
+       phone the headline wraps to three lines and reaches well up the card,
+       so the scrim has to carry higher and darker there than on desktop. */
+    @media (max-width:640px){
+      #page-home.apple-style .home-news-card .home-news-body{
+        padding:14px 16px;
+        background:linear-gradient(0deg,rgba(18,16,14,.93) 0%,rgba(18,16,14,.84) 46%,rgba(18,16,14,.62) 74%,rgba(18,16,14,.18) 100%);
+      }
     }
     #page-home.apple-style .home-news-card .home-news-date{
       font:500 10.5px "JetBrains Mono",monospace !important;
@@ -1786,6 +1873,20 @@
     }
     @media (max-width:640px){
       #page-home.apple-style .home-news-card .home-news-body strong{font-size:15px;}
+    }
+
+    /* Crossfade for the rotating lead card. The image keeps its own hover
+       zoom transition, so both are declared together rather than one
+       clobbering the other. */
+    #page-home.apple-style #homeNewsCard .home-news-thumb img{
+      transition:opacity .42s ease,transform .4s ease;
+    }
+    #page-home.apple-style #homeNewsCard .home-news-body{
+      transition:opacity .42s ease;
+    }
+    #page-home.apple-style #homeNewsCard.is-swapping .home-news-thumb img,
+    #page-home.apple-style #homeNewsCard.is-swapping .home-news-body{
+      opacity:0;
     }
     #page-home.apple-style .home-latest-item,
     #page-home.apple-style .home-category-card{border-radius:14px;}
