@@ -131,7 +131,7 @@
           area: [payload.eventPrefecture, payload.venue].filter(Boolean).join("・") || "会場未入力",
           description: payload.summary || "投稿者から寄せられたイベントです。",
           url: payload.applicationUrl || "",
-          image: payload.photoKeys && payload.photoKeys[0] ? API_URL.replace("/api/submissions", "/api/photos") + "?key=" + encodeURIComponent(payload.photoKeys[0]) : "/sotocom_hero_photo.jpg",
+          image: payload.photoKeys && payload.photoKeys[0] ? API_URL.replace("/api/submissions", "/api/photos") + "?key=" + encodeURIComponent(payload.photoKeys[0]) : "/event.png",
           author: submission.display_name || "投稿者",
           fee: feeText(payload),
           capacity: capacityLabels[payload.capacity] || "",
@@ -145,7 +145,7 @@
         var modal = document.getElementById("evModal");
         document.getElementById("evModalTitle").textContent = item.title;
         var image = document.getElementById("evModalImage");
-        image.src = item.image || eventImages[item.slug] || "/sotocom_hero_photo.jpg";
+        image.src = item.image || eventImages[item.slug] || "/event.png";
         image.alt = item.title + "のイメージ";
         var details = [["日時", escapeHtml(item.date + " " + item.time)], ["場所", escapeHtml(item.area)]];
         if (item.fee) details.push(["参加費", escapeHtml(item.fee)]);
