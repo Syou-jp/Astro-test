@@ -123,27 +123,27 @@
         <div class="util-doc-switch home-tabs-bar" role="tablist" aria-label="カテゴリー切替" data-no-i18n>
           <button type="button" class="util-doc-tab home-tab active" data-util-target="homeTabNews">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M7 13h5M7 16.5h8"/></svg></span>
-            <span class="home-tab-label">ニュース日報</span>
+            <span class="home-tab-label">ニュース日報</span><span class="home-tab-label-short">ニュース</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabListings">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.2V20h12v-9.8"/><path d="M10 20v-5.5h4V20"/></svg></span>
-            <span class="home-tab-label">入居募集</span>
+            <span class="home-tab-label">入居募集</span><span class="home-tab-label-short">入居募集</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabUsedMarket">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><path d="M12.6 3.6 20 11c.6.6.6 1.5 0 2.1l-6.4 6.4c-.6.6-1.5.6-2.1 0L4 12c-.3-.3-.5-.7-.5-1.1V5a1.4 1.4 0 0 1 1.4-1.4h6.6c.4 0 .8.2 1.1.5Z"/><circle cx="8.2" cy="8.2" r="1.1"/></svg></span>
-            <span class="home-tab-label">中古市場</span>
+            <span class="home-tab-label">中古市場</span><span class="home-tab-label-short">中古市場</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabJobs">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/><path d="M3 12.5h18"/></svg></span>
-            <span class="home-tab-label">求人・採用</span>
+            <span class="home-tab-label">求人・採用</span><span class="home-tab-label-short">求人</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabEvents">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v4M16 3v4"/></svg></span>
-            <span class="home-tab-label">イベント・交流会</span>
+            <span class="home-tab-label">イベント・交流会</span><span class="home-tab-label-short">イベント</span>
           </button>
           <button type="button" class="util-doc-tab home-tab" data-util-target="homeTabHelp">
             <span class="home-tab-icon"><svg viewBox="0 0 24 24"><path d="M3 11 7 7l4 3 4-3 4 4"/><path d="M3 11v3l4 4 3-2 2 2 3-2 4-4v-3"/></svg></span>
-            <span class="home-tab-label">助け合い掲示板</span>
+            <span class="home-tab-label">助け合い掲示板</span><span class="home-tab-label-short">助け合い</span>
           </button>
         </div>
       </div>
@@ -424,19 +424,55 @@
       letter-spacing:.06em;
       transition:color .18s ease;
     }
-    /* On mobile, switch to horizontal scrollable tabs.
-       align-self/min-width matter: the heading column sets
-       align-items:flex-start, so without them the bar sizes to its
-       fit-content width (~590px) instead of the column's, and a nowrap row
-       of six tabs shoots straight out of the card — overflow-x never gets
-       a chance to scroll because the box simply grew. */
-    @media (max-width:768px){
-      .home-tabs-bar{flex-direction:row;flex-wrap:nowrap;align-self:stretch;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:26px;margin-top:14px;}
-      .home-tab{flex:0 0 auto;padding:0 0 14px;}
-      .home-tab::before{display:none;}
-    }
+    /* Base (desktop rail): icons and short labels are off; the media query
+       below turns them on. These have to sit *above* it — media queries add
+       no specificity, so an unconditional rule placed after would win. */
     .home-tab-icon{display:none;}
     .home-tab-label{font-size:13.5px;line-height:1.3;font-weight:500;}
+    .home-tab-label-short{display:none;}
+
+    /* On mobile the rail becomes a 3x2 grid so all six categories are
+       visible at once — a scrolling row hid half of them, and the full
+       labels can't fit three-across (イベント・交流会 alone is 108px in an
+       89px cell), so each tab shows its icon over a short label instead.
+       align-self:stretch is load-bearing: the heading column sets
+       align-items:flex-start, so without it the bar takes its fit-content
+       width and shoots straight out of the card. */
+    @media (max-width:768px){
+      .home-tabs-bar{
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        align-self:stretch;
+        min-width:0;
+        gap:0;
+        margin-top:14px;
+        overflow:visible;
+      }
+      .home-tab{
+        flex:0 0 auto;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:6px;
+        min-width:0;
+        padding:11px 4px 12px;
+        text-align:center;
+        white-space:normal;
+      }
+      .home-tab::before{display:none;}
+      .home-tab-icon{display:flex;align-items:center;justify-content:center;}
+      .home-tab-icon svg{
+        width:19px;
+        height:19px;
+        fill:none;
+        stroke:currentColor;
+        stroke-width:1.5;
+        stroke-linecap:round;
+        stroke-linejoin:round;
+      }
+      .home-tab-label{display:none;}
+      .home-tab-label-short{display:block;font-size:13px;line-height:1.25;font-weight:500;}
+    }
     .home-tab-panel{padding-top:4px;padding-bottom:6px;}
     .home-tab-panel .home-latest-list{display:block;}
     .home-tab-panel .home-latest-list.home-latest-list--grid{display:grid;}
@@ -1464,12 +1500,19 @@
       background:#1F3A5C;
       border-radius:0;
     }
+    /* Mobile 3x2 grid: cells ruled by hairlines like an index table, the
+       active one carrying an indigo underline along its own bottom edge. */
     @media (max-width:768px){
       #page-home.apple-style .home-tabs-bar{
-        border-top:none;
+        border-top:1px solid #E2E2E7;
         border-bottom:1px solid #E2E2E7;
       }
-      #page-home.apple-style .home-tab{border-bottom:none;}
+      #page-home.apple-style .home-tab{
+        border-right:1px solid #EDEDF0 !important;
+        border-bottom:1px solid #EDEDF0;
+      }
+      #page-home.apple-style .home-tab:nth-child(3n){border-right:none !important;}
+      #page-home.apple-style .home-tab:nth-child(n+4){border-bottom:none;}
       #page-home.apple-style .home-tab.active::after{
         left:0;
         right:0;
@@ -1479,6 +1522,7 @@
         height:2px;
         border-radius:2px;
       }
+      #page-home.apple-style .home-tab.active .home-tab-label-short{font-weight:700;}
     }
     /* `#page-home.apple-style *{letter-spacing:0}` above outranks any
        class-only tracking rule in the earlier style blocks, so the heading's
