@@ -407,22 +407,10 @@
       justify-content:flex-start;
       gap:10px;
       counter-increment:home-tab;
-      padding:11px 0 11px 16px;
+      padding:11px 0;
       white-space:nowrap;
       position:relative;
       border-bottom:none;
-    }
-    /* Index numeral (01–06) in the left margin — the quiet editorial cue
-       that carries the hierarchy instead of colour or weight. */
-    .home-tab::before{
-      content:counter(home-tab,decimal-leading-zero);
-      position:absolute;
-      left:0;
-      top:50%;
-      transform:translateY(-50%);
-      font:600 9.5px "JetBrains Mono",monospace;
-      letter-spacing:.06em;
-      transition:color .18s ease;
     }
     /* Base (desktop rail): icons and short labels are off; the media query
        below turns them on. These have to sit *above* it — media queries add
@@ -459,7 +447,6 @@
         text-align:center;
         white-space:normal;
       }
-      .home-tab::before{display:none;}
       .home-tab-icon{display:flex;align-items:center;justify-content:center;}
       .home-tab-icon svg{
         width:19px;
@@ -1558,7 +1545,6 @@
       color:#6E6E73;
       transition:color .18s ease;
     }
-    #page-home.apple-style .home-tab::before{color:#A9A5A0;}
     #page-home.apple-style .home-tab:hover{color:#1D1D1F;}
     #page-home.apple-style .home-tab.active{
       background:transparent;
@@ -1566,12 +1552,11 @@
       box-shadow:none;
     }
     #page-home.apple-style .home-tab.active .home-tab-label{font-weight:700;}
-    #page-home.apple-style .home-tab.active::before{color:#1F3A5C;}
-    /* The marker: a 2px vertical stroke sitting in the number's gutter. */
+    /* The marker: a 2px vertical stroke on the tab's leading edge. */
     #page-home.apple-style .home-tab.active::after{
       content:"";
       position:absolute;
-      left:-10px;
+      left:-6px;
       top:11px;
       bottom:11px;
       width:2px;
@@ -1607,7 +1592,6 @@
        tracking has to be re-declared at this specificity. */
     #page-home.apple-style .home-news-tab-title{letter-spacing:.16em;}
     #page-home.apple-style .home-news-tab-sub{letter-spacing:.13em;}
-    #page-home.apple-style .home-tab::before{letter-spacing:.06em;}
 
     /* Quick nav / news / food tiles sit on the grey card. Apple rarely
        outlines these — a soft resting shadow plus a slightly stronger one
