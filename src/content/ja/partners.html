@@ -12,15 +12,6 @@
         <option value="tax">税理士</option>
         <option value="gyosei">行政書士</option>
         <option value="labor">社会保険労務士</option>
-        <option value="realestate">不動産会社</option>
-        <option value="hotel">ホテル・宿泊</option>
-        <option value="staffing">人材派遣会社</option>
-        <option value="appliance">中古家電販売</option>
-        <option value="japanese">日本語教師</option>
-        <option value="pc">パソコン組立・修理</option>
-        <option value="hair">美容室・理髪</option>
-        <option value="beauty">美容・ネイル</option>
-        <option value="chiro">整骨院・整体</option>
       </select>
       <select id="partnerLanguage">
         <option value="all">すべての言語</option>
@@ -53,15 +44,10 @@
 <script>
   (() => {
     const PARTNER_CATEGORY = {
-      tax: "税理士", gyosei: "行政書士", labor: "社会保険労務士",
-      realestate: "不動産会社", hotel: "ホテル・宿泊", staffing: "人材派遣会社", appliance: "中古家電販売",
-      japanese: "日本語教師", pc: "パソコン組立・修理", hair: "美容室・理髪", beauty: "美容・ネイル",
-      chiro: "整骨院・整体"
+      tax: "税理士", gyosei: "行政書士", labor: "社会保険労務士"
     };
     const PARTNER_GLYPH = {
-      tax: "税", gyosei: "行", labor: "社", realestate: "不", hotel: "宿",
-      staffing: "派", appliance: "電", japanese: "語",
-      pc: "P", hair: "髪", beauty: "美", chiro: "整"
+      tax: "税", gyosei: "行", labor: "社"
     };
     const PARTNER_LANG = {
       ja: "日本語", "zh-tw": "中文（繁體）", "zh-cn": "中文（简体）", en: "English",
@@ -74,16 +60,7 @@
     const PARTNER_DIRECTORY = [
       { n: "はなみずき税理士事務所（掲載例）", c: "tax", area: "tokyo", l: ["ja", "en", "zh-tw"], desc: "個人事業主・外国人経営者の確定申告、会社設立後の記帳代行、消費税インボイス対応を中心にサポート。", addr: "東京都新宿区（最寄駅：新宿）", tel: "0300000001", site: "#" },
       { n: "ひかり行政書士事務所（掲載例）", c: "gyosei", area: "tokyo", l: ["ja", "zh-tw", "zh-cn", "vi"], desc: "在留資格の変更・更新、永住許可、帰化申請の書類作成と申請取次を行っています。初回相談は無料。", addr: "東京都豊島区（最寄駅：池袋）", tel: "0300000002", site: "#" },
-      { n: "そよかぜ社会保険労務士法人（掲載例）", c: "labor", area: "kanagawa", l: ["ja", "en"], desc: "外国人雇用に伴う社会保険・雇用保険手続き、給与計算、労務相談を企業向けに提供。", addr: "神奈川県横浜市（最寄駅：横浜）", tel: "0300000003", site: "#" },
-      { n: "みらい不動産（外国人サポート窓口）（掲載例）", c: "realestate", area: "tokyo", l: ["ja", "en", "zh-tw", "zh-cn"], desc: "外国人可の賃貸物件紹介、保証会社の案内、契約書の内容説明まで多言語で対応。", addr: "東京都台東区（最寄駅：浅草）", tel: "0300000005", site: "#" },
-      { n: "サクラホテル浅草（掲載例）", c: "hotel", area: "tokyo", l: ["ja", "en", "zh-tw", "ko"], desc: "短期滞在・来日直後の仮住まいにも利用しやすいビジネスホテル。週単位の割引プランあり。", addr: "東京都台東区浅草", tel: "0300000006", site: "#" },
-      { n: "グローバル人材派遣（掲載例）", c: "staffing", area: "nationwide", l: ["ja", "en", "vi", "id"], desc: "特定技能・技術人文知識国際業務など、在留資格に応じた求人紹介と就労サポート。", addr: "全国対応（オンライン面談可）", tel: "0300000007", site: "#" },
-      { n: "リユース家電ステーション（掲載例）", c: "appliance", area: "tokyo", l: ["ja", "en", "vi"], desc: "冷蔵庫・洗濯機・電子レンジなど中古家電の販売とお得な生活家電セットを用意。", addr: "東京都板橋区", tel: "0300000011", site: "#" },
-      { n: "にほんご教室ゆずる（掲載例）", c: "japanese", area: "nationwide", l: ["ja", "en", "zh-tw", "zh-cn", "ko"], desc: "生活日本語からJLPT対策までマンツーマン・オンラインレッスンに対応。", addr: "オンライン対応（東京都内で対面可）", tel: "0300000012", site: "#" },
-      { n: "PCサポート工房（掲載例）", c: "pc", area: "tokyo", l: ["ja", "en"], desc: "自作PCの組み立て、故障修理、データ移行、日本語⇔外国語キーボード設定を代行。", addr: "東京都中野区", tel: "0300000013", site: "#" },
-      { n: "ヘアサロン結（掲載例）", c: "hair", area: "tokyo", l: ["ja", "en", "ko"], desc: "カット・カラー・トリートメント。外国人のくせ毛・多様な髪質に対応した施術が可能。", addr: "東京都渋谷区", tel: "0300000014", site: "#" },
-      { n: "ネイル＆アイラッシュ Petit（掲載例）", c: "beauty", area: "kanagawa", l: ["ja", "zh-tw", "zh-cn"], desc: "ネイルケア、まつげエクステ、フェイシャルなど美容メニューを幅広く提供。", addr: "神奈川県川崎市", tel: "0300000015", site: "#" },
-      { n: "整骨院やすらぎ（掲載例）", c: "chiro", area: "tokyo", l: ["ja", "en"], desc: "肩こり・腰痛・スポーツ外傷の施術。健康保険の適用可否も丁寧に説明。", addr: "東京都墨田区", tel: "0300000016", site: "#" }
+      { n: "そよかぜ社会保険労務士法人（掲載例）", c: "labor", area: "kanagawa", l: ["ja", "en"], desc: "外国人雇用に伴う社会保険・雇用保険手続き、給与計算、労務相談を企業向けに提供。", addr: "神奈川県横浜市（最寄駅：横浜）", tel: "0300000003", site: "#" }
     ];
 
     const photoOf = (category) => `<div class="partner-photo" aria-hidden="true"><span>${PARTNER_GLYPH[category] || "夥"}</span></div>`;

@@ -56,14 +56,21 @@ function resolveAllowedOrigin(requestOrigin: string, configuredOrigin: string) {
   return configuredOrigin;
 }
 
+function timingSafeEqual(a: string, b: string) {
+  if (a.length !== b.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < a.length; i += 1) mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return mismatch === 0;
+}
+
 async function verifySignature(request: Request, body: string, secret: string) {
   const signature = request.headers.get('x-line-signature');
-  if (!signature) return false;
+  if (!signature || !secret) return false;
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   const digest = new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(body)));
   let encoded = '';
   for (const byte of digest) encoded += String.fromCharCode(byte);
-  return signature === btoa(encoded);
+  return timingSafeEqual(signature, btoa(encoded));
 }
 
 async function lineApi(path: string, token: string, init: RequestInit = {}) {

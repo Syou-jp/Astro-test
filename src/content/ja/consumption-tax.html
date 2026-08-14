@@ -230,7 +230,7 @@
         var backBtn = document.getElementById("expertBackBtn");
         if (!openBtns.length || !backdrop || !closeBtn || !grid) return;
 
-        function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value == null ? "" : value; return el.innerHTML; }
+        function escapeHtml(value) { return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]; }); }
 
         grid.innerHTML = experts.map(function (e) {
           return '<button type="button" class="expert-mini-card" data-expert-id="' + escapeHtml(e.id) + '">' +

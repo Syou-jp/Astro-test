@@ -71,7 +71,7 @@
       var articleBody = document.getElementById("nwArticleBody");
       var listSection = document.getElementById("news-list");
 
-      function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value; return el.innerHTML; }
+      function escapeHtml(value) { return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]; }); }
 
       function renderList() {
         listEl.innerHTML = digests.map(function (d) {

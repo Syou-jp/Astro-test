@@ -69,7 +69,7 @@
         { category: "other", categoryLabel: "OTHER", urgent: false, title: "役所の書類記入を手伝ってほしいです", date: "都合の良い平日", area: "新宿区役所 付近", reward: "応相談", note: "日本語の書類記入に不安があるため、一緒に区役所へ行って手伝ってくれる方を探しています。", contact: "メール: help.example@mail.com" }
       ];
       var activeFilter = "all";
-      function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value; return el.innerHTML; }
+      function escapeHtml(value) { return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]; }); }
       function render() {
         var visible = requests.filter(function (item) { return activeFilter === "all" || item.category === activeFilter; });
         var grid = document.getElementById("hrRequestGrid");

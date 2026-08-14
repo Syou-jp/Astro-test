@@ -141,7 +141,7 @@
           other: payload.other || ""
         };
       }
-      function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value; return el.innerHTML; }
+      function escapeHtml(value) { return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]; }); }
       function openModal(item) {
         var modal = document.getElementById("evModal");
         document.getElementById("evModalTitle").textContent = item.title;
@@ -149,12 +149,12 @@
         var image = document.getElementById("evModalImage");
         image.src = item.image || eventImages[item.slug] || "/sotocom_hero_photo.jpg";
         image.alt = item.title + "のイメージ";
-        var details = [["日時", item.date + " " + item.time], ["場所", item.area]];
-        if (item.fee) details.push(["参加費", item.fee]);
-        if (item.capacity) details.push(["定員", item.capacity]);
-        if (item.participation) details.push(["参加方法", item.participation]);
-        if (item.author) details.push(["投稿者", item.author]);
-        if (item.url) details.push(["参考URL", '<a class="ev-modal-link" href="' + ((/^https?:\/\//i.test(item.url)) ? item.url : "https://" + item.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.url) + '</a>']);
+        var details = [["日時", escapeHtml(item.date + " " + item.time)], ["場所", escapeHtml(item.area)]];
+        if (item.fee) details.push(["参加費", escapeHtml(item.fee)]);
+        if (item.capacity) details.push(["定員", escapeHtml(item.capacity)]);
+        if (item.participation) details.push(["参加方法", escapeHtml(item.participation)]);
+        if (item.author) details.push(["投稿者", escapeHtml(item.author)]);
+        if (item.url) details.push(["参考URL", '<a class="ev-modal-link" href="' + escapeHtml((/^https?:\/\//i.test(item.url)) ? item.url : "https://" + item.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.url) + '</a>']);
         if (item.notes) details.push(["注意事項", escapeHtml(item.notes).replace(/\n/g, "<br>")]);
         if (item.other) details.push(["その他", escapeHtml(item.other).replace(/\n/g, "<br>")]);
         document.getElementById("evModalDetails").innerHTML = details.map(function (detail) { return '<div class="ev-modal-detail"><b>' + escapeHtml(detail[0]) + '</b><span>' + detail[1] + '</span></div>'; }).join("");

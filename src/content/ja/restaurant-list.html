@@ -116,7 +116,7 @@
       var dataEl = document.getElementById("restaurantsData");
       var restaurants = dataEl ? JSON.parse(dataEl.textContent) : [];
 
-      function escapeHtml(value) { var el = document.createElement("div"); el.textContent = value == null ? "" : value; return el.innerHTML; }
+      function escapeHtml(value) { return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]; }); }
       function mapEmbedUrl(query) { return "https://www.google.com/maps?q=" + encodeURIComponent(query) + "&output=embed"; }
       function mapLinkUrl(query) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query); }
       function resolvedMapLink(r) { return r.mapUrl || mapLinkUrl(r.mapQuery); }

@@ -212,9 +212,9 @@
       });
 
       function esc(s){
-        var d = document.createElement("div");
-        d.textContent = s || "";
-        return d.innerHTML;
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function(ch){
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+        });
       }
 
       function badgeLabel(type){ return type === "share" ? "ルームシェア募集" : "オーナー直貸し"; }
@@ -472,7 +472,7 @@
         modalBadge.textContent = badgeLabel(item.type) + (item.sample ? "・例示（実在しない物件）" : "");
         modalTitle.textContent = item.title;
         modalDetails.innerHTML = item.details.map(function(detail, detailIndex){ var detailClass = detail[2] || (item.sample ? (detailIndex < 4 ? 'wide' : 'pair') : 'wide'); return '<div class="rl-detail-item rl-detail-' + detailClass + '"><dt>' + esc(detail[0]) + '</dt><dd>' + esc(detail[1]) + '</dd></div>'; }).join("");
-        modalThumbs.innerHTML = item.photos.map(function(photo, i){ return '<button type="button" class="rl-thumb" data-rl-photo="' + i + '"><img src="' + photo + '" alt="写真' + (i + 1) + '"></button>'; }).join("");
+        modalThumbs.innerHTML = item.photos.map(function(photo, i){ return '<button type="button" class="rl-thumb" data-rl-photo="' + i + '"><img src="' + esc(photo) + '" alt="写真' + (i + 1) + '"></button>'; }).join("");
         modal.hidden = false;
         modal.setAttribute("aria-hidden", "false");
         document.body.classList.add("rl-modal-open");

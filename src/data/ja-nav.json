@@ -273,6 +273,13 @@
         "glyph": "暮",
         "text": "暮らしのサービス",
         "small": "LIFESTYLE SERVICES"
+      },
+      {
+        "id": "page-partners",
+        "slug": "partners",
+        "glyph": "夥",
+        "text": "専門家リスト",
+        "small": "PROFESSIONALS DIRECTORY"
       }
     ]
   },
@@ -327,13 +334,6 @@
         "glyph": "暦",
         "text": "元号・年齢早見表",
         "small": "ERA &amp; AGE CONVERTER"
-      },
-      {
-        "id": "page-partners",
-        "slug": "partners",
-        "glyph": "夥",
-        "text": "専門家リスト",
-        "small": "PROFESSIONALS DIRECTORY"
       }
     ]
   }
