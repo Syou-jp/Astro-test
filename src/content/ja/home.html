@@ -424,9 +424,14 @@
       letter-spacing:.06em;
       transition:color .18s ease;
     }
-    /* On mobile, switch to horizontal scrollable tabs */
+    /* On mobile, switch to horizontal scrollable tabs.
+       align-self/min-width matter: the heading column sets
+       align-items:flex-start, so without them the bar sizes to its
+       fit-content width (~590px) instead of the column's, and a nowrap row
+       of six tabs shoots straight out of the card — overflow-x never gets
+       a chance to scroll because the box simply grew. */
     @media (max-width:768px){
-      .home-tabs-bar{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:26px;margin-top:14px;}
+      .home-tabs-bar{flex-direction:row;flex-wrap:nowrap;align-self:stretch;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:26px;margin-top:14px;}
       .home-tab{flex:0 0 auto;padding:0 0 14px;}
       .home-tab::before{display:none;}
     }
@@ -455,6 +460,21 @@
       visibility:visible;
       opacity:1;
       pointer-events:auto;
+    }
+    /* That shared cell is a desktop trade-off: it costs the height of the
+       tallest panel so the page never jumps. On a phone the panels differ
+       far more (News is one 16/9 image, Listings is a 2x2 photo grid), and
+       the cost lands on the default tab as ~300px of dead space right where
+       the fold is. Below 768px each panel sizes to its own content instead. */
+    @media (max-width:768px){
+      #page-home .home-tabs-content{display:block;}
+      #page-home .home-tabs-content .util-doc-panel{
+        display:none;
+        visibility:visible;
+        opacity:1;
+        pointer-events:auto;
+      }
+      #page-home .home-tabs-content .util-doc-panel.active{display:block;}
     }
     .home-tab-cta{
       display:inline-flex;
