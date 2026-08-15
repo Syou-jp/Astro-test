@@ -183,10 +183,10 @@
         if (item.fee) details.push(["参加費", escapeHtml(item.fee)]);
         if (item.capacity) details.push(["定員", escapeHtml(item.capacity)]);
         if (item.participation) details.push(["参加方法", escapeHtml(item.participation)]);
-        if (item.organizer) details.push(["主催者", escapeHtml(item.organizer)]);
-        else if (item.author) details.push(["投稿者", escapeHtml(item.author)]);
         if (item.url) details.push(["申込URL", linkHtml(item.url)]);
+        if (item.organizer) details.push(["主催者", escapeHtml(item.organizer)]);
         if (item.officialUrl) details.push(["公式サイト・SNS", linkHtml(item.officialUrl)]);
+        if (item.author) details.push(["投稿者・連絡方法", escapeHtml(item.author)]);
         if (item.notes) details.push(["注意事項", escapeHtml(item.notes).replace(/\n/g, "<br>")]);
         if (item.other) details.push(["その他", escapeHtml(item.other).replace(/\n/g, "<br>")]);
         document.getElementById("evModalDetails").innerHTML = details.map(function (detail) { return '<div class="ev-modal-detail"><b>' + escapeHtml(detail[0]) + '</b><span>' + detail[1] + '</span></div>'; }).join("");
