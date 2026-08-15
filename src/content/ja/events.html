@@ -223,7 +223,7 @@
         }
         grid.innerHTML = visible.map(function (item) {
           var tagsHtml = item.tags && item.tags.length ? '<div class="ev-card-tags">' + item.tags.slice(0, 3).map(function (tag) { return '<span class="ev-tag-pill">#' + escapeHtml(tag) + '</span>'; }).join("") + '</div>' : '';
-          return '<button type="button" class="ev-card" data-event-slug="' + item.slug + '">' + (item.popular ? '<div class="ev-card-top"><span class="ev-popular">人気</span></div>' : '') + '<h4>' + escapeHtml(item.title) + '</h4><div class="ev-meta"><div><b>日時</b><span>' + escapeHtml(item.date) + ' ' + escapeHtml(item.time) + '</span></div><div><b>場所</b><span>' + escapeHtml(item.area) + '</span></div></div>' + tagsHtml + '</button>';
+          return '<button type="button" class="ev-card" data-event-slug="' + item.slug + '"><h4>' + escapeHtml(item.title) + '</h4><div class="ev-meta"><div><b>日時</b><span>' + escapeHtml(item.date) + ' ' + escapeHtml(item.time) + '</span></div><div><b>場所</b><span>' + escapeHtml(item.area) + '</span></div></div>' + tagsHtml + '</button>';
         }).join("");
         grid.querySelectorAll("[data-event-slug]").forEach(function (card) { card.addEventListener("click", function () { var item = events.find(function (event) { return event.slug === card.dataset.eventSlug; }); if (item) openModal(item); }); });
       }
