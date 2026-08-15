@@ -152,7 +152,7 @@
         });
         return {
           date: dateLabel,
-          time: "日により異なる",
+          time: "",
           detail: groups.map(function (group) {
             var first = group.entries[0];
             var last = group.entries[group.entries.length - 1];
@@ -244,7 +244,8 @@
           return;
         }
         grid.innerHTML = visible.map(function (item) {
-          return '<button type="button" class="ev-card" data-event-slug="' + item.slug + '"><h4>' + escapeHtml(item.title) + '</h4><div class="ev-meta"><div><b>日時</b><span>' + escapeHtml(item.date) + ' ' + escapeHtml(item.time) + '</span></div><div><b>場所</b><span>' + escapeHtml(item.area) + '</span></div></div></button>';
+          var dateTimeText = item.time ? item.date + " " + item.time : item.date;
+          return '<button type="button" class="ev-card" data-event-slug="' + item.slug + '"><h4>' + escapeHtml(item.title) + '</h4><div class="ev-meta"><div><b>日時</b><span>' + escapeHtml(dateTimeText) + '</span></div><div><b>場所</b><span>' + escapeHtml(item.area) + '</span></div></div></button>';
         }).join("");
         grid.querySelectorAll("[data-event-slug]").forEach(function (card) { card.addEventListener("click", function () { var item = events.find(function (event) { return event.slug === card.dataset.eventSlug; }); if (item) openModal(item); }); });
       }
