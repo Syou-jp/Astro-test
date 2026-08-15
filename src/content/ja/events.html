@@ -141,10 +141,26 @@
           ? formatScheduleDateLabel(sorted[0].date, true) + "〜" + formatScheduleDateLabel(sorted[sorted.length - 1].date, false)
           : formatScheduleDateLabel(sorted[0].date, true);
         if (sameTime) return { date: dateLabel, time: sorted[0].start + "〜" + sorted[0].end };
+        var groups = [];
+        sorted.forEach(function (entry) {
+          var group = groups[groups.length - 1];
+          var prevEntry = group ? group.entries[group.entries.length - 1] : null;
+          var isNextDay = prevEntry && (new Date(entry.date + "T00:00:00") - new Date(prevEntry.date + "T00:00:00")) === 86400000;
+          var sameGroupTime = group && group.start === entry.start && group.end === entry.end;
+          if (group && isNextDay && sameGroupTime) group.entries.push(entry);
+          else groups.push({ start: entry.start, end: entry.end, entries: [entry] });
+        });
         return {
           date: dateLabel,
           time: "日により異なる",
-          detail: sorted.map(function (entry) { return formatScheduleDateLabel(entry.date, false) + " " + entry.start + "〜" + entry.end; })
+          detail: groups.map(function (group) {
+            var first = group.entries[0];
+            var last = group.entries[group.entries.length - 1];
+            var groupDateLabel = group.entries.length > 1
+              ? formatScheduleDateLabel(first.date, false) + "〜" + formatScheduleDateLabel(last.date, false)
+              : formatScheduleDateLabel(first.date, false);
+            return groupDateLabel + " " + group.start + "〜" + group.end;
+          })
         };
       }
       function makeLiveEvent(submission) {

@@ -133,7 +133,7 @@ const { locale = 'ja' } = Astro.params;
         listings: { title: '入居募集を投稿する', intro: '物件カードに必要な情報を順番に入力してください。確認後、掲載用に整えます。', fields: [['listingType', '募集タイプ', '', 'select', [['tenant', 'オーナー直貸し'], ['share', 'ルームシェア募集']]], ['prefecture', '都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['area', '区・市町村', '例：新宿区', 'text'], ['station', '最寄り駅', '例：中野駅 徒歩5分', 'text'], ['floorArea', '面積（㎡）', '例：40', 'number'], ['rent', '家賃（月額・円）', '例：90000', 'number'], ['managementFee', '管理費（月額・円）', '例：5000', 'number'], ['depositMonths', '敷金', '', 'select', []], ['keyMoneyMonths', '礼金', '', 'select', []], ['cleaningFeeHasFee', '清掃費', '', 'select', [['none', 'なし'], ['yes', 'あり']]], ['cleaningFee', '清掃費の金額', '例：30,000円', 'text'], ['layout', '間取り・広さ', '', 'select', []], ['moveIn', '入居可能日', '', 'select', []], ['moveInDate', '入居可能日（日付）', '', 'date'], ['contractPeriod', '契約期間', '', 'select', []], ['furnished', '家具・家電', '', 'select', [['あり', '家具・家電付き'], ['一部', '一部あり'], ['なし', 'なし']]], ['pet', 'ペット', '', 'select', []], ['genderRestriction', '性別限定', '', 'select', []], ['tenantNationalityHasCondition', '国籍・言語条件', '', 'select', []], ['tenantNationalityNote', '国籍・言語の内容', '例：中国語が話せる方', 'text'], ['propertyIntro', '物件紹介', '例：〇〇線〇〇駅から徒歩5分の明るいお部屋です。', 'textarea'], ['conditionChecks', '条件備註', '', 'select', [['fireInsurance', '🔥 火災保険加入必要'], ['utilities', '💧 光熱費割り勘'], ['quiet', '🤐 静かな環境を優先'], ['non-smoker', '🚭 禁煙']]], ['details', '条件・補足', '同居人など、その他の条件', 'textarea']] },
         'used-market': { title: '中古市場に投稿する', intro: '中古市場のカードに必要な商品情報を入力してください。写真は後から追加できます。', fields: [['category', 'カテゴリー', '', 'select', [['furniture', '家具'], ['appliance', '家電・ガジェット'], ['daily-goods', '生活雑貨・キッチン'], ['fashion', 'ファッション・美容'], ['kids', '子供用品・おもちゃ'], ['hobby', '本・趣味・スポーツ'], ['other', 'その他']]], ['title', '商品名', '例：冷蔵庫（168L）', 'text'], ['condition', '商品の状態', '', 'select', [['new', '新品・未使用'], ['good', '目立つ傷なし'], ['used', '使用感あり'], ['repair', '要確認・難あり']]], ['price', '価格（円）', '無料の場合は0', 'number'], ['prefecture', '受け渡し都道府県', '', 'select', [['東京都', '東京都'], ['神奈川県', '神奈川県'], ['埼玉県', '埼玉県'], ['千葉県', '千葉県'], ['その他', 'その他']]], ['pickupArea', '受け渡し場所', '例：中野駅・杉並区', 'text'], ['availableUntil', '受け渡し可能日', '', 'select', []], ['delivery', '受け渡し方法', '', 'select', [['pickup', '現地受け取り'], ['station', '駅で受け渡し'], ['delivery', '配送相談'], ['other', 'その他']]], ['details', '商品説明', '購入時期、サイズ、動作確認、傷、付属品など', 'textarea']] },
         jobs: { title: '求人を投稿する', intro: '求人カードに必要な募集条件を入力してください。応募者が比較しやすい形に整えます。', fields: [['jobCategory', '職種カテゴリー', '', 'select', [['hotel', 'ホテル・宿泊'], ['restaurant', '飲食'], ['cleaning', '清掃'], ['office', '事務・オフィス'], ['care', '介護・福祉'], ['other', 'その他']]], ['title', '募集職種', '例：ホテルフロントスタッフ', 'text'], ['company', '会社・店舗名', '掲載名として表示します', 'text'], ['employmentType', '雇用形態', '', 'select', [['part-time', 'アルバイト・パート'], ['full-time', '正社員'], ['contract', '契約社員'], ['freelance', '業務委託'], ['other', 'その他']]], ['workplace', '勤務地', '', 'select', []], ['salary', '給与・報酬', '例：時給1,300円〜／月給25万円〜', 'text'], ['hours', '勤務時間', '', 'select', []], ['japaneseLevel', '日本語レベル', '', 'select', [['none', '不問'], ['basic', '日常会話'], ['business', 'ビジネスレベル'], ['native', 'ネイティブ相当']]], ['benefits', '待遇・条件', '交通費、まかない、寮、資格、経験など', 'textarea'], ['application', '応募方法', '担当者、連絡先、応募時に伝える内容など', 'textarea']] },
-        events: { title: 'イベントを投稿する', intro: 'イベントページに表示する開催情報と参加方法を入力してください。', fields: [['title', 'タイトル', '例：多文化交流会', 'text'], ['organizer', '主催者・団体名', '例：ツナグ／個人開催の場合は空欄でOK', 'text'], ['schedule', '開催日時', '', 'text'], ['deadline', '申込締切', '', 'date'], ['venue', '場所・住所', '例：東京都渋谷区〇〇／渋谷カフェ', 'text'], ['eventPrefecture', '都道府県', '', 'select'], ['summary', '紹介文', 'イベントの内容や、どんな人におすすめかを書いてください', 'textarea'], ['fee', '参加費', '', 'select'], ['feeAmount', '参加費の金額', '', 'select'], ['capacity', '定員', '', 'select'], ['participationType', '参加方法', '', 'select'], ['applicationUrl', '申込方法・URL', '例：https://example.com または「当日受付」', 'text'], ['officialUrl', '公式サイト・SNS', '例：https://instagram.com/...', 'text'], ['tags', 'ハッシュタグ', '例：日本就職, 台湾人, 大阪（カンマ区切り）', 'text'], ['notes', '注意事項', '持ち物、対象年齢、雨天時の対応など', 'textarea'], ['other', 'その他', '補足があれば入力してください', 'textarea']] },
+        events: { title: 'イベントを投稿する', intro: 'イベントページに表示する開催情報と参加方法を入力してください。', fields: [['title', 'タイトル', '例：多文化交流会', 'text'], ['organizer', '主催者・団体名', '例：ツナグ／個人開催の場合は空欄でOK', 'text'], ['schedule', '開催日時', '', 'text'], ['deadline', '申込締切', '', 'date'], ['eventPrefecture', '都道府県', '', 'select'], ['venue', '場所・住所', '例：東京都渋谷区〇〇／渋谷カフェ', 'text'], ['summary', '紹介文', 'イベントの内容や、どんな人におすすめかを書いてください', 'textarea'], ['fee', '参加費', '', 'select'], ['feeAmount', '参加費の金額', '', 'select'], ['capacity', '定員', '', 'select'], ['participationType', '参加方法', '', 'select'], ['applicationUrl', '申込方法・URL', '例：https://example.com または「当日受付」', 'text'], ['officialUrl', '公式サイト・SNS', '例：https://instagram.com/...', 'text'], ['tags', 'ハッシュタグ', '例：日本就職, 台湾人, 大阪（カンマ区切り）', 'text'], ['notes', '注意事項', '持ち物、対象年齢、雨天時の対応など', 'textarea'], ['other', 'その他', '補足があれば入力してください', 'textarea']] },
         help: { title: '助け合いを投稿する', intro: '助けを求める人と協力できる人が判断しやすい情報を入力してください。', fields: [['category', '依頼カテゴリー', '', 'select', [['translate', '通訳・翻訳'], ['pet', 'ペット・留守番'], ['labor', '力仕事・引越し'], ['other', 'その他']]], ['title', '投稿タイトル', '例：引っ越しを手伝ってくれる方を探しています', 'text'], ['requestDate', '希望日時', '', 'select', []], ['area', '場所', '例：杉並区・高円寺エリア', 'text'], ['reward', '謝礼', '', 'select', []], ['urgent', '急募', '', 'select', [['no', '通常'], ['yes', '急募']]], ['details', '依頼内容', 'いつ、どこで、何を手伝ってほしいかを具体的に書いてください', 'textarea'], ['contact', '連絡方法', 'LINE ID、メール、その他の希望連絡方法', 'text']] }
       };
       const params = new URLSearchParams(location.search);
@@ -382,12 +382,11 @@ const { locale = 'ja' } = Astro.params;
         });
         const scheduleInput = fields.querySelector('[name="schedule"]');
         if (scheduleInput) {
-          const hourOptions = Array.from({ length: 24 }, (_, h) => String(h).padStart(2, '0')).map((h) => `<option value="${h}">${h}</option>`).join('');
-          const minuteOptions = Array.from({ length: 12 }, (_, m) => String(m * 5).padStart(2, '0')).map((m) => `<option value="${m}">${m}</option>`).join('');
-          const timeSelectHtml = (prefix) =>
-            `<select class="schedule-${prefix}-hour" aria-label="${prefix === 'start' ? '開始' : '終了'}時"><option value="">時</option>${hourOptions}</select>` +
-            `<span class="schedule-time-colon">:</span>` +
-            `<select class="schedule-${prefix}-minute" aria-label="${prefix === 'start' ? '開始' : '終了'}分"><option value="">分</option>${minuteOptions}</select>`;
+          const timeOptions = [];
+          for (let h = 0; h < 24; h += 1) {
+            for (let m = 0; m < 60; m += 30) timeOptions.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+          }
+          const timeOptionsHtml = timeOptions.map((t) => `<option value="${t}">${t}</option>`).join('');
           const scheduleField = document.createElement('div');
           scheduleField.className = 'schedule-field';
           scheduleField.innerHTML = '<span class="field-label">開催日時<em aria-label="必須">*</em></span>' +
@@ -398,9 +397,9 @@ const { locale = 'ja' } = Astro.params;
                 '<input type="date" class="schedule-date-end-input" aria-label="終了日（同じ時間が続く場合）" />' +
               '</div>' +
               '<div class="schedule-time-range">' +
-                timeSelectHtml('start') +
+                `<select class="schedule-start-time" aria-label="開始時刻"><option value="">開始時刻</option>${timeOptionsHtml}</select>` +
                 '<span class="schedule-time-sep">〜</span>' +
-                timeSelectHtml('end') +
+                `<select class="schedule-end-time" aria-label="終了時刻"><option value="">終了時刻</option>${timeOptionsHtml}</select>` +
               '</div>' +
               '<button type="button" class="schedule-add-btn" disabled>＋ 追加</button>' +
             '</div>' +
@@ -410,36 +409,51 @@ const { locale = 'ja' } = Astro.params;
           scheduleInput.closest('label').replaceWith(scheduleField);
           const dateInput = scheduleField.querySelector('.schedule-date-input');
           const dateEndInput = scheduleField.querySelector('.schedule-date-end-input');
-          const startHour = scheduleField.querySelector('.schedule-start-hour');
-          const startMinute = scheduleField.querySelector('.schedule-start-minute');
-          const endHour = scheduleField.querySelector('.schedule-end-hour');
-          const endMinute = scheduleField.querySelector('.schedule-end-minute');
+          const startTimeSelect = scheduleField.querySelector('.schedule-start-time');
+          const endTimeSelect = scheduleField.querySelector('.schedule-end-time');
           const addBtn = scheduleField.querySelector('.schedule-add-btn');
           const list = scheduleField.querySelector('.schedule-list');
           const hiddenInput = scheduleField.querySelector('.schedule-hidden-input');
           const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-          const formatDateLabel = (value) => {
+          const formatDateLabel = (value, withYear) => {
             const date = new Date(`${value}T00:00:00`);
-            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日（${weekdays[date.getDay()]}）`;
+            return `${withYear ? date.getFullYear() + '年' : ''}${date.getMonth() + 1}月${date.getDate()}日（${weekdays[date.getDay()]}）`;
           };
           const entries = [];
-          const currentStart = () => (startHour.value && startMinute.value ? `${startHour.value}:${startMinute.value}` : '');
-          const currentEnd = () => (endHour.value && endMinute.value ? `${endHour.value}:${endMinute.value}` : '');
           const syncAddBtn = () => {
-            const start = currentStart();
-            const end = currentEnd();
+            const start = startTimeSelect.value;
+            const end = endTimeSelect.value;
             const validRange = !dateEndInput.value || dateEndInput.value >= dateInput.value;
             addBtn.disabled = !(dateInput.value && start && end && end > start && validRange);
           };
+          const groupEntries = () => {
+            const sorted = entries.slice().sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
+            const groups = [];
+            sorted.forEach((entry) => {
+              const group = groups[groups.length - 1];
+              const prevEntry = group ? group.entries[group.entries.length - 1] : null;
+              const isNextDay = prevEntry && new Date(`${entry.date}T00:00:00`) - new Date(`${prevEntry.date}T00:00:00`) === 86400000;
+              const sameTime = group && group.start === entry.start && group.end === entry.end;
+              if (group && isNextDay && sameTime) group.entries.push(entry);
+              else groups.push({ start: entry.start, end: entry.end, entries: [entry] });
+            });
+            return groups;
+          };
           const renderScheduleList = () => {
-            list.innerHTML = entries.map((entry, index) => `<div class="schedule-row"><span>${formatDateLabel(entry.date)} ${entry.start}〜${entry.end}</span><button type="button" class="schedule-remove" data-index="${index}" aria-label="削除">×</button></div>`).join('');
+            list.innerHTML = groupEntries().map((group) => {
+              const first = group.entries[0];
+              const last = group.entries[group.entries.length - 1];
+              const dateLabel = group.entries.length > 1 ? `${formatDateLabel(first.date, true)}〜${formatDateLabel(last.date, false)}` : formatDateLabel(first.date, true);
+              const dates = group.entries.map((entry) => entry.date).join(',');
+              return `<div class="schedule-row"><span>${dateLabel} ${group.start}〜${group.end}</span><button type="button" class="schedule-remove" data-dates="${dates}" aria-label="削除">×</button></div>`;
+            }).join('');
             hiddenInput.value = entries.length ? JSON.stringify(entries) : '';
             hiddenInput.setCustomValidity(entries.length ? '' : '開催日時を1件以上追加してください。');
           };
-          [dateInput, dateEndInput, startHour, startMinute, endHour, endMinute].forEach((input) => input.addEventListener('input', syncAddBtn));
+          [dateInput, dateEndInput, startTimeSelect, endTimeSelect].forEach((input) => input.addEventListener('input', syncAddBtn));
           addBtn.addEventListener('click', () => {
-            const start = currentStart();
-            const end = currentEnd();
+            const start = startTimeSelect.value;
+            const end = endTimeSelect.value;
             const lastDate = dateEndInput.value || dateInput.value;
             const cursor = new Date(`${dateInput.value}T00:00:00`);
             const last = new Date(`${lastDate}T00:00:00`);
@@ -449,14 +463,17 @@ const { locale = 'ja' } = Astro.params;
               cursor.setDate(cursor.getDate() + 1);
             }
             entries.sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
-            dateInput.value = ''; dateEndInput.value = ''; startHour.value = ''; startMinute.value = ''; endHour.value = ''; endMinute.value = '';
+            dateInput.value = ''; dateEndInput.value = ''; startTimeSelect.value = ''; endTimeSelect.value = '';
             syncAddBtn();
             renderScheduleList();
           });
           list.addEventListener('click', (event) => {
-            const button = event.target.closest('[data-index]');
+            const button = event.target.closest('[data-dates]');
             if (!button) return;
-            entries.splice(Number(button.dataset.index), 1);
+            const datesToRemove = new Set(button.dataset.dates.split(','));
+            for (let i = entries.length - 1; i >= 0; i -= 1) {
+              if (datesToRemove.has(entries[i].date)) entries.splice(i, 1);
+            }
             renderScheduleList();
           });
           renderScheduleList();
@@ -931,12 +948,22 @@ const { locale = 'ja' } = Astro.params;
           const date = new Date(`${value}T00:00:00`);
           return `${date.getMonth() + 1}月${date.getDate()}日（${weekdays[date.getDay()]}）`;
         };
-        const sameTime = entries.every((entry) => entry.start === entries[0].start && entry.end === entries[0].end);
-        if (sameTime) {
-          const dateLabel = entries.length > 1 ? `${formatDateLabel(entries[0].date)}〜${formatDateLabel(entries[entries.length - 1].date)}` : formatDateLabel(entries[0].date);
-          return `${dateLabel} ${entries[0].start}〜${entries[0].end}`;
-        }
-        return entries.map((entry) => `${formatDateLabel(entry.date)} ${entry.start}〜${entry.end}`).join('、');
+        const sorted = entries.slice().sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
+        const groups = [];
+        sorted.forEach((entry) => {
+          const group = groups[groups.length - 1];
+          const prevEntry = group ? group.entries[group.entries.length - 1] : null;
+          const isNextDay = prevEntry && new Date(`${entry.date}T00:00:00`) - new Date(`${prevEntry.date}T00:00:00`) === 86400000;
+          const sameTime = group && group.start === entry.start && group.end === entry.end;
+          if (group && isNextDay && sameTime) group.entries.push(entry);
+          else groups.push({ start: entry.start, end: entry.end, entries: [entry] });
+        });
+        return groups.map((group) => {
+          const first = group.entries[0];
+          const last = group.entries[group.entries.length - 1];
+          const dateLabel = group.entries.length > 1 ? `${formatDateLabel(first.date)}〜${formatDateLabel(last.date)}` : formatDateLabel(first.date);
+          return `${dateLabel} ${group.start}〜${group.end}`;
+        }).join('、');
       }
 
       function listingAutoTitle(values) {
@@ -1691,9 +1718,9 @@ const { locale = 'ja' } = Astro.params;
   .schedule-field{display:grid;gap:9px;min-width:0;margin:0}
   .schedule-add-row{display:grid;gap:8px}
   .schedule-date-range{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px}
-  .schedule-time-range{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:5px}
+  .schedule-time-range{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px}
   .schedule-add-row input,.schedule-add-row select{width:100%;min-height:48px;margin:0;padding:11px 8px;border:1px solid #c8d9cf;border-radius:11px;background:#fff;color:#173044;font-family:inherit;font-size:12.5px;font-weight:500;outline:none;min-width:0}
-  .schedule-date-sep,.schedule-time-sep,.schedule-time-colon{color:#7c8c90;font-size:12.5px;text-align:center}
+  .schedule-date-sep,.schedule-time-sep{color:#7c8c90;font-size:12.5px;text-align:center}
   .schedule-add-btn{width:100%;min-height:48px;padding:0 12px;border:1px solid #789e35;border-radius:11px;background:#eaf4d8;color:#3a5c1e;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap}
   .schedule-add-btn:disabled{opacity:.4;cursor:not-allowed}
   .schedule-hint{margin:0;color:#7c8c90;font-size:10.5px;line-height:1.6}
