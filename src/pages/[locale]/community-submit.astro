@@ -907,10 +907,9 @@ const { locale = 'ja' } = Astro.params;
         const dateRange = [formatDateTime(values.startsAt), formatDateTime(values.endsAt)].filter(Boolean).join('〜');
         const audienceTagsValues = Array.from(fields.querySelectorAll('[name="audienceTags"]:checked')).map((c) => audienceTagsLabels[c.value] || c.value);
         const hashtagList = (values.tags || '').split(/[,、\s]+/).map((tag) => tag.trim()).filter(Boolean);
-        const organizerLine = values.organizer ? `<div class="pv-organizer">主催：${escapeHtml(values.organizer)}</div>` : '';
         const audienceHtml = audienceTagsValues.length ? `<div class="pv-checklist">${audienceTagsValues.map((tag) => `<span>✓ ${escapeHtml(tag)}</span>`).join('')}</div>` : '';
         const hashtagHtml = hashtagList.length ? `<div class="pv-tags">${hashtagList.map((tag) => `<span class="pv-tag">#${escapeHtml(tag)}</span>`).join('')}</div>` : '';
-        const card = `<article class="pv-card pv-events"><div class="pv-card-body">${organizerLine}<h3>${escapeHtml(values.title) || '（タイトル未入力）'}</h3><p class="pv-desc">${escapeHtml(values.summary) || ''}</p>${audienceHtml}<div class="pv-meta-rows"><div><b>日時</b><span>${dateRange || '未設定'}</span></div><div><b>場所</b><span>${escapeHtml(values.venue) || '未設定'}</span></div>${values.deadline ? `<div><b>申込締切</b><span>${escapeHtml(values.deadline)}</span></div>` : ''}</div>${hashtagHtml}</div></article>`;
+        const card = `<article class="pv-card pv-events"><div class="pv-card-body"><h3>${escapeHtml(values.title) || '（タイトル未入力）'}</h3>${audienceHtml}<div class="pv-meta-rows"><div><b>日時</b><span>${dateRange || '未設定'}</span></div><div><b>場所</b><span>${escapeHtml(values.venue) || '未設定'}</span></div>${values.deadline ? `<div><b>申込締切</b><span>${escapeHtml(values.deadline)}</span></div>` : ''}</div>${hashtagHtml}</div></article>`;
         return card;
       }
 
