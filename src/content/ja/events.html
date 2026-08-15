@@ -75,10 +75,6 @@
     .ev-card-organizer{font:700 9.5px "JetBrains Mono",monospace;letter-spacing:.04em;color:var(--ev-accent);margin-bottom:2px}
     .ev-card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
     .ev-modal-organizer{font:700 11px "JetBrains Mono",monospace;letter-spacing:.04em;color:var(--ev-accent);margin:6px 0 0}
-    .ev-modal-audience{margin:0 0 18px;padding:14px 16px;border-radius:var(--radius-md);background:var(--ev-sage)}
-    .ev-modal-audience b{display:block;font-size:11px;color:var(--ev-dark);letter-spacing:.06em;margin-bottom:8px}
-    .ev-modal-audience-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px}
-    .ev-modal-audience-list span{font-size:12px;line-height:1.6;color:var(--ev-dark)}
     .ev-modal-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
   </style>
 
@@ -114,7 +110,7 @@
       var feeAmountLabels = { "500": "500円", "1000": "1,000円", "1500": "1,500円", "2000": "2,000円", "3000": "3,000円", "5000": "5,000円", "10000": "10,000円", other: "その他" };
       var capacityLabels = { small: "10名未満", medium: "10〜30名", large: "30名以上", unlimited: "定員なし", unknown: "未定" };
       var participationLabels = { reservation: "事前予約", "walk-in": "当日参加", both: "予約・当日参加", contact: "主催者へ問い合わせ" };
-      var audienceTagsLabels = { beginner: "🔰 初心者歓迎", solo: "🙋 ひとり参加OK", student: "🎓 学生歓迎", business: "💼 転職・キャリア目的", family: "👨‍👩‍👧 家族連れOK", "no-language-barrier": "🗣️ 日本語レベル不問" };
+      var weekdaysJa = ["日", "月", "火", "水", "木", "金", "土"];
       function formatDeadlineDate(value) {
         if (!value) return "";
         var date = new Date(value);
@@ -126,21 +122,34 @@
         if (payload.fee === "paid") return feeAmountLabels[payload.feeAmount] || feeLabels.paid;
         return "";
       }
-      function formatLiveDate(value) {
-        var date = new Date(value);
-        if (Number.isNaN(date.getTime())) return { date: "日時未入力", time: "" };
-        var weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+      function formatScheduleDateLabel(value, withYear) {
+        var date = new Date(value + "T00:00:00");
+        if (Number.isNaN(date.getTime())) return "";
+        return (withYear ? date.getFullYear() + "年" : "") + (date.getMonth() + 1) + "月" + date.getDate() + "日（" + weekdaysJa[date.getDay()] + "）";
+      }
+      function parseSchedule(json) {
+        try {
+          var entries = JSON.parse(json || "[]");
+          return Array.isArray(entries) ? entries : [];
+        } catch (error) { return []; }
+      }
+      function summarizeSchedule(entries) {
+        if (!entries.length) return { date: "日時未入力", time: "" };
+        var sorted = entries.slice().sort(function (a, b) { return a.date === b.date ? (a.start < b.start ? -1 : 1) : (a.date < b.date ? -1 : 1); });
+        var sameTime = sorted.every(function (entry) { return entry.start === sorted[0].start && entry.end === sorted[0].end; });
+        var dateLabel = sorted.length > 1
+          ? formatScheduleDateLabel(sorted[0].date, true) + "〜" + formatScheduleDateLabel(sorted[sorted.length - 1].date, false)
+          : formatScheduleDateLabel(sorted[0].date, true);
+        if (sameTime) return { date: dateLabel, time: sorted[0].start + "〜" + sorted[0].end };
         return {
-          date: date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日（" + weekdays[date.getDay()] + "）",
-          time: String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0")
+          date: dateLabel,
+          time: "日により異なる",
+          detail: sorted.map(function (entry) { return formatScheduleDateLabel(entry.date, false) + " " + entry.start + "〜" + entry.end; })
         };
       }
       function makeLiveEvent(submission) {
         var payload = submission.payload || {};
-        var start = formatLiveDate(payload.startsAt);
-        var end = payload.endsAt ? formatLiveDate(payload.endsAt) : null;
-        var date = start.date;
-        if (end && end.date !== start.date) date += "〜" + end.date;
+        var schedule = summarizeSchedule(parseSchedule(payload.schedule));
         return {
           slug: "submission-" + submission.id,
           category: "cultural",
@@ -148,8 +157,9 @@
           popular: false,
           liveSubmission: true,
           title: payload.title || "新しいイベント",
-          date: date,
-          time: end && end.time !== start.time ? start.time + "〜" + end.time : start.time,
+          date: schedule.date,
+          time: schedule.time,
+          scheduleDetail: schedule.detail || null,
           area: [payload.eventPrefecture, payload.venue].filter(Boolean).join("・") || "会場未入力",
           description: payload.summary || "投稿者から寄せられたイベントです。",
           url: payload.applicationUrl || "",
@@ -162,7 +172,6 @@
           deadline: formatDeadlineDate(payload.deadline),
           officialUrl: payload.officialUrl || "",
           tags: (payload.tags || "").split(/[,、\s]+/).map(function (tag) { return tag.trim(); }).filter(Boolean),
-          audienceTags: (payload.audienceTags || "").split(" / ").map(function (key) { return audienceTagsLabels[key] || key; }).filter(Boolean),
           notes: payload.notes || "",
           other: payload.other || ""
         };
@@ -179,7 +188,10 @@
         var organizerEl = document.getElementById("evModalOrganizer");
         if (item.organizer) { organizerEl.textContent = "主催：" + item.organizer; organizerEl.hidden = false; } else { organizerEl.hidden = true; }
         var detailHtml = function (label, val) { return '<div class="ev-modal-detail"><b>' + escapeHtml(label) + '</b><span>' + val + '</span></div>'; };
-        var blocks = [detailHtml("日時", escapeHtml(item.date + " " + item.time)), detailHtml("場所", escapeHtml(item.area))];
+        var dateTimeValue = item.scheduleDetail && item.scheduleDetail.length
+          ? item.scheduleDetail.map(function (line) { return escapeHtml(line); }).join("<br>")
+          : escapeHtml(item.date + " " + item.time);
+        var blocks = [detailHtml("日時", dateTimeValue), detailHtml("場所", escapeHtml(item.area))];
         if (item.deadline) blocks.push(detailHtml("申込締切", escapeHtml(item.deadline)));
         var rowItems = [];
         if (item.fee) rowItems.push(detailHtml("参加費", escapeHtml(item.fee)));
