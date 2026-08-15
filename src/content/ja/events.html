@@ -45,7 +45,15 @@
     <div class="ev-modal-backdrop" data-ev-close></div>
     <div class="ev-modal-panel" role="dialog" aria-modal="true" aria-labelledby="evModalTitle">
       <button type="button" class="ev-modal-close" data-ev-close aria-label="閉じる">×</button>
-      <div class="ev-modal-media"><img id="evModalImage" src="" alt=""></div>
+      <div class="ev-modal-media">
+        <div class="ev-modal-gallery">
+          <button type="button" class="ev-gallery-arrow prev" data-ev-prev aria-label="前の写真">‹</button>
+          <img id="evModalImage" src="" alt="">
+          <button type="button" class="ev-gallery-arrow next" data-ev-next aria-label="次の写真">›</button>
+          <div class="ev-gallery-count" id="evGalleryCount"></div>
+        </div>
+        <div class="ev-thumbs" id="evModalThumbs"></div>
+      </div>
       <div class="ev-modal-content">
         <div class="ev-modal-eyebrow">イベント・交流会</div>
         <div class="ev-modal-organizer" id="evModalOrganizer" hidden></div>
@@ -71,6 +79,7 @@
     .ev-modal[hidden]{display:none}.ev-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px}.ev-modal-backdrop{position:absolute;inset:0;background:rgba(20,30,42,.72);backdrop-filter:blur(4px)}.ev-modal-panel{position:relative;z-index:1;width:min(1180px,100%);max-height:calc(100vh - 48px);overflow:auto;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);background:var(--paper);border-radius:var(--radius-lg);box-shadow:0 24px 80px rgba(0,0,0,.28)}.ev-modal-close{position:absolute;z-index:2;top:12px;right:14px;width:38px;height:38px;border:0;border-radius:var(--radius-full);background:rgba(0,0,0,.58);color:#fff;font-size:27px;line-height:1;cursor:pointer}.ev-modal-media{min-width:0;padding:22px;background:var(--paper-2);display:grid;place-items:center}.ev-modal-media img{display:block;width:auto;max-width:100%;height:auto;max-height:min(68vh,680px);object-fit:contain;border-radius:var(--radius-md);box-shadow:0 3px 14px rgba(0,0,0,.08)}.ev-modal-content{padding:34px 30px 30px;min-width:0}.ev-modal-eyebrow{font:700 10px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--ev-accent)}.ev-modal-content h2{font-family:"Shippori Mincho",serif;font-size:clamp(23px,3vw,32px);line-height:1.4;margin:5px 30px 12px 0}.ev-modal-intro-box{margin:0 0 18px;padding:16px;border:1px solid var(--line);border-radius:var(--radius-md);background:var(--paper-2)}.ev-modal-intro-box b{display:block;font-size:11px;color:var(--ev-accent);letter-spacing:.06em;margin-bottom:8px}.ev-modal-intro-box p{margin:0;font-size:13px;line-height:1.9;color:var(--ink)}.ev-modal-details{display:grid;gap:8px}.ev-modal-detail{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);padding:11px 12px}.ev-modal-detail b{display:block;font-size:10px;color:var(--ink-soft);letter-spacing:.06em;margin-bottom:3px}.ev-modal-detail span{font-size:12px;line-height:1.55}.ev-modal-detail-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ev-modal-detail-row .ev-modal-detail{padding:11px 10px}@media(max-width:520px){.ev-modal-detail-row{grid-template-columns:1fr}}.ev-modal-note{display:grid;gap:4px;margin-top:14px;padding:12px;border-left:3px solid var(--ev-accent);border-radius:var(--radius-sm);background:var(--ev-sage)}.ev-modal-note b{font-size:11px;color:var(--ev-dark)}.ev-modal-note span{font-size:10.5px;line-height:1.7;color:var(--ink-soft)}body.ev-modal-open{overflow:hidden}@media(max-width:700px){.ev-modal{padding:0}.ev-modal-panel{display:block;width:100%;max-height:100vh;border-radius:0}.ev-modal-media{padding:16px;min-height:0}.ev-modal-media img{max-height:48vh}.ev-modal-content{padding:20px 16px 24px}}
     .events-page .ev-note{margin-top:18px;padding:13px 16px;border:1px solid var(--line);border-left:4px solid var(--ev-accent);background:var(--paper-2);color:var(--ink-soft);font-size:12px;line-height:1.85;text-align:left}
     .ev-modal[hidden]{display:none}.ev-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px}.ev-modal-backdrop{position:absolute;inset:0;background:rgba(20,30,42,.72);backdrop-filter:blur(4px)}.ev-modal-panel{position:relative;z-index:1;width:min(1180px,100%);max-height:calc(100vh - 48px);overflow:auto;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);background:var(--paper);border-radius:var(--radius-lg);box-shadow:0 24px 80px rgba(0,0,0,.28)}.ev-modal-close{position:absolute;z-index:2;top:12px;right:14px;width:38px;height:38px;border:0;border-radius:var(--radius-full);background:rgba(0,0,0,.58);color:#fff;font-size:27px;line-height:1;cursor:pointer}.ev-modal-media{min-width:0;padding:22px;background:var(--paper-2);display:grid;place-items:center}.ev-modal-media img{display:block;width:auto;max-width:100%;height:auto;max-height:min(68vh,680px);object-fit:contain;border-radius:var(--radius-md);box-shadow:0 3px 14px rgba(0,0,0,.08)}.ev-modal-content{padding:34px 30px 30px;min-width:0}.ev-modal-eyebrow{font:700 10px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--ev-accent)}.ev-modal-content h2{font-family:"Shippori Mincho",serif;font-size:clamp(23px,3vw,32px);line-height:1.4;margin:5px 30px 12px 0}.ev-modal-intro-box{margin:0 0 18px;padding:16px;border:1px solid var(--line);border-radius:var(--radius-md);background:var(--paper-2)}.ev-modal-intro-box b{display:block;font-size:11px;color:var(--ev-accent);letter-spacing:.06em;margin-bottom:8px}.ev-modal-intro-box p{margin:0;font-size:13px;line-height:1.9;color:var(--ink)}.ev-modal-details{display:grid;gap:8px}.ev-modal-detail{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);padding:11px 12px}.ev-modal-detail b{display:block;font-size:10px;color:var(--ink-soft);letter-spacing:.06em;margin-bottom:3px}.ev-modal-detail span{font-size:12px;line-height:1.55}.ev-modal-detail-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ev-modal-detail-row .ev-modal-detail{padding:11px 10px}@media(max-width:520px){.ev-modal-detail-row{grid-template-columns:1fr}}.ev-modal-link{color:var(--ev-dark);font-weight:700;text-decoration:underline;word-break:break-all}.ev-modal-note{display:grid;gap:4px;margin-top:14px;padding:12px;border-left:3px solid var(--ev-accent);border-radius:var(--radius-sm);background:var(--ev-sage)}.ev-modal-note b{font-size:11px;color:var(--ev-dark)}.ev-modal-note span{font-size:10.5px;line-height:1.7;color:var(--ink-soft)}body.ev-modal-open{overflow:hidden}@media(max-width:700px){.ev-modal{padding:0}.ev-modal-panel{display:block;width:100%;max-height:100vh;border-radius:0}.ev-modal-media{padding:16px;min-height:0}.ev-modal-media img{max-height:48vh}.ev-modal-content{padding:20px 16px 24px}}
+    .ev-modal-media{display:block;padding:22px}.ev-modal-gallery{position:relative;background:var(--paper);display:grid;place-items:center;min-height:280px;height:min(58vh,560px);overflow:hidden;border-radius:var(--radius-md)}.ev-modal-gallery img{display:block;width:auto;max-width:calc(100% - 32px);height:auto;max-height:calc(100% - 32px);object-fit:contain;box-shadow:0 3px 14px rgba(0,0,0,.08)}.ev-gallery-arrow{position:absolute;z-index:1;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;border-radius:var(--radius-full);background:rgba(255,255,255,.88);color:#282a25;font-size:30px;line-height:26px;cursor:pointer}.ev-gallery-arrow.prev{left:12px}.ev-gallery-arrow.next{right:12px}.ev-gallery-count{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);padding:4px 10px;border-radius:99px;background:rgba(0,0,0,.62);color:#fff;font-size:11px}.ev-thumbs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}.ev-thumb{flex:0 0 56px;width:56px;height:56px;padding:0;border:2px solid transparent;background:none;overflow:hidden;cursor:pointer;border-radius:8px}.ev-thumb.active{border-color:var(--ev-accent)}.ev-thumb img{width:100%;height:100%;object-fit:cover;display:block}@media(max-width:700px){.ev-modal-gallery{min-height:220px;height:44vh}}
     .ev-tag-pill{display:inline-flex;font:600 10px "JetBrains Mono",monospace;letter-spacing:.02em;color:var(--ev-dark);background:var(--ev-sage);border-radius:999px;padding:3px 9px}
     .ev-card-organizer{font:700 9.5px "JetBrains Mono",monospace;letter-spacing:.04em;color:var(--ev-accent);margin-bottom:2px}
     .ev-card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
@@ -180,6 +189,7 @@
           description: payload.summary || "投稿者から寄せられたイベントです。",
           url: payload.applicationUrl || "",
           image: payload.photoKeys && payload.photoKeys[0] ? API_URL.replace("/api/submissions", "/api/photos") + "?key=" + encodeURIComponent(payload.photoKeys[0]) : "/event.png",
+          images: payload.photoKeys && payload.photoKeys.length ? payload.photoKeys.map(function (key) { return API_URL.replace("/api/submissions", "/api/photos") + "?key=" + encodeURIComponent(key); }) : null,
           author: submission.display_name || "投稿者",
           organizer: payload.organizer || "",
           fee: feeText(payload),
@@ -194,13 +204,31 @@
       }
       function escapeHtml(value) { return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]; }); }
       function linkHtml(url) { return '<a class="ev-modal-link" href="' + escapeHtml((/^https?:\/\//i.test(url)) ? url : "https://" + url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(url) + '</a>'; }
+      var evModalImage = document.getElementById("evModalImage");
+      var evModalThumbs = document.getElementById("evModalThumbs");
+      var evGalleryCount = document.getElementById("evGalleryCount");
+      var currentEventPhotos = [];
+      var currentEventPhotoIndex = 0;
+      function showEventPhoto(index) {
+        currentEventPhotoIndex = (index + currentEventPhotos.length) % currentEventPhotos.length;
+        evModalImage.src = currentEventPhotos[currentEventPhotoIndex];
+        var multi = currentEventPhotos.length > 1;
+        evGalleryCount.hidden = !multi;
+        evGalleryCount.textContent = (currentEventPhotoIndex + 1) + " / " + currentEventPhotos.length;
+        Array.prototype.forEach.call(evModalThumbs.children, function (thumb, i) { thumb.classList.toggle("active", i === currentEventPhotoIndex); });
+      }
       function openModal(item) {
         var modal = document.getElementById("evModal");
         document.getElementById("evModalTitle").textContent = item.title;
         document.getElementById("evModalIntro").textContent = item.description || eventDescriptions[item.slug] || "";
-        var image = document.getElementById("evModalImage");
-        image.src = item.image || eventImages[item.slug] || "/event.png";
-        image.alt = item.title + "のイメージ";
+        evModalImage.alt = item.title + "のイメージ";
+        currentEventPhotos = (item.images && item.images.length) ? item.images : [item.image || eventImages[item.slug] || "/event.png"];
+        var arrowsHidden = currentEventPhotos.length <= 1;
+        document.querySelectorAll("[data-ev-prev], [data-ev-next]").forEach(function (button) { button.hidden = arrowsHidden; });
+        evModalThumbs.innerHTML = currentEventPhotos.length > 1
+          ? currentEventPhotos.map(function (photo, i) { return '<button type="button" class="ev-thumb" data-ev-photo="' + i + '"><img src="' + escapeHtml(photo) + '" alt="写真' + (i + 1) + '"></button>'; }).join("")
+          : "";
+        showEventPhoto(0);
         var organizerEl = document.getElementById("evModalOrganizer");
         if (item.organizer) { organizerEl.textContent = "主催：" + item.organizer; organizerEl.hidden = false; } else { organizerEl.hidden = true; }
         var detailHtml = function (label, val) { return '<div class="ev-modal-detail"><b>' + escapeHtml(label) + '</b><span>' + val + '</span></div>'; };
@@ -250,7 +278,15 @@
       }
       document.querySelectorAll(".ev-filter").forEach(function (button) { button.addEventListener("click", function () { activeFilter = button.dataset.filter; document.querySelectorAll(".ev-filter").forEach(function (entry) { entry.classList.toggle("active", entry === button); }); render(); }); });
       document.querySelectorAll("[data-ev-close]").forEach(function (button) { button.addEventListener("click", closeModal); });
-      document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !document.getElementById("evModal").hidden) closeModal(); });
+      document.querySelector("[data-ev-prev]").addEventListener("click", function () { showEventPhoto(currentEventPhotoIndex - 1); });
+      document.querySelector("[data-ev-next]").addEventListener("click", function () { showEventPhoto(currentEventPhotoIndex + 1); });
+      evModalThumbs.addEventListener("click", function (event) { var thumb = event.target.closest("[data-ev-photo]"); if (thumb) showEventPhoto(Number(thumb.dataset.evPhoto)); });
+      document.addEventListener("keydown", function (event) {
+        if (document.getElementById("evModal").hidden) return;
+        if (event.key === "Escape") closeModal();
+        if (event.key === "ArrowLeft") showEventPhoto(currentEventPhotoIndex - 1);
+        if (event.key === "ArrowRight") showEventPhoto(currentEventPhotoIndex + 1);
+      });
       render();
       fetch(API_URL + "?=" + Date.now())
         .then(function (response) { if (!response.ok) throw new Error("events-submissions-failed"); return response.json(); })

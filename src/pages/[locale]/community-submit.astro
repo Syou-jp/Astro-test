@@ -141,7 +141,7 @@ const { locale = 'ja' } = Astro.params;
       const languageMode = params.get('mode') === 'language';
       const type = params.get('type') || 'events';
       const config = configs[type] || configs.events;
-      const PHOTO_LIMITS = { listings: 8, 'used-market': 9, jobs: 1, events: 1, help: 1 };
+      const PHOTO_LIMITS = { listings: 8, 'used-market': 9, jobs: 1, events: 8, help: 1 };
       const maxPhotos = PHOTO_LIMITS[type] ?? 8;
       const app = document.querySelector('#liff-app');
       const error = document.querySelector('#liff-error');
