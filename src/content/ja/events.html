@@ -54,10 +54,6 @@
           <b>イベント紹介</b>
           <p id="evModalIntro"></p>
         </div>
-        <div class="ev-modal-audience" id="evModalAudience" hidden>
-          <b>こんな人におすすめ</b>
-          <div class="ev-modal-audience-list" id="evModalAudienceList"></div>
-        </div>
         <div class="ev-modal-details" id="evModalDetails"></div>
         <div class="ev-modal-tags" id="evModalTags" hidden></div>
         <div class="ev-modal-note">
@@ -182,11 +178,6 @@
         image.alt = item.title + "のイメージ";
         var organizerEl = document.getElementById("evModalOrganizer");
         if (item.organizer) { organizerEl.textContent = "主催：" + item.organizer; organizerEl.hidden = false; } else { organizerEl.hidden = true; }
-        var audienceEl = document.getElementById("evModalAudience");
-        if (item.audienceTags && item.audienceTags.length) {
-          document.getElementById("evModalAudienceList").innerHTML = item.audienceTags.map(function (tag) { return '<span>✓ ' + escapeHtml(tag) + '</span>'; }).join("");
-          audienceEl.hidden = false;
-        } else { audienceEl.hidden = true; }
         var details = [["日時", escapeHtml(item.date + " " + item.time)], ["場所", escapeHtml(item.area)]];
         if (item.deadline) details.push(["申込締切", escapeHtml(item.deadline)]);
         if (item.fee) details.push(["参加費", escapeHtml(item.fee)]);
