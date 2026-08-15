@@ -11,10 +11,9 @@
 
     <div class="ev-filters" aria-label="イベントカテゴリー">
       <button type="button" class="ev-filter active" data-filter="all">すべて <small>06</small></button>
-      <button type="button" class="ev-filter" data-filter="language">語言交換</button>
-      <button type="button" class="ev-filter" data-filter="cultural">文化交流</button>
-      <button type="button" class="ev-filter" data-filter="regional">各国イベント</button>
-      <button type="button" class="ev-filter" data-filter="networking">ネットワーク</button>
+      <button type="button" class="ev-filter" data-filter="tokyo3">一都三県</button>
+      <button type="button" class="ev-filter" data-filter="osaka">大阪</button>
+      <button type="button" class="ev-filter" data-filter="other">その他</button>
     </div>
 
     <div class="ev-event-grid" id="evEventGrid"></div>
@@ -90,12 +89,12 @@
   <script>
     (function () {
       var events = [
-        { slug: "ueno-taiwan-festival", category: "cultural", categoryLabel: "CULTURAL", popular: false, title: "上野台湾祭 2024春", organizer: "台北駐日文化交流協会", date: "2024年3月30日（土）〜4月1日（月）", time: "10:00〜18:00", area: "上野公園", description: "台湾の文化・グルメ・工芸品が一堂に集まるイベント。台湾の地元の味を楽しんだり、文化を学んだりできます。", url: "www.taipeifestival-tokyo.jp", fee: "無料", capacity: "定員なし", participation: "当日参加", tags: ["台湾", "グルメ", "文化交流"], audienceTags: ["🙋 ひとり参加OK", "👨‍👩‍👧 家族連れOK"] },
-        { slug: "shibuya-language-exchange", category: "language", categoryLabel: "LANGUAGE EXCHANGE", popular: false, title: "金曜夜の言語交換パーティー", organizer: "渋谷語学交流会", date: "毎週金曜日", time: "19:00〜21:00", area: "渋谷 カフェアリス", description: "日本語を学ぶ外国人と他言語を学ぶ日本人が集まる、カジュアルな言語交換イベント。飲食代実費のみ。", url: "www.language-exchange-tokyo.com", fee: "無料", capacity: "10〜30名", participation: "予約・当日参加", tags: ["言語交換", "日本語", "渋谷"], audienceTags: ["🔰 初心者歓迎", "🙋 ひとり参加OK", "🗣️ 日本語レベル不問"] },
-        { slug: "thai-community-festival", category: "regional", categoryLabel: "THAI COMMUNITY", popular: true, title: "タイ・フェスティバル 2024", organizer: "在日タイ人コミュニティ", date: "2024年5月19日（日）", time: "11:00〜18:00", area: "赤坂見附 TRY横丁", description: "タイ系コミュニティが主催する、タイ料理・音楽・ダンスのイベント。毎年多くの外国人が参加します。", url: "www.thai-festival-tokyo.net", fee: "無料", capacity: "定員なし", participation: "当日参加", tags: ["タイ", "フェスティバル", "音楽"], audienceTags: ["👨‍👩‍👧 家族連れOK"] },
-        { slug: "shinjuku-startup-breakfast", category: "networking", categoryLabel: "NETWORKING", popular: false, title: "外国人起業家の朝食会", organizer: "Global Founders Tokyo", date: "毎月第一日曜日", time: "07:30〜09:00", area: "新宿 ビジネスラウンジ", description: "東京で起業・ビジネスを立ち上げた外国人が集まり、経験やアイデアをシェアする朝食イベント。参加費 1,500円。", url: "www.startup-tokyo-network.jp", fee: "1,500円", capacity: "10名未満", participation: "事前予約", tags: ["起業", "ネットワーキング", "朝活"], audienceTags: ["💼 転職・キャリア目的"] },
-        { slug: "multicultural-autumn-festival", category: "cultural", categoryLabel: "CULTURAL", popular: false, title: "多文化フェスティバル 2024秋", organizer: "新宿多文化共生センター", date: "2024年10月12日（土）〜10月14日（月）", time: "10:00〜19:00", area: "新宿バルト広場", description: "アジア・アフリカ・ヨーロッパなど、様々な国の文化を紹介するイベント。料理・音楽・工芸品・ダンスなど。", url: "www.multiculture-tokyo.org", fee: "無料", capacity: "30名以上", participation: "当日参加", tags: ["多文化", "フェスティバル", "新宿"], audienceTags: ["👨‍👩‍👧 家族連れOK", "🙋 ひとり参加OK"] },
-        { slug: "roppongi-language-cafe", category: "language", categoryLabel: "LANGUAGE EXCHANGE", popular: false, title: "日本語・英語 カフェテーブル", organizer: "六本木ランゲージカフェ", date: "毎週水曜日", time: "18:00〜20:00", area: "六本木 Caféラングエッジ", description: "テーブルごとに異なる言語で会話する、少人数の言語交換イベント。初心者からビジネスレベルまで対応。", url: "www.language-cafe-tokyo.jp", fee: "無料", capacity: "10名未満", participation: "予約・当日参加", tags: ["言語交換", "英語", "六本木"], audienceTags: ["🔰 初心者歓迎", "💼 転職・キャリア目的"] }
+        { slug: "ueno-taiwan-festival", category: "tokyo3", categoryLabel: "CULTURAL", popular: false, title: "上野台湾祭 2024春", organizer: "台北駐日文化交流協会", date: "2024年3月30日（土）〜4月1日（月）", time: "10:00〜18:00", area: "上野公園", description: "台湾の文化・グルメ・工芸品が一堂に集まるイベント。台湾の地元の味を楽しんだり、文化を学んだりできます。", url: "www.taipeifestival-tokyo.jp", fee: "無料", capacity: "定員なし", participation: "当日参加", tags: ["台湾", "グルメ", "文化交流"], audienceTags: ["🙋 ひとり参加OK", "👨‍👩‍👧 家族連れOK"] },
+        { slug: "shibuya-language-exchange", category: "tokyo3", categoryLabel: "LANGUAGE EXCHANGE", popular: false, title: "金曜夜の言語交換パーティー", organizer: "渋谷語学交流会", date: "毎週金曜日", time: "19:00〜21:00", area: "渋谷 カフェアリス", description: "日本語を学ぶ外国人と他言語を学ぶ日本人が集まる、カジュアルな言語交換イベント。飲食代実費のみ。", url: "www.language-exchange-tokyo.com", fee: "無料", capacity: "10〜30名", participation: "予約・当日参加", tags: ["言語交換", "日本語", "渋谷"], audienceTags: ["🔰 初心者歓迎", "🙋 ひとり参加OK", "🗣️ 日本語レベル不問"] },
+        { slug: "thai-community-festival", category: "tokyo3", categoryLabel: "THAI COMMUNITY", popular: true, title: "タイ・フェスティバル 2024", organizer: "在日タイ人コミュニティ", date: "2024年5月19日（日）", time: "11:00〜18:00", area: "赤坂見附 TRY横丁", description: "タイ系コミュニティが主催する、タイ料理・音楽・ダンスのイベント。毎年多くの外国人が参加します。", url: "www.thai-festival-tokyo.net", fee: "無料", capacity: "定員なし", participation: "当日参加", tags: ["タイ", "フェスティバル", "音楽"], audienceTags: ["👨‍👩‍👧 家族連れOK"] },
+        { slug: "shinjuku-startup-breakfast", category: "tokyo3", categoryLabel: "NETWORKING", popular: false, title: "外国人起業家の朝食会", organizer: "Global Founders Tokyo", date: "毎月第一日曜日", time: "07:30〜09:00", area: "新宿 ビジネスラウンジ", description: "東京で起業・ビジネスを立ち上げた外国人が集まり、経験やアイデアをシェアする朝食イベント。参加費 1,500円。", url: "www.startup-tokyo-network.jp", fee: "1,500円", capacity: "10名未満", participation: "事前予約", tags: ["起業", "ネットワーキング", "朝活"], audienceTags: ["💼 転職・キャリア目的"] },
+        { slug: "multicultural-autumn-festival", category: "tokyo3", categoryLabel: "CULTURAL", popular: false, title: "多文化フェスティバル 2024秋", organizer: "新宿多文化共生センター", date: "2024年10月12日（土）〜10月14日（月）", time: "10:00〜19:00", area: "新宿バルト広場", description: "アジア・アフリカ・ヨーロッパなど、様々な国の文化を紹介するイベント。料理・音楽・工芸品・ダンスなど。", url: "www.multiculture-tokyo.org", fee: "無料", capacity: "30名以上", participation: "当日参加", tags: ["多文化", "フェスティバル", "新宿"], audienceTags: ["👨‍👩‍👧 家族連れOK", "🙋 ひとり参加OK"] },
+        { slug: "roppongi-language-cafe", category: "tokyo3", categoryLabel: "LANGUAGE EXCHANGE", popular: false, title: "日本語・英語 カフェテーブル", organizer: "六本木ランゲージカフェ", date: "毎週水曜日", time: "18:00〜20:00", area: "六本木 Caféラングエッジ", description: "テーブルごとに異なる言語で会話する、少人数の言語交換イベント。初心者からビジネスレベルまで対応。", url: "www.language-cafe-tokyo.jp", fee: "無料", capacity: "10名未満", participation: "予約・当日参加", tags: ["言語交換", "英語", "六本木"], audienceTags: ["🔰 初心者歓迎", "💼 転職・キャリア目的"] }
       ];
       var activeFilter = "all";
       var eventImages = {
@@ -120,6 +119,12 @@
       var capacityLabels = { small: "10名未満", medium: "10〜30名", large: "30名以上", unlimited: "定員なし", unknown: "未定" };
       var participationLabels = { reservation: "事前予約", "walk-in": "当日参加", both: "予約・当日参加", contact: "主催者へ問い合わせ" };
       var weekdaysJa = ["日", "月", "火", "水", "木", "金", "土"];
+      var tokyoAreaPrefectures = ["東京都", "神奈川県", "埼玉県", "千葉県"];
+      function categorizeEventArea(prefecture) {
+        if (prefecture === "大阪府") return "osaka";
+        if (tokyoAreaPrefectures.indexOf(prefecture) !== -1) return "tokyo3";
+        return "other";
+      }
       function formatDeadlineDate(value) {
         if (!value) return "";
         var date = new Date(value);
@@ -177,7 +182,7 @@
         var schedule = summarizeSchedule(parseSchedule(payload.schedule));
         return {
           slug: "submission-" + submission.id,
-          category: "cultural",
+          category: categorizeEventArea(payload.eventPrefecture),
           categoryLabel: "COMMUNITY EVENT",
           popular: false,
           liveSubmission: true,
